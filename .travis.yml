@@ -8,3 +8,11 @@ branches:
   only:
   - master
   - dev
+deploy:
+  provider: heroku
+  app: web-event-manager
+  api_key:
+    secure: "nnvwkWvlj81kRB5EV8iBiCy7t6wAxoeR8GWdGu958ZYU612yDyS2AMr8oNC6f0v/ZlXqsWy7FK/ak0WwgTBBKn0PHtDAZ2skCRT2XLWkzEiCAa9Vo6eIztd1oI+lRM8N9qm7i/bVQGlaHRCKsbodj8VJX71wSSMWo/VHk2CXaoz
+    xHyAp5Prq2ZXGWPhmAJD2WZpOulSvkKVI4tFj+cp16xdnJIjmtdiVXNsqI70GeJeSK2CmxHP3Jlph1pWG7WQxi60OCr2kFkM1e4shui4TzYGRsIvKKvmwZTYxD0wHNPIdzQ100rmdsy9PQmVqHpBmf4AAngmtq6S98hfX6vEKeIq8DW3x1JxUR
+    qu8mQ+UpxNaiAQTN96E/IlVKw2oxrZa1vBHa6RP1Abm7p8s2hot00xKqv1HumKyNeQjjfae7MjweSDpT3o0UxgcvOSp4hqA/cPg18ViZwn+IrHROckk5r2SH+aU8JVDmV47QlOPX32MfZJ0cLN8BzLM2Ku3KRAw6c9qUumg/fa40A6q4Jrc5iL
+    g4qp2L/JN8i8bQWG1xkGFeRXAzXYsI3UcBYvGlmE4Dn5ldS9KtCdzLVPT30L4xsKYFaY+z2Is5eJxpXA0b8RvYvFso7iO4RtNnskyChBKJqU8mGIg6KocsxR0S5WT7JQSN2feehQLxxRcwlbhMHc="
