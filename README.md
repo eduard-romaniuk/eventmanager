@@ -1,1 +1,1 @@
-### Event Manager [![Build Status](https://travis-ci.org/eduard-romanyuk/eventmanager.png?branch=master)](https://travis-ci.org/eduard-romanyuk/eventmanager)
+### Event Manager [![Build Status](https://travis-ci.org/eduard-romanyuk/eventmanager.png?branch=dev)](https://travis-ci.org/eduard-romanyuk/eventmanager)
