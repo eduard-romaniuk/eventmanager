@@ -1,0 +1,1 @@
+### Event Manager [![Build Status](https://travis-ci.org/eduard-romanyuk/eventmanager.png?branch=master)](https://travis-ci.org/eduard-romanyuk/eventmanager)
