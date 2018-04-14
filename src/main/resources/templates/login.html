@@ -8,10 +8,10 @@
     <div class="container-fluid h-100">
         <div class="row h-100 justify-content-center align-items-center">
             <div class="col-3">
-                <form th:action="@{/login}" method="post" class="form-signin text-center">
+                <form th:action="@{/login}" method="post" class="form-signin text-center" th:object="${user}">
                     <h3>Login form</h3>
-                    <input type="text" class="form-control mt-3 mb-2" placeholder="Username">
-                    <input type="password" class="form-control mb-2" placeholder="Password">
+                    <input type="text" class="form-control mt-3 mb-2" placeholder="Username" th:field="*{username}">
+                    <input type="password" class="form-control mb-2" placeholder="Password" th:field="*{password}">
                     <div class="text-danger small" role="alert" th:if="${param.error}">Username or Password invalid, please verify</div>
                     <button type="submit" class="btn btn-primary btn-block mt-2" name="submit">Login</button>
                     <a class="text-muted lead small nounderline"
