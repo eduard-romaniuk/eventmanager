@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/common :: head(~{::title},~{::link})">
+    <title>Sign Up</title>
+    <link rel="stylesheet" th:href="@{/css/auth.css}">
+</head>
+<body>
+    <div class="container-fluid h-100">
+        <div class="row h-100 justify-content-center align-items-center">
+            <div class="col-3">
+                <form th:action="@{/registration}" th:object="${userRegistration}" method="post" class="form-signin text-center">
+                    <h3>Sign Up form</h3>
+                    <div>
+                        <input type="text" class="form-control mb-2" placeholder="Username"
+                            th:field="*{username}" th:errorclass="is-invalid">
+                        <p th:errors="*{username}" class="invalid-feedback"/>
+                    </div>
+                    <div>
+                        <input type="password" class="form-control mb-2" placeholder="Password"
+                            th:field="*{password}" th:errorclass="is-invalid">
+                        <p th:errors="*{password}" class="invalid-feedback"/>
+                    </div>
+                    <div>
+                        <input type="password" class="form-control mb-2" placeholder="Confirm password"
+                            th:field="*{passwordConfirm}" th:errorclass="is-invalid">
+                        <p th:errors="*{passwordConfirm}" class="invalid-feedback"/>
+                    </div>
+                    <button type="submit"  class="btn btn-primary btn-block mt-2" name="submit">Sign Up</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
