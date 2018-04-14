@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title, links)">
+    <title th:replace="${title}">title</title>
+
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/jquery-3.2.1.slim.min.js}"></script>
+
+    <th:block th:replace="${links}" />
+</head>
+<body>
+</body>
+</html>
