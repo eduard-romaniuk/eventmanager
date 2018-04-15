@@ -62,7 +62,7 @@ public class UsersRepository implements CrudRepository<User> {
 
     @Override
     public void save(User user) {
-        if (!this.exists(user.getId())) {
+        if (user.getId() == null || !this.exists(user.getId())) {
             jdbcTemplate.update(
                     "INSERT INTO \"users\" (username, password) VALUES (?, ?)",
                     user.getUsername(),
