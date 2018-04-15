@@ -28,8 +28,8 @@ public class HelloController {
     @Autowired
     UserService userService;
 
-    @RequestMapping(value = "/home", method = RequestMethod.GET)
-    public ModelAndView home() {
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public ModelAndView start() {
         return new ModelAndView("home");
     }
 
