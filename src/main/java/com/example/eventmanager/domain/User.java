@@ -1,11 +1,18 @@
 package com.example.eventmanager.domain;
 
+import lombok.ToString;
+
+@ToString
 public class User {
 
     private Long id;
     private String username;
     private String password;
     private String passwordConfirm;
+
+    public User copy() {
+        return new User(username, password, passwordConfirm);
+    }
 
     public User() {
     }

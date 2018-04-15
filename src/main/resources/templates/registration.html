@@ -26,6 +26,8 @@
                         <p th:errors="*{passwordConfirm}" class="invalid-feedback"/>
                     </div>
                     <button type="submit"  class="btn btn-primary btn-block mt-2" name="submit">Sign Up</button>
+                    <a class="text-muted lead small nounderline"
+                       href="registration.html" th:href="@{/login}">Have an account?</a>
                 </form>
             </div>
         </div>
