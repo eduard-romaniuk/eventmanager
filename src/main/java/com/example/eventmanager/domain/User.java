@@ -22,7 +22,6 @@ public class User {
     }
 
     public User(String username, String password, String passwordConfirm) {
-        this.id = id;
         this.username = username;
         this.password = password;
         this.passwordConfirm = passwordConfirm;
