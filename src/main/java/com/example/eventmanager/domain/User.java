@@ -3,8 +3,7 @@ package com.example.eventmanager.domain;
 import lombok.ToString;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.LinkedList;
+import java.util.Set;
 
 @ToString
 public class User {
@@ -15,20 +14,22 @@ public class User {
     private String passwordConfirm;
     private String name;
     private String surName;
-    private ZoneId timeZone;
+    private String email;
     private LocalDate birth;
     private String phone;
-    private boolean gender;
-    private boolean verified;
-    private long imageId;
-    private LinkedList<Long> friends;
-    private LinkedList<Long> wishLists;
-    private LinkedList<Long> events;
-    private long settingsId;
+    private boolean sex;
+    private boolean isActive;
+    private Image image;
+    private LocalDate regDate;
+    private Set<User> friends;
+    private WishList wishList;
+    private Set<Event> events;
+    private Settings settings;
+    private String confLink;
 
     public User copy() {
 
-        return new User(id, username, password, passwordConfirm, name, surName, timeZone, birth, phone, gender, verified, imageId, (LinkedList<Long>)friends.clone(), (LinkedList<Long>)wishLists.clone(), (LinkedList<Long>)events.clone(), settingsId);
+        return new User(id, username, password, passwordConfirm, name, surName, email, birth, phone, sex, isActive, image, regDate, friends, wishList, events, settings, confLink);
     }
 
 
@@ -53,23 +54,25 @@ public class User {
         this.passwordConfirm = passwordConfirm;
     }
 
-    public User(Long id, String username, String password, String passwordConfirm, String name, String surName, ZoneId timeZone, LocalDate birth, String phone, boolean gender, boolean verified, long imageId, LinkedList<Long> friends, LinkedList<Long> wishLists, LinkedList<Long> events, long settingsId) {
+    public User(Long id, String username, String password, String passwordConfirm, String name, String surName, String email, LocalDate birth, String phone, boolean sex, boolean isActive, Image image, LocalDate regDate, Set<User> friends, WishList wishList, Set<Event> events, Settings settings, String confLink) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.passwordConfirm = passwordConfirm;
         this.name = name;
         this.surName = surName;
-        this.timeZone = timeZone;
+        this.email = email;
         this.birth = birth;
         this.phone = phone;
-        this.gender = gender;
-        this.verified = verified;
-        this.imageId = imageId;
+        this.sex = sex;
+        this.isActive = isActive;
+        this.image = image;
+        this.regDate = regDate;
         this.friends = friends;
-        this.wishLists = wishLists;
+        this.wishList = wishList;
         this.events = events;
-        this.settingsId = settingsId;
+        this.settings = settings;
+        this.confLink = confLink;
     }
 
     public Long getId() {
@@ -120,12 +123,12 @@ public class User {
         this.surName = surName;
     }
 
-    public ZoneId getTimeZone() {
-        return timeZone;
+    public String getEmail() {
+        return email;
     }
 
-    public void setTimeZone(ZoneId timeZone) {
-        this.timeZone = timeZone;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public LocalDate getBirth() {
@@ -144,59 +147,75 @@ public class User {
         this.phone = phone;
     }
 
-    public boolean isGender() {
-        return gender;
+    public boolean isSex() {
+        return sex;
     }
 
-    public void setGender(boolean gender) {
-        this.gender = gender;
+    public void setSex(boolean sex) {
+        this.sex = sex;
     }
 
-    public boolean isVerified() {
-        return verified;
+    public boolean isActive() {
+        return isActive;
     }
 
-    public void setVerified(boolean verified) {
-        this.verified = verified;
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
-    public long getImageId() {
-        return imageId;
+    public Image getImage() {
+        return image;
     }
 
-    public void setImageId(long imageId) {
-        this.imageId = imageId;
+    public void setImage(Image image) {
+        this.image = image;
     }
 
-    public LinkedList<Long> getFriends() {
+    public LocalDate getRegDate() {
+        return regDate;
+    }
+
+    public void setRegDate(LocalDate regDate) {
+        this.regDate = regDate;
+    }
+
+    public Set<User> getFriends() {
         return friends;
     }
 
-    public void setFriends(LinkedList<Long> friends) {
+    public void setFriends(Set<User> friends) {
         this.friends = friends;
     }
 
-    public LinkedList<Long> getWishLists() {
-        return wishLists;
+    public WishList getWishList() {
+        return wishList;
     }
 
-    public void setWishLists(LinkedList<Long> wishLists) {
-        this.wishLists = wishLists;
+    public void setWishList(WishList wishList) {
+        this.wishList = wishList;
     }
 
-    public LinkedList<Long> getEvents() {
+    public Set<Event> getEvents() {
         return events;
     }
 
-    public void setEvents(LinkedList<Long> events) {
+    public void setEvents(Set<Event> events) {
         this.events = events;
     }
 
-    public long getSettingsId() {
-        return settingsId;
+    public Settings getSettings() {
+        return settings;
     }
 
-    public void setSettingsId(long settingsId) {
-        this.settingsId = settingsId;
+    public void setSettings(Settings settings) {
+        this.settings = settings;
+    }
+
+    public String getConfLink() {
+        return confLink;
+    }
+
+    public void setConfLink(String confLink) {
+        this.confLink = confLink;
     }
 }
