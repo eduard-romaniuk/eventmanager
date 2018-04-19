@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 @Repository
 public class UsersRepository implements CrudRepository<User> {
-
     private JdbcTemplate jdbcTemplate = JdbcTemplateSingleton.getInstance();
 
     public User findByUsername(String username) {

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -24,13 +25,24 @@ public class EventRepository implements CrudRepository<Event> {
         this.namedJdbcTemplate = namedJdbcTemplate;
     }
 
+    public List<Event> findByCreator(Long creator_id){
+
+        String sql = "SELECT id,name,description,place,timeline_start,timeline_finish,period_in_days,image_id," +
+                "is_sent,is_private FROM \"event\" WHERE id = :creator_id";
+        Map<String, Object> namedParams = new HashMap<>();
+        namedParams.put("eventId", creator_id);
+        return namedJdbcTemplate.query(sql,namedParams, new EventMapper());
+
+    }
+
     @Override
     public int save(Event entity) {
         String sql = "INSERT INTO  \"event\" " +
-                "(name,description,place,timeline_start,timeline_finish,period_in_days,image_id,is_sent,is_private)" +
-                " VALUES (:name,:description,:place, :timeline_start,:timeline_finish,:period_in_days,:image_id,:is_sent,:is_private)";
+                "(creator_id,name,description,place,timeline_start,timeline_finish,period_in_days,image_id,is_sent,is_private)" +
+                " VALUES (:creator_id,:name,:description,:place, :timeline_start,:timeline_finish,:period_in_days,:image_id,:is_sent,:is_private)";
 
         Map<String, Object> namedParams = new HashMap<String, Object>();
+        namedParams.put("creator_id",entity.getCreator().getId());
         namedParams.put("name",entity.getName());
         namedParams.put("description",entity.getDescriptionId());
         namedParams.put("place",entity.getPlase());
@@ -74,6 +86,12 @@ public class EventRepository implements CrudRepository<Event> {
         namedParams.put("eventId", entity.getId());
         return namedJdbcTemplate.update(sql,namedParams);
 
+    }
+
+     public List<Event> findAllPublicEvents(){
+        String sql = "SELECT id,name,description,place,timeline_start,timeline_finish,period_in_days,image_id," +
+                "is_sent,is_private FROM \"event\" WHERE is_private=FALSE ";
+        return namedJdbcTemplate.query(sql, new EventMapper());
     }
 
     private static final class EventMapper implements RowMapper<Event> {
