@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 @Service
@@ -24,49 +24,53 @@ public class EventService {
 
     public void createEvent(Event event, User creator){
         event.setCreator(creator);
-        eventRepository.save(event);
+        event.setId((long) eventRepository.save(event));
+        eventRepository.addUserToEvent(event.getId(),creator.getId());
     }
 
     public void publishEvent(Event event){
-        boolean sent = true;
-        event.setSent(sent);
+        event.setSent(true);
         eventRepository.update(event);
     }
 
     public void editEvent(Event event){
-
         eventRepository.update(event);
     }
 
-    public Event showEvent (Long id){
+    public Event getEvent (Long id){
         return eventRepository.findOne(id);
     }
 
-    public List<Event> showUserEvents(User user,Event event){
+    public List<Event> getUserEvents(Long id){
 
-       return new ArrayList<Event>(eventRepository.findByCreator(user.getId()));
+       return eventRepository.findByCreator(id);
     }
 
-    public List<Event> ShowAllEventsWithUserParticipation(User user,Event event){
+    public List<Event> getEventsWithUserParticipation(User user){
 
-        return null;
+        return eventRepository.findEventsWithUserParticipation(user.getId());
     }
 
-    public List<Event> ShowAllPublicEvents(User user,Event event){
+    public List<Event> getAllPublicEvents(){
 
-        return null;
+        return eventRepository.findAllPublicEvents();
     }
 
-    public void JoinToEvent(User user,Event event){
+    public void joinToEvent(User user,Event event){
+
+        eventRepository.addUserToEvent(user.getId(),event.getId());
 
     }
 
-    public void AddUserToEvent(User user,Event event){
+    public void AddUsersToEvent(List<User> users,Event event){
 
+        for (User user:users) {
+            eventRepository.addUserToEvent(user.getId(),event.getId());
+        }
     }
 
-    public List<User> ShowParticipants(Event event){
+    public List<User> getParticipants(Event event){
 
-        return null;
+        return eventRepository.findParticipants(event.getId());
     }
 }

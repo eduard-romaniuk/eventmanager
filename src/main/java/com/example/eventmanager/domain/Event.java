@@ -3,7 +3,6 @@ package com.example.eventmanager.domain;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.List;
 
 @ToString
