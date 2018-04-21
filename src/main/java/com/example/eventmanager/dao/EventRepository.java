@@ -4,6 +4,8 @@ package com.example.eventmanager.dao;
 import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -18,62 +20,54 @@ import java.util.List;
 import java.util.Map;
 
 
+@PropertySource("classpath:events.properties")
 @Repository
 public class EventRepository implements CrudRepository<Event> {
+
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
+    private final Environment env;
 
     @Autowired
-    public EventRepository(NamedParameterJdbcTemplate namedJdbcTemplate) {
+    public EventRepository(NamedParameterJdbcTemplate namedJdbcTemplate, Environment env) {
         this.namedJdbcTemplate = namedJdbcTemplate;
+        this.env = env;
     }
-    public List<Event> findByCreator(Long creator_id){
 
-        String sql = "SELECT id,name,description,place,timeline_start,timeline_finish,period_in_days,image_id," +
-                "is_sent,is_private FROM \"events\" WHERE creator_id = :creator_id";
+
+    public List<Event> findByCreator(Long creator_id) {
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("creator_id", creator_id);
-        return namedJdbcTemplate.query(sql,namedParams, new EventMapper());
-
+        return namedJdbcTemplate.query(env.getProperty("findByCreator"), namedParams, new EventMapper());
     }
 
     @Override
-    public int save(Event entity) {
-        String sql = "INSERT INTO  \"events\" " +
-                "(creator_id,name,description,place,timeline_start,timeline_finish,period_in_days,image_id,is_sent,is_private)" +
-                " VALUES (:creator_id,:name,:description,:place, :timeline_start,:timeline_finish,:period_in_days,:image_id,:is_sent,:is_private)";
-
+    public int save(Event event) {
         MapSqlParameterSource namedParams = new MapSqlParameterSource();
-        namedParams.addValue("creator_id",entity.getCreator().getId());
-        namedParams.addValue("name",entity.getName());
-        namedParams.addValue("description",entity.getDescriptionId());
-        namedParams.addValue("place",entity.getPlase());
-        namedParams.addValue("timeline_start",entity.getTimeLineStart());
-        namedParams.addValue("timeline_finish",entity.getTimeLineFinish());
-        namedParams.addValue("period_in_days",entity.getPeriod());
-        namedParams.addValue("image_id",entity.getImageId());
-        namedParams.addValue("is_sent",entity.isSent());
-        namedParams.addValue("is_private",entity.isPrivate());
+        namedParams.addValue("creator_id", event.getCreator().getId());
+        namedParams.addValue("name", event.getName());
+        namedParams.addValue("description", event.getDescriptionId());
+        namedParams.addValue("place", event.getPlase());
+        namedParams.addValue("timeline_start", event.getTimeLineStart());
+        namedParams.addValue("timeline_finish", event.getTimeLineFinish());
+        namedParams.addValue("period_in_days", event.getPeriod());
+        namedParams.addValue("image_id", event.getImageId());
+        namedParams.addValue("is_sent", event.isSent());
+        namedParams.addValue("is_private", event.isPrivate());
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        namedJdbcTemplate.update(sql,namedParams,keyHolder);
+        namedJdbcTemplate.update(env.getProperty("save"), namedParams, keyHolder);
         return keyHolder.getKey().intValue();
-
     }
 
     @Override
     public Event findOne(Long id) {
-        String sql = "SELECT id,name,description,place,timeline_start,timeline_finish,period_in_days,image_id," +
-                     "is_sent,is_private FROM \"events\" WHERE id = :eventId";
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("eventId", id);
-        return namedJdbcTemplate.queryForObject(sql,namedParams, new EventMapper());
+        return namedJdbcTemplate.queryForObject(env.getProperty("findById"), namedParams, new EventMapper());
     }
 
     @Override
     public Iterable<Event> findAll() {
-        String sql = "SELECT id,name,description,place,timeline_start,timeline_finish,period_in_days,image_id," +
-                "is_sent,is_private FROM \"events\" ";
-        return namedJdbcTemplate.query(sql, new EventMapper());
-
+        return namedJdbcTemplate.query(env.getProperty("findAll"), new EventMapper());
     }
 
     @Override
@@ -84,48 +78,35 @@ public class EventRepository implements CrudRepository<Event> {
 
     @Override
     public int delete(Event entity) {
-        String sql = "DELETE FROM \"events\" WHERE id = :eventId ";
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("eventId", entity.getId());
-        return namedJdbcTemplate.update(sql,namedParams);
-
+        return namedJdbcTemplate.update(env.getProperty("delete"), namedParams);
     }
 
 
-     public List<Event> findEventsWithUserParticipation(Long user_id){
-        String sql = "SELECT ev.id,name,description,place,timeline_start,timeline_finish,period_in_days,image_id," +
-                "is_sent,is_private FROM \"events\" ev INNER JOIN participants part ON ev.id = part.event_id " +
-                "WHERE part.user_id= :user_id";
-        return namedJdbcTemplate.query(sql, new EventMapper());
+    public List<Event> findEventsWithUserParticipation(Long user_id) {
+        return namedJdbcTemplate.query(env.getProperty("findWithUserParticipation"), new EventMapper());
     }
 
-    public List<Event> findAllPublicEvents(){
-        String sql = "SELECT id,name,description,place,timeline_start,timeline_finish,period_in_days,image_id," +
-                "is_sent,is_private FROM \"events\" WHERE is_private=FALSE AND is_sent=TRUE";
-        return namedJdbcTemplate.query(sql, new EventMapper());
+    public List<Event> findAllPublicEvents() {
+        return namedJdbcTemplate.query(env.getProperty("findAllPublic"), new EventMapper());
     }
 
-    public int addUserToEvent(Long user_id,Long event_id){
-        String sql = "INSERT INTO  \"participants\" (user_id,event_id) VALUES (:user_id,:ivent_id)";
+    public int addUserToEvent(Long user_id, Long event_id) {
         Map<String, Object> namedParams = new HashMap<>();
-        namedParams.put("user_id",user_id);
-        namedParams.put("event_id",event_id);
-        return namedJdbcTemplate.update(sql, namedParams);
-
+        namedParams.put("user_id", user_id);
+        namedParams.put("event_id", event_id);
+        return namedJdbcTemplate.update(env.getProperty("addUser"), namedParams);
     }
 
-    public List<User> findParticipants(Long id){
-        String sql = "SELECT users.id,login is_sent FROM \"users\" users INNER JOIN participants part ON users.id = part.user_id WHERE event_id= :event_id";
+    public List<User> findParticipants(Long id) {
         Map<String, Object> namedParams = new HashMap<>();
-        namedParams.put("event_id",id);
-        return namedJdbcTemplate.query(sql,namedParams, new UserMapper());
-
+        namedParams.put("event_id", id);
+        return namedJdbcTemplate.query(env.getProperty("findParticipants"), namedParams, new UserMapper());
     }
-
 
 
     private static final class EventMapper implements RowMapper<Event> {
-
         @Override
         public Event mapRow(ResultSet rs, int rowNum) throws SQLException {
             Event event = new Event();
