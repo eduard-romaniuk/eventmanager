@@ -17,7 +17,7 @@ public class UsersRepository implements CrudRepository<User> {
     public User findByUsername(String username) {
         try {
             return (User) jdbcTemplate.queryForObject(
-                    "SELECT id, username, password FROM \"users\" WHERE username = ?",
+                    "SELECT id, login, password FROM \"users\" WHERE login = ?",
                     new Object[]{username},
                     (RowMapper<Object>) (rs, rowNum) -> new User(
                             rs.getLong("id"),
@@ -32,11 +32,11 @@ public class UsersRepository implements CrudRepository<User> {
     public User findOne(Long id) {
         try {
             return (User) jdbcTemplate.queryForObject(
-                    "SELECT username, password FROM \"users\" WHERE id = ?",
+                    "SELECT login, password FROM \"users\" WHERE id = ?",
                     new Object[]{id},
                     (RowMapper<Object>) (rs, rowNum) -> new User(
                             id,
-                            rs.getString("username"),
+                            rs.getString("login"),
                             rs.getString("password")));
         } catch (EmptyResultDataAccessException e) {
             return null;
@@ -46,7 +46,7 @@ public class UsersRepository implements CrudRepository<User> {
     @Override
     public Iterable<User> findAll() {
         return jdbcTemplate
-                .queryForList("SELECT id, username, password FROM \"users\"")
+                .queryForList("SELECT id, login, password FROM \"users\"")
                 .stream()
                 .map(row -> new User(
                         new Long((Integer) row.get("id")),
@@ -74,7 +74,7 @@ public class UsersRepository implements CrudRepository<User> {
     public int save(User user) {
         if (user.getId() == null || !this.exists(user.getId())) {
             jdbcTemplate.update(
-                    "INSERT INTO \"users\" (username, password) VALUES (?, ?)",
+                    "INSERT INTO \"users\" (login, password) VALUES (?, ?)",
                     user.getUsername(),
                     user.getPassword());
         } else {
