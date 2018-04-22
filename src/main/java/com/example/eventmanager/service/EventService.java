@@ -16,12 +16,10 @@ import java.util.List;
 public class EventService {
 
     private final EventRepository eventRepository;
-    private final UsersRepository usersRepository;
 
     @Autowired
     public EventService(EventRepository eventRepository, UsersRepository usersRepository) {
         this.eventRepository = eventRepository;
-        this.usersRepository = usersRepository;
     }
 
     /* TODO add Principal */
@@ -41,7 +39,6 @@ public class EventService {
     }
 
     public Event getEvent (Long id){
-
         return eventRepository.findOne(id);
     }
 
@@ -73,8 +70,8 @@ public class EventService {
         }
     }
 
-    public List<User> getParticipants(Event event){
+    public List<User> getParticipants(Long id){
 
-        return eventRepository.findParticipants(event.getId());
+        return eventRepository.findParticipants(id);
     }
 }

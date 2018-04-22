@@ -41,10 +41,10 @@ public class EventController {
         return eventService.getEventsWithUserParticipation(user);
     }
 
-    @RequestMapping(value = "/id")
+    @RequestMapping(value = "/{id}")
     @JsonView(EventView.FullView.class)
-    public Event showEvent(@RequestParam(value = "id") Long id){
-        return eventService.getEvent( id);
+    public Event showEvent(@PathVariable(value = "id") Long id){
+        return eventService.getEvent(id);
     }
 
     @JsonView(EventView.ShortView.class)
@@ -62,10 +62,10 @@ public class EventController {
     public void addParticipants(@RequestBody List<User> users,Event event) {
        eventService.AddUsersToEvent(users,event);
     }
-
-    @RequestMapping(value="/participants")
-    public List<User> participants(@RequestBody Event event){
-      return   eventService.getParticipants(event);
+    @JsonView(EventView.FullView.class)
+    @RequestMapping(value="/{id}/participants")
+    public List<User> participants(@PathVariable Long id ){
+        return   eventService.getParticipants(id);
     }
 
 }

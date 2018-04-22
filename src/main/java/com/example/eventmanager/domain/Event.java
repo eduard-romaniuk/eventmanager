@@ -1,5 +1,6 @@
 package com.example.eventmanager.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.ToString;
 
@@ -25,7 +26,9 @@ public class Event {
     private Integer period;
    // private WishList wishList;
     private Long imageId;
+    @JsonProperty
     private boolean isSent;
+    @JsonProperty
     private boolean isPrivate;
     private List<User> participants;
   //  private List<Chat> chats;
