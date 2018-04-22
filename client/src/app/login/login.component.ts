@@ -3,6 +3,7 @@ import { AuthService } from '../auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { JQueryStatic } from 'jquery';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 
 declare var $:JQueryStatic;
 
@@ -11,20 +12,39 @@ declare var $:JQueryStatic;
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
+  form: FormGroup;
   credentials = {username: '', password: ''};
+  loading = false;
+  error = false;
 
-  login_error = false;
+  constructor(private auth: AuthService, private http: HttpClient, private router: Router, private formBuilder: FormBuilder) {
+  }
 
-  constructor(private auth: AuthService, private http: HttpClient, private router: Router) {
+  ngOnInit() {
+    this.form = this.formBuilder.group({
+      username: ['', [ Validators.required, Validators.pattern('^[a-zA-Z0-9_]*$') ]],
+      password: ['', [ Validators.required, Validators.pattern('^[a-zA-Z0-9]*$') ]]
+    });
   }
 
   login() {
-    // TODO: Handle login error
+    this.loading = true;
+    this.error = false;
+    
     this.auth.authenticate(this.credentials, () => {
+      this.credentials.password = '';
+      this.credentials.username = '';
+      this.error = false;
+      this.loading = false;
+
       $('#signInModal').modal('hide');
-      this.router.navigateByUrl('/home');
+      this.router.navigate(['home']);
+    },
+    () => {
+      this.error = true,
+      this.loading = false
     });
   }
 

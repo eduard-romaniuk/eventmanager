@@ -4,36 +4,49 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Injectable()
 export class AuthService {
 
-  authenticated = false;
-  headers: HttpHeaders;
+  authenticated: boolean;
   username: string;
 
   constructor(private http: HttpClient) {
+    const authToken = sessionStorage.getItem('authToken');
+
+    console.log(authToken);
+
+    if (authToken === null || authToken === '') {
+      this.authenticated = false;
+      sessionStorage.setItem('authToken', '');
+    } else {
+      this.authenticated = true;
+    }
   }
 
-  authenticate(credentials, callback) {
+  authenticate(credentials, callback?, errorCallback?) {
 
-        console.log(`try to login(${credentials.username} ${credentials.password})`);
+    sessionStorage.setItem('authToken', 'Basic ' + btoa(credentials.username + ':' + credentials.password));
 
-        this.headers = new HttpHeaders(credentials ? {
-            authorization : 'Basic ' + btoa(credentials.username + ':' + credentials.password)
-        } : {});
-
-        this.http.get('http://localhost:8080/user', {headers: this.headers}).subscribe(response => {
-          if (response['name']) {
-              this.authenticated = true;
-              this.username = credentials.username;
-          } else {
-              this.authenticated = false;
-          }
-          return callback && callback();
-        });
+    this.http.get('http://localhost:8080/user').subscribe(response => {
+      if (response['name']) {
+          this.authenticated = true;
+          this.username = credentials.username;
+      } else {
+          this.logout();
+      }
+      return callback && callback();
+    },
+    error => {
+      this.logout();
+      return errorCallback && errorCallback();
+    });
   }
 
-  logout(callback) {
+  logout(callback?) {
     this.authenticated = false;
-    this.headers = null;
+    sessionStorage.setItem('authToken', '');
     return callback && callback();
+  }
+
+  isLoggedIn() {
+    return this.authenticated;
   }
 
 }

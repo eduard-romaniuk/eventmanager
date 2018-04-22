@@ -11,7 +11,7 @@ export class HomeComponent {
   obj = {};
 
   constructor(private auth: AuthService, private http: HttpClient) {
-    http.get('http://localhost:8080/getObj/test', {headers: this.auth.headers})
+    http.get('http://localhost:8080/getObj/test')
     	.subscribe(data => this.obj = data);
   }
 
