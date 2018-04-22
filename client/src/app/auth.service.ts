@@ -24,7 +24,7 @@ export class AuthService {
 
     sessionStorage.setItem('authToken', 'Basic ' + btoa(credentials.username + ':' + credentials.password));
 
-    this.http.get('http://localhost:8080/user').subscribe(response => {
+    this.http.get('/user').subscribe(response => {
       if (response['name']) {
           this.authenticated = true;
           this.username = credentials.username;
