@@ -155,9 +155,9 @@ public class EventRepository implements CrudRepository<Event> {
                 event.setSent(rs.getBoolean("is_sent"));
                 event.setPrivate(rs.getBoolean("is_private"));
                 creator.setId(rs.getLong("creator_id"));
-                creator.setName(rs.getString("login"));
+                creator.setUsername(rs.getString("login"));
                 creator.setName(rs.getString("creator_name"));
-                creator.setName(rs.getString("surname"));
+                creator.setSurName(rs.getString("surname"));
             }
 
             event.setCreator(creator);

@@ -34,7 +34,7 @@ public class EventService {
         eventRepository.update(event);
     }
 
-    public void editEvent(Event event){
+    public void updateEvent(Event event){
         eventRepository.update(event);
     }
 
@@ -73,5 +73,9 @@ public class EventService {
     public List<User> getParticipants(Long id){
 
         return eventRepository.findParticipants(id);
+    }
+
+    public void deleteEvent(Event event){
+        eventRepository.delete(event);
     }
 }
