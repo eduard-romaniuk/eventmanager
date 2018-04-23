@@ -23,11 +23,9 @@ export class EventService {
 
     console.log(`CreateNewEvent(${this.headers.get("eventData")})`);
 
+    this.http.post('http://localhost:8080/event/createEvent', {headers: this.headers});
 
-
-    this.http.post('http://localhost:8080/event', {headers: this.headers}).subscribe(response => {
-      return callback && callback();
-    });
+    console.log('afterCreate');
   }
 
 }

@@ -15,6 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "/event")
 public class EventController {
 
@@ -23,10 +24,14 @@ public class EventController {
     @Autowired
     public EventController(EventService eventService) {
         this.eventService = eventService;
+        System.out.println("EventControllerConstructor");
     }
 
-    @PostMapping(value = "/event")
+    @CrossOrigin(origins = "http://localhost:4200")
+    //@PostMapping(value = "/event")
+    @RequestMapping(path = "/event/CreateEvent", method = RequestMethod.POST)
     public ResponseEntity<Void> createEvent(@RequestBody Event event, UriComponentsBuilder ucBuilder) {
+        System.out.println("CreateEvent method");
         eventService.createEvent(event);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/event/{id}").buildAndExpand(event.getId()).toUri());
@@ -36,6 +41,7 @@ public class EventController {
     @JsonView(EventView.ShortView.class)
     @GetMapping(value = "/event")
     public ResponseEntity<List<Event>> listAllPublicEvent() {
+        System.out.println("listAllPublicEvent method");
         List<Event> events = eventService.getAllPublicEvents();
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
