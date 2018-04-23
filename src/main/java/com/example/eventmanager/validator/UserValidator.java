@@ -25,13 +25,13 @@ public class UserValidator implements Validator {
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors,
                 "username", "NotEmpty", null, "Empty or whitespaces");
-        if (userRegistration.getUsername().contains(" ")) {
+        if (userRegistration.getLogin().contains(" ")) {
             errors.rejectValue("username", "UsernameWithWhitespaces", null,
                     "Cannot contain whitespaces");
-        } else if (userRegistration.getUsername().length() < 6 || userRegistration.getUsername().length() > 45) {
+        } else if (userRegistration.getLogin().length() < 6 || userRegistration.getLogin().length() > 45) {
             errors.rejectValue("username", "UsernameSize", null,
                     "Invalid username size (6 - 45 symbols)");
-        } else if (usersRepository.findByUsername(userRegistration.getUsername()) != null) {
+        } else if (usersRepository.findByUsername(userRegistration.getLogin()) != null) {
             errors.rejectValue("username", "UsernameDuplicate", null, "Username already used");
         }
 

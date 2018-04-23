@@ -11,55 +11,77 @@ public class User {
     @JsonView(UserView.ShortView.class)
     private Long id;
     @JsonView(UserView.ShortView.class)
-    private String username;
-    @JsonView(UserView.ShortView.class)
+    private String login;
+    @JsonView(UserView.FullView.class)
     private String password;
     private String passwordConfirm;
+    @JsonView(UserView.ShortView.class)
     private String name;
+    @JsonView(UserView.ShortView.class)
     private String surName;
+    @JsonView(UserView.ShortView.class)
     private String email;
+    @JsonView(UserView.ShortView.class)
     private LocalDate birth;
+    @JsonView(UserView.ShortView.class)
     private String phone;
+    @JsonView(UserView.ShortView.class)
     private boolean sex;
-    private boolean isActive;
+    @JsonView(UserView.ShortView.class)
+    private boolean active;
+    @JsonView(UserView.ShortView.class)
     private Image image;
+    @JsonView(UserView.ShortView.class)
     private LocalDate regDate;
+    @JsonView(UserView.FullView.class)
     private Set<User> friends;
+    @JsonView(UserView.FullView.class)
     private WishList wishList;
+    @JsonView(UserView.FullView.class)
     private Set<Event> events;
+    @JsonView(UserView.FullView.class)
     private Settings settings;
+    @JsonView(UserView.FullView.class)
     private String confLink;
 
     public User copy() {
-
-        return new User(id, username, password, passwordConfirm, name, surName, email, birth, phone, sex, isActive, image, regDate, friends, wishList, events, settings, confLink);
+        return new User(id, login, password, passwordConfirm, name, surName,
+                email, birth, phone, sex, active, image,
+                regDate, friends, wishList, events, settings, confLink);
     }
-
-
 
     public User() {
     }
 
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
-    public User(Long id, String username, String password) {
+    public User(Long id, String password) {
         this.id = id;
-        this.username = username;
+        this.password = password;
+    }
+    public User(String login, String password) {
+        this.login = login;
         this.password = password;
     }
 
-    public User(String username, String password, String passwordConfirm) {
-        this.username = username;
+    public User(Long id, String login, String password, String name) {
+        this.id = id;
+        this.login = login;
+        this.password = password;
+        this.name = name;
+    }
+
+    public User(String login, String password, String passwordConfirm) {
+        this.login = login;
         this.password = password;
         this.passwordConfirm = passwordConfirm;
     }
 
-    public User(Long id, String username, String password, String passwordConfirm, String name, String surName, String email, LocalDate birth, String phone, boolean sex, boolean isActive, Image image, LocalDate regDate, Set<User> friends, WishList wishList, Set<Event> events, Settings settings, String confLink) {
+    public User(Long id, String login, String password, String passwordConfirm,
+                String name, String surName, String email, LocalDate birth,
+                String phone, boolean sex, boolean active, Image image,
+                LocalDate regDate, Set<User> friends, WishList wishList,
+                Set<Event> events, Settings settings, String confLink) {
         this.id = id;
-        this.username = username;
+        this.login = login;
         this.password = password;
         this.passwordConfirm = passwordConfirm;
         this.name = name;
@@ -68,7 +90,7 @@ public class User {
         this.birth = birth;
         this.phone = phone;
         this.sex = sex;
-        this.isActive = isActive;
+        this.active = active;
         this.image = image;
         this.regDate = regDate;
         this.friends = friends;
@@ -76,6 +98,23 @@ public class User {
         this.events = events;
         this.settings = settings;
         this.confLink = confLink;
+    }
+
+    public User(Long id, String login, String password, String name,
+                String surName, String email, LocalDate birth, String phone,
+                boolean sex, boolean active, LocalDate regDate, String confLink){
+        this.id = id;
+        this.login = login;
+        this.password = password;
+        this.name = name;
+        this.surName = surName;
+        this.email = email;
+        this.birth = birth;
+        this.phone = phone;
+        this.sex = sex;
+        this.active=active;
+        this.regDate=regDate;
+        this.confLink=confLink;
     }
 
     public Long getId() {
@@ -86,12 +125,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getLogin() {
+        return login;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getPassword() {
@@ -150,7 +189,7 @@ public class User {
         this.phone = phone;
     }
 
-    public boolean isSex() {
+    public boolean getSex() {
         return sex;
     }
 
@@ -159,11 +198,11 @@ public class User {
     }
 
     public boolean isActive() {
-        return isActive;
+        return active;
     }
 
     public void setActive(boolean active) {
-        isActive = active;
+        this.active = active;
     }
 
     public Image getImage() {

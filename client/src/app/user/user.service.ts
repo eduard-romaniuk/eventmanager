@@ -19,12 +19,20 @@ export class UserService {
     return this.http.get(this.userUrl);
   }
 
-  public deleteUser(user) {
-    return this.http.delete(this.userUrl + "/"+ user.id);
+  public getUserById(id) {
+    return this.http.get(this.userUrl+ "/"+ id);
   }
 
   public createUser(user) {
     return this.http.post(this.userUrl, user);
+  }
+
+  public updateUser(id, newUser) {
+    return this.http.post(this.userUrl, id, newUser);
+  }
+
+  public deleteUser(user) {
+    return this.http.delete(this.userUrl + "/"+ user.id);
   }
 
 }

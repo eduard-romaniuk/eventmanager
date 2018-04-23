@@ -12,7 +12,7 @@ public class JdbcTemplateSingleton extends JdbcTemplate {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
 //        dataSource.setUrl("jdbc:postgresql://ec2-54-217-217-142.eu-west-1.compute.amazonaws.com:5432" +
 //                "/d4btkoj41tnlfe?ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory");
-//        dataSource.setUsername("xqfzmsoqaknvri");
+//        dataSource.setLogin("xqfzmsoqaknvri");
 //        dataSource.setPassword("fa270a93981995a8eabbe236fcab3a3c0b48d69e7fe3f34f474ba3065731e38a");
         dataSource.setUrl("jdbc:postgresql:eventmanagerdb");
         dataSource.setUsername("postgres");

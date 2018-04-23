@@ -1,16 +1,16 @@
 <form class="md-form text-center" [formGroup]="form" (submit)="login()">
     <div class="form-group">
-        <input type="text" id="username" class="form-control mt-2" placeholder="Username"
-            formControlName="username" [(ngModel)]="credentials.username"
+        <input type="text" id="login" class="form-control mt-2" placeholder="Username"
+            formControlName="login" [(ngModel)]="credentials.login"
             [ngClass]="{
-                'is-invalid': form.get('username').invalid && (form.get('username').dirty || form.get('username').touched)
+                'is-invalid': form.get('login').invalid && (form.get('login').dirty || form.get('login').touched)
             }">
-        <div *ngIf="form.get('username').invalid && (form.get('username').dirty || form.get('username').touched)"
+        <div *ngIf="form.get('login').invalid && (form.get('login').dirty || form.get('login').touched)"
             class="text-danger">
-            <div *ngIf = "form.get('username').errors.required">
+            <div *ngIf = "form.get('login').errors.required">
                 Username field can't be blank
             </div>
-            <div *ngIf = "form.get('username').errors.pattern">
+            <div *ngIf = "form.get('login').errors.pattern">
                 Invalid characters used
             </div>
         </div>

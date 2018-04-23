@@ -59,7 +59,7 @@ public class HelloController {
 //    @RequestMapping(value = "/login", method = RequestMethod.POST)
 //    public ModelAndView login(User user) {
 //        try {
-//            securityService.login(user.getUsername(), user.getPassword());
+//            securityService.login(user.getLogin(), user.getPassword());
 //            return new ModelAndView(REDIRECT_TO_ROOT);
 //        } catch (AuthException e) {
 //            return new ModelAndView("login");
@@ -85,7 +85,7 @@ public class HelloController {
 //        if(!bindingResult.hasErrors()) {
 //            userService.saveUser(userRegistration.copy());
 //            try {
-//                securityService.login(userRegistration.getUsername(), userRegistration.getPassword());
+//                securityService.login(userRegistration.getLogin(), userRegistration.getPassword());
 //                return new ModelAndView(REDIRECT_TO_ROOT);
 //            } catch (AuthException ignored) {
 //                return new ModelAndView(REDIRECT_TO_ROOT);

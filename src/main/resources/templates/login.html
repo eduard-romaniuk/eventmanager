@@ -10,7 +10,7 @@
             <div class="col-3">
                 <form th:action="@{/login}" method="post" class="form-signin text-center" th:object="${user}">
                     <h3>Login form</h3>
-                    <input type="text" class="form-control mt-3 mb-2" placeholder="Username" th:field="*{username}">
+                    <input type="text" class="form-control mt-3 mb-2" placeholder="Username" th:field="*{login}">
                     <input type="password" class="form-control mb-2" placeholder="Password" th:field="*{password}">
                     <div class="text-danger small" role="alert" th:if="${param.error}">Username or Password invalid, please verify</div>
                     <button type="submit" class="btn btn-primary btn-block mt-2" name="submit">Login</button>

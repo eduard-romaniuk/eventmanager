@@ -7,10 +7,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,4 +29,34 @@ public class UserController {
         System.out.println("In listAllUsers - " + users.toString());
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+
+    @JsonView(UserView.FullView.class)
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
+        User user = userService.getUser(id);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @JsonView(UserView.FullView.class)
+    @PostMapping(value = "/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User newUser) {
+        User oldUser = userService.getUser(id);
+        if (oldUser == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        newUser.setId(oldUser.getId());
+        userService.updateUser(newUser);
+        return new ResponseEntity<>(newUser, HttpStatus.OK);
+    }
+
+//TODO Uncomment when eventService appear
+//    @JsonView(UserView.FullView.class)
+//    @GetMapping(value = "/{id}/events")
+//    public ResponseEntity<List<Event>> getUserEvents(@PathVariable Long id) {
+//        List<Event> eventList = eventService.getUserEvents(id);
+//        return new ResponseEntity<>(eventList, HttpStatus.OK);
+//    }
 }

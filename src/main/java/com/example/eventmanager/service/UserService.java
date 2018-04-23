@@ -36,4 +36,17 @@ public class UserService {
 
         return copy;
     }
+
+    public User getUser(Long id){
+        return usersRepository.findOne(id);
+    }
+
+    public void updateUser(User user){
+        usersRepository.update(user);
+    }
+
+    public void deleteUser(User user){
+        usersRepository.delete(user);
+    }
+
 }
