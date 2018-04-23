@@ -4,9 +4,11 @@ import { HelloComponent } 		from './hello/hello.component';
 import { HomeComponent } 		from './home/home.component';
 import { AuthService } 			from './auth.service';
 
+import { UserComponent } from './user/user.component';
+
 @Injectable()
-class OnlyLoggedInUsersGuard implements CanActivate { 
-  constructor(private auth: AuthService, private router: Router) {}; 
+class OnlyLoggedInUsersGuard implements CanActivate {
+  constructor(private auth: AuthService, private router: Router) {};
 
   canActivate() {
     if (!this.auth.authenticated) {
@@ -24,6 +26,8 @@ const routes: Routes = [
   { path: 'home',
     component: HomeComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'users',
+    component: UserComponent},
   { path: '**', redirectTo: '/hello', pathMatch: 'full'}
 ];
 

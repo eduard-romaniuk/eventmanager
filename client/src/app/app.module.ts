@@ -11,13 +11,15 @@ import { HelloComponent }        from './hello/hello.component';
 import { AppRoutingModule }      from './app-routing.module';
 import { HomeComponent }         from './home/home.component';
 import { LoggerService } from './logger.service';
+import { UserComponent } from './user/user.component';
+import {UserService} from './user/user.service';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     req = req.clone({
        setHeaders: {
-          Authorization: sessionStorage.getItem('authToken') 
+          Authorization: sessionStorage.getItem('authToken')
        }
     });
     return next.handle(req);
@@ -30,7 +32,8 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     LoginComponent,
     RegistrationComponent,
     HelloComponent,
-    HomeComponent
+    HomeComponent,
+    UserComponent
   ],
   imports: [
     BrowserModule,
@@ -44,7 +47,8 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     { provide: HTTP_INTERCEPTORS,
       useClass: AuthenticationInterceptor,
       multi: true},
-    LoggerService
+    LoggerService,
+    UserService
   ],
   bootstrap: [AppComponent]
 })

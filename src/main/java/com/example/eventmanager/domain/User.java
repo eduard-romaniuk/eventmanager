@@ -1,5 +1,6 @@
 package com.example.eventmanager.domain;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.ToString;
 
 import java.time.LocalDate;
@@ -7,9 +8,11 @@ import java.util.Set;
 
 @ToString
 public class User {
-
+    @JsonView(UserView.ShortView.class)
     private Long id;
+    @JsonView(UserView.ShortView.class)
     private String username;
+    @JsonView(UserView.ShortView.class)
     private String password;
     private String passwordConfirm;
     private String name;
