@@ -28,8 +28,8 @@ public class EventController {
     }
 
     @CrossOrigin(origins = "http://localhost:4200")
-    //@PostMapping(value = "/event")
-    @RequestMapping(path = "/event/CreateEvent", method = RequestMethod.POST)
+    @PostMapping(value = "/event")
+    //@RequestMapping(path = "/event/CreateEvent", method = RequestMethod.POST)
     public ResponseEntity<Void> createEvent(@RequestBody Event event, UriComponentsBuilder ucBuilder) {
         System.out.println("CreateEvent method");
         eventService.createEvent(event);

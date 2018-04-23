@@ -41,11 +41,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anonymous()
             .and()
                 .authorizeRequests()
-                    .antMatchers().permitAll()
+                    .antMatchers(HttpMethod.POST, "/event").permitAll()
                     .anyRequest().authenticated()
             .and()
-                .csrf()
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+                .csrf().disable();
     }
 
     @Autowired
