@@ -10,6 +10,8 @@ import { RegistrationComponent } from './registration/registration.component';
 import { HelloComponent }        from './hello/hello.component';
 import { AppRoutingModule }      from './app-routing.module';
 import { HomeComponent }         from './home/home.component';
+import { CreateEventComponent }   from './createEvent/createEvent.component'
+import {EventService} from "./event.service";
 
 
 @NgModule({
@@ -18,7 +20,8 @@ import { HomeComponent }         from './home/home.component';
     LoginComponent,
     RegistrationComponent,
     HelloComponent,
-    HomeComponent
+    HomeComponent,
+    CreateEventComponent
   ],
   imports: [
     BrowserModule,
@@ -27,7 +30,8 @@ import { HomeComponent }         from './home/home.component';
     FormsModule
   ],
   providers: [
-    AuthService
+    AuthService,
+    EventService
   ],
   bootstrap: [AppComponent]
 })
