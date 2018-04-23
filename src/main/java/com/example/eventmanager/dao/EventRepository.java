@@ -6,6 +6,8 @@ import com.example.eventmanager.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -45,8 +47,8 @@ public class EventRepository implements CrudRepository<Event> {
         MapSqlParameterSource namedParams = new MapSqlParameterSource();
         namedParams.addValue("creator_id", event.getCreator().getId());
         namedParams.addValue("name", event.getName());
-        namedParams.addValue("description", event.getDescriptionId());
-        namedParams.addValue("place", event.getPlase());
+        namedParams.addValue("description", event.getDescription());
+        namedParams.addValue("place", event.getPlace());
         namedParams.addValue("timeline_start", event.getTimeLineStart());
         namedParams.addValue("timeline_finish", event.getTimeLineFinish());
         namedParams.addValue("period_in_days", event.getPeriod());
@@ -62,7 +64,7 @@ public class EventRepository implements CrudRepository<Event> {
     public Event findOne(Long id) {
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("eventId", id);
-        return namedJdbcTemplate.queryForObject(env.getProperty("findById"), namedParams, new EventMapper());
+        return namedJdbcTemplate.query(env.getProperty("findById"), namedParams, new EventWithCreator());
     }
 
     @Override
@@ -71,9 +73,19 @@ public class EventRepository implements CrudRepository<Event> {
     }
 
     @Override
-    public void update(Event entity) {
-        delete(entity);
-        save(entity);
+    public void update(Event event) {
+        Map<String, Object> namedParams = new HashMap<>();
+        namedParams.put("name", event.getName());
+        namedParams.put("description", event.getDescription());
+        namedParams.put("place", event.getPlace());
+        namedParams.put("timeline_start", event.getTimeLineStart());
+        namedParams.put("timeline_finish", event.getTimeLineFinish());
+        namedParams.put("period_in_days", event.getPeriod());
+        namedParams.put("image_id", event.getImageId());
+        namedParams.put("is_sent", event.isSent());
+        namedParams.put("is_private", event.isPrivate());
+        namedParams.put("eventId", event.getId());
+        namedJdbcTemplate.update(env.getProperty("updateEvent"), namedParams);
     }
 
     @Override
@@ -112,8 +124,8 @@ public class EventRepository implements CrudRepository<Event> {
             Event event = new Event();
             event.setId(rs.getLong("id"));
             event.setName(rs.getString("name"));
-            event.setDescriptionId(rs.getLong("description"));
-            event.setPlase(rs.getString("place"));
+            event.setDescription(rs.getString("description"));
+            event.setPlace(rs.getString("place"));
             event.setTimeLineStart(rs.getTimestamp("timeline_start").toLocalDateTime());
             event.setTimeLineFinish(rs.getTimestamp("timeline_finish").toLocalDateTime());
             event.setPeriod(rs.getInt("period_in_days"));
@@ -124,6 +136,34 @@ public class EventRepository implements CrudRepository<Event> {
         }
     }
 
+    private static final class EventWithCreator implements ResultSetExtractor<Event>{
+
+        @Override
+        public Event extractData(ResultSet rs) throws SQLException, DataAccessException {
+
+            Event event = new Event();
+            User creator = new User();
+            while (rs.next()){
+                event.setId(rs.getLong("id"));
+                event.setName(rs.getString("name"));
+                event.setDescription(rs.getString("description"));
+                event.setPlace(rs.getString("place"));
+                event.setTimeLineStart(rs.getTimestamp("timeline_start").toLocalDateTime());
+                event.setTimeLineFinish(rs.getTimestamp("timeline_finish").toLocalDateTime());
+                event.setPeriod(rs.getInt("period_in_days"));
+                event.setImageId(rs.getLong("image_id"));
+                event.setSent(rs.getBoolean("is_sent"));
+                event.setPrivate(rs.getBoolean("is_private"));
+                creator.setId(rs.getLong("creator_id"));
+                creator.setUsername(rs.getString("login"));
+                creator.setName(rs.getString("creator_name"));
+                creator.setSurName(rs.getString("surname"));
+            }
+
+            event.setCreator(creator);
+            return event;
+        }
+    }
 
     private static final class UserMapper implements RowMapper<User> {
         @Override

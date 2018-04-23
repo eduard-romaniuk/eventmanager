@@ -15,17 +15,18 @@ import java.util.List;
 @Service
 public class EventService {
 
-    @Autowired
-    EventRepository eventRepository;
+    private final EventRepository eventRepository;
 
     @Autowired
-    UsersRepository usersRepository;
+    public EventService(EventRepository eventRepository, UsersRepository usersRepository) {
+        this.eventRepository = eventRepository;
+    }
 
-
-    public void createEvent(Event event, User creator){
-        event.setCreator(creator);
+    /* TODO add Principal */
+    public void createEvent(Event event){
+       // event.setCreator(creator);
         event.setId((long) eventRepository.save(event));
-        eventRepository.addUserToEvent(event.getId(),creator.getId());
+        //eventRepository.addUserToEvent(event.getId(),creator.getId());
     }
 
     public void publishEvent(Event event){
@@ -33,7 +34,7 @@ public class EventService {
         eventRepository.update(event);
     }
 
-    public void editEvent(Event event){
+    public void updateEvent(Event event){
         eventRepository.update(event);
     }
 
@@ -69,8 +70,12 @@ public class EventService {
         }
     }
 
-    public List<User> getParticipants(Event event){
+    public List<User> getParticipants(Long id){
 
-        return eventRepository.findParticipants(event.getId());
+        return eventRepository.findParticipants(id);
+    }
+
+    public void deleteEvent(Event event){
+        eventRepository.delete(event);
     }
 }

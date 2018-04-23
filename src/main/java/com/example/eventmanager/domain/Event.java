@@ -1,5 +1,7 @@
 package com.example.eventmanager.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
@@ -7,18 +9,26 @@ import java.util.List;
 
 @ToString
 public class Event {
+    @JsonView(EventView.ShortView.class)
     private Long id;
     private User creator;
     //private Folder folder;
+    @JsonView(EventView.ShortView.class)
     private String name;
-    private long descriptionId;
-    private String plase;
+    @JsonView(EventView.FullView.class)
+    private String description;
+    @JsonView(EventView.FullView.class)
+    private String place;
+    @JsonView(EventView.FullView.class)
     private LocalDateTime timeLineStart;
+    @JsonView(EventView.FullView.class)
     private LocalDateTime timeLineFinish;
     private Integer period;
    // private WishList wishList;
     private Long imageId;
+    @JsonProperty
     private boolean isSent;
+    @JsonProperty
     private boolean isPrivate;
     private List<User> participants;
   //  private List<Chat> chats;
@@ -48,20 +58,20 @@ public class Event {
         this.name = name;
     }
 
-    public long getDescriptionId() {
-        return descriptionId;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescriptionId(long descriptionId) {
-        this.descriptionId = descriptionId;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getPlase() {
-        return plase;
+    public String getPlace() {
+        return place;
     }
 
-    public void setPlase(String plase) {
-        this.plase = plase;
+    public void setPlace(String place) {
+        this.place = place;
     }
 
     public LocalDateTime getTimeLineStart() {
