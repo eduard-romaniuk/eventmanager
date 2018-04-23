@@ -62,15 +62,16 @@ public class UsersRepository implements CrudRepository<User> {
     }
 
     @Override
-    public void delete(User user) {
+    public int delete(User user) {
         jdbcTemplate.update(
                 "DELETE FROM \"users\" WHERE id = ?",
                 user.getId()
         );
+        return 0;
     }
 
     @Override
-    public void save(User user) {
+    public int save(User user) {
         if (user.getId() == null || !this.exists(user.getId())) {
             jdbcTemplate.update(
                     "INSERT INTO \"users\" (username, password) VALUES (?, ?)",
@@ -79,6 +80,7 @@ public class UsersRepository implements CrudRepository<User> {
         } else {
             update(user);
         }
+        return 0;
     }
 
 }
