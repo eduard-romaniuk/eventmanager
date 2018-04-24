@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 import { User } from '../models/user.model';
 import { UserService } from './user.service';
@@ -12,15 +12,32 @@ import { UserService } from './user.service';
 })
 export class UserComponent implements OnInit {
 
-  users: User[];
+  user: User = new User();
 
-  constructor(private router: Router, private userService: UserService) { }
+  sub: Subscription;
+
+  constructor(private route: ActivatedRoute,
+              private router: Router,
+              private userService: UserService) { }
 
   ngOnInit() {
-    this.userService.getUsers()
-      .subscribe( (data : any) => {
-        this.users = data;
-      });
+    this.sub = this.route.params.subscribe(params => {
+      const id = params['id'];
+      if (id) {
+        this.userService.getUserById(id).subscribe((user: any) => {
+          if (user) {
+            this.user = user;
+          } else {
+            console.log(`User with id '${id}' not found!`);
+            this.gotoList();
+          }
+        });
+      }
+    });
+  }
+
+  gotoList() {
+    this.router.navigate(['/users']);
   }
 
 }

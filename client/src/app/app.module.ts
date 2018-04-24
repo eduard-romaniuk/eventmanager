@@ -12,6 +12,7 @@ import { AppRoutingModule }      from './app-routing.module';
 import { HomeComponent }         from './home/home.component';
 import { LoggerService } from './logger.service';
 import { UserComponent } from './user/user.component';
+import { UserListComponent } from './user/user-list.component';
 import {UserService} from './user/user.service';
 
 @Injectable()
@@ -33,7 +34,8 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     RegistrationComponent,
     HelloComponent,
     HomeComponent,
-    UserComponent
+    UserComponent,
+    UserListComponent
   ],
   imports: [
     BrowserModule,
