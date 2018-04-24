@@ -41,14 +41,16 @@ public class UserController {
     }
 
     @JsonView(UserView.FullView.class)
-    @PostMapping(value = "/{id}")
+    @PutMapping(value = "/{id}")
     public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User newUser) {
+        System.out.println("newUser - " + newUser.toString());
         User oldUser = userService.getUser(id);
         if (oldUser == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         newUser.setId(oldUser.getId());
         userService.updateUser(newUser);
+        System.out.println("In updateUser - " + newUser.toString());
         return new ResponseEntity<>(newUser, HttpStatus.OK);
     }
 

@@ -6,6 +6,7 @@ import { AuthService } 			from './auth.service';
 
 import { UserComponent } from './user/user.component';
 import { UserListComponent } from './user/user-list.component';
+import { UserEditComponent } from './user/user-edit.component';
 
 @Injectable()
 class OnlyLoggedInUsersGuard implements CanActivate {
@@ -31,6 +32,8 @@ const routes: Routes = [
     component: UserListComponent},
   { path: 'users/:id',
     component: UserComponent},
+  { path: 'users/:id/edit',
+    component: UserEditComponent},
   { path: '**', redirectTo: '/hello', pathMatch: 'full'}
 ];
 

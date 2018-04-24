@@ -5,5 +5,9 @@
   <p>Login: {{ user.login }}</p>
   <p>Name: {{ user.name }} {{user.surName }}</p>
 
+  <p>
+    <button class="btn btn-info" (click)="goToEditUserPage(user)"> Edit User</button>
+  </p>
+
 </div>
 

@@ -13,7 +13,8 @@ import { HomeComponent }         from './home/home.component';
 import { LoggerService } from './logger.service';
 import { UserComponent } from './user/user.component';
 import { UserListComponent } from './user/user-list.component';
-import {UserService} from './user/user.service';
+import { UserService } from './user/user.service';
+import { UserEditComponent } from './user/user-edit.component';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -35,7 +36,8 @@ export class AuthenticationInterceptor implements HttpInterceptor {
     HelloComponent,
     HomeComponent,
     UserComponent,
-    UserListComponent
+    UserListComponent,
+    UserEditComponent
   ],
   imports: [
     BrowserModule,

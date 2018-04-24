@@ -87,6 +87,7 @@ public class UsersRepository implements CrudRepository<User> {
 
     @Override
     public void update(User user) {
+        System.out.println("user - " + user.toString());
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("login", user.getLogin());
         namedParams.put("password", user.getPassword());
@@ -94,7 +95,7 @@ public class UsersRepository implements CrudRepository<User> {
         namedParams.put("surname", user.getSurName());
         namedParams.put("email", user.getEmail());
         namedParams.put("birth", user.getBirth());
-        namedParams.put("phone", !user.getPhone().equals("") ?
+        namedParams.put("phone", (user.getPhone()!=null || !user.getPhone().equals(""))?
                 user.getPhone() : null);
         namedParams.put("sex", user.getSex());
         namedParams.put("image_id", user.getImage() != null ?

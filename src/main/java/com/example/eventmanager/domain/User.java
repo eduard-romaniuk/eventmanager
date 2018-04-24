@@ -53,6 +53,10 @@ public class User {
     public User() {
     }
 
+    public User(Long id) {
+        this.id = id;
+    }
+
     public User(Long id, String password) {
         this.id = id;
         this.password = password;
