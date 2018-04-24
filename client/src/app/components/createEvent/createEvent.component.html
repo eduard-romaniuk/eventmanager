@@ -1,26 +1,26 @@
 <div class="md-form text-center">
   <input type="text" id="eventName" class="form-control mt-2" placeholder="Name of event"
-         [(ngModel)]="eventData.eventName">
+         [(ngModel)]="event.name">
   <input type="text" id="description" class="form-control mt-2" placeholder="Description"
-         [(ngModel)]="eventData.description">
+         [(ngModel)]="event.description">
   <input type="text" id="place" class="form-control mt-2" placeholder="Venue"
-         [(ngModel)]="eventData.place">
+         [(ngModel)]="event.place">
   <div class="md-form text-left">
     Start time:
   </div>
   <input type="datetime-local" id="timeLineStart" class="form-control mt-2"
-         [(ngModel)]="eventData.timeLineStart">
+         [(ngModel)]="event.timeLineStart">
   <div class="md-form text-left">
     End time:
   </div>
   <input type="datetime-local" id="timeLineFinish" class="form-control mt-2"
-         [(ngModel)]="eventData.timeLineFinish">
+         [(ngModel)]="event.timeLineFinish">
   <input type="number" id="period" class="form-control mt-2" placeholder="Repetition period in days"
-         [(ngModel)]="eventData.period">
+         [(ngModel)]="event.period">
   <div class="form-control mt-2">
     Event is private?
     <input type="checkbox" id="isPrivate"
-           [(ngModel)]="eventData.isPrivate">
+           [(ngModel)]="event.isPrivate">
   </div>
   <button class="btn btn-default mt-2" (click)="create()">Create</button>
   <button class="btn btn-default mt-2" (click)="publish()">Publish</button>

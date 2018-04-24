@@ -3,15 +3,15 @@ import { NgModule, Injectable } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
-import { AuthService }            from './auth.service';
+import { AuthService }            from '../services/auth.service';
 import { AppComponent }          from './app.component';
-import { LoginComponent }        from './login/login.component';
-import { RegistrationComponent } from './registration/registration.component';
-import { HelloComponent }        from './hello/hello.component';
-import { AppRoutingModule }      from './app-routing.module';
-import { HomeComponent }         from './home/home.component';
-import { CreateEventComponent }   from './createEvent/createEvent.component'
-import {EventService} from "./event.service";
+import { LoginComponent }        from '../components/login/login.component';
+import { RegistrationComponent } from '../components/registration/registration.component';
+import { HelloComponent }        from '../components/hello/hello.component';
+import { AppRoutingModule }      from '../modules/app-routing.module';
+import { HomeComponent }         from '../components/home/home.component';
+import { CreateEventComponent }   from '../components/createEvent/createEvent.component'
+import {EventService} from "../services/event.service";
 
 
 @NgModule({

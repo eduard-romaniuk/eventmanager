@@ -1,9 +1,9 @@
 import { NgModule, Injectable } from '@angular/core';
 import { RouterModule, Routes, CanActivate } from '@angular/router';
-import { HelloComponent } 		from './hello/hello.component';
-import { HomeComponent } 		from './home/home.component';
-import { AuthService } 			from './auth.service';
-import { CreateEventComponent } from './createEvent/createEvent.component'
+import { HelloComponent } 		from '../components/hello/hello.component';
+import { HomeComponent } 		from '../components/home/home.component';
+import { AuthService } 			from '../services/auth.service';
+import { CreateEventComponent } from '../components/createEvent/createEvent.component'
 
 @Injectable()
 class OnlyLoggedInUsersGuard implements CanActivate {
