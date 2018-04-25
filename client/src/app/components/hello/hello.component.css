@@ -1,0 +1,13 @@
+.bg {
+	height: 100%;
+	background:
+		linear-gradient(
+	      rgba(0, 0, 0, 0.45), 
+	      rgba(0, 0, 0, 0.45)
+	    ),
+	    url("../../../assets/images/start-bg.jpg");
+}
+
+.nounderline{
+	text-decoration: none !important;
+}

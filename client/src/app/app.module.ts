@@ -3,15 +3,17 @@ import { NgModule, Injectable } from '@angular/core';
 import { HttpClientModule, HttpInterceptor, HttpHandler, HttpRequest, HTTP_INTERCEPTORS, HttpHeaders } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { environment } from '../environments/environment';
-import { AuthService }           from './auth.service';
+import { environment }           from '../environments/environment';
+import { AppRoutingModule }      from './modules/app-routing.module';
+import { AuthService }           from './services/auth.service';
+import { UsersService }           from './services/users.service';
+import { LoggerService }         from './services/logger.service';
 import { AppComponent }          from './app.component';
-import { LoginComponent }        from './login/login.component';
-import { RegistrationComponent } from './registration/registration.component';
-import { HelloComponent }        from './hello/hello.component';
-import { AppRoutingModule }      from './app-routing.module';
-import { HomeComponent }         from './home/home.component';
-import { LoggerService }         from './logger.service';
+import { LoginComponent }        from './components/login/login.component';
+import { RegistrationComponent } from './components/registration/registration.component';
+import { HelloComponent }        from './components/hello/hello.component';
+import { HomeComponent }         from './components/home/home.component';
+import { EmailVerificationComponent } from './components/email-verification/email-verification.component';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -41,7 +43,8 @@ export class AddressInterceptor implements HttpInterceptor {
     LoginComponent,
     RegistrationComponent,
     HelloComponent,
-    HomeComponent
+    HomeComponent,
+    EmailVerificationComponent
   ],
   imports: [
     BrowserModule,
@@ -52,13 +55,14 @@ export class AddressInterceptor implements HttpInterceptor {
   ],
   providers: [
     AuthService,
+    UsersService,
+    LoggerService,
     { provide: HTTP_INTERCEPTORS,
       useClass: AddressInterceptor,
       multi: true},
     { provide: HTTP_INTERCEPTORS,
       useClass: AuthenticationInterceptor,
-      multi: true},
-    LoggerService
+      multi: true}
   ],
   bootstrap: [AppComponent]
 })
