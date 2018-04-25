@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../services/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { JQueryStatic } from 'jquery';
@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
   login() {
     this.loading = true;
     this.error = false;
-    
+
     this.auth.authenticate(this.credentials, () => {
       this.credentials.password = '';
       this.credentials.username = '';

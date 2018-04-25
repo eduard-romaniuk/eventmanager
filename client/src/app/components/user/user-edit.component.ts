@@ -1,16 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-import { User } from '../models/user.model';
-import { UserService } from './user.service';
+import { User } from '../../model/user.model';
+import { UserService } from '../../services/users.service';
 
 @Component({
-  selector: 'app-user',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.css']
+  selector: 'app-user-edit',
+  templateUrl: './user-edit.component.html',
+  styleUrls: ['./user-edit.component.css']
 })
-export class UserComponent implements OnInit {
+export class UserEditComponent implements OnInit, OnDestroy {
 
   user: User = new User();
 
@@ -29,7 +29,6 @@ export class UserComponent implements OnInit {
             this.user = user;
           } else {
             console.log(`User with id '${id}' not found!`);
-            this.gotoList();
           }
         });
       }
@@ -40,12 +39,11 @@ export class UserComponent implements OnInit {
     this.sub.unsubscribe();
   }
 
-  goToEditUserPage(user: User): void {
-    this.router.navigate(['users', user.id, 'edit']);
-  };
-
-  gotoList() {
-    this.router.navigate(['/users']);
+  save() {
+    console.log("this.user.email - " + this.user.email);
+    this.userService.updateUser(this.user).subscribe((user: any) => {
+      this.router.navigate(['users', user.id]);
+    }, error => console.error(error));
   }
 
 }

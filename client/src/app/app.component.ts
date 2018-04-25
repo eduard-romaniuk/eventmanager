@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import { AuthService } from './auth.service';
+import { AuthService } from './services/auth.service';
 import 'rxjs/add/operator/finally';
 
 @Component({
@@ -19,7 +19,7 @@ export class AppComponent {
   logout() {
     this.auth.logout(() => this.router.navigateByUrl('/hello'));
   }
-  
+
   authenticated() {
     return this.auth.authenticated;
   }

@@ -3,18 +3,18 @@ import { NgModule, Injectable } from '@angular/core';
 import { HttpClientModule, HttpInterceptor, HttpHandler, HttpRequest, HTTP_INTERCEPTORS, HttpHeaders } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { AuthService }            from './auth.service';
+import { AuthService }            from './services/auth.service';
 import { AppComponent }          from './app.component';
-import { LoginComponent }        from './login/login.component';
-import { RegistrationComponent } from './registration/registration.component';
-import { HelloComponent }        from './hello/hello.component';
-import { AppRoutingModule }      from './app-routing.module';
-import { HomeComponent }         from './home/home.component';
-import { LoggerService } from './logger.service';
-import { UserComponent } from './user/user.component';
-import { UserListComponent } from './user/user-list.component';
-import { UserService } from './user/user.service';
-import { UserEditComponent } from './user/user-edit.component';
+import { LoginComponent }        from './components/login/login.component';
+import { RegistrationComponent } from './components/registration/registration.component';
+import { HelloComponent }        from './components/hello/hello.component';
+import { AppRoutingModule }      from './modules/app-routing.module';
+import { HomeComponent }         from './components/home/home.component';
+import { LoggerService } from './services/logger.service';
+import { UserComponent } from './components/user/user.component';
+import { UserListComponent } from './components/user/user-list.component';
+import { UserService } from './services/users.service';
+import { UserEditComponent } from './components/user/user-edit.component';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {

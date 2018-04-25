@@ -1,12 +1,12 @@
 import { NgModule, Injectable } from '@angular/core';
 import { RouterModule, Routes, CanActivate, Router } from '@angular/router';
-import { HelloComponent } 		from './hello/hello.component';
-import { HomeComponent } 		from './home/home.component';
-import { AuthService } 			from './auth.service';
+import { HelloComponent } 		from '../components/hello/hello.component';
+import { HomeComponent } 		from '../components/home/home.component';
+import { AuthService } 			from '../services/auth.service';
 
-import { UserComponent } from './user/user.component';
-import { UserListComponent } from './user/user-list.component';
-import { UserEditComponent } from './user/user-edit.component';
+import { UserComponent } from '../components/user/user.component';
+import { UserListComponent } from '../components/user/user-list.component';
+import { UserEditComponent } from '../components/user/user-edit.component';
 
 @Injectable()
 class OnlyLoggedInUsersGuard implements CanActivate {
