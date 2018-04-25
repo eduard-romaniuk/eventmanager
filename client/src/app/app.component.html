@@ -1,0 +1,40 @@
+<nav class="navbar navbar-light bg-light">
+  <span class="navbar-brand mb-0 h1">{{ title }}</span>
+  <div class="navbar-right" [hidden]="authenticated()">
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#signInModal">Sign In</button>
+  </div>
+  <div class="navbar-right" [hidden]="!authenticated()">
+    <button type="button" class="btn btn-primary" (click)="logout()">Log Out</button>
+  </div>
+</nav>
+
+<div class="modal fade" id="signInModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div role="tabpanel">
+          <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="nav-item">
+              <a class="nav-link active" href="#loginTab" aria-controls="loginTab" role="tab" data-toggle="tab">Login</a>
+            </li>
+            <li role="presentation" class="nav-item">
+              <a class="nav-link" href="#registrationTab" aria-controls="registrationTab" role="tab" data-toggle="tab">Registraion</a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="loginTab">
+              <app-login></app-login>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="registrationTab">
+              <app-registration></app-registration>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<router-outlet></router-outlet>

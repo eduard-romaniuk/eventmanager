@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import {Router, ActivatedRoute} from '@angular/router';
 import { JQueryStatic } from 'jquery';
 
-import { Event } from '../../model/event.model'
+import { Event } from '../../model/event'
 
 @Component({
   selector: 'app-createEvent',
