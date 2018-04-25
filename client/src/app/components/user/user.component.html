@@ -1,0 +1,13 @@
+<div class="col-md-6">
+  <h2> User Details: </h2>
+
+  <p *ngIf="hideElement">{{ user.id }}</p>
+  <p>Login: {{ user.login }}</p>
+  <p>Name: {{ user.name }} {{user.surName }}</p>
+
+  <p>
+    <button class="btn btn-info" (click)="goToEditUserPage(user)"> Edit User</button>
+  </p>
+
+</div>
+

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { User } from '../../model/user';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -9,10 +8,11 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
+  obj = {};
 
-  user: User = new User();
-
-  constructor(private http: HttpClient, private auth: AuthService) {
-    this.auth.current_user.subscribe(response => this.user = response);
+  constructor(private auth: AuthService, private http: HttpClient) {
+    http.get('http://localhost:8080/getObj/test')
+    	.subscribe(data => this.obj = data);
   }
+
 }

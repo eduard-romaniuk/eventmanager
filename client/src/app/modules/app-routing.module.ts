@@ -5,9 +5,13 @@ import { HomeComponent } 		  from '../components/home/home.component';
 import { CreateEventComponent }       from '../components/createEvent/createEvent.component';
 import { AuthService } 			  from '../services/auth.service';
 
+import { UserComponent } from '../components/user/user.component';
+import { UserListComponent } from '../components/user/user-list.component';
+import { UserEditComponent } from '../components/user/user-edit.component';
+
 @Injectable()
-class OnlyLoggedInUsersGuard implements CanActivate { 
-  constructor(private auth: AuthService, private router: Router) {}; 
+class OnlyLoggedInUsersGuard implements CanActivate {
+  constructor(private auth: AuthService, private router: Router) {};
 
   canActivate() {
     if (!this.auth.authenticated) {
@@ -27,6 +31,12 @@ const routes: Routes = [
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'event',
     component: CreateEventComponent },
+  { path: 'users',
+    component: UserListComponent},
+  { path: 'users/:id',
+    component: UserComponent},
+  { path: 'users/:id/edit',
+    component: UserEditComponent},
   { path: '**', redirectTo: '/hello', pathMatch: 'full'}
 ];
 

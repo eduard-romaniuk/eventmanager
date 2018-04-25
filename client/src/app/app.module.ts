@@ -16,13 +16,16 @@ import { HomeComponent }         from './components/home/home.component';
 import { EmailVerificationComponent } from './components/email-verification/email-verification.component';
 import { CreateEventComponent }   from './components/createEvent/createEvent.component'
 import { EventService } from "./services/event.service";
+import { UserComponent } from './components/user/user.component';
+import { UserListComponent } from './components/user/user-list.component';
+import { UserEditComponent } from './components/user/user-edit.component';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     req = req.clone({
         setHeaders: {
-          Authorization: sessionStorage.getItem('authToken') 
+          Authorization: sessionStorage.getItem('authToken')
         }
     });
     return next.handle(req);
@@ -48,6 +51,9 @@ export class AddressInterceptor implements HttpInterceptor {
     HomeComponent,
     EmailVerificationComponent,
     CreateEventComponent
+    UserComponent,
+    UserListComponent,
+    UserEditComponent
   ],
   imports: [
     BrowserModule,

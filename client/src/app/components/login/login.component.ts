@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
   login() {
     this.loading = true;
     this.error = false;
-    
+
     this.auth.authenticate(this.credentials, () => {
       $('#signInModal').modal('hide');
       
