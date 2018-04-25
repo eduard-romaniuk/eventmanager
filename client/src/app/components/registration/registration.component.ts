@@ -44,7 +44,7 @@ export class RegistrationComponent implements OnInit {
   registration(){
   	console.log(this.user);
     // this.form.reset();
-    this.auth.registration(this.user, );
+    this.auth.registration(this.user);
   	$('#logTab').tab('show');
   }
 
