@@ -2,6 +2,7 @@ import { NgModule, Injectable } from '@angular/core';
 import { RouterModule, Routes, CanActivate, Router } from '@angular/router';
 import { HelloComponent } 		from '../components/hello/hello.component';
 import { HomeComponent } 		  from '../components/home/home.component';
+import { CreateEventComponent }       from '../components/createEvent/createEvent.component';
 import { AuthService } 			  from '../services/auth.service';
 
 @Injectable()
@@ -24,6 +25,8 @@ const routes: Routes = [
   { path: 'home',
     component: HomeComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'event',
+    component: CreateEventComponent },
   { path: '**', redirectTo: '/hello', pathMatch: 'full'}
 ];
 

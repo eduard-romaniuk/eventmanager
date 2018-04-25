@@ -14,6 +14,8 @@ import { RegistrationComponent } from './components/registration/registration.co
 import { HelloComponent }        from './components/hello/hello.component';
 import { HomeComponent }         from './components/home/home.component';
 import { EmailVerificationComponent } from './components/email-verification/email-verification.component';
+import { CreateEventComponent }   from './components/createEvent/createEvent.component'
+import { EventService } from "./services/event.service";
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -44,7 +46,8 @@ export class AddressInterceptor implements HttpInterceptor {
     RegistrationComponent,
     HelloComponent,
     HomeComponent,
-    EmailVerificationComponent
+    EmailVerificationComponent,
+    CreateEventComponent
   ],
   imports: [
     BrowserModule,
@@ -55,6 +58,7 @@ export class AddressInterceptor implements HttpInterceptor {
   ],
   providers: [
     AuthService,
+    EventService,
     UsersService,
     LoggerService,
     { provide: HTTP_INTERCEPTORS,

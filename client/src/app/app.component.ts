@@ -19,7 +19,7 @@ export class AppComponent {
   logout() {
     this.auth.logout(() => this.router.navigateByUrl('/hello'));
   }
-  
+
   authenticated() {
     return this.auth.authenticated;
   }
