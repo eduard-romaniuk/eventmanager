@@ -1,15 +1,15 @@
-﻿-- TODO: indexes
-DROP TABLE IF EXISTS message_images;
-DROP TABLE IF EXISTS item_images;
+﻿--DROP TABLE IF EXISTS message_images;
+--DROP TABLE IF EXISTS item_images;
 DROP TABLE IF EXISTS item_tags;
 DROP TABLE IF EXISTS likes;
 DROP TABLE IF EXISTS tags;
 DROP TABLE IF EXISTS bookers;
+DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS items;
 DROP TABLE IF EXISTS wishlists;
 DROP TABLE IF EXISTS messages;
-DROP TABLE IF EXISTS participants;
 DROP TABLE IF EXISTS notifications_sett;
+DROP TABLE IF EXISTS participants;
 DROP TABLE IF EXISTS priorities;
 DROP TABLE IF EXISTS chats;
 DROP TABLE IF EXISTS events;
@@ -17,7 +17,6 @@ DROP TABLE IF EXISTS folders;
 DROP TABLE IF EXISTS relationships;
 DROP TABLE IF EXISTS settings;
 DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS images;
 DROP TABLE IF EXISTS status;
 
 -- -----------------------------------------------------
@@ -30,44 +29,33 @@ CREATE TABLE IF NOT EXISTS public.status (
   CONSTRAINT pk_status_id PRIMARY KEY (id),
   CONSTRAINT uk_status_statusName UNIQUE(status_name));
 
--- -----------------------------------------------------
--- Table public.images
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS public.images (
-  id SERIAL NOT NULL,
-  image_link VARCHAR(2083) NOT NULL,
-  
-  CONSTRAINT pk_images_id PRIMARY KEY (id));
 
 -- -----------------------------------------------------
 -- Table public.users
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.users (
   id SERIAL NOT NULL,
-  login VARCHAR(45) NOT NULL,
-  name VARCHAR(45) NOT NULL,
-  surname VARCHAR(45) NOT NULL,
-  email VARCHAR(254) NOT NULL,
-  password VARCHAR(32) NOT NULL,
+  login VARCHAR(64) NOT NULL,
+  name VARCHAR(64) NOT NULL,
+  surname VARCHAR(64) NOT NULL,
+  email VARCHAR(320) NOT NULL, --64 characters for the "local part" (username). 1 character for the @ symbol. 255 characters for the domain name.
+  password VARCHAR(128) NOT NULL,
   birth DATE NULL,
-  phone VARCHAR(15) NULL, -- Think about it!
+  phone VARCHAR(16) NULL,
   sex BOOLEAN NULL,
-  image_id INT NULL,
+  image VARCHAR(2083) NULL,
   is_active BOOLEAN NOT NULL DEFAULT FALSE,
-  reg_date TIMESTAMP with time zone NOT NULL,
+  reg_date TIMESTAMP with time zone NOT NULL DEFAULT current_timestamp,
   conf_link VARCHAR(2083) NULL,
   
   CONSTRAINT pk_users_id PRIMARY KEY (id),
   CONSTRAINT uk_users_login UNIQUE (login),
   CONSTRAINT uk_users_email UNIQUE (email),
-  CONSTRAINT uk_users_phone UNIQUE (phone),
-  CONSTRAINT fk_users_images FOREIGN KEY (image_id)
-	REFERENCES public.images (id)
-	ON DELETE NO ACTION
-	ON UPDATE NO ACTION);
-	
+  CONSTRAINT uk_users_phone UNIQUE (phone)
+
+	);
 -- -----------------------------------------------------
--- Table `mydb`.`settings`
+-- Table public.settings
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.settings (
   user_id INT NOT NULL,
@@ -120,7 +108,7 @@ CREATE TABLE IF NOT EXISTS public.folders (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.events (
   id SERIAL NOT NULL,
-  creator_id INT NOT NULL,
+  creator_id INT NOT NULL, 
   folder_id INT NULL,
   name VARCHAR(60) NOT NULL,
   description VARCHAR(2083) NOT NULL, --contains link
@@ -128,9 +116,9 @@ CREATE TABLE IF NOT EXISTS public.events (
   timeline_start TIMESTAMP NULL,
   timeline_finish TIMESTAMP NULL,
   period_in_days INT NULL,
-  image_id INT NULL,
-  is_sent BOOLEAN NOT NULL,
-  is_private BOOLEAN NOT NULL,
+  image VARCHAR(2083) NULL, --image link
+  is_sent BOOLEAN NOT NULL DEFAULT FALSE,
+  is_private BOOLEAN NOT NULL DEFAULT FALSE,
   
   CONSTRAINT pk_events_id PRIMARY KEY (id),
 
@@ -138,28 +126,24 @@ CREATE TABLE IF NOT EXISTS public.events (
     REFERENCES public.folders (id),
     
   CONSTRAINT fk_events_creator FOREIGN KEY (creator_id)
-    REFERENCES public.users (id),
-    
-  CONSTRAINT fk_events_image FOREIGN KEY (image_id)
-    REFERENCES public.images (id));
-
-
+    REFERENCES public.users (id)
+);
 -- -----------------------------------------------------
 -- Table public.chats
 -- -----------------------------------------------------
+
 CREATE TABLE IF NOT EXISTS public.chats (
   id SERIAL NOT NULL,
   event_id INT NOT NULL,
   with_creator BOOLEAN NOT NULL,
-  image_id INT NULL,
+  image VARCHAR(2083) NULL, --link
 
   CONSTRAINT pk_chats_id PRIMARY KEY (id),
+
+  CONSTRAINT uk_chats_eventId_withCreator UNIQUE (event_id, with_creator),
  
   CONSTRAINT fk_chats_event FOREIGN KEY (event_id)
-	REFERENCES public.events (id),
-    
-  CONSTRAINT fk_chats_image FOREIGN KEY (image_id)
-	REFERENCES public.images (id)
+	REFERENCES public.events (id)
     );
 
 
@@ -174,19 +158,6 @@ CREATE TABLE IF NOT EXISTS public.priorities (
   CONSTRAINT uk_priorities_priority UNIQUE (priority)
   );
 
- -- -----------------------------------------------------
--- Table public.notifications_sett
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS public.notifications_sett (
-  id SERIAL NOT NULL,
-  count_down_on BOOLEAN NOT NULL DEFAULT FALSE,
-  period INT NULL,
-  start_date DATE NULL,
-  email_notif_on BOOLEAN NOT NULL DEFAULT FALSE,
-  bell_notif_on BOOLEAN NOT NULL DEFAULT TRUE,
-
-  CONSTRAINT pk_notificationSett_id PRIMARY KEY (id));
-
 -- -----------------------------------------------------
 -- Table public.participants
 -- -----------------------------------------------------
@@ -195,7 +166,7 @@ CREATE TABLE IF NOT EXISTS public.participants (
   user_id INT NOT NULL,
   event_id INT NOT NULL,
   priority_id INT NOT NULL,
-  notification_sett_id INT NOT NULL,
+  
   
   CONSTRAINT pk_participatns_id PRIMARY KEY (id),
  
@@ -206,11 +177,26 @@ CREATE TABLE IF NOT EXISTS public.participants (
     REFERENCES public.events (id),
     
   CONSTRAINT fk_participants_priority FOREIGN KEY (priority_id)
-    REFERENCES public.priorities (id),
-    
-  CONSTRAINT fk_participants_notifications_sett FOREIGN KEY (notification_sett_id)
-    REFERENCES public.notifications_sett (id)
+    REFERENCES public.priorities (id)
   );
+
+ -- -----------------------------------------------------
+-- Table public.notifications_sett
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS public.notifications_sett (
+  participant_id INT NOT NULL,
+  count_down_on BOOLEAN NOT NULL DEFAULT FALSE,
+  period INT NULL,
+  start_date DATE NULL,
+  email_notif_on BOOLEAN NOT NULL DEFAULT FALSE,
+  bell_notif_on BOOLEAN NOT NULL DEFAULT TRUE,
+
+  CONSTRAINT pk_notificationSett_id PRIMARY KEY (participant_id),
+
+  CONSTRAINT fk_notificationSett_participantId FOREIGN KEY (participant_id)
+    REFERENCES participants (id)
+);
+
 
   
 -- -----------------------------------------------------
@@ -239,7 +225,7 @@ CREATE TABLE IF NOT EXISTS public.messages (
 CREATE TABLE IF NOT EXISTS public.wishlists (
   id SERIAL NOT NULL,
   name VARCHAR(45) NULL,
-  users_id INT NOT NULL,
+  user_id INT NOT NULL,
   
   CONSTRAINT pk_wishlists_id PRIMARY KEY (id),
   
@@ -331,45 +317,19 @@ CREATE TABLE IF NOT EXISTS public.item_tags (
 
 
 -- -----------------------------------------------------
--- Table public.item_images
+-- Table public.images
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS public.item_images (
-  item_id INT NOT NULL,
-  image_id INT NOT NULL,
+CREATE TABLE IF NOT EXISTS public.images (
+  id SERIAL NOT NULL,
+  image VARCHAR(2083) NOT NULL,
+  item_id INT NULL,
+  message_id INT NULL,
 
-  CONSTRAINT pk_item_images_itemId_imageId PRIMARY KEY (item_id, image_id),
+  CONSTRAINT pk_item_images_itemId_imageId PRIMARY KEY (id),
  
   CONSTRAINT fk_item_images_item FOREIGN KEY (item_id)
     REFERENCES public.items (id),
-    
-  CONSTRAINT fk_item_images_image FOREIGN KEY (image_id)
-    REFERENCES public.images (id)
-  );
 
-
--- -----------------------------------------------------
--- Table public.message_images
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS public.message_images (
-  image_id INT NOT NULL,
-  message_id INT NOT NULL,
-
-  CONSTRAINT pk_message_images_messageId_imageId PRIMARY KEY (message_id, image_id),
- 
   CONSTRAINT fk_message_images_message FOREIGN KEY (message_id)
-    REFERENCES public.messages (id),
-    
-  CONSTRAINT fk_message_images_image FOREIGN KEY (image_id)
-    REFERENCES public.images (id)
-  
+    REFERENCES public.messages (id)
   );
-
-
-
-
-
-
-
-
-
-  
