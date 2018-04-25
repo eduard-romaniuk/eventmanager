@@ -1,6 +1,4 @@
-﻿--DROP TABLE IF EXISTS message_images;
---DROP TABLE IF EXISTS item_images;
-DROP TABLE IF EXISTS item_tags;
+﻿DROP TABLE IF EXISTS item_tags;
 DROP TABLE IF EXISTS likes;
 DROP TABLE IF EXISTS tags;
 DROP TABLE IF EXISTS bookers;
@@ -229,9 +227,9 @@ CREATE TABLE IF NOT EXISTS public.wishlists (
   
   CONSTRAINT pk_wishlists_id PRIMARY KEY (id),
   
-  CONSTRAINT uk_wishlists_user_id UNIQUE (users_id),
+  CONSTRAINT uk_wishlists_user_id UNIQUE (user_id),
   
-  CONSTRAINT fk_wishlists_user FOREIGN KEY (users_id)
+  CONSTRAINT fk_wishlists_user FOREIGN KEY (user_id)
 	REFERENCES public.users (id)
   );
 
