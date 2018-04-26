@@ -11,7 +11,6 @@ import java.util.Iterator;
 import java.util.List;
 
 @Service
-@CrossOrigin(origins = "http://localhost:4200")
 public class UserService {
 
     @Autowired
@@ -24,7 +23,7 @@ public class UserService {
     public List<User> getAllUsers(){
         //TODO Return list, not iterator
         Iterator<User> iter = userRepository.findAll().iterator();
-        List<User> copy = new ArrayList<User>();
+        List<User> copy = new ArrayList<>();
         while (iter.hasNext())
             copy.add(iter.next());
         System.out.println(copy);
@@ -47,6 +46,7 @@ public class UserService {
     public User findUser(String username) {
         return userRepository.findByUsername(username);
     }
+
     public boolean isEmailExists(String email) {
         return userRepository.isEmailExists(email);
     }

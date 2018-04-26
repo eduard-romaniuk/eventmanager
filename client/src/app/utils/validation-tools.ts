@@ -10,6 +10,7 @@ export function passConfirm(form: AbstractControl) {
   }
 }
 
+// TODO: check for boolean
 export function boolean(control: AbstractControl) {
   return control.value === '' ? { boolean: true } : null;
 }

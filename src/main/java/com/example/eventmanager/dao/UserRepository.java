@@ -1,8 +1,9 @@
 package com.example.eventmanager.dao;
 
 import com.example.eventmanager.domain.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -22,9 +23,12 @@ public class UserRepository implements CrudRepository<User> {
 
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
     private final Environment env;
+    private final Logger logger = LogManager.getLogger(UserRepository.class);
 
     @Autowired
-    public UserRepository(NamedParameterJdbcTemplate namedJdbcTemplate, Environment env, ApplicationContext appContext) {
+    public UserRepository(NamedParameterJdbcTemplate namedJdbcTemplate, Environment env) {
+        logger.info("Class initialized");
+
         this.namedJdbcTemplate = namedJdbcTemplate;
         this.env = env;
     }
@@ -43,7 +47,7 @@ public class UserRepository implements CrudRepository<User> {
             user.setBirth(resultSet.getDate("birth") != null ? resultSet.getDate("birth").toLocalDate() : null);
             user.setPhone(resultSet.getString("phone"));
             user.setSex(resultSet.getBoolean("sex"));
-           // user.setImage(resultSet.getString("image"));
+            // user.setImage(resultSet.getString("image"));
             user.setVerified(resultSet.getBoolean("is_active"));
             user.setRegDate(resultSet.getDate("reg_date").toLocalDate());
             user.setToken(resultSet.getString("conf_link"));
@@ -58,7 +62,7 @@ public class UserRepository implements CrudRepository<User> {
             namedParams.put("login", login);
             return namedJdbcTemplate.queryForObject(env.getProperty("findByUsername"), namedParams, new UserMapper());
         } catch (EmptyResultDataAccessException e) {
-            //TODO Logging
+            logger.info("User not found");
             return null;
         }
     }
@@ -70,7 +74,7 @@ public class UserRepository implements CrudRepository<User> {
             namedParams.put("id", id);
             return namedJdbcTemplate.queryForObject(env.getProperty("findOne"), namedParams, new UserMapper());
         } catch (EmptyResultDataAccessException e) {
-            //TODO Logging
+            logger.info("User not found");
             return null;
         }
     }
@@ -89,7 +93,7 @@ public class UserRepository implements CrudRepository<User> {
         namedParams.put("surname", user.getSurName());
         namedParams.put("email", user.getEmail());
         namedParams.put("birth", user.getBirth());
-        namedParams.put("phone", (user.getPhone()!=null || !user.getPhone().equals(""))?
+        namedParams.put("phone", (user.getPhone() != null || !user.getPhone().equals("")) ?
                 user.getPhone() : null);
         namedParams.put("sex", user.getSex());
         namedParams.put("image", user.getImage());
@@ -103,7 +107,7 @@ public class UserRepository implements CrudRepository<User> {
     public void delete(User user) {
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("id", user.getId());
-        namedJdbcTemplate.update(env.getProperty("delete"),namedParams);
+        namedJdbcTemplate.update(env.getProperty("delete"), namedParams);
     }
 
     public void changePass(User user) {
@@ -116,21 +120,21 @@ public class UserRepository implements CrudRepository<User> {
 
     @Override
     public int save(User user) {
-            Map<String, Object> namedParams = new HashMap<>();
-            namedParams.put("login", user.getLogin());
-            namedParams.put("password", user.getPassword());
-            namedParams.put("name", user.getName());
-            namedParams.put("surname", user.getSurName());
-            namedParams.put("email", user.getEmail());
-            namedParams.put("birth", user.getBirth());
-            namedParams.put("phone", user.getPhone());
-            namedParams.put("sex", user.getSex());
-            namedParams.put("image", user.getImage());
-            namedParams.put("is_active", user.getVerified());
-            namedParams.put("reg_date", LocalDate.now());
-            namedParams.put("conf_link", user.getToken());
+        Map<String, Object> namedParams = new HashMap<>();
+        namedParams.put("login", user.getLogin());
+        namedParams.put("password", user.getPassword());
+        namedParams.put("name", user.getName());
+        namedParams.put("surname", user.getSurName());
+        namedParams.put("email", user.getEmail());
+        namedParams.put("birth", user.getBirth());
+        namedParams.put("phone", user.getPhone());
+        namedParams.put("sex", user.getSex());
+        namedParams.put("image", user.getImage());
+        namedParams.put("is_active", user.getVerified());
+        namedParams.put("reg_date", LocalDate.now());
+        namedParams.put("conf_link", user.getToken());
 
-           return namedJdbcTemplate.update(env.getProperty("save"), namedParams);
+        return namedJdbcTemplate.update(env.getProperty("save"), namedParams);
 
     }
 
@@ -141,7 +145,7 @@ public class UserRepository implements CrudRepository<User> {
             namedJdbcTemplate.queryForObject(env.getProperty("isUsernameExists"), namedParams, String.class);
             return true;
         } catch (EmptyResultDataAccessException e) {
-            //TODO Logging
+            logger.info("Username not found");
             return false;
         }
     }
@@ -153,7 +157,7 @@ public class UserRepository implements CrudRepository<User> {
             namedJdbcTemplate.queryForObject(env.getProperty("isEmailExists"), namedParams, String.class);
             return true;
         } catch (EmptyResultDataAccessException e) {
-            //TODO Logging
+            logger.info("Email not found");
             return false;
         }
     }
