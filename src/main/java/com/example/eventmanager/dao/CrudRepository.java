@@ -21,7 +21,7 @@ public interface CrudRepository<T> {
         entities.forEach(this::update);
     }
 
-    int delete(T entity);
+    void delete(T entity);
 
     default void deleteAll(Iterable<T> entities) {
         entities.forEach(this::delete);

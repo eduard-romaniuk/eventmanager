@@ -1,6 +1,6 @@
 package com.example.eventmanager.config;
 
-import com.example.eventmanager.dao.UsersRepository;
+import com.example.eventmanager.dao.UserRepository;
 import com.example.eventmanager.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -16,7 +16,7 @@ import java.util.Collections;
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
-    private UsersRepository usersRepository;
+    private UserRepository userRepository;
 
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -27,7 +27,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String name = authentication.getName();
         String password = bCryptPasswordEncoder.encode(authentication.getCredentials().toString());
 
-        User user = usersRepository.findByUsername(name);
+        User user = userRepository.findByUsername(name);
 
         if (user != null && user.getPassword().equals(password)) {
             return new UsernamePasswordAuthenticationToken(

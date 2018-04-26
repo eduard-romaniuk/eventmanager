@@ -6,7 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { environment }           from '../environments/environment';
 import { AppRoutingModule }      from './modules/app-routing.module';
 import { AuthService }           from './services/auth.service';
-import { UsersService }           from './services/users.service';
+import { UserService }           from './services/user.service';
 import { LoggerService }         from './services/logger.service';
 import { AppComponent }          from './app.component';
 import { LoginComponent }        from './components/login/login.component';
@@ -50,7 +50,7 @@ export class AddressInterceptor implements HttpInterceptor {
     HelloComponent,
     HomeComponent,
     EmailVerificationComponent,
-    CreateEventComponent
+    CreateEventComponent,
     UserComponent,
     UserListComponent,
     UserEditComponent
@@ -65,7 +65,7 @@ export class AddressInterceptor implements HttpInterceptor {
   providers: [
     AuthService,
     EventService,
-    UsersService,
+    UserService,
     LoggerService,
     { provide: HTTP_INTERCEPTORS,
       useClass: AddressInterceptor,

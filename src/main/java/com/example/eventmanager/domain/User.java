@@ -1,9 +1,11 @@
 package com.example.eventmanager.domain;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.ToString;
 
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
+
 
 @ToString
 public class User {
@@ -11,113 +13,33 @@ public class User {
     private Long id;
     @JsonView(UserView.ShortView.class)
     private String login;
-    @JsonView(UserView.FullView.class)
     private String password;
     private String passwordConfirm;
+
     @JsonView(UserView.ShortView.class)
     private String name;
     @JsonView(UserView.ShortView.class)
     private String surName;
-    @JsonView(UserView.ShortView.class)
+    @JsonView(UserView.FullView.class)
     private String email;
-    @JsonView(UserView.ShortView.class)
+    @JsonView(UserView.FullView.class)
     private LocalDate birth;
-    @JsonView(UserView.ShortView.class)
+    @JsonView(UserView.FullView.class)
     private String phone;
-    @JsonView(UserView.ShortView.class)
-    private boolean sex;
+    @JsonView(UserView.FullView.class)
+    private Boolean sex;
     @JsonView(UserView.ShortView.class)
     private String image;
-    @JsonView(UserView.ShortView.class)
+    @JsonView(UserView.FullView.class)
     private LocalDate regDate;
     @JsonView(UserView.FullView.class)
-    private Set<User> friends;
-    @JsonView(UserView.FullView.class)
-    private WishList wishList;
-    @JsonView(UserView.FullView.class)
-    private Set<Event> events;
-    @JsonView(UserView.FullView.class)
-    private Settings settings;
-    @JsonView(UserView.FullView.class)
+    private List<User> friends;
+    //private WishList wishList;
+    private List<Event> events;
+   // private Settings settings;
     private String token = "";
     private Boolean verified = false;
 
-    public User copy() {
-        return new User(id, login, password, passwordConfirm, name, surName,
-                email, birth, phone, sex, active, image,
-                regDate, friends, wishList, events, settings, confLink);
-    }
-
-    public User() {
-    }
-
-    public User(Long id) {
-        this.id = id;
-    }
-
-    public User(Long id, String password) {
-        this.id = id;
-        this.password = password;
-    }
-    public User(String login, String password) {
-        this.login = login;
-        this.password = password;
-    }
-
-    public User(Long id, String login, String password, String name) {
-        this.id = id;
-        this.login = login;
-        this.password = password;
-        this.name = name;
-    }
-
-    public User(String login, String password, String passwordConfirm) {
-        this.login = login;
-        this.password = password;
-        this.passwordConfirm = passwordConfirm;
-    }
-
-    public User(Long id, String login, String password, String passwordConfirm,
-                String name, String surName, String email, LocalDate birth,
-                String phone, boolean sex, boolean active, Image image,
-                LocalDate regDate, Set<User> friends, WishList wishList,
-                Set<Event> events, Settings settings, String confLink) {
-        this.id = id;
-        this.login = login;
-        this.password = password;
-        this.passwordConfirm = passwordConfirm;
-        this.name = name;
-        this.surName = surName;
-        this.email = email;
-        this.birth = birth;
-        this.phone = phone;
-        this.sex = sex;
-        this.active = active;
-        this.image = image;
-        this.regDate = regDate;
-        this.friends = friends;
-        this.wishList = wishList;
-        this.events = events;
-        this.settings = settings;
-        this.confLink = confLink;
-    }
-
-    public User(Long id, String login, String password, String name,
-                String surName, String email, LocalDate birth, String phone,
-                boolean sex, boolean active, LocalDate regDate, String confLink){
-        this.id = id;
-        this.login = login;
-        this.password = password;
-        this.name = name;
-        this.surName = surName;
-        this.email = email;
-        this.birth = birth;
-        this.phone = phone;
-        this.sex = sex;
-        this.active=active;
-        this.regDate=regDate;
-        this.confLink=confLink;
-    }
 
     public Long getId() {
         return id;
@@ -199,19 +121,11 @@ public class User {
         this.sex = sex;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public Image getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(Image image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
@@ -223,43 +137,35 @@ public class User {
         this.regDate = regDate;
     }
 
-    public Set<User> getFriends() {
+    public List<User> getFriends() {
         return friends;
     }
 
-    public void setFriends(Set<User> friends) {
+    public void setFriends(List<User> friends) {
         this.friends = friends;
     }
 
-    public WishList getWishList() {
-        return wishList;
-    }
-
-    public void setWishList(WishList wishList) {
-        this.wishList = wishList;
-    }
-
-    public Set<Event> getEvents() {
+    public List<Event> getEvents() {
         return events;
     }
 
-    public void setEvents(Set<Event> events) {
+    public void setEvents(List<Event> events) {
         this.events = events;
     }
 
-    public Settings getSettings() {
-        return settings;
+    public String getToken() {
+        return token;
     }
 
-    public void setSettings(Settings settings) {
-        this.settings = settings;
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    public String getConfLink() {
-        return confLink;
+    public Boolean getVerified() {
+        return verified;
     }
 
-    public void setConfLink(String confLink) {
-        this.confLink = confLink;
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
     }
 }

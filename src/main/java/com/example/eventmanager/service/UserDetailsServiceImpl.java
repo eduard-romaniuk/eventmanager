@@ -1,6 +1,6 @@
 package com.example.eventmanager.service;
 
-import com.example.eventmanager.dao.UsersRepository;
+import com.example.eventmanager.dao.UserRepository;
 import com.example.eventmanager.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -14,11 +14,11 @@ import java.util.Collections;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    UsersRepository usersRepository;
+    UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) {
-        User user = usersRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
         return new org.springframework.security.core.userdetails.User(
                 user.getLogin(),
                 user.getPassword(),

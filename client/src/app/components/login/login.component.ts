@@ -15,7 +15,7 @@ declare var $:JQueryStatic;
 export class LoginComponent implements OnInit {
 
   form: FormGroup;
-  credentials = {username: '', password: ''};
+  credentials = {login: '', password: ''};
   loading = false;
   error = false;
 
@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      username: ['', [ Validators.required, Validators.pattern('^[a-zA-Z0-9_]*$') ]],
+      login: ['', [ Validators.required, Validators.pattern('^[a-zA-Z0-9_]*$') ]],
       password: ['', [ Validators.required, Validators.pattern('^[a-zA-Z0-9]*$') ]]
     });
   }
@@ -35,10 +35,10 @@ export class LoginComponent implements OnInit {
 
     this.auth.authenticate(this.credentials, () => {
       $('#signInModal').modal('hide');
-      
+
       this.form.reset();
       this.credentials.password = '';
-      this.credentials.username = '';
+      this.credentials.login = '';
       this.error = false;
       this.loading = false;
 

@@ -15,7 +15,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.List;
 
 @RestController
-//@RequestMapping(value = "/event")
 public class EventController {
 
    private final EventService eventService;
@@ -31,7 +30,7 @@ public class EventController {
         eventService.createEvent(event);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/event/{id}").buildAndExpand(event.getId()).toUri());
-        return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 
     @JsonView(EventView.ShortView.class)
@@ -80,10 +79,6 @@ public class EventController {
         List<User> userList = eventService.getParticipants(id);
         return new ResponseEntity<>(userList, HttpStatus.OK);
     }
-
-
-
-
 
     @RequestMapping(value = "/publish")
     public void publishEvent(@RequestBody Event event) {

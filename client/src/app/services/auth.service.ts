@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../model/user';
-import { UsersService } from './users.service';
+import { UserService } from './user.service';
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()
@@ -12,7 +12,7 @@ export class AuthService {
   base_url = '/users';
   current_user: Observable<User>;
 
-  constructor(private http: HttpClient, private users: UsersService) {
+  constructor(private http: HttpClient, private users: UserService) {
     const authToken = sessionStorage.getItem('authToken');
     if (authToken === null || authToken === '') {
       this.authenticated = false;

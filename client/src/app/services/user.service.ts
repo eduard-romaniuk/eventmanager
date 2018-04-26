@@ -12,13 +12,14 @@ const httpOptions = {
 @Injectable()
 export class UserService {
 
-  private userUrl = 'http://localhost:8081/users';
+  private userUrl = 'http://localhost:80/users';
 
   headers: HttpHeaders;
 
   constructor(private http:HttpClient) {}
 
   public getUsers() {
+    console.log(this.userUrl);
     return this.http.get(this.userUrl);
   }
 
@@ -44,14 +45,14 @@ export class UserService {
       birth: newUser.birth,
       phone: newUser.phone,
       sex: newUser.sex,
-      active: newUser.active,
+        verified: newUser.verified,
       image: newUser.image,
       regDate: newUser.regDate,
       friends: newUser.friends,
       wishList: newUser.wishList,
       events: newUser.events,
       settings: newUser.settings,
-      confLink: newUser.confLink
+        token: newUser.token
     }) } : {});
 
     console.log(`Update User(${this.headers.get("newUser")})`);

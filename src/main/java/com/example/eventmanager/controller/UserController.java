@@ -2,6 +2,8 @@ package com.example.eventmanager.controller;
 
 import com.example.eventmanager.domain.User;
 import com.example.eventmanager.domain.UserView;
+import com.example.eventmanager.service.EmailService;
+import com.example.eventmanager.service.SecurityService;
 import com.example.eventmanager.service.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +18,22 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:4200")
 public class UserController {
     private final UserService userService;
+    private final SecurityService securityService;
+    private final EmailService emailService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, SecurityService securityService, EmailService emailService) {
         this.userService = userService;
+        this.securityService = securityService;
+        this.emailService = emailService;
+    }
+
+    @RequestMapping(value="/", method = RequestMethod.POST)
+    public void create(@RequestBody User user) {
+        userService.saveUser(
+                securityService.encodePass(
+                        securityService.verificationToken(user)));
+        emailService.sendVerificationLink(user.getEmail(), user.getToken());
     }
 
     @JsonView(UserView.ShortView.class)
@@ -61,4 +75,9 @@ public class UserController {
 //        List<Event> eventList = eventService.getUserEvents(id);
 //        return new ResponseEntity<>(eventList, HttpStatus.OK);
 //    }
+
+   /* @RequestMapping(value="/", method = RequestMethod.PATCH)
+    public void update(@RequestBody User user) {
+        userService.updateUser(user);
+    }*/
 }

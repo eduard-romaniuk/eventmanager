@@ -10,7 +10,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
-@PropertySource("classpath:users.queries.properties")
 public class EventmanagerApplication /*implements CommandLineRunner*/ {
 
 //	@Autowired

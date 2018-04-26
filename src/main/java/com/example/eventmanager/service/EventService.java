@@ -2,7 +2,7 @@ package com.example.eventmanager.service;
 
 
 import com.example.eventmanager.dao.EventRepository;
-import com.example.eventmanager.dao.UsersRepository;
+import com.example.eventmanager.dao.UserRepository;
 import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class EventService {
     private final EventRepository eventRepository;
 
     @Autowired
-    public EventService(EventRepository eventRepository, UsersRepository usersRepository) {
+    public EventService(EventRepository eventRepository, UserRepository userRepository) {
         this.eventRepository = eventRepository;
     }
 

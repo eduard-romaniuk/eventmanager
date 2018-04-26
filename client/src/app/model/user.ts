@@ -1,11 +1,21 @@
-export class User{
-	private id: number;
-    private email: String;
-    private username: String;
-    private password: String;
-    private sex: boolean;
-    private name: String;
-    private surName: String;
-    private token: String;
-    private verified: boolean;
+export class User {
+  //TODO private
+   id: number;
+   login: String;
+   password: String;
+   passwordConfirm: String;
+   name: String;
+   surName: String;
+   email: String;
+   birth: any; //TODO date
+   phone: String;
+   sex: boolean;
+   image: String;
+   regDate: any; //TODO date
+   friends: User[];
+   wishList: any; //TODO wishList
+   events: any[]; //TODO events
+   settings: any; //TODO settings
+   token: String;
+   verified: boolean;
 }

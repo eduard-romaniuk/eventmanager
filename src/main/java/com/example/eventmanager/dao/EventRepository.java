@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 
-@PropertySource("classpath:events.properties")
+@PropertySource("classpath:queries/event.properties")
 @Repository
 public class EventRepository implements CrudRepository<Event> {
 
@@ -89,10 +89,10 @@ public class EventRepository implements CrudRepository<Event> {
     }
 
     @Override
-    public int delete(Event entity) {
+    public void delete(Event entity) {
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("eventId", entity.getId());
-        return namedJdbcTemplate.update(env.getProperty("delete"), namedParams);
+        namedJdbcTemplate.update(env.getProperty("delete"), namedParams);
     }
 
 
@@ -155,7 +155,7 @@ public class EventRepository implements CrudRepository<Event> {
                 event.setSent(rs.getBoolean("is_sent"));
                 event.setPrivate(rs.getBoolean("is_private"));
                 creator.setId(rs.getLong("creator_id"));
-                creator.setUsername(rs.getString("login"));
+                creator.setLogin(rs.getString("login"));
                 creator.setName(rs.getString("creator_name"));
                 creator.setSurName(rs.getString("surname"));
             }
@@ -170,7 +170,7 @@ public class EventRepository implements CrudRepository<Event> {
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
             User particapant = new User();
             particapant.setId(rs.getLong("id"));
-            particapant.setUsername(rs.getString("login"));
+            particapant.setLogin(rs.getString("login"));
             return particapant;
         }
     }
