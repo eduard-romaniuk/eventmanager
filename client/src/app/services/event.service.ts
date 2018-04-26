@@ -11,8 +11,7 @@ const httpOptions = {
 export class EventService {
 
   headers: HttpHeaders;
-
-  private eventUrl = 'http://localhost:80/event';
+  private base_url = '/event';
 
   constructor(private http: HttpClient) {
   }
@@ -20,7 +19,7 @@ export class EventService {
   public createEvent(event) {
     console.log('Create event');
     console.log(event);
-    return this.http.post(this.eventUrl, event).subscribe(
+    return this.http.post(this.base_url, event).subscribe(
            (data:any) => {
              console.log(data);
            }

@@ -3,37 +3,33 @@ import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { User } from '../model/user';
 import { Observable } from 'rxjs/Observable';
 
-
-
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' })
 };
 
 @Injectable()
 export class UserService {
-
-  private userUrl = 'http://localhost:80/users';
+  private base_url = '/users';
 
   headers: HttpHeaders;
 
   constructor(private http:HttpClient) {}
 
   public getUsers() {
-    console.log(this.userUrl);
-    return this.http.get(this.userUrl);
+    return this.http.get(this.base_url);
   }
 
   public getUserById(id) {
-    return this.http.get(this.userUrl+ "/"+ id);
+    return this.http.get(this.base_url+ "/"+ id);
   }
 
   public createUser(user) {
-    return this.http.post(this.userUrl, user);
+    return this.http.post(this.base_url, user);
   }
 
   public updateUser(newUser : User) {
     console.log("newUser in updateUser" + newUser);
-    const url = `${this.userUrl}/${newUser.id}`;
+    const url = `${this.base_url}/${newUser.id}`;
 
     this.headers = new HttpHeaders(newUser? {newUser: JSON.stringify({
       id: newUser.id,
@@ -61,10 +57,8 @@ export class UserService {
   }
 
   public deleteUser(user) {
-    return this.http.delete(this.userUrl + "/"+ user.id);
+    return this.http.delete(this.base_url + "/"+ user.id);
   }
-
-  base_url = '/users';
 
   isEmailExists(email: String): Observable<boolean> {
     return this.http.get<boolean>(this.base_url + '/exists/email/' + email);
