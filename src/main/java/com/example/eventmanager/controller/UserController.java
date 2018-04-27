@@ -56,7 +56,7 @@ public class UserController {
         userService.updateUser(user);
     }
     
-    @RequestMapping(value = "/", method = RequestMethod.PATCH)
+    @RequestMapping(value = "/changePassword", method = RequestMethod.PATCH)
     public void changePass(@RequestBody User user) {
         logger.info("PATCH /");
         
