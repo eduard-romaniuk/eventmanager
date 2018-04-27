@@ -55,6 +55,13 @@ public class UserController {
 
         userService.updateUser(user);
     }
+    
+    @RequestMapping(value = "/", method = RequestMethod.PATCH)
+    public void changePass(@RequestBody User user) {
+        logger.info("PATCH /");
+        
+        userService.changePass(securityService.encodePass(user));
+    }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public Principal user(Principal user) {

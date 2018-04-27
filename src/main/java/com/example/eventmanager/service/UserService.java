@@ -42,6 +42,10 @@ public class UserService {
     public void deleteUser(User user){
         userRepository.delete(user);
     }
+    
+    public void changePass(User user){
+    	userRepository.changePass(user);
+    }
 
     public User findUser(String username) {
         return userRepository.findByUsername(username);
