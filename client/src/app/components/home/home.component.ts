@@ -22,6 +22,10 @@ export class HomeComponent {
 
   goToEditUserPage(user: User): void {
     this.router.navigate(['users', user.id, 'edit']);
+  }
+
+  goToEditImagePage(user: User): void {
+    this.router.navigate(['users', user.id, 'updateImage']);
   };
 
 }
