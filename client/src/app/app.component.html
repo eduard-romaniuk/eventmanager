@@ -1,18 +1,48 @@
-<nav class="navbar navbar-light bg-light">
-    <span class="navbar-brand mb-0 h1">
-        {{ title }}
-    </span>
-    <div [hidden]="authenticated()" class="navbar-right">
-        <button class="btn btn-primary" data-target="#signInModal" data-toggle="modal" type="button">
-            Sign In
-        </button>
-    </div>
-    <div [hidden]="!authenticated()" class="navbar-right">
-        <button (click)="logout()" class="btn btn-primary" type="button">
-            Log Out
-        </button>
+<!-- TODO: Fix items align -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <span class="navbar-brand mb-0 h1">{{ title }}</span>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    
+
+    <div class="collapse navbar-collapse ml-auto" id="navbarSupportedContent">
+        <div [hidden]="authenticated()">
+            <button class="btn btn-primary" data-target="#signInModal" data-toggle="modal" type="button">
+                Sign In
+            </button>
+        </div>
+        <div [hidden]="!authenticated()">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="" id="usersDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Users
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="usersDropdown">
+                        <a class="dropdown-item" routerLink="/users">All</a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="" id="eventsDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Events
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="eventsDropdown">
+                        <a class="dropdown-item" routerLink="/event/create">Create</a>
+                    </div>
+                </li>
+            </ul>
+            <button (click)="logout()" class="btn btn-primary" type="button">
+                Log Out
+            </button>
+        </div>
     </div>
 </nav>
+
+<!-- modal -->
 <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="signInModal" role="dialog" tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -42,7 +72,5 @@
             </div>
         </div>
     </div>
-</div>
-<div>
 </div>
 <router-outlet></router-outlet>

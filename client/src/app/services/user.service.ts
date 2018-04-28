@@ -16,7 +16,7 @@ export class UserService {
   constructor(private http:HttpClient) {}
 
   public getUsers() {
-    return this.http.get(this.base_url);
+    return this.http.get(this.base_url + "/all");
   }
 
   public getUserById(id) {
