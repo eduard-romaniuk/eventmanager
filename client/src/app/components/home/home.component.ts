@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
+import {User} from "../../model/user";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-home',
@@ -8,11 +9,19 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  obj = {};
+  user: User = new User();
 
-  constructor(private auth: AuthService, private http: HttpClient) {
-    http.get('http://localhost:8080/getObj/test')
-    	.subscribe(data => this.obj = data);
+  constructor(private auth: AuthService,
+              private router: Router) {
+    this.auth.current_user.subscribe(
+      current_user => {
+        console.log(current_user);
+        this.user = current_user;
+      });
   }
+
+  goToEditUserPage(user: User): void {
+    this.router.navigate(['users', user.id, 'edit']);
+  };
 
 }

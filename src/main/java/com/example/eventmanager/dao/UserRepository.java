@@ -93,8 +93,8 @@ public class UserRepository implements CrudRepository<User> {
         namedParams.put("surname", user.getSurName());
         namedParams.put("email", user.getEmail());
         namedParams.put("birth", user.getBirth());
-        namedParams.put("phone", (user.getPhone() != null || !user.getPhone().equals("")) ?
-                user.getPhone() : null);
+        namedParams.put("phone", (user.getPhone()== null || user.getPhone().equals("")) ?
+                null : user.getPhone());
         namedParams.put("sex", user.getSex());
         namedParams.put("image", user.getImage());
         namedParams.put("is_active", user.getVerified());

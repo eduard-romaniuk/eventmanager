@@ -20,12 +20,25 @@ export class UserService {
   }
 
   public getUserById(id) {
-    return this.http.get(this.base_url+ "/"+ id);
+    return this.http.get(this.base_url + "/"+ id);
   }
 
   public createUser(user) {
     return this.http.post(this.base_url, user);
   }
+
+  //TODO Do update without headers
+  // updateUser(newUser: User, callback?, errorCallback?) {
+  //   console.log("newUser in updateUser" + newUser);
+  //   const url = `${this.base_url}/${newUser.id}`;
+  //   this.http.patch(url, newUser).subscribe(
+  //     response => {
+  //       return callback && callback();
+  //     },
+  //     error => {
+  //       return errorCallback && errorCallback();
+  //     })
+  // }
 
   public updateUser(newUser : User) {
     console.log("newUser in updateUser" + newUser);
@@ -41,14 +54,14 @@ export class UserService {
       birth: newUser.birth,
       phone: newUser.phone,
       sex: newUser.sex,
-        verified: newUser.verified,
+      verified: newUser.verified,
       image: newUser.image,
       regDate: newUser.regDate,
       friends: newUser.friends,
       wishList: newUser.wishList,
       events: newUser.events,
       settings: newUser.settings,
-        token: newUser.token
+      token: newUser.token
     }) } : {});
 
     console.log(`Update User(${this.headers.get("newUser")})`);
@@ -69,6 +82,6 @@ export class UserService {
   }
 
   getUser(username: String): Observable<User> {
-    return this.http.get<User>(this.base_url + '/' + username);
+    return this.http.get<User>(this.base_url + '/by-username/' + username);
   }
 }

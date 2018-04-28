@@ -33,6 +33,8 @@ public class User {
     @JsonView(UserView.FullView.class)
     private List<User> friends;
 
+    //TODO Delete password from FullView
+    @JsonView(UserView.FullView.class)
     private String password;
     //private WishList wishList;
     private List<Event> events;

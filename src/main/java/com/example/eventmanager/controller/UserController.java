@@ -49,11 +49,24 @@ public class UserController {
         emailService.sendVerificationLink(user.getEmail(), user.getToken());
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.PATCH)
-    public void update(@RequestBody User user) {
-        logger.info("PATCH /");
+//    @RequestMapping(value = "/{id}", method = RequestMethod.PATCH)
+//    public void update(@PathVariable("id") Long id, @RequestBody User user) {
+//        logger.info("PATCH /");
+//
+//        userService.updateUser(user);
+//    }
 
-        userService.updateUser(user);
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User newUser) {
+        logger.info("PUT /" + id);
+        System.out.println("newUser - " + newUser.toString());
+        User oldUser = userService.getUser(id);
+        if (oldUser == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        newUser.setId(oldUser.getId());
+        userService.updateUser(newUser);
+        return new ResponseEntity<>(newUser, HttpStatus.OK);
     }
     
     @RequestMapping(value = "/changePassword", method = RequestMethod.PATCH)
@@ -70,7 +83,7 @@ public class UserController {
         return user;
     }
 
-    @RequestMapping(value = "/{username}", method = RequestMethod.GET)
+    @RequestMapping(value = "/by-username/{username}", method = RequestMethod.GET)
     public User get(@PathVariable String username) {
         logger.info("GET /" + username);
 
@@ -120,6 +133,5 @@ public class UserController {
         List<Event> eventList = eventService.getUserEvents(id);
         return new ResponseEntity<>(eventList, HttpStatus.OK);
     }
-
 
 }

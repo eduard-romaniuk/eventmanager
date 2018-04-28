@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import { Router } from '@angular/router';
 import { JQueryStatic } from 'jquery';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
@@ -34,20 +34,20 @@ export class LoginComponent implements OnInit {
     this.error = false;
 
     this.auth.authenticate(this.credentials, () => {
-      $('#signInModal').modal('hide');
+        $('#signInModal').modal('hide');
 
-      this.form.reset();
-      this.credentials.password = '';
-      this.credentials.login = '';
-      this.error = false;
-      this.loading = false;
+        this.form.reset();
+        this.credentials.password = '';
+        this.credentials.login = '';
+        this.error = false;
+        this.loading = false;
 
-      this.router.navigate(['home']);
-    },
-    () => {
-      this.error = true,
-      this.loading = false
-    });
+        this.router.navigate(['home']);
+      },
+      () => {
+        this.error = true,
+          this.loading = false
+      });
   }
 
 }

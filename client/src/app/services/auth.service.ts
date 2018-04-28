@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable';
 export class AuthService {
 
   authenticated: boolean;
-  username: string;
+  login: string;
   base_url = '/users';
   current_user: Observable<User>;
 
@@ -19,19 +19,19 @@ export class AuthService {
       sessionStorage.setItem('authToken', '');
     } else {
       this.authenticated = true;
-      this.current_user = this.users.getUser(sessionStorage.getItem('username'));
+      this.current_user = this.users.getUser(sessionStorage.getItem('login'));
     }
   }
 
   authenticate(credentials, callback?, errorCallback?) {
 
-    sessionStorage.setItem('authToken', 'Basic ' + btoa(credentials.username + ':' + credentials.password));
+    sessionStorage.setItem('authToken', 'Basic ' + btoa(credentials.login + ':' + credentials.password));
 
     this.http.get(this.base_url + '/').subscribe(response => {
       if (response['name']) {
           this.authenticated = true;
-          sessionStorage.setItem('username', credentials.username);
-          this.current_user = this.users.getUser(credentials.username);
+          sessionStorage.setItem('login', credentials.login);
+          this.current_user = this.users.getUser(credentials.login);
       } else {
           this.logout();
       }
@@ -60,7 +60,7 @@ export class AuthService {
   logout(callback?) {
     this.authenticated = false;
     sessionStorage.setItem('authToken', '');
-    sessionStorage.setItem('username', '');
+    sessionStorage.setItem('login', '');
     return callback && callback();
   }
 
