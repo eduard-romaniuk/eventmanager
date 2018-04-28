@@ -155,6 +155,18 @@ public class EventController {
         }
 
     }
+    @RequestMapping(value = "/sendPlan", method = RequestMethod.GET)
+    public void sendEventsPlan(@RequestParam Long userId, @RequestParam String from, @RequestParam String to, HttpServletResponse response) {
+        logger.info("GET /export");
+
+        LocalDate fromDate = LocalDate.parse(from);
+        LocalDate toDate = LocalDate.parse(to);
+
+        JasperPrint eventsPlan = exportService.createEventsPlan(userId, fromDate, toDate);
+
+        exportService.sendEventsPlan("vladimmyr@gmail.com",eventsPlan);
+
+    }
 
 }
 

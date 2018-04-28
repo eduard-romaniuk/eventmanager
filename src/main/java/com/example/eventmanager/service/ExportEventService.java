@@ -6,8 +6,14 @@ import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import javax.activation.DataSource;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import javax.mail.util.ByteArrayDataSource;
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -36,9 +42,7 @@ public class ExportEventService {
         try {
             JasperReport eventsPlan = JasperCompileManager.compileReport("src/main/resources/eventsPlan.jrxml");
             JRBeanCollectionDataSource dataSource= new JRBeanCollectionDataSource(events);
-            JasperPrint jPrint = JasperFillManager.fillReport(eventsPlan,params,dataSource);
-
-            return jPrint;
+            return JasperFillManager.fillReport(eventsPlan,params,dataSource);
 
         } catch (JRException ex){
             ex.printStackTrace();
@@ -47,5 +51,24 @@ public class ExportEventService {
 
     }
 
+    public void sendEventsPlan(String email,JasperPrint jasperPrint){
+
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = null;
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            JasperExportManager.exportReportToPdfStream(jasperPrint, baos);
+            DataSource aAttachment =  new ByteArrayDataSource(baos.toByteArray(), "application/pdf");
+            helper = new MimeMessageHelper(message, true);
+            helper.setTo(email);
+            helper.setSubject("1");
+            helper.addAttachment("plan.pdf", aAttachment);
+            helper.setText("Some text");
+            emailSender.send(helper.getMimeMessage());
+        } catch (MessagingException | JRException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 }

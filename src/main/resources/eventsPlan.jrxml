@@ -15,8 +15,8 @@
 	<field name="name" class="java.lang.String"/>
 	<field name="description" class="java.lang.String"/>
 	<field name="place" class="java.lang.String"/>
-	<field name="timeLineStart" class="java.lang.String"/>
-	<field name="timeLineFinish" class="java.lang.String"/>
+	<field name="timeLineStart" class="java.time.LocalDateTime"/>
+	<field name="timeLineFinish" class="java.time.LocalDateTime"/>
 	<field name="creator" class="com.example.eventmanager.domain.User"/>
 	<background>
 		<band height="79">
@@ -160,7 +160,7 @@
 				<reportElement x="340" y="40" width="140" height="30" uuid="647a91ae-7803-407c-a8c8-da80e9efc071">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c0ba09a7-836a-4a60-863f-c551bfcc3641"/>
 				</reportElement>
-				<textFieldExpression><![CDATA[$F{creator}.getSerName()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{creator}.getSurName()]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
