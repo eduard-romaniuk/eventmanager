@@ -2,6 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, Injectable } from '@angular/core';
 import { HttpClientModule, HttpInterceptor, HttpHandler, HttpRequest, HTTP_INTERCEPTORS, HttpHeaders } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Ng2CloudinaryModule } from 'ng2-cloudinary';
+import { FileUploadModule } from 'ng2-file-upload';
 
 import { environment }           from '../environments/environment';
 import { AppRoutingModule }      from './modules/app-routing.module';
@@ -19,6 +21,7 @@ import { EventService } from "./services/event.service";
 import { UserComponent } from './components/user/user.component';
 import { UserListComponent } from './components/user/user-list.component';
 import { UserEditComponent } from './components/user/user-edit.component';
+import { UserEditImageComponent } from './components/user/user-edit-image.component';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -53,14 +56,17 @@ export class AddressInterceptor implements HttpInterceptor {
     CreateEventComponent,
     UserComponent,
     UserListComponent,
-    UserEditComponent
+    UserEditComponent,
+    UserEditImageComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    Ng2CloudinaryModule,
+    FileUploadModule
   ],
   providers: [
     AuthService,

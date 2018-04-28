@@ -5,3 +5,13 @@ html, body {
 .nounderline {
 	text-decoration: none !important;
 }
+
+.profileImage{
+  border-radius: 50%;
+  height: 150px;
+  width: 150px;
+}
+
+.button{
+  margin: 10px;
+}

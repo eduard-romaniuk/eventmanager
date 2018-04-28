@@ -47,7 +47,7 @@ public class UserRepository implements CrudRepository<User> {
             user.setBirth(resultSet.getDate("birth") != null ? resultSet.getDate("birth").toLocalDate() : null);
             user.setPhone(resultSet.getString("phone"));
             user.setSex(resultSet.getBoolean("sex"));
-            // user.setImage(resultSet.getString("image"));
+            user.setImage(resultSet.getString("image"));
             user.setVerified(resultSet.getBoolean("is_active"));
             user.setRegDate(resultSet.getDate("reg_date").toLocalDate());
             user.setToken(resultSet.getString("conf_link"));
@@ -135,7 +135,6 @@ public class UserRepository implements CrudRepository<User> {
         namedParams.put("conf_link", user.getToken());
 
         return namedJdbcTemplate.update(env.getProperty("save"), namedParams);
-
     }
 
     public boolean isUsernameExists(String login) {
