@@ -9,6 +9,7 @@ import { UserComponent } from '../components/user/user.component';
 import { UserListComponent } from '../components/user/user-list.component';
 import { UserEditComponent } from '../components/user/user-edit.component';
 import { UserEditImageComponent } from '../components/user/user-edit-image.component';
+import {WishListComponent} from '../components/wishlist/wishlist.component';
 
 @Injectable()
 class OnlyLoggedInUsersGuard implements CanActivate {
@@ -36,6 +37,10 @@ const routes: Routes = [
   { path: 'users',
     component: UserListComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'wishlist',
+    component: WishListComponent
+    // canActivate: [ OnlyLoggedInUsersGuard ]
+  },
   { path: 'users/:id',
     component: UserComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },

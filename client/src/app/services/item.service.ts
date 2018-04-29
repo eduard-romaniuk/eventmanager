@@ -8,12 +8,22 @@ const httpOptions = {
 };
 
 @Injectable()
-export class WishListService {
+export class ItemService {
 
   headers: HttpHeaders;
-  private base_url = '/wishlist';
+  private base_url = '/item';
 
   constructor(private http: HttpClient) {
   }
+
+  // public createItem(item) {
+  //   console.log('Create event-wishlist');
+  //   console.log(event);
+  //   return this.http.post(this.base_url, event).subscribe(
+  //     (data:any) => {
+  //       console.log(data);
+  //     }
+  //   );
+  // }
 
 }

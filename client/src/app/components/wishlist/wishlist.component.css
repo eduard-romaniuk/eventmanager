@@ -2,6 +2,10 @@ h1 {
   color : pink;
 }
 
+h5 {
+  margin: 0 auto;
+}
+
 ul {
   margin: 0;
   padding: 0;
@@ -13,3 +17,5 @@ li {
   margin: 5px;
   border: 3px solid gray;
 }
+
+

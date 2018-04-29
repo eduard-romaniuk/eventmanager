@@ -22,6 +22,10 @@ import { UserComponent } from './components/user/user.component';
 import { UserListComponent } from './components/user/user-list.component';
 import { UserEditComponent } from './components/user/user-edit.component';
 import { UserEditImageComponent } from './components/user/user-edit-image.component';
+import {WishListComponent} from './components/wishlist/wishlist.component';
+import {WishListService} from './services/wishlist.service';
+import {CreateItemComponent} from './components/wishlist/item/createItem/createItem.component';
+import {ItemService} from './services/item.service';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -57,7 +61,9 @@ export class AddressInterceptor implements HttpInterceptor {
     UserComponent,
     UserListComponent,
     UserEditComponent,
-    UserEditImageComponent
+    UserEditImageComponent,
+    WishListComponent,
+    CreateItemComponent
   ],
   imports: [
     BrowserModule,
@@ -73,6 +79,8 @@ export class AddressInterceptor implements HttpInterceptor {
     EventService,
     UserService,
     LoggerService,
+    WishListService,
+    ItemService,
     { provide: HTTP_INTERCEPTORS,
       useClass: AddressInterceptor,
       multi: true},

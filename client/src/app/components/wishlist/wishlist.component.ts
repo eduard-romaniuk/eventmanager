@@ -7,7 +7,7 @@ import { JQueryStatic } from 'jquery';
 import { Event } from '../../model/event'
 
 @Component({
-  selector: 'app-wishlist',
+  selector: 'app-wish-list',
   templateUrl: './wishlist.component.html',
   styleUrls: ['./wishlist.component.css']
 })
@@ -30,7 +30,7 @@ export class WishListComponent {
 
   create() {
     // TODO: Handle create error
-    this.wishlist.createEvent(this.event);
+    // this.wishlist.createEvent(this.event);
   }
 
 }

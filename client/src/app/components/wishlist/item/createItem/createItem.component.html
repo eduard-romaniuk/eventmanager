@@ -1,0 +1,31 @@
+<form class="md-form text-center" [formGroup]="form" (submit)="create()">
+
+  <!-- name -->
+  <div class="form-group">
+    <input type="text" id="name" class="form-control mt-2" placeholder="Name"
+           formControlName="name" autocomplete="off" [(ngModel)]="item.name">
+  </div>
+
+  <!-- description -->
+  <div class="form-group text-left">
+
+    <label for="description"> Description: </label>
+    <textarea class="form-control mt-2" id="description" formControlName="description" rows="3" [(ngModel)]="item.descriprion"></textarea>
+
+  </div>
+
+  <!-- priority -->
+  <!--TODO-->
+
+  <!-- images -->
+  <!--TODO-->
+
+  <!--tags-->
+  <!--TODO-->
+
+  <button class="btn btn-default mt-2" type="submit">Create new item</button>
+</form>
+
+<div>
+  {{form.value | json}}
+</div>
