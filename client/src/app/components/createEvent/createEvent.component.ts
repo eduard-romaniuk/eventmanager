@@ -5,6 +5,9 @@ import {Router, ActivatedRoute} from '@angular/router';
 import { JQueryStatic } from 'jquery';
 
 import { Event } from '../../model/event'
+import {User} from "../../model/user";
+import {Observable} from "rxjs/Observable";
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-createEvent',
@@ -15,9 +18,21 @@ export class CreateEventComponent {
 
   event : Event = new Event();
 
-  constructor(private route: ActivatedRoute,
+  constructor(private auth : AuthService,
+              private route: ActivatedRoute,
               private router: Router,
-              private eventService: EventService) { }
+              private eventService: EventService) {
+
+    auth.getUser().subscribe((data: any) => {this.event.creator = data});
+    console.log(this.event.creator);
+  }
+
+  ngOnInit() {
+    this.route.params.subscribe(params => {
+      console.log('On innit');
+      console.log( params['user']);
+    });
+  }
 
   create() {
     // TODO: Handle create error

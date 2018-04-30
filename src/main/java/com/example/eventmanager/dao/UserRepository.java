@@ -86,6 +86,7 @@ public class UserRepository implements CrudRepository<User> {
 
     @Override
     public void update(User user) {
+        System.out.println("UserRepository.update");
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("login", user.getLogin());
         namedParams.put("password", user.getPassword());

@@ -64,4 +64,12 @@ export class AuthService {
     return callback && callback();
   }
 
+  // getUserId() {
+  //   this.current_user.subscribe((data: User)=>{return('3')});
+  // }
+
+  getUser() {
+    return this.current_user;
+  }
+
 }
