@@ -28,7 +28,7 @@ public class Event {
     private Integer period;
     // private WishList wishList;
     @JsonView(EventView.FullView.class)
-    private Long imageId;
+    private Long image;
     @JsonView(EventView.FullView.class)
     private boolean isSent;
     @JsonView(EventView.FullView.class)
@@ -101,12 +101,12 @@ public class Event {
         this.period = period;
     }
 
-    public Long getImageId() {
-        return imageId;
+    public Long getImage() {
+        return image;
     }
 
-    public void setImageId(Long imageId) {
-        this.imageId = imageId;
+    public void setImage(Long imageId) {
+        this.image = imageId;
     }
 
     public boolean isSent() {
@@ -144,7 +144,7 @@ public class Event {
                 ", timeLineFinish=" + timeLineFinish +
                 ", creator=" + creator +
                 ", period=" + period +
-                ", imageId=" + imageId +
+                ", image=" + image +
                 ", isSent=" + isSent +
                 ", isPrivate=" + isPrivate +
                 ", participants=" + participants +

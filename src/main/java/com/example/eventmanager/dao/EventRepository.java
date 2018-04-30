@@ -64,12 +64,14 @@ public class EventRepository implements CrudRepository<Event> {
         namedParams.addValue("timeline_start", event.getTimeLineStart());
         namedParams.addValue("timeline_finish", event.getTimeLineFinish());
         namedParams.addValue("period_in_days", event.getPeriod());
-        namedParams.addValue("image_id", event.getImageId());
+        namedParams.addValue("image", event.getImage());
         namedParams.addValue("is_sent", event.isSent());
         namedParams.addValue("is_private", event.isPrivate());
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        namedJdbcTemplate.update(env.getProperty("save"), namedParams, keyHolder);
-        return keyHolder.getKey().intValue();
+        namedJdbcTemplate.update(env.getProperty("saveEvent"), namedParams, keyHolder);
+        //return keyHolder.getKey().intValue();
+        System.out.println("newEvent = " + keyHolder.getKeys());
+        return (Integer)keyHolder.getKeys().get("id");
     }
 
     @Override
@@ -103,7 +105,7 @@ public class EventRepository implements CrudRepository<Event> {
         namedParams.put("timeline_start", event.getTimeLineStart());
         namedParams.put("timeline_finish", event.getTimeLineFinish());
         namedParams.put("period_in_days", event.getPeriod());
-        namedParams.put("image_id", event.getImageId());
+        namedParams.put("image", event.getImage());
         namedParams.put("is_sent", event.isSent());
         namedParams.put("is_private", event.isPrivate());
         namedParams.put("eventId", event.getId());
@@ -168,7 +170,7 @@ public class EventRepository implements CrudRepository<Event> {
             event.setTimeLineStart(rs.getTimestamp("timeline_start").toLocalDateTime());
             event.setTimeLineFinish(rs.getTimestamp("timeline_finish").toLocalDateTime());
             event.setPeriod(rs.getInt("period_in_days"));
-            event.setImageId(rs.getLong("image_id"));
+            event.setImage(rs.getLong("image"));
             event.setSent(rs.getBoolean("is_sent"));
             event.setPrivate(rs.getBoolean("is_private"));
             return event;
@@ -190,7 +192,7 @@ public class EventRepository implements CrudRepository<Event> {
                 event.setTimeLineStart(rs.getTimestamp("timeline_start").toLocalDateTime());
                 event.setTimeLineFinish(rs.getTimestamp("timeline_finish").toLocalDateTime());
                 event.setPeriod(rs.getInt("period_in_days"));
-                event.setImageId(rs.getLong("image_id"));
+                event.setImage(rs.getLong("image"));
                 event.setSent(rs.getBoolean("is_sent"));
                 event.setPrivate(rs.getBoolean("is_private"));
                 creator.setId(rs.getLong("creator_id"));

@@ -27,12 +27,12 @@ export class CreateEventComponent {
     console.log(this.event.creator);
   }
 
-  ngOnInit() {
-    this.route.params.subscribe(params => {
-      console.log('On innit');
-      console.log( params['user']);
-    });
-  }
+  // ngOnInit() {
+  //   this.route.params.subscribe(params => {
+  //     console.log('On innit');
+  //     console.log( params['user']);
+  //   });
+  // }
 
   create() {
     // TODO: Handle create error
