@@ -40,10 +40,6 @@ export class UserComponent implements OnInit {
     this.sub.unsubscribe();
   }
 
-  goToEditUserPage(user: User): void {
-    this.router.navigate(['users', user.id, 'edit']);
-  };
-
   gotoList() {
     this.router.navigate(['/users']);
   }

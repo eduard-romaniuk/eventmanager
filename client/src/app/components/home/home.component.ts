@@ -20,6 +20,10 @@ export class HomeComponent {
       });
   }
 
+  goToSearchUserPage(): void {
+    this.router.navigate(['searchUsers']);
+  }
+
   goToEditUserPage(user: User): void {
     this.router.navigate(['users', user.id, 'edit']);
   }

@@ -9,6 +9,7 @@ import { UserComponent } from '../components/user/user.component';
 import { UserListComponent } from '../components/user/user-list.component';
 import { UserEditComponent } from '../components/user/user-edit.component';
 import { UserEditImageComponent } from '../components/user/user-edit-image.component';
+import {UserSearchComponent} from "../components/user/user-search.component";
 
 @Injectable()
 class OnlyLoggedInUsersGuard implements CanActivate {
@@ -43,6 +44,8 @@ const routes: Routes = [
     component: UserEditComponent},
   { path: 'users/:id/updateImage',
     component: UserEditImageComponent},
+  { path: 'searchUsers',
+    component: UserSearchComponent},
   { path: '**', redirectTo: '/hello', pathMatch: 'full'}
 ];
 
