@@ -24,8 +24,6 @@ import { UserEditComponent } from './components/user/user-edit.component';
 import { UserEditImageComponent } from './components/user/user-edit-image.component';
 import { UserSearchComponent } from './components/user/user-search.component';
 
-import { SearchUserPipe }from './pipes/search-user.pipe';
-
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler) {
@@ -61,8 +59,7 @@ export class AddressInterceptor implements HttpInterceptor {
     UserListComponent,
     UserEditComponent,
     UserEditImageComponent,
-    UserSearchComponent,
-    SearchUserPipe
+    UserSearchComponent
   ],
   imports: [
     BrowserModule,
