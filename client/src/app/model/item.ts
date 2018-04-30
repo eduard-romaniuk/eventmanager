@@ -9,7 +9,7 @@ export class Item {
   images: String[];
   booker: User;
   likes: number;
-  tags: any[];
+  tags: String[];
 
   //TODO: duedate, links
 }

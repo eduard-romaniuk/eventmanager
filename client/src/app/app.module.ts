@@ -24,7 +24,7 @@ import { UserEditComponent } from './components/user/user-edit.component';
 import { UserEditImageComponent } from './components/user/user-edit-image.component';
 import {WishListComponent} from './components/wishlist/wishlist.component';
 import {WishListService} from './services/wishlist.service';
-import {CreateItemComponent} from './components/wishlist/item/createItem/createItem.component';
+import {CreateItemComponent} from './components/wishlist/item/create-item/create-item.component';
 import {ItemService} from './services/item.service';
 
 @Injectable()

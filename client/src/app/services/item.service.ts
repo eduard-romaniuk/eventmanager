@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Event } from '../model/event';
+import {Item} from '../model/item';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' })
@@ -16,14 +16,19 @@ export class ItemService {
   constructor(private http: HttpClient) {
   }
 
-  // public createItem(item) {
-  //   console.log('Create event-wishlist');
-  //   console.log(event);
-  //   return this.http.post(this.base_url, event).subscribe(
-  //     (data:any) => {
-  //       console.log(data);
-  //     }
-  //   );
-  // }
+  public createItem(item: Item, callback?, errorCallback?) {
+    // console.log('Create event-wishlist');
+    // console.log(event);
+    this.http.post(this.base_url + '/', item).subscribe(
+      response => {
+        return callback && callback();
+      },
+      error => {
+        return errorCallback && errorCallback();
+      })
+
+    //TODO: delete after adding backend
+    return callback && callback();
+  }
 
 }
