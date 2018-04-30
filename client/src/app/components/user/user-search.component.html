@@ -1,34 +1,39 @@
 <div class="container">
   <div class="row searchInput">
-    <div class="col-lg-4 col-lg-offset-4">
+    <div class="col-sm-4 col-sm-offset-4">
       <div class="input-group">
-        <input type="text" class="form-control" [(ngModel)]="searchUserByLogin"/>
+        <input type="text" class="form-control" (keyup)="loginToSearch.next($event.target.value)"/>
       </div>
     </div>
   </div>
 
-  <div *ngFor="let user of (users | searchUser : searchUserByLogin)">
-    <div class="row border list">
-      <div class="col-sm-3">
+  <div *ngIf="users">
+    <div *ngFor="let user of users">
+      <div class="row border list">
+        <div class="col-sm-3">
 
-        <!--TODO Partial-->
-        <div *ngIf="user.image">
-          <img class="profileImage mediumImage" [src]="user.image" id="image" name="image"> <br/>
-        </div>
-        <div *ngIf="!user.image && user.sex">
-          <img class="profileImage mediumImage" src="../../../assets/images/default_user_male.png" name="image"> <br/>
-        </div>
-        <div *ngIf="!user.image && !user.sex">
-          <img class="profileImage mediumImage" src="../../../assets/images/default_user_female.png" name="image"> <br/>
-        </div>
+          <!--TODO Partial-->
+          <div *ngIf="user.image">
+            <img class="profileImage mediumImage" [src]="user.image" id="image" name="image"> <br/>
+          </div>
+          <div *ngIf="!user.image && user.sex">
+            <img class="profileImage mediumImage" src="../../../assets/images/default_user_male.png" name="image"> <br/>
+          </div>
+          <div *ngIf="!user.image && !user.sex">
+            <img class="profileImage mediumImage" src="../../../assets/images/default_user_female.png" name="image">
+            <br/>
+          </div>
 
-      </div>
-      <div>
-        <a [routerLink]="['/users', user.id]"> {{ user.login }} </a>
+        </div>
+        <div>
+          <a [routerLink]="['/users', user.id]"> {{ user.login }} </a>
+        </div>
       </div>
     </div>
   </div>
+
   <div *ngIf="users?.length < 1">
-    <p>Sorry, no users found</p>
+    <p>No results</p>
   </div>
+
 </div>

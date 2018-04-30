@@ -134,4 +134,13 @@ public class UserController {
         return new ResponseEntity<>(eventList, HttpStatus.OK);
     }
 
+    @JsonView(UserView.ShortView.class)
+    @RequestMapping(value = "/search", params = "login", method = RequestMethod.GET)
+    public ResponseEntity<List<User>> searchByLogin(@RequestParam("login") String login) {
+        logger.info("GET /users/search?login=" + login);
+
+        List<User> users = userService.searchByLogin(login);
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
 }
