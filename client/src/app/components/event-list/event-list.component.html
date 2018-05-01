@@ -12,7 +12,7 @@
     <tr *ngFor="let event of events">
       <td *ngIf="hideElement">{{ event.id }}</td>
       <td>
-        <a [routerLink]="['/event', event.id, 'edit']"> {{ event.name }} </a>
+        <a [routerLink]="['/event', event.id]"> {{ event.name }} </a>
       </td>
     </tr>
     </tbody>

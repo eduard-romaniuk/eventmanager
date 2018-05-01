@@ -16,7 +16,6 @@ import { HomeComponent }         from './components/home/home.component';
 import { EmailVerificationComponent } from './components/email-verification/email-verification.component';
 import { CreateEventComponent }   from './components/createEvent/createEvent.component';
 import { ViewEventComponent }   from './components/viewEvent/viewEvent.component';
-import { CreateEventComponent }   from './components/createEvent/createEvent.component'
 import { EventEditComponent } from './components/event-edit/event-edit.component';
 import { EventService } from "./services/event.service";
 import { UserComponent } from './components/user/user.component';
