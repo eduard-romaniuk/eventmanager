@@ -18,4 +18,13 @@ li {
   border: 3px solid gray;
 }
 
+.button {
+  /*display: block;*/
+  width: 40%;
+  /*text-align: left;*/
+  border-radius: 15px;
+}
+.likes {
+
+}
 
