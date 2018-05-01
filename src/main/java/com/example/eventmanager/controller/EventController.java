@@ -31,13 +31,14 @@ public class EventController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public ResponseEntity<Void> createEvent(@RequestBody Event event, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Long> createEvent(@RequestBody Event event, UriComponentsBuilder ucBuilder) {
         logger.info("POST /");
 
         eventService.createEvent(event);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/event/{id}").buildAndExpand(event.getId()).toUri());
-        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+        //HttpHeaders headers = new HttpHeaders();
+        //headers.add("id", "1" + event.getId());
+        //headers.setLocation(ucBuilder.path("/event/{id}").buildAndExpand(event.getId()).toUri());
+        return new ResponseEntity<>(event.getId(), HttpStatus.CREATED);
     }
 
     @JsonView(EventView.ShortView.class)

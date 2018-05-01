@@ -14,7 +14,8 @@ import { RegistrationComponent } from './components/registration/registration.co
 import { HelloComponent }        from './components/hello/hello.component';
 import { HomeComponent }         from './components/home/home.component';
 import { EmailVerificationComponent } from './components/email-verification/email-verification.component';
-import { CreateEventComponent }   from './components/createEvent/createEvent.component'
+import { CreateEventComponent }   from './components/createEvent/createEvent.component';
+import { ViewEventComponent }   from './components/viewEvent/viewEvent.component';
 import { EventService } from "./services/event.service";
 import { UserComponent } from './components/user/user.component';
 import { UserListComponent } from './components/user/user-list.component';
@@ -51,6 +52,7 @@ export class AddressInterceptor implements HttpInterceptor {
     HomeComponent,
     EmailVerificationComponent,
     CreateEventComponent,
+    ViewEventComponent,
     UserComponent,
     UserListComponent,
     UserEditComponent

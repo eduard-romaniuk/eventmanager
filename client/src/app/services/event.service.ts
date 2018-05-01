@@ -13,32 +13,29 @@ const httpOptions = {
 @Injectable()
 export class EventService {
 
-  currentUserId: number;
-  //authService :AuthService;
   private base_url = '/event/';
+  private response: Response;
 
-  constructor(private http: HttpClient, private route: ActivatedRoute) {
-    //this.currentUser = currentUserIn;
-    //this.route.params.subscribe(params => )
+
+  constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {
 
   }
 
-  // ngOnInit() {
-  //   this.route.params.subscribe(params => {
-  //     console.log('On innit');
-  //     console.log( params['userId']);
-  //   });
-  // }
+  getEventById(id) {
+    return this.http.get(this.base_url + id);
+  }
 
   public createEvent(event) {
     //this.currentUser = this.authService.getUser();
     console.log('Create event');
     console.log(event);
-    console.log(this.currentUserId);
-    return this.http.post(this.base_url, event).subscribe(
-           (data:any) => {
-             console.log(data);
+
+    this.http.post(this.base_url, event).subscribe(
+      (id: number) => {
+             console.log("Id: " + id)
+             this.router.navigate(['event/', id]);
            }
          );
+
   }
 }

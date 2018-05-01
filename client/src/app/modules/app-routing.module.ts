@@ -3,6 +3,7 @@ import { RouterModule, Routes, CanActivate, Router } from '@angular/router';
 import { HelloComponent } 		from '../components/hello/hello.component';
 import { HomeComponent } 		  from '../components/home/home.component';
 import { CreateEventComponent }       from '../components/createEvent/createEvent.component';
+import { ViewEventComponent }       from '../components/viewEvent/viewEvent.component';
 import { AuthService } 			  from '../services/auth.service';
 
 import { UserComponent } from '../components/user/user.component';
@@ -31,6 +32,9 @@ const routes: Routes = [
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'event/create',
     component: CreateEventComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'event/:id',
+    component: ViewEventComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'users',
     component: UserListComponent,

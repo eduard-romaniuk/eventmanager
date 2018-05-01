@@ -1,0 +1,13 @@
+<div class="md-form text-center">
+{{event.name}}<br><br>
+Description:<br>
+  {{event.description}}<br><br>
+  Place:<br>
+  {{event.place}}<br><br>
+  Time of start:<br>
+  {{event.timeLineStart}}<br><br>
+  Time of finish:<br>
+  {{event.timeLineFinish}}<br>
+  <button class="btn btn-default mt-2" (click)="create()"> <!--*ngIf="creatorId == userId"-->Update</button>
+  <button class="btn btn-default mt-2" (click)="publish()">Invite members</button>
+</div>
