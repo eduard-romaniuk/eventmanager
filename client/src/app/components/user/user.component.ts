@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { User } from '../../model/user';
 import { UserService } from '../../services/user.service';
+import {EventService} from "../../services/event.service";
 
 @Component({
   selector: 'app-user',
@@ -13,7 +14,7 @@ import { UserService } from '../../services/user.service';
 export class UserComponent implements OnInit {
 
   user: User = new User();
-
+  userEvents: Event[];
   sub: Subscription;
 
   constructor(private route: ActivatedRoute,
@@ -27,6 +28,11 @@ export class UserComponent implements OnInit {
         this.userService.getUserById(id).subscribe((user: any) => {
           if (user) {
             this.user = user;
+            this.userService.getEventsByUserId(this.user.id)
+              .subscribe( (events : any) => {
+                console.log("events - " + events);
+                this.userEvents = events;
+              });
           } else {
             console.log(`User with id '${id}' not found!`);
             this.gotoList();
