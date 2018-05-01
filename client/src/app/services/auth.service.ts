@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { User } from '../model/user';
-import { UserService } from './user.service';
-import { Observable } from 'rxjs/Observable';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {User} from '../model/user';
+import {UserService} from './user.service';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
 export class AuthService {
@@ -28,19 +28,19 @@ export class AuthService {
     sessionStorage.setItem('authToken', 'Basic ' + btoa(credentials.login + ':' + credentials.password));
 
     this.http.get(this.base_url + '/').subscribe(response => {
-      if (response['name']) {
+        if (response['name']) {
           this.authenticated = true;
           sessionStorage.setItem('login', credentials.login);
           this.current_user = this.users.getUser(credentials.login);
-      } else {
+        } else {
           this.logout();
-      }
-      return callback && callback();
-    },
-    error => {
-      this.logout();
-      return errorCallback && errorCallback();
-    });
+        }
+        return callback && callback();
+      },
+      error => {
+        this.logout();
+        return errorCallback && errorCallback();
+      });
   }
 
   registration(user: User, callback?, errorCallback?) {

@@ -13,8 +13,13 @@ import {User} from "./model/user";
 })
 export class AppComponent {
   title = 'Event manager';
+  user: User = new User();
 
   constructor(private auth: AuthService, private http: HttpClient, private router: Router) {
+    this.auth.current_user.subscribe(
+      current_user => {
+        this.user = current_user;
+      });
   }
 
   logout() {

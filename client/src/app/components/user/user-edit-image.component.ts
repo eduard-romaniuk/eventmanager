@@ -4,7 +4,7 @@ import {Subscription} from "rxjs/Subscription";
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../services/user.service";
 
-import { CloudinaryOptions, CloudinaryUploader } from 'ng2-cloudinary';
+import {CloudinaryOptions, CloudinaryUploader} from 'ng2-cloudinary';
 
 @Component({
   selector: 'app-user-edit-image',
@@ -63,7 +63,7 @@ export class UserEditImageComponent implements OnInit, OnDestroy {
   }
 
   goHome(): void {
-    this.router.navigate(['home']);
+    this.router.navigate(['users', this.user.id]);
   };
 
 }

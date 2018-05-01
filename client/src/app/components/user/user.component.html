@@ -1,24 +1,41 @@
 <div class="container">
   <div class="row">
-    <div class="col-sm-4">
-      <h2> {{ user.login }} </h2>
 
-      <!--TODO Partial-->
-      <div *ngIf="user.image">
-        <img class="profileImage bigImage" [src]="user.image" id="image" name="image"> <br/>
-      </div>
-      <div *ngIf="!user.image && user.sex">
-        <img class="profileImage bigImage" src="../../../assets/images/default_user_male.png" name="image"> <br/>
-      </div>
-      <div *ngIf="!user.image && !user.sex">
-        <img class="profileImage bigImage" src="../../../assets/images/default_user_female.png" name="image"> <br/>
-      </div>
+    <div class="col-sm-3 border userProfileBlock" align="center">
+        <h2> {{ user.login }} </h2>
 
-      <p *ngIf="hideElement">{{ user.id }}</p>
-      <p>{{ user.name }} {{user.surName }}</p>
+        <!--TODO Partial-->
+        <div *ngIf="user.image">
+          <img class="profileImage bigImage" [src]="user.image" id="image" name="image"> <br/>
+        </div>
+        <div *ngIf="!user.image && user.sex">
+          <img class="profileImage bigImage" src="../../../assets/images/default_user_male.png" name="image"> <br/>
+        </div>
+        <div *ngIf="!user.image && !user.sex">
+          <img class="profileImage bigImage" src="../../../assets/images/default_user_female.png" name="image"> <br/>
+        </div>
+
+        <p *ngIf="hideElement">{{ user.id }}</p>
+        <p>{{ user.name }} {{user.surName }}</p>
+
+        <div *ngIf="currentUserPage">
+          <p>
+            <button class="btn btn-info" (click)="goToEditUserPage(user)"> Edit info </button>
+          </p>
+          <p>
+            <button class="btn btn-info" (click)="goToEditImagePage(user)"> Edit image </button>
+          </p>
+        </div>
+
+        <div *ngIf="!currentUserPage">
+          <p>
+            <button class="btn btn-info" (click)="addToFriends(user)"> Add to friends </button>
+          </p>
+        </div>
+
     </div>
 
-    <div class="col-sm-8">
+    <div class="col-sm-9">
 
       <div *ngIf="userEvents">
         <div *ngFor="let event of userEvents">
@@ -33,5 +50,6 @@
       </div>
 
     </div>
+
   </div>
 </div>
