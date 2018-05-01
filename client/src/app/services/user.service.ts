@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import { HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { User } from '../model/user';
 import { Observable } from 'rxjs/Observable';
 
@@ -84,4 +84,11 @@ export class UserService {
   getUser(username: String): Observable<User> {
     return this.http.get<User>(this.base_url + '/by-username/' + username);
   }
+
+  searchUserByLogin(login) {
+    const params = new HttpParams().set('login', login);
+    console.log("In searchUserByLogin. login = " + login);
+    return this.http.get(this.base_url + "/search",{params: params});
+  }
+
 }

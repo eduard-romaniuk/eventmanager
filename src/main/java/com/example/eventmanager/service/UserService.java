@@ -58,4 +58,8 @@ public class UserService {
     public boolean isUsernameExists(String username) {
         return userRepository.isUsernameExists(username);
     }
+
+    public List<User> searchByLogin(String login){
+        return userRepository.searchByLogin(login);
+    }
 }

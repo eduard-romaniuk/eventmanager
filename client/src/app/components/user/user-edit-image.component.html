@@ -9,13 +9,13 @@
 
       <!--TODO Partial-->
       <div *ngIf="user.image">
-        <img class="profileImage" [src]="user.image" id="image" name="image"> <br/>
+        <img class="profileImage bigImage" [src]="user.image" id="image" name="image"> <br/>
       </div>
       <div *ngIf="!user.image && user.sex">
-        <img class="profileImage" src="../../../assets/images/default_user_male.png" name="image"> <br/>
+        <img class="profileImage bigImage" src="../../../assets/images/default_user_male.png" name="image"> <br/>
       </div>
       <div *ngIf="!user.image && !user.sex">
-        <img class="profileImage" src="../../../assets/images/default_user_female.png" name="image"> <br/>
+        <img class="profileImage bigImage" src="../../../assets/images/default_user_female.png" name="image"> <br/>
       </div>
 
       <input

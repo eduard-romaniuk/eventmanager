@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @PropertySource("classpath:queries/user.properties")
@@ -86,6 +87,7 @@ public class UserRepository implements CrudRepository<User> {
 
     @Override
     public void update(User user) {
+        System.out.println("UserRepository.update");
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("login", user.getLogin());
         namedParams.put("password", user.getPassword());
@@ -158,6 +160,17 @@ public class UserRepository implements CrudRepository<User> {
         } catch (EmptyResultDataAccessException e) {
             logger.info("Email not found");
             return false;
+        }
+    }
+
+    public List<User> searchByLogin(String login) {
+        try {
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("login", "%" + login.toLowerCase().trim() + "%");
+            return namedJdbcTemplate.query(env.getProperty("searchUserByLogin"), namedParams, new UserMapper());
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("User not found");
+            return null;
         }
     }
 }

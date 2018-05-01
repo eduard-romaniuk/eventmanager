@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import { AuthService } from './services/auth.service';
 import 'rxjs/add/operator/finally';
+import {User} from "./model/user";
 
 @Component({
   selector: 'app-root',
@@ -22,5 +23,9 @@ export class AppComponent {
 
   authenticated() {
     return this.auth.authenticated;
+  }
+
+  createEvent() {
+    this.router.navigate(['/event/create', this.auth]);
   }
 }

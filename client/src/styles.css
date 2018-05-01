@@ -6,8 +6,25 @@ html, body {
 	text-decoration: none !important;
 }
 
+.searchInput{
+  margin: 10px 0px;
+}
+
+.list{
+  margin: 10px;
+  padding: 5px;
+}
+
 .profileImage{
   border-radius: 50%;
+}
+
+.mediumImage{
+  height: 100px;
+  width: 100px;
+}
+
+.bigImage{
   height: 150px;
   width: 150px;
 }
