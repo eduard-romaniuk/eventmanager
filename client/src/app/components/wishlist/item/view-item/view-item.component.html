@@ -1,24 +1,21 @@
-<div>
+<div *ngIf="item">
 
   <h4 class="text-uppercase">{{item.name}} <i class="likes fa fa-thumbs-up" >{{item.likes}}</i></h4>
   <button type="button" class="exbutt btn" *ngFor="let tag of item.tags">
       #{{tag}}
   </button>
-  <img src="../../../../../assets/images/test.jpg" alt="Smiley face" height="200">
+  <img src="../../../../../assets/images/mock/test.jpg" alt="Smiley face" height="200">
   <p>
     {{item.descriprion}}
   </p>
   <button type="button" class=" btn">
-    <img src="../../../../../assets/images/copy-icon.png" alt="Smiley face" height="20">
+    <img src="../../../../../assets/images/mock/copy-icon.png" alt="Smiley face" height="20">
     Copy
   </button>
   <button type="button" class=" btn">
-    <img src="../../../../../assets/images/Vote-512.png" alt="Smiley face" height="20">
+    <img src="../../../../../assets/images/mock/Vote-512.png" alt="Smiley face" height="20">
     Booking
   </button>
-
-
-
 
 </div>
 

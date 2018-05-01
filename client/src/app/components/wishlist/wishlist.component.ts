@@ -25,6 +25,7 @@ export class WishListComponent {
               private wishListService: WishListService,
               ) {
     this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
+    this.sendViewingItem(this.items[0]);
 
 
     this.generateItem(
@@ -68,8 +69,6 @@ export class WishListComponent {
   }
 
   create() {
-    // TODO: Handle create error
-    // this.wishlist.createEvent(this.event);
   }
 
   generateItem (id: number, name: string, description: String, priority: number, likes: number, tags: String[]){
