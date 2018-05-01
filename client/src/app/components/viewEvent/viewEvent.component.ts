@@ -29,9 +29,9 @@ export class ViewEventComponent {
   }
 
   ngOnInit() {
-    this.auth.getUser().subscribe((id: any) => {
-      this.userId = id;
-      console.log("currentUserId = " + id);
+    this.auth.getUser().subscribe((user: any) => {
+      this.userId = user.id;
+      console.log("currentUserId = " + user.id);
     })
     this.sub = this.route.params.subscribe(params => {
       const id = params['id'];
@@ -40,6 +40,7 @@ export class ViewEventComponent {
           if (event) {
             this.event = event;
             console.log(`Event with id '${id}' was loaded!`);
+            console.log(event);
           } else {
             console.log(`Event with id '${id}' not found!`);
           }
@@ -47,6 +48,10 @@ export class ViewEventComponent {
       }
     });
     console.log("loadedEventCreator = " + this.event.creator)
+  }
+
+  public isCreator(): boolean {
+    return this.userId === this.event.creator.id;
   }
 
 }

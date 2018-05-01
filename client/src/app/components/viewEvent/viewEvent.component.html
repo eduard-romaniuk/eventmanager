@@ -8,6 +8,6 @@ Description:<br>
   {{event.timeLineStart}}<br><br>
   Time of finish:<br>
   {{event.timeLineFinish}}<br>
-  <button class="btn btn-default mt-2" (click)="create()"> <!--*ngIf="creatorId == userId"-->Update</button>
-  <button class="btn btn-default mt-2" (click)="publish()">Invite members</button>
+  <button class="btn btn-default mt-2" [routerLink]="['/event', event.id, 'edit']"> <!--*ngIf="isCreator()"-->Edit</button>
+  <button class="btn btn-default mt-2" (click)="publish()" [disabled]="true">Invite members</button>
 </div>
