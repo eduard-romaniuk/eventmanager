@@ -39,6 +39,11 @@ export class EventEditComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
+  publish() {
+    this.event.isSent = true;
+    this.save();
+  }
+  
   save() {
     this.eventService.updateEvent(this.event).subscribe(response => {
       this.router.navigate(['home']);

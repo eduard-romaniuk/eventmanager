@@ -49,4 +49,8 @@ export class EventService {
   public updateEvent(event: Event): Observable<Object> {
     return this.http.post(this.base_url + event.id, event);
   }
+
+  public getPublicEvents(): Observable<Event[]> {
+    return this.http.get<Event[]>(this.base_url);
+  }
 }
