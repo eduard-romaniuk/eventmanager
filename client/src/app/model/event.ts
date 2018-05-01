@@ -1,6 +1,7 @@
+import {User} from "./user";
 export class Event {
   id: number;
-  creator: any; //TODO user
+  creator: User;
   name: string;
   description: string;
   place: string;

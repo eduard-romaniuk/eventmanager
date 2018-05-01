@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
 import { Event } from '../model/event';
+import { User } from '../model/user';
+//import { AuthService } from 'auth.service';
+import {Observable} from "rxjs/Observable";
+import { ActivatedRoute, Router } from '@angular/router';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' })
@@ -10,64 +13,41 @@ const httpOptions = {
 @Injectable()
 export class EventService {
 
-  headers: HttpHeaders;
-  private base_url = '/event';
+  private base_url = '/event/';
+  private response: Response;
 
-  constructor(private http: HttpClient) {
+
+  constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {
+
+  }
+
+  getEventById(id) {
+    return this.http.get(this.base_url + id);
   }
 
   public createEvent(event) {
+    //this.currentUser = this.authService.getUser();
     console.log('Create event');
     console.log(event);
-    return this.http.post(this.base_url, event).subscribe(
-           (data:any) => {
-             console.log(data);
+
+    this.http.post(this.base_url, event).subscribe(
+      (id: number) => {
+             console.log("Id: " + id)
+             this.router.navigate(['event/', id]);
            }
          );
+
   }
 
-  // create(eventData, callback) {
-  //
-  //   this.headers = new HttpHeaders({
-  //     "Content-Type" : "application/json"
-  //   });
-  //
-  //   console.log(`CreateNewEvent(${this.headers.get("Content-Type")})`);
-  //
-  //   this.http.post(`http://localhost:80/event`,
-  //     JSON.stringify({
-  //       name: eventData.eventName,
-  //       description: eventData.description,
-  //       place: eventData.place,
-  //       timeLineStart: eventData.timeLineStart,
-  //       timeLineFinish: eventData.timeLineFinish,
-  //       period: eventData.period,
-  //       isSent: false,
-  //       isPrivate: eventData.isPrivate
-  //     }), {headers: this.headers})
-  //     .subscribe(
-  //       (data:any) => {
-  //         console.log(data);
-  //       }
-  //     )
-  //
-  //   // this.http.post('http://localhost:80/event', {body : {
-  //   //   "name": eventData.eventName,
-  //   //   "description": eventData.description,
-  //   //   "place": eventData.place,
-  //   //   "timeLineStart": eventData.timeLineStart,
-  //   //   "timeLineFinish": eventData.timeLineFinish,
-  //   //   "period": eventData.period,
-  //   //   "isSent":false,
-  //   //   "isPrivate": eventData.isPrivate
-  //   // }}, {headers: this.headers}).subscribe(
-  //   //   (data:any) => {
-  //   //     console.log(data)
-  //   //   }
-  //   // );
-  //
-  //
-  //   console.log('afterCreate');
-  // }
+  public getEvent(id: number): Observable<Event> {
+     return this.http.get<Event>(this.base_url + id);
+  }
 
+  public updateEvent(event: Event): Observable<Object> {
+    return this.http.post(this.base_url + event.id, event);
+  }
+
+  public getPublicEvents(): Observable<Event[]> {
+    return this.http.get<Event[]>(this.base_url);
+  }
 }

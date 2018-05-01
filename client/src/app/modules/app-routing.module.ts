@@ -3,11 +3,14 @@ import { RouterModule, Routes, CanActivate, Router } from '@angular/router';
 import { HelloComponent } 		from '../components/hello/hello.component';
 import { HomeComponent } 		  from '../components/home/home.component';
 import { CreateEventComponent }       from '../components/createEvent/createEvent.component';
+import { ViewEventComponent }       from '../components/viewEvent/viewEvent.component';
 import { AuthService } 			  from '../services/auth.service';
 
 import { UserComponent } from '../components/user/user.component';
 import { UserListComponent } from '../components/user/user-list.component';
 import { UserEditComponent } from '../components/user/user-edit.component';
+import { EventEditComponent } from '../components/event-edit/event-edit.component';
+import { EventListComponent } from '../components/event-list/event-list.component';
 import { UserEditImageComponent } from '../components/user/user-edit-image.component';
 import {UserSearchComponent} from "../components/user/user-search.component";
 
@@ -34,6 +37,12 @@ const routes: Routes = [
   { path: 'event/create',
     component: CreateEventComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'events/list',
+      component: EventListComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'event/:id',
+    component: ViewEventComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'users',
     component: UserListComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
@@ -41,7 +50,11 @@ const routes: Routes = [
     component: UserComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'users/:id/edit',
-    component: UserEditComponent},
+    component: UserEditComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'event/:id/edit',
+    component: EventEditComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'users/:id/updateImage',
     component: UserEditImageComponent},
   { path: 'searchUsers',

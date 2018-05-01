@@ -3,7 +3,7 @@
          [(ngModel)]="event.name">
   <input type="text" id="description" class="form-control mt-2" placeholder="Description"
          [(ngModel)]="event.description">
-  <input type="text" id="place" class="form-control mt-2" placeholder="Plase"
+  <input type="text" id="place" class="form-control mt-2" placeholder="Venue"
          [(ngModel)]="event.place">
   <div class="md-form text-left">
     Start time:
@@ -22,6 +22,6 @@
     <input type="checkbox" id="isPrivate"
            [(ngModel)]="event.isPrivate">
   </div>
-  <button class="btn btn-default mt-2" (click)="create()">Create</button>
+  <button class="btn btn-default mt-2" (click)="save()">Save</button>
   <button class="btn btn-default mt-2" (click)="publish()">Publish</button>
 </div>
