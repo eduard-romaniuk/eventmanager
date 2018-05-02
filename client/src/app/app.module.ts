@@ -31,7 +31,7 @@ import {WishListService} from './services/wishlist.service';
 import {CreateItemComponent} from './components/wishlist/item/create-item/create-item.component';
 import {ItemService} from './services/item.service';
 import { ViewItemComponent } from './components/wishlist/item/view-item/view-item.component';
-
+import { ChatComponent } from './components/chat/chat.component';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -74,7 +74,8 @@ export class AddressInterceptor implements HttpInterceptor {
     UserSearchComponent,
     WishListComponent,
     CreateItemComponent,
-    ViewItemComponent
+    ViewItemComponent,
+    ChatComponent
 
   ],
   imports: [

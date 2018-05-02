@@ -53,5 +53,7 @@ export class ViewEventComponent {
   public isCreator(): boolean {
     return this.userId === this.event.creator.id;
   }
-
+  goToChat() {
+      this.router.navigate(['/chats']);
+    }
 }
