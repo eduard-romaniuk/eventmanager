@@ -28,7 +28,7 @@ public class Event {
     private Integer period;
     // private WishList wishList;
     @JsonView(EventView.FullView.class)
-    private Long image;
+    private String image;
     @JsonView(EventView.FullView.class)
     private boolean isSent;
     @JsonView(EventView.FullView.class)
@@ -101,12 +101,12 @@ public class Event {
         this.period = period;
     }
 
-    public Long getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(Long imageId) {
-        this.image = imageId;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public boolean isSent() {

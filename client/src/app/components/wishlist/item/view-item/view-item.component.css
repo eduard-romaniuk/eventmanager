@@ -1,0 +1,13 @@
+.exbutt{
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
+  color: black;
+  background: #eee;
+  border: 1px solid gray;
+  border-radius: 5px;
+  margin: 5px;
+  padding: 0px;
+  padding-right: 5px;
+  padding-left: 5px;
+}

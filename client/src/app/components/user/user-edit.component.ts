@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { User } from '../../model/user';
 import { UserService } from '../../services/user.service';
+import {AuthService} from "../../services/auth.service";
 
 @Component({
   selector: 'app-user-edit',
@@ -13,7 +14,6 @@ import { UserService } from '../../services/user.service';
 export class UserEditComponent implements OnInit, OnDestroy {
 
   user: User = new User();
-
   sub: Subscription;
 
   constructor(private route: ActivatedRoute,
@@ -40,9 +40,8 @@ export class UserEditComponent implements OnInit, OnDestroy {
   }
 
   save() {
-    console.log("this.user.email - " + this.user.email);
     this.userService.updateUser(this.user).subscribe((user: any) => {
-      this.router.navigate(['home']);
+      this.router.navigate(['users', user.id]);
     }, error => console.error(error));
     // this.userService.updateUser(this.user);
     // this.router.navigate(['users', this.user.id]);

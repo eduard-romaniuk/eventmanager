@@ -26,6 +26,14 @@ import { UserEditComponent } from './components/user/user-edit.component';
 import { EventListComponent } from './components/event-list/event-list.component';
 import { UserEditImageComponent } from './components/user/user-edit-image.component';
 import { UserSearchComponent } from './components/user/user-search.component';
+import {ImageUploaderService} from "./services/image-uploader.service";
+import {WishListComponent} from './components/wishlist/wishlist.component';
+import {WishListService} from './services/wishlist.service';
+import {CreateItemComponent} from './components/wishlist/item/create-item/create-item.component';
+import {ItemService} from './services/item.service';
+import { ViewItemComponent } from './components/wishlist/item/view-item/view-item.component';
+import { ChatComponent } from './components/chat/chat.component';
+import { ExportEventsPlanComponent } from './components/export-events-plan/export-events-plan.component';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -65,7 +73,12 @@ export class AddressInterceptor implements HttpInterceptor {
     UserListComponent,
     UserEditComponent,
     UserEditImageComponent,
-    UserSearchComponent
+    UserSearchComponent,
+    WishListComponent,
+    CreateItemComponent,
+    ViewItemComponent,
+    ChatComponent,
+    ExportEventsPlanComponent
   ],
   imports: [
     BrowserModule,
@@ -81,6 +94,9 @@ export class AddressInterceptor implements HttpInterceptor {
     EventService,
     UserService,
     LoggerService,
+    ImageUploaderService,
+    WishListService,
+    ItemService,
     { provide: HTTP_INTERCEPTORS,
       useClass: AddressInterceptor,
       multi: true},

@@ -1,0 +1,75 @@
+<form class="md-form text-center" [formGroup]="form" (submit)="createItem()">
+
+  <!-- name -->
+  <div class="form-group">
+    <input type="text" id="name" class="form-control mt-2" placeholder="Name"
+           formControlName="name" autocomplete="off" [(ngModel)]="item.name">
+  </div>
+
+  <!-- description -->
+  <div class="form-group text-left">
+
+    <label for="description"> Description: </label>
+    <textarea class="form-control mt-2" id="description" formControlName="description" rows="3" [(ngModel)]="item.descriprion"></textarea>
+
+  </div>
+
+  <!-- priority -->
+  <div class="form-group">
+
+    <div class="text-left"> Priority: </div>
+
+    <div class="radio radio-inline form-check">
+      <input type="radio" name="priority" value="0" id="prior01" formControlName="priority" [(ngModel)]="item.priority">
+      <label class="form-check-label" for="prior01">low</label>
+
+      <input type="radio" name="priority" value="1" id="prior02" formControlName="priority" [(ngModel)]="item.priority" >
+      <label class="form-check-label" for="prior02">normal</label>
+
+      <input type="radio" name="priority" value="2" id="prior03"formControlName="priority" [(ngModel)]="item.priority">
+      <label class="form-check-label" for="prior03">urgent</label>
+    </div>
+
+  </div>
+
+  <!-- images -->
+  <!--TODO-->
+
+  <!--tags-->
+  <div class="form-group">
+
+    <div class="d-inline" formArrayName="tags"
+         *ngFor="let tag of form.get('tags').controls; let i = index; let last = last" >
+
+      <div class="d-inline" [formGroupName]="i">
+
+        <input class="form-control" *ngIf="last" formControlName="name" placeholder="Tag">
+
+        <div class="exbutt" *ngIf="!last">
+
+          {{ form.controls.tags.controls[i].controls.name.value }}
+          <button class="close" type="button" (click)="removeTag(i)">×</button>
+
+        </div>
+
+
+      </div>
+
+    </div>
+
+    <button type="button" class="btn btn-default mt-2" (click)="addTag()" [disabled]="isTagControlInvalid('name')">
+      Add new tag
+    </button>
+
+  </div>
+
+
+  <button class="btn btn-default mt-2" type="submit"
+          [disabled]="isControlInvalid('name') || isControlInvalid('priority')">
+    Create new item
+  </button>
+</form>
+
+<div>
+  {{form.value | json}}
+</div>

@@ -19,10 +19,9 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 
 
 @PropertySource("classpath:queries/event.properties")
@@ -32,6 +31,7 @@ public class EventRepository implements CrudRepository<Event> {
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
     private final Environment env;
     private final Logger logger = LogManager.getLogger(EventRepository.class);
+    private static final int FIRST_ELEMENT = 0;
 
     @Autowired
     public EventRepository(NamedParameterJdbcTemplate namedJdbcTemplate, Environment env) {
@@ -79,7 +79,7 @@ public class EventRepository implements CrudRepository<Event> {
         try {
             Map<String, Object> namedParams = new HashMap<>();
             namedParams.put("eventId", id);
-            return namedJdbcTemplate.query(env.getProperty("findById"), namedParams, new EventWithCreator());
+            return namedJdbcTemplate.query(env.getProperty("findById"), namedParams, new EventWithCreator()).get(FIRST_ELEMENT);
         } catch (EmptyResultDataAccessException e) {
             logger.info("Event not found");
             return null;
@@ -140,11 +140,11 @@ public class EventRepository implements CrudRepository<Event> {
         }
     }
 
-    public int addUserToEvent(Long user_id, Long event_id) {
+    public void addUserToEvent(Long user_id, Long event_id) {
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("user_id", user_id);
         namedParams.put("event_id", event_id);
-        return namedJdbcTemplate.update(env.getProperty("addUser"), namedParams);
+        namedJdbcTemplate.update(env.getProperty("addUser"), namedParams);
     }
 
     public List<User> findParticipants(Long id) {
@@ -156,6 +156,20 @@ public class EventRepository implements CrudRepository<Event> {
             logger.info("Participants not found");
             return Collections.emptyList();
         }
+    }
+
+    public List<Event> eventsListForPeriod(Long id, LocalDate fromDate, LocalDate toDate){
+        try {
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("user_id", id);
+            namedParams.put("fromDate", fromDate);
+            namedParams.put("toDate", toDate);
+            return namedJdbcTemplate.query(env.getProperty("forPeriod"), namedParams,new EventWithCreator());
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("Events not found");
+            return Collections.emptyList();
+        }
+
     }
 
 
@@ -170,18 +184,19 @@ public class EventRepository implements CrudRepository<Event> {
             event.setTimeLineStart(rs.getTimestamp("timeline_start").toLocalDateTime());
             event.setTimeLineFinish(rs.getTimestamp("timeline_finish").toLocalDateTime());
             event.setPeriod(rs.getInt("period_in_days"));
-            event.setImage(rs.getLong("image"));
+            event.setImage(rs.getString("image"));
             event.setSent(rs.getBoolean("is_sent"));
             event.setPrivate(rs.getBoolean("is_private"));
             return event;
         }
     }
 
-    private static final class EventWithCreator implements ResultSetExtractor<Event> {
+    private static final class EventWithCreator implements ResultSetExtractor<List<Event>> {
 
         @Override
-        public Event extractData(ResultSet rs) throws SQLException {
+        public List<Event> extractData(ResultSet rs) throws SQLException {
 
+            List<Event> events = new ArrayList<>();
             Event event = new Event();
             User creator = new User();
             while (rs.next()) {
@@ -196,17 +211,18 @@ public class EventRepository implements CrudRepository<Event> {
                     event.setTimeLineFinish(rs.getTimestamp("timeline_finish").toLocalDateTime());
                 }
                 event.setPeriod(rs.getInt("period_in_days"));
-                event.setImage(rs.getLong("image"));
+                event.setImage(rs.getString("image"));
                 event.setSent(rs.getBoolean("is_sent"));
                 event.setPrivate(rs.getBoolean("is_private"));
                 creator.setId(rs.getLong("creator_id"));
                 creator.setLogin(rs.getString("login"));
                 creator.setName(rs.getString("creator_name"));
                 creator.setSurName(rs.getString("surname"));
+                event.setCreator(creator);
+                events.add(event);
             }
 
-            event.setCreator(creator);
-            return event;
+           return events;
         }
     }
 

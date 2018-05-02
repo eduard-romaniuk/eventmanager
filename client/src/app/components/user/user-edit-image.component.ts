@@ -4,7 +4,8 @@ import {Subscription} from "rxjs/Subscription";
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../services/user.service";
 
-import { CloudinaryOptions, CloudinaryUploader } from 'ng2-cloudinary';
+import {CloudinaryUploader} from 'ng2-cloudinary';
+import {ImageUploaderService} from "../../services/image-uploader.service";
 
 @Component({
   selector: 'app-user-edit-image',
@@ -16,10 +17,7 @@ export class UserEditImageComponent implements OnInit, OnDestroy {
   user: User = new User();
   sub: Subscription;
 
-  //TODO Make global
-  uploader: CloudinaryUploader = new CloudinaryUploader(
-    new CloudinaryOptions({ cloudName: 'eventnetcracker', uploadPreset: 'tawlrxdf' })
-  );
+  uploader: CloudinaryUploader = ImageUploaderService.getUploader();
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -63,7 +61,7 @@ export class UserEditImageComponent implements OnInit, OnDestroy {
   }
 
   goHome(): void {
-    this.router.navigate(['home']);
+    this.router.navigate(['users', this.user.id]);
   };
 
 }
