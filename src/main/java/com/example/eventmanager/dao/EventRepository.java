@@ -31,6 +31,7 @@ public class EventRepository implements CrudRepository<Event> {
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
     private final Environment env;
     private final Logger logger = LogManager.getLogger(EventRepository.class);
+    private static final int FIRST_ELEMENT = 0;
 
     @Autowired
     public EventRepository(NamedParameterJdbcTemplate namedJdbcTemplate, Environment env) {
@@ -78,7 +79,7 @@ public class EventRepository implements CrudRepository<Event> {
         try {
             Map<String, Object> namedParams = new HashMap<>();
             namedParams.put("eventId", id);
-            return namedJdbcTemplate.query(env.getProperty("findById"), namedParams, new EventWithCreator()).get(0);
+            return namedJdbcTemplate.query(env.getProperty("findById"), namedParams, new EventWithCreator()).get(FIRST_ELEMENT);
         } catch (EmptyResultDataAccessException e) {
             logger.info("Event not found");
             return null;

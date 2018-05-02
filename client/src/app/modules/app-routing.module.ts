@@ -68,8 +68,7 @@ const routes: Routes = [
     component: UserSearchComponent},
   { path: 'chats',
     component: ChatComponent},
-    component: UserEditComponent},
-  { path: 'event/export',
+  { path: 'events/export',
     component: ExportEventsPlanComponent},
   { path: '**', redirectTo: '/hello', pathMatch: 'full'}
 ];

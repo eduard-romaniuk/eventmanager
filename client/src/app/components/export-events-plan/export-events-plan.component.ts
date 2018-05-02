@@ -15,6 +15,7 @@ export class ExportEventsPlanComponent {
   public toDate: string;
   public fromDate: string;
   private user: User;
+  private id:number;
 
   constructor(private auth : AuthService, private http: HttpClient) { }
 
@@ -22,7 +23,9 @@ export class ExportEventsPlanComponent {
   download(){
     console.log("POST");
     this.auth.current_user.subscribe((data: any) => {this.user = data});
-    this.http.post(this.url, {userId:this.user.id,toDate:this,fromDate:this});
+    this.id=this.user.id;
+    this.http.post(this.url, {userId:this.id,from:this,to:this});
+    console.log(this.url,this.fromDate,this.toDate,this.id)
 
   }
 

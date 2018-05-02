@@ -76,7 +76,7 @@ export class AddressInterceptor implements HttpInterceptor {
     WishListComponent,
     CreateItemComponent,
     ViewItemComponent,
-    ChatComponent
+    ChatComponent,
     ExportEventsPlanComponent
   ],
   imports: [
