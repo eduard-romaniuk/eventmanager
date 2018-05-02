@@ -21,6 +21,7 @@ html, body {
 
 .profileImage{
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .mediumImage{
