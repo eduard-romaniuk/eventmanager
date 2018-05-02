@@ -4,7 +4,12 @@ import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.EventView;
 import com.example.eventmanager.domain.User;
 import com.example.eventmanager.service.EventService;
+import com.example.eventmanager.service.ExportEventService;
+import com.example.eventmanager.service.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +19,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -21,12 +30,14 @@ import java.util.List;
 public class EventController {
 
     private final EventService eventService;
+    private final ExportEventService exportService;
     private final Logger logger = LogManager.getLogger(EventController.class);
 
     @Autowired
-    public EventController(EventService eventService) {
+    public EventController(EventService eventService, ExportEventService exportService) {
         logger.info("Class initialized");
 
+        this.exportService = exportService;
         this.eventService = eventService;
     }
 
@@ -127,4 +138,34 @@ public class EventController {
         eventService.AddUsersToEvent(users, event);
     }
 
+    @RequestMapping(value = "/downloadPlan", method = RequestMethod.POST)
+    public void downloadEventsPlan(@RequestParam Long userId, @RequestParam String from, @RequestParam String to, HttpServletResponse response) {
+        logger.info("GET /export");
+
+        LocalDate fromDate = LocalDate.parse(from);
+        LocalDate toDate = LocalDate.parse(to);
+
+        JasperPrint eventsPlan = exportService.createEventsPlan(userId, fromDate, toDate);
+
+        response.setContentType("application/x-pdf");
+        response.setHeader("Content-Disposition", "inline; filename= eventsPlan.pdf");
+        try {
+            final OutputStream outputStream = response.getOutputStream();
+            JasperExportManager.exportReportToPdfStream(eventsPlan, outputStream);
+        } catch (IOException | JRException e) {
+            e.printStackTrace();
+        }
+
+    }
+    @RequestMapping(value = "/sendPlan", method = RequestMethod.POST)
+    public void sendEventsPlan(@RequestParam Long userId, @RequestParam String from, @RequestParam String to, HttpServletResponse response) {
+        logger.info("GET /export");
+        LocalDate fromDate = LocalDate.parse(from);
+        LocalDate toDate = LocalDate.parse(to);
+        exportService.sendEventsPlan(userId,fromDate, toDate);
+
+    }
+
 }
+
+
