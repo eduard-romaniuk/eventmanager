@@ -17,8 +17,7 @@ export class ItemService {
   }
 
   public createItem(item: Item, callback?, errorCallback?) {
-    // console.log('Create event-wishlist');
-    // console.log(event);
+    console.log(item);
     this.http.post(this.base_url + '/', item).subscribe(
       response => {
         return callback && callback();

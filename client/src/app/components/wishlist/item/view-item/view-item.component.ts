@@ -9,7 +9,6 @@ import {Subscription} from 'rxjs/Subscription';
   styleUrls: ['./view-item.component.css']
 })
 export class ViewItemComponent implements OnInit {
-
   item: Item;
   subscription: Subscription;
 
