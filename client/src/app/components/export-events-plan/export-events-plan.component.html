@@ -1,0 +1,14 @@
+<div class="md-form text-center">
+
+  <div class="md-form text-left">
+    From:
+  </div>
+  <input type="date" id="fromDate" class="form-control mt-2" [(ngModel)]="fromDate">
+  <div class="md-form text-left">
+    To:
+  </div>
+  <input type="date" id="toDate" class="form-control mt-2" [(ngModel)]="toDate">
+
+  <button class="btn btn-default mt-2" (click)="download()">Download</button>
+  <button class="btn btn-default mt-2" (click)="send()">Send</button>
+</div>

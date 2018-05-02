@@ -1,6 +1,7 @@
 package com.example.eventmanager.service;
 
 import com.example.eventmanager.dao.EventRepository;
+import com.example.eventmanager.dao.UserRepository;
 import com.example.eventmanager.domain.Event;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -23,11 +24,13 @@ import java.util.Map;
 public class ExportEventService {
 
     private final EventRepository eventRepository;
-    public final JavaMailSender emailSender;
+    private final UserRepository userRepository;
+    private final JavaMailSender emailSender;
 
     @Autowired
-    public ExportEventService(EventRepository eventRepository, JavaMailSender emailSender) {
+    public ExportEventService(EventRepository eventRepository, UserRepository userRepository, JavaMailSender emailSender) {
         this.eventRepository = eventRepository;
+        this.userRepository = userRepository;
         this.emailSender = emailSender;
     }
 
@@ -51,19 +54,21 @@ public class ExportEventService {
 
     }
 
-    public void sendEventsPlan(String email,JasperPrint jasperPrint){
+    public void sendEventsPlan(Long id,LocalDate fromDate, LocalDate toDate){
 
+        JasperPrint eventsPlan = createEventsPlan(id, fromDate, toDate);
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = null;
+        String email = userRepository.findOne(id).getEmail();
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            JasperExportManager.exportReportToPdfStream(jasperPrint, baos);
+            JasperExportManager.exportReportToPdfStream(eventsPlan, baos);
             DataSource aAttachment =  new ByteArrayDataSource(baos.toByteArray(), "application/pdf");
             helper = new MimeMessageHelper(message, true);
             helper.setTo(email);
-            helper.setSubject("1");
-            helper.addAttachment("plan.pdf", aAttachment);
-            helper.setText("Some text");
+            helper.setSubject("Events plan");
+            helper.addAttachment("events-plan.pdf", aAttachment);
+            helper.setText("Events plan from: "+fromDate+"to: "+toDate);
             emailSender.send(helper.getMimeMessage());
         } catch (MessagingException | JRException e) {
             e.printStackTrace();

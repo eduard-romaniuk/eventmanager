@@ -19,6 +19,7 @@ import { EventService } from "./services/event.service";
 import { UserComponent } from './components/user/user.component';
 import { UserListComponent } from './components/user/user-list.component';
 import { UserEditComponent } from './components/user/user-edit.component';
+import { ExportEventsPlanComponent } from './components/export-events-plan/export-events-plan.component';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -53,7 +54,8 @@ export class AddressInterceptor implements HttpInterceptor {
     CreateEventComponent,
     UserComponent,
     UserListComponent,
-    UserEditComponent
+    UserEditComponent,
+    ExportEventsPlanComponent
   ],
   imports: [
     BrowserModule,

@@ -32,22 +32,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // TODO: set up the correct cors and csrf
-//        http
-//                .cors()
+       //  TODO: set up the correct cors and csrf
+        http
+                .cors()
+            .and()
+                .httpBasic()
+            .and()
+                .anonymous()
+            .and()
+                .authorizeRequests()
+                    .antMatchers(HttpMethod.GET,"/users/exists/**").permitAll()
+                    .antMatchers(HttpMethod.POST,"/users/").permitAll()
+                    .antMatchers(HttpMethod.GET,"/users/").permitAll()
+                    .anyRequest().authenticated();
 //            .and()
-//                .httpBasic()
-//            .and()
-//                .anonymous()
-//            .and()
-//                .authorizeRequests()
-//                    .antMatchers(HttpMethod.GET,"/users/exists/**").permitAll()
-//                    .antMatchers(HttpMethod.POST,"/users/").permitAll()
-//                    .antMatchers(HttpMethod.GET,"/users/").permitAll()
-//                    .anyRequest().authenticated()
-//            .and()
-               http.csrf().disable();
-        http.authorizeRequests().antMatchers("/").permitAll();
+//               http.csrf().disable();
+//        http.authorizeRequests().antMatchers("/").permitAll();
     }
 
     @Autowired

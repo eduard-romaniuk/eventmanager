@@ -5,6 +5,7 @@ import com.example.eventmanager.domain.EventView;
 import com.example.eventmanager.domain.User;
 import com.example.eventmanager.service.EventService;
 import com.example.eventmanager.service.ExportEventService;
+import com.example.eventmanager.service.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -136,7 +137,7 @@ public class EventController {
         eventService.AddUsersToEvent(users, event);
     }
 
-    @RequestMapping(value = "/downloadPlan", method = RequestMethod.GET)
+    @RequestMapping(value = "/downloadPlan", method = RequestMethod.POST)
     public void downloadEventsPlan(@RequestParam Long userId, @RequestParam String from, @RequestParam String to, HttpServletResponse response) {
         logger.info("GET /export");
 
@@ -155,16 +156,12 @@ public class EventController {
         }
 
     }
-    @RequestMapping(value = "/sendPlan", method = RequestMethod.GET)
+    @RequestMapping(value = "/sendPlan", method = RequestMethod.POST)
     public void sendEventsPlan(@RequestParam Long userId, @RequestParam String from, @RequestParam String to, HttpServletResponse response) {
         logger.info("GET /export");
-
         LocalDate fromDate = LocalDate.parse(from);
         LocalDate toDate = LocalDate.parse(to);
-
-        JasperPrint eventsPlan = exportService.createEventsPlan(userId, fromDate, toDate);
-
-        exportService.sendEventsPlan("vladimmyr@gmail.com",eventsPlan);
+        exportService.sendEventsPlan(userId,fromDate, toDate);
 
     }
 
