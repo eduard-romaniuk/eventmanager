@@ -6,6 +6,10 @@ html, body {
 	text-decoration: none !important;
 }
 
+.userProfileBlock{
+  margin: 10px 0px;
+}
+
 .searchInput{
   margin: 10px 0px;
 }

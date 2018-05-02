@@ -1,7 +1,8 @@
-import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { User } from '../model/user';
 import { Observable } from 'rxjs/Observable';
+import { Event } from "../model/event";
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' })
@@ -89,6 +90,10 @@ export class UserService {
     const params = new HttpParams().set('login', login);
     console.log("In searchUserByLogin. login = " + login);
     return this.http.get(this.base_url + "/search",{params: params});
+  }
+
+  public getEventsByUserId(id): Observable<Event[]> {
+    return this.http.get<Event[]>(this.base_url + "/"+ id + "/events");
   }
 
 }

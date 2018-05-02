@@ -1,6 +1,7 @@
 package com.example.eventmanager.controller;
 
 import com.example.eventmanager.domain.Event;
+import com.example.eventmanager.domain.EventView;
 import com.example.eventmanager.domain.User;
 import com.example.eventmanager.domain.UserView;
 import com.example.eventmanager.service.EmailService;
@@ -125,7 +126,7 @@ public class UserController {
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @JsonView(UserView.FullView.class)
+    @JsonView(EventView.FullView.class)
     @RequestMapping(value = "/{id}/events", method = RequestMethod.GET)
     public ResponseEntity<List<Event>> getUserEvents(@PathVariable Long id) {
         logger.info("GET /" + id + "/events");

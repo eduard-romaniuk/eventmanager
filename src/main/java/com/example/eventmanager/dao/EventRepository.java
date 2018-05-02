@@ -170,7 +170,7 @@ public class EventRepository implements CrudRepository<Event> {
             event.setTimeLineStart(rs.getTimestamp("timeline_start").toLocalDateTime());
             event.setTimeLineFinish(rs.getTimestamp("timeline_finish").toLocalDateTime());
             event.setPeriod(rs.getInt("period_in_days"));
-            event.setImage(rs.getLong("image"));
+            event.setImage(rs.getString("image"));
             event.setSent(rs.getBoolean("is_sent"));
             event.setPrivate(rs.getBoolean("is_private"));
             return event;
@@ -192,7 +192,7 @@ public class EventRepository implements CrudRepository<Event> {
                 event.setTimeLineStart(rs.getTimestamp("timeline_start").toLocalDateTime());
                 event.setTimeLineFinish(rs.getTimestamp("timeline_finish").toLocalDateTime());
                 event.setPeriod(rs.getInt("period_in_days"));
-                event.setImage(rs.getLong("image"));
+                event.setImage(rs.getString("image"));
                 event.setSent(rs.getBoolean("is_sent"));
                 event.setPrivate(rs.getBoolean("is_private"));
                 creator.setId(rs.getLong("creator_id"));

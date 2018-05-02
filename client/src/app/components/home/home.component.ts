@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
-import {User} from "../../model/user";
+import {Component} from '@angular/core';
+import {AuthService} from '../../services/auth.service';
 import {Router} from "@angular/router";
 
 @Component({
@@ -9,27 +8,14 @@ import {Router} from "@angular/router";
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-  user: User = new User();
 
   constructor(private auth: AuthService,
               private router: Router) {
     this.auth.current_user.subscribe(
       current_user => {
         console.log(current_user);
-        this.user = current_user;
+        this.router.navigate(['users', current_user.id]);
       });
   }
-
-  goToSearchUserPage(): void {
-    this.router.navigate(['searchUsers']);
-  }
-
-  goToEditUserPage(user: User): void {
-    this.router.navigate(['users', user.id, 'edit']);
-  }
-
-  goToEditImagePage(user: User): void {
-    this.router.navigate(['users', user.id, 'updateImage']);
-  };
 
 }

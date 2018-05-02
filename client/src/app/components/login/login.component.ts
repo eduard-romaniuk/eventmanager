@@ -42,7 +42,11 @@ export class LoginComponent implements OnInit {
         this.error = false;
         this.loading = false;
 
-        this.router.navigate(['home']);
+        this.auth.current_user.subscribe(
+          current_user => {
+            console.log(current_user);
+            this.router.navigate(['users', current_user.id]);
+          });
       },
       () => {
         this.error = true,
