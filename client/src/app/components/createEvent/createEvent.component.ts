@@ -19,7 +19,7 @@ export class CreateEventComponent {
 
   private event : Event = new Event();
 
-  //form: FormGroup;
+  form: FormGroup;
 
   constructor(private auth : AuthService,
               private eventService: EventService,
@@ -29,13 +29,12 @@ export class CreateEventComponent {
   ngOnInit() {
     this.auth.getUser().subscribe((data: any) => {this.event.creator = data});
     console.log(this.event.creator);
-    // this.form = this.formBuilder.group({
-    //   eventName: ['', [ Validators.required, Validators.pattern('^[a-zA-Z0-9_]*$') ]],
-    //   description: ['', [ Validators.required, Validators.pattern('^[a-zA-Z0-9]*$') ]],
-    //   place: ['', [ Validators.required, Validators.pattern('^[a-zA-Z0-9]*$') ]],
-    //   //timeLineStart: ['', [ Validators.required, Validators.pattern('[0-9].:') ]],
-    //   //timeLineFinish: ['', [ Validators.required, Validators.pattern('[0-9].:') ]],
-    // });
+    this.form = this.formBuilder.group({
+      eventNameControl: ['', [ Validators.required]],
+      descriptionControl: ['', [ Validators.required]],
+      timeLineFinishControl: ['', [ Validators.min(this.event.timeLineStart)]],
+      periodControl: ['', [ Validators.required, Validators.min(0)]],
+    });
   }
 
   create() {
