@@ -181,8 +181,12 @@ public class EventRepository implements CrudRepository<Event> {
             event.setName(rs.getString("name"));
             event.setDescription(rs.getString("description"));
             event.setPlace(rs.getString("place"));
-            event.setTimeLineStart(rs.getTimestamp("timeline_start").toLocalDateTime());
-            event.setTimeLineFinish(rs.getTimestamp("timeline_finish").toLocalDateTime());
+            if(rs.getTimestamp("timeline_start") != null) {
+                event.setTimeLineStart(rs.getTimestamp("timeline_start").toLocalDateTime());
+            }
+            if(rs.getTimestamp("timeline_finish") != null) {
+                event.setTimeLineFinish(rs.getTimestamp("timeline_finish").toLocalDateTime());
+            }
             event.setPeriod(rs.getInt("period_in_days"));
             event.setImage(rs.getString("image"));
             event.setSent(rs.getBoolean("is_sent"));
