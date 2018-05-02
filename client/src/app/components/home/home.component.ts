@@ -11,11 +11,16 @@ export class HomeComponent {
 
   constructor(private auth: AuthService,
               private router: Router) {
-    this.auth.current_user.subscribe(
-      current_user => {
-        console.log(current_user);
-        this.router.navigate(['users', current_user.id]);
-      });
+    if(this.auth.authenticated){
+      this.auth.current_user.subscribe(
+        current_user => {
+          console.log(current_user);
+          this.router.navigate(['users', current_user.id]);
+        });
+    } else {
+      this.router.navigate(['hello']);
+    }
   }
 
 }
+
