@@ -25,6 +25,8 @@ import java.io.OutputStream;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.springframework.http.MediaType.APPLICATION_PDF;
+
 @RestController
 @RequestMapping(value = "/event")
 public class EventController {
@@ -138,17 +140,15 @@ public class EventController {
         eventService.AddUsersToEvent(users, event);
     }
 
-    @RequestMapping(value = "/downloadPlan", method = RequestMethod.POST)
-    public void downloadEventsPlan(@RequestParam Long userId, @RequestParam String from, @RequestParam String to, HttpServletResponse response) {
-        logger.info("GET /export");
+    @RequestMapping(value = "/downloadPlan", method = RequestMethod.GET)
+    public void downloadEventsPlan(@RequestParam String from, @RequestParam String to, HttpServletResponse response) {
+        logger.info("GET /downloadPlan");
 
         LocalDate fromDate = LocalDate.parse(from);
         LocalDate toDate = LocalDate.parse(to);
 
-        JasperPrint eventsPlan = exportService.createEventsPlan(userId, fromDate, toDate);
+        JasperPrint eventsPlan = exportService.createEventsPlan(fromDate, toDate);
 
-        response.setContentType("application/x-pdf");
-        response.setHeader("Content-Disposition", "inline; filename= eventsPlan.pdf");
         try {
             final OutputStream outputStream = response.getOutputStream();
             JasperExportManager.exportReportToPdfStream(eventsPlan, outputStream);
@@ -157,12 +157,12 @@ public class EventController {
         }
 
     }
-    @RequestMapping(value = "/sendPlan", method = RequestMethod.POST)
-    public void sendEventsPlan(@RequestParam Long userId, @RequestParam String from, @RequestParam String to, HttpServletResponse response) {
-        logger.info("GET /export");
+    @RequestMapping(value = "/sendPlan", method = RequestMethod.GET)
+    public void sendEventsPlan(@RequestParam String from, @RequestParam String to) {
+        logger.info("GET /sendPlan");
         LocalDate fromDate = LocalDate.parse(from);
         LocalDate toDate = LocalDate.parse(to);
-        exportService.sendEventsPlan(userId,fromDate, toDate);
+        exportService.sendEventsPlan(fromDate, toDate);
 
     }
 

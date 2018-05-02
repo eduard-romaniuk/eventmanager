@@ -3,8 +3,9 @@ package com.example.eventmanager.service;
 import com.example.eventmanager.dao.UserRepository;
 import com.example.eventmanager.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -61,5 +62,10 @@ public class UserService {
 
     public List<User> searchByLogin(String login){
         return userRepository.searchByLogin(login);
+    }
+
+    public String getCurrentUsername() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return auth.getName();
     }
 }

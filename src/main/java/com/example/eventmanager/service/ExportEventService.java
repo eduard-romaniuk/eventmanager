@@ -1,7 +1,6 @@
 package com.example.eventmanager.service;
 
 import com.example.eventmanager.dao.EventRepository;
-import com.example.eventmanager.dao.UserRepository;
 import com.example.eventmanager.domain.Event;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -24,18 +23,19 @@ import java.util.Map;
 public class ExportEventService {
 
     private final EventRepository eventRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final JavaMailSender emailSender;
 
     @Autowired
-    public ExportEventService(EventRepository eventRepository, UserRepository userRepository, JavaMailSender emailSender) {
+    public ExportEventService(EventRepository eventRepository,UserService userService, JavaMailSender emailSender) {
         this.eventRepository = eventRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.emailSender = emailSender;
     }
 
-    public JasperPrint createEventsPlan(Long id, LocalDate fromDate, LocalDate toDate) {
+    public JasperPrint createEventsPlan(LocalDate fromDate, LocalDate toDate) {
 
+        Long id = userService.findUser(userService.getCurrentUsername()).getId();
         List<Event> events = eventRepository.eventsListForPeriod(id, fromDate, toDate);
 
         Map<String,Object> params=new HashMap<>();
@@ -54,12 +54,12 @@ public class ExportEventService {
 
     }
 
-    public void sendEventsPlan(Long id,LocalDate fromDate, LocalDate toDate){
+    public void sendEventsPlan(LocalDate fromDate, LocalDate toDate){
 
-        JasperPrint eventsPlan = createEventsPlan(id, fromDate, toDate);
+        JasperPrint eventsPlan = createEventsPlan(fromDate, toDate);
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = null;
-        String email = userRepository.findOne(id).getEmail();
+        String email = userService.findUser(userService.getCurrentUsername()).getEmail();
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             JasperExportManager.exportReportToPdfStream(eventsPlan, baos);

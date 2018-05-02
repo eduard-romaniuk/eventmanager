@@ -164,7 +164,7 @@
 				<reportElement x="280" y="40" width="130" height="30" uuid="647a91ae-7803-407c-a8c8-da80e9efc071">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c0ba09a7-836a-4a60-863f-c551bfcc3641"/>
 				</reportElement>
-				<textFieldExpression><![CDATA[$F{creator}.getSerName()]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{creator}.getSurName()]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
