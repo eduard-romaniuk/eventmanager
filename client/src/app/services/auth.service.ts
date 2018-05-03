@@ -64,12 +64,23 @@ export class AuthService {
     return callback && callback();
   }
 
-  // getUserId() {
-  //   this.current_user.subscribe((data: User)=>{return('3')});
-  // }
-
   getUser() {
     return this.current_user;
   }
+
+  // reauthenticate(credentials, callback?, errorCallback?) {
+  //   console.log("reauthenticate");
+  //   this.logout(() => {
+  //     console.log("logout");
+  //     this.authenticate(credentials, () => {{
+  //         console.log("authenticate");
+  //         return callback && callback();
+  //       }},
+  //       () => {
+  //         this.logout();
+  //         return errorCallback && errorCallback();
+  //       });
+  //   });
+  // }
 
 }
