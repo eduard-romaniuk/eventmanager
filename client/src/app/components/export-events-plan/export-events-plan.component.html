@@ -7,6 +7,6 @@
     <label class="col-md-2 control-label" for="toDate">To</label>
     <input id="toDate" type="date" class="form-control input-md" [(ngModel)]="toDate">
 
-  <button class="btn btn-success" (click)="download()" [disabled]="!form.valid">Download</button>
-  <button class="btn btn-success" (click)="send()" [disabled]="!form.valid">Send</button>
+  <button class="btn btn-success" (click)="download()">Download</button>
+  <button class="btn btn-success" (click)="send()">Send</button>
 </div>
