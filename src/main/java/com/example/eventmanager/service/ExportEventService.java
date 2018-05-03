@@ -35,7 +35,7 @@ public class ExportEventService {
 
     public JasperPrint createEventsPlan(LocalDate fromDate, LocalDate toDate) {
 
-        Long id = userService.findUser(userService.getCurrentUsername()).getId();
+        Long id = userService.getCurrentUser().getId();
         List<Event> events = eventRepository.eventsListForPeriod(id, fromDate, toDate);
 
         Map<String,Object> params=new HashMap<>();
@@ -58,17 +58,16 @@ public class ExportEventService {
 
         JasperPrint eventsPlan = createEventsPlan(fromDate, toDate);
         MimeMessage message = emailSender.createMimeMessage();
-        MimeMessageHelper helper = null;
-        String email = userService.findUser(userService.getCurrentUsername()).getEmail();
+        String email = userService.getCurrentUser().getEmail();
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             JasperExportManager.exportReportToPdfStream(eventsPlan, baos);
             DataSource aAttachment =  new ByteArrayDataSource(baos.toByteArray(), "application/pdf");
-            helper = new MimeMessageHelper(message, true);
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setTo(email);
             helper.setSubject("Events plan");
             helper.addAttachment("events-plan.pdf", aAttachment);
-            helper.setText("Events plan from: "+fromDate+"to: "+toDate);
+            helper.setText("Events plan from: "+fromDate+" to: "+toDate);
             emailSender.send(helper.getMimeMessage());
         } catch (MessagingException | JRException e) {
             e.printStackTrace();

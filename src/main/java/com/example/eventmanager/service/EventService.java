@@ -16,17 +16,19 @@ import java.util.List;
 public class EventService {
 
     private final EventRepository eventRepository;
+    private final UserService userService;
 
     @Autowired
-    public EventService(EventRepository eventRepository, UserRepository userRepository) {
+    public EventService(EventRepository eventRepository, UserService userService) {
         this.eventRepository = eventRepository;
+        this.userService = userService;
     }
 
-    /* TODO add Principal */
+
     public void createEvent(Event event){
        // event.setCreator(creator);
         event.setId((long) eventRepository.save(event));
-        //eventRepository.addUserToEvent(event.getId(),creator.getId());
+        eventRepository.addUserToEvent(userService.getCurrentUser().getId(),event.getId());
     }
 
     public void publishEvent(Event event){

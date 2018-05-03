@@ -14,8 +14,12 @@ import java.util.List;
 @Service
 public class UserService {
 
+    private final UserRepository userRepository;
+
     @Autowired
-    private UserRepository userRepository;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public void saveUser(User user) {
         userRepository.save(user);
@@ -64,8 +68,12 @@ public class UserService {
         return userRepository.searchByLogin(login);
     }
 
-    public String getCurrentUsername() {
+    private String getCurrentUsername() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return auth.getName();
+    }
+
+    public User getCurrentUser(){
+        return findUser(getCurrentUsername());
     }
 }

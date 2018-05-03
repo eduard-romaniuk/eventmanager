@@ -32,6 +32,7 @@ public class EventRepository implements CrudRepository<Event> {
     private final Environment env;
     private final Logger logger = LogManager.getLogger(EventRepository.class);
     private static final int FIRST_ELEMENT = 0;
+    private static final int NORMAL_PRIORITY=0;
 
     @Autowired
     public EventRepository(NamedParameterJdbcTemplate namedJdbcTemplate, Environment env) {
@@ -144,6 +145,7 @@ public class EventRepository implements CrudRepository<Event> {
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("user_id", user_id);
         namedParams.put("event_id", event_id);
+        namedParams.put("priority_id", NORMAL_PRIORITY);
         namedJdbcTemplate.update(env.getProperty("addUser"), namedParams);
     }
 
