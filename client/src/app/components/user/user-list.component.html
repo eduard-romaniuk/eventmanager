@@ -1,0 +1,21 @@
+<div class="col-md-6">
+  <h2> List of users </h2>
+
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th *ngIf="hideElement">Id</th>
+      <th>Login</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of users">
+      <td *ngIf="hideElement">{{ user.id }}</td>
+      <td>
+        <a [routerLink]="['/users', user.id]"> {{ user.login }} </a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+

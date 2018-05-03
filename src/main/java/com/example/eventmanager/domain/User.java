@@ -1,79 +1,49 @@
 package com.example.eventmanager.domain;
 
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonView;
+import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
-@ToString
+
+@Data
 public class User {
-
+    @JsonView(UserView.ShortView.class)
     private Long id;
-    private String username;
-    private String password;
-    private String passwordConfirm;
+    @JsonView(UserView.ShortView.class)
+    private String login;
+    @JsonView(UserView.ShortView.class)
     private String name;
+    @JsonView(UserView.ShortView.class)
     private String surName;
+    @JsonView(UserView.ShortView.class)
+    private String image;
+
+    @JsonView(UserView.FullView.class)
     private String email;
+    @JsonView(UserView.FullView.class)
     private LocalDate birth;
+    @JsonView(UserView.FullView.class)
     private String phone;
-    private boolean sex;
-    private boolean isActive;
-    private Image image;
+    @JsonView(UserView.FullView.class)
+    private Boolean sex;
+    @JsonView(UserView.FullView.class)
     private LocalDate regDate;
-    private Set<User> friends;
-    private WishList wishList;
-    private Set<Event> events;
-    private Settings settings;
-    private String confLink;
+    @JsonView(UserView.FullView.class)
+    private List<User> friends;
 
-    public User copy() {
-
-        return new User(id, username, password, passwordConfirm, name, surName, email, birth, phone, sex, isActive, image, regDate, friends, wishList, events, settings, confLink);
-    }
-
-
-
-    public User() {
-    }
-
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-
-    public User(Long id, String username, String password) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-    }
-
-    public User(String username, String password, String passwordConfirm) {
-        this.username = username;
-        this.password = password;
-        this.passwordConfirm = passwordConfirm;
-    }
-
-    public User(Long id, String username, String password, String passwordConfirm, String name, String surName, String email, LocalDate birth, String phone, boolean sex, boolean isActive, Image image, LocalDate regDate, Set<User> friends, WishList wishList, Set<Event> events, Settings settings, String confLink) {
-        this.id = id;
-        this.username = username;
-        this.password = password;
-        this.passwordConfirm = passwordConfirm;
-        this.name = name;
-        this.surName = surName;
-        this.email = email;
-        this.birth = birth;
-        this.phone = phone;
-        this.sex = sex;
-        this.isActive = isActive;
-        this.image = image;
-        this.regDate = regDate;
-        this.friends = friends;
-        this.wishList = wishList;
-        this.events = events;
-        this.settings = settings;
-        this.confLink = confLink;
-    }
+    //TODO Delete password from FullView
+    @JsonView(UserView.FullView.class)
+    private String password;
+    //private WishList wishList;
+    @JsonView(EventView.FullView.class)
+    private List<Event> events;
+    // private Settings settings;
+    @JsonView(EventView.FullView.class)
+    private String token = "";
+    @JsonView(EventView.FullView.class)
+    private Boolean verified = false;
 
     public Long getId() {
         return id;
@@ -83,28 +53,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getLogin() {
+        return login;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
-
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     public String getName() {
@@ -121,6 +75,14 @@ public class User {
 
     public void setSurName(String surName) {
         this.surName = surName;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getEmail() {
@@ -147,28 +109,12 @@ public class User {
         this.phone = phone;
     }
 
-    public boolean isSex() {
+    public Boolean getSex() {
         return sex;
     }
 
-    public void setSex(boolean sex) {
+    public void setSex(Boolean sex) {
         this.sex = sex;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
-
-    public Image getImage() {
-        return image;
-    }
-
-    public void setImage(Image image) {
-        this.image = image;
     }
 
     public LocalDate getRegDate() {
@@ -179,43 +125,43 @@ public class User {
         this.regDate = regDate;
     }
 
-    public Set<User> getFriends() {
+    public List<User> getFriends() {
         return friends;
     }
 
-    public void setFriends(Set<User> friends) {
+    public void setFriends(List<User> friends) {
         this.friends = friends;
     }
 
-    public WishList getWishList() {
-        return wishList;
+    public String getPassword() {
+        return password;
     }
 
-    public void setWishList(WishList wishList) {
-        this.wishList = wishList;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public Set<Event> getEvents() {
+    public List<Event> getEvents() {
         return events;
     }
 
-    public void setEvents(Set<Event> events) {
+    public void setEvents(List<Event> events) {
         this.events = events;
     }
 
-    public Settings getSettings() {
-        return settings;
+    public String getToken() {
+        return token;
     }
 
-    public void setSettings(Settings settings) {
-        this.settings = settings;
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    public String getConfLink() {
-        return confLink;
+    public Boolean getVerified() {
+        return verified;
     }
 
-    public void setConfLink(String confLink) {
-        this.confLink = confLink;
+    public void setVerified(Boolean verified) {
+        this.verified = verified;
     }
 }

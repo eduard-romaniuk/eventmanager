@@ -1,0 +1,103 @@
+<!-- TODO: Fix items align -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <span class="navbar-brand mb-0 h1">{{ title }}</span>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+
+
+    <div class="collapse navbar-collapse ml-auto" id="navbarSupportedContent">
+        <div [hidden]="authenticated()">
+            <button class="btn btn-primary" data-target="#signInModal" data-toggle="modal" type="button">
+                Sign In
+            </button>
+        </div>
+        <div [hidden]="!authenticated()">
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="" id="usersDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Users
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="usersDropdown">
+                        <a class="dropdown-item" routerLink="/users">All</a>
+                    </div>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="" id="eventsDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Events
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="eventsDropdown">
+                        <a class="dropdown-item" routerLink="/events/list">All public events</a>
+                        <a class="dropdown-item" (click)="createEvent()">Create</a>
+                        <a class="dropdown-item" routerLink="/events/export">Export events plan</a>
+                    </div>
+                </li>
+
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="" id="searchDropdown" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Search
+                </a>
+                <div class="dropdown-menu" aria-labelledby="searchDropdown">
+                  <a class="dropdown-item" routerLink="/searchUsers">Users</a>
+                </div>
+              </li>
+
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="" id="wishList" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Wish Board
+                </a>
+                <div class="dropdown-menu" aria-labelledby="searchDropdown">
+                  <a class="dropdown-item" routerLink="/wishlist">Your Wish Board</a>
+                </div>
+              </li>
+
+              <!--<li>-->
+                <!--You logged in as <a [routerLink]="['/users', user.id]"> {{ user.login }} </a>-->
+              <!--</li>-->
+
+            </ul>
+            <button (click)="logout()" class="btn btn-primary" type="button">
+                Log Out
+            </button>
+        </div>
+    </div>
+</nav>
+
+<!-- modal -->
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="signInModal" role="dialog" tabindex="-1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div role="tabpanel">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a id="logTab" aria-controls="loginTab" class="nav-link active" data-toggle="tab" href="#loginTab" role="tab">
+                                Login
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a id="regTab" aria-controls="registrationTab" class="nav-link" data-toggle="tab" href="#registrationTab" role="tab">
+                                Registration
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="loginTab" role="tabpanel">
+                            <app-login></app-login>
+                        </div>
+                        <div class="tab-pane" id="registrationTab" role="tabpanel">
+                            <app-registration></app-registration>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<router-outlet></router-outlet>

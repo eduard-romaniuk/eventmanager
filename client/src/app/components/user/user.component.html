@@ -1,0 +1,58 @@
+<div class="container">
+  <div class="row">
+
+    <div class="col-sm-3 border userProfileBlock" align="center">
+        <h2> {{ user.login }} </h2>
+
+        <!--TODO Partial-->
+        <div *ngIf="user.image">
+          <img class="profileImage bigImage" [src]="user.image" id="image" name="image"> <br/>
+        </div>
+        <div *ngIf="!user.image && user.sex">
+          <img class="profileImage bigImage" src="../../../assets/images/default_user_male.png" name="image"> <br/>
+        </div>
+        <div *ngIf="!user.image && !user.sex">
+          <img class="profileImage bigImage" src="../../../assets/images/default_user_female.png" name="image"> <br/>
+        </div>
+
+        <p *ngIf="hideElement">{{ user.id }}</p>
+        <p>{{ user.name }} {{user.surName }}</p>
+
+        <div *ngIf="currentUserPage">
+          <p>
+            <button class="btn btn-info" (click)="goToEditUserPage(user)"> Edit info </button>
+          </p>
+          <p>
+            <button class="btn btn-info" (click)="goToEditImagePage(user)"> Edit image </button>
+          </p>
+          <p>
+            <button class="btn btn-info" (click)="goToEditPasswordPage()"> Edit password </button>
+          </p>
+        </div>
+
+        <div *ngIf="!currentUserPage">
+          <p>
+            <button class="btn btn-info" (click)="addToFriends(user)"> Add to friends </button>
+          </p>
+        </div>
+
+    </div>
+
+    <div class="col-sm-9">
+
+      <div *ngIf="userEvents">
+        <div *ngFor="let event of userEvents">
+          <div class="row border list">
+              <p><a [routerLink]="['/event', event.id]"> {{ event.name }} </a></p>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="userEvents?.length < 1">
+        <p>No public events</p>
+      </div>
+
+    </div>
+
+  </div>
+</div>

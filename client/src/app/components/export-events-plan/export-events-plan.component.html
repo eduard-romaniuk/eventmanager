@@ -1,0 +1,12 @@
+<div class="md-form text-center">
+  <h4>Export Events Plan</h4>
+
+    <label class="col-md-2 control-label" for="fromDate">From</label>
+    <input id="fromDate" type="date" class="form-control input-md" [(ngModel)]="fromDate">
+
+    <label class="col-md-2 control-label" for="toDate">To</label>
+    <input id="toDate" type="date" class="form-control input-md" [(ngModel)]="toDate">
+
+  <button class="btn btn-success" (click)="download()" [disabled]="!form.valid">Download</button>
+  <button class="btn btn-success" (click)="send()" [disabled]="!form.valid">Send</button>
+</div>

@@ -1,0 +1,39 @@
+html, body {
+	height: 100%;
+}
+
+.nounderline {
+	text-decoration: none !important;
+}
+
+.userProfileBlock{
+  margin: 10px 0px;
+}
+
+.searchInput{
+  margin: 10px 0px;
+}
+
+.list{
+  margin: 10px;
+  padding: 5px;
+}
+
+.profileImage{
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.mediumImage{
+  height: 100px;
+  width: 100px;
+}
+
+.bigImage{
+  height: 150px;
+  width: 150px;
+}
+
+.button{
+  margin: 10px;
+}

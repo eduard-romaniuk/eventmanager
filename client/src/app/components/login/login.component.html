@@ -1,0 +1,44 @@
+<form class="md-form text-center" [formGroup]="form" (submit)="login()">
+    <div class="form-group">
+        <input type="text" id="login" class="form-control mt-2" placeholder="login"
+            formControlName="login" [(ngModel)]="credentials.login"
+            [ngClass]="{
+                'is-invalid': form.get('login').invalid && (form.get('login').dirty || form.get('login').touched)
+            }">
+        <div *ngIf="form.get('login').invalid && (form.get('login').dirty || form.get('login').touched)"
+            class="text-danger">
+            <div *ngIf = "form.get('login').errors.required">
+                Username field can't be blank
+            </div>
+            <div *ngIf = "form.get('login').errors.pattern">
+                Invalid characters used
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input type="password" id="password" class="form-control mt-2" placeholder="Password"
+            formControlName="password" [(ngModel)]="credentials.password"
+            [ngClass]="{
+                'is-invalid': form.get('password').invalid && (form.get('password').dirty || form.get('password').touched)
+            }">
+        <div *ngIf="form.get('password').invalid && (form.get('password').dirty || form.get('password').touched)"
+            class="text-danger">
+            <div *ngIf = "form.get('password').errors.required">
+                Password field can't be blank
+            </div>
+            <div *ngIf = "form.get('password').errors.pattern">
+                Invalid characters used
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-primary mt-2" [hidden]="!loading">
+		Please wait...
+	</div>
+    <div class="alert alert-danger mt-2" [hidden]="!error">
+		There was a problem logging in. Please try again.
+	</div>
+
+    <button class="btn btn-default mt-2" type="submit" [disabled] = "!form.valid">Log in</button>
+</form>

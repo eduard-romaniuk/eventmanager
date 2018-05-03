@@ -2,9 +2,10 @@ package com.example.eventmanager.dao;
 
 import java.util.stream.StreamSupport;
 
+
 public interface CrudRepository<T> {
 
-    void save(T entity);
+    int save(T entity);
 
     default void saveAll(Iterable<T> entities){
         entities.forEach(this::save);

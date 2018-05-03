@@ -1,0 +1,32 @@
+<div class="row h-100 justify-content-center align-items-center">
+  <div class="col-6 text-center">
+    <header>
+      <h2 class="text-center">Change profile image</h2>
+    </header>
+    <input type="hidden" name="href" [(ngModel)]="user.id">
+    <div>
+      <label for="image">Your image:</label>
+
+      <!--TODO Partial-->
+      <div *ngIf="user.image">
+        <img class="profileImage bigImage" [src]="user.image" id="image" name="image"> <br/>
+      </div>
+      <div *ngIf="!user.image && user.sex">
+        <img class="profileImage bigImage" src="../../../assets/images/default_user_male.png" name="image"> <br/>
+      </div>
+      <div *ngIf="!user.image && !user.sex">
+        <img class="profileImage bigImage" src="../../../assets/images/default_user_female.png" name="image"> <br/>
+      </div>
+
+      <input
+        style="display: none"
+        type="file" accept="image/*" ng2FileSelect [uploader]="uploader" (change)="upload()"
+        #fileInput>
+      <button class="btn btn-info button" (click)="fileInput.click()">Select File</button>
+    </div>
+    <p>
+      <button class="btn btn-danger button" (click)="goHome()">Cancel</button>
+      <button class="btn btn-info button" type="submit" (click)="uploadImage()">Save</button>
+    </p>
+  </div>
+</div>
