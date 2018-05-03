@@ -70,6 +70,10 @@ export class UserComponent implements OnInit, OnDestroy {
     this.router.navigate(['users', user.id, 'updateImage']);
   };
 
+  goToEditPasswordPage(): void {
+    this.router.navigate(['changePassword']);
+  };
+
   gotoList() {
     this.router.navigate(['/users']);
   }

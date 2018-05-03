@@ -16,6 +16,7 @@ import {UserSearchComponent} from "../components/user/user-search.component";
 import {WishListComponent} from '../components/wishlist/wishlist.component';
 import {ChatComponent} from "../components/chat/chat.component";
 import {ExportEventsPlanComponent} from "../components/export-events-plan/export-events-plan.component";
+import {UserEditPasswordComponent} from "../components/user/user-edit-password/user-edit-password.component";
 
 @Injectable()
 class OnlyLoggedInUsersGuard implements CanActivate {
@@ -64,6 +65,8 @@ const routes: Routes = [
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'users/:id/updateImage',
     component: UserEditImageComponent},
+  { path: 'changePassword',
+    component: UserEditPasswordComponent},
   { path: 'searchUsers',
     component: UserSearchComponent},
   { path: 'chats',

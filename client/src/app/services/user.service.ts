@@ -88,7 +88,7 @@ export class UserService {
 
   searchUserByLogin(login) {
     const params = new HttpParams().set('login', login);
-    console.log("In searchUserByLogin. login = " + login);
+    console.log("Login in searchUserByLogin - " + login);
     return this.http.get(this.base_url + "/search",{params: params});
   }
 
@@ -96,4 +96,14 @@ export class UserService {
     return this.http.get<Event[]>(this.base_url + "/"+ id + "/events");
   }
 
+  updateUserPassword(newUser: User, callback?, errorCallback?) {
+    console.log("user in updateUserPassword - " + newUser);
+    this.http.put(this.base_url + "/changePassword", newUser).subscribe(
+      response => {
+        return callback && callback();
+      },
+      error => {
+        return errorCallback && errorCallback();
+      })
+  }
 }
