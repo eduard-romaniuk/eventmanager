@@ -203,9 +203,9 @@ public class EventRepository implements CrudRepository<Event> {
         public List<Event> extractData(ResultSet rs) throws SQLException {
 
             List<Event> events = new ArrayList<>();
-            Event event = new Event();
-            User creator = new User();
             while (rs.next()) {
+                Event event = new Event();
+                User creator = new User();
                 event.setId(rs.getLong("id"));
                 event.setName(rs.getString("name"));
                 event.setDescription(rs.getString("description"));

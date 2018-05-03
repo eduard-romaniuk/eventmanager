@@ -18,9 +18,6 @@
 	<field name="timeLineStart" class="java.time.LocalDateTime"/>
 	<field name="timeLineFinish" class="java.time.LocalDateTime"/>
 	<field name="creator" class="com.example.eventmanager.domain.User"/>
-	<background>
-		<band height="57"/>
-	</background>
 	<title>
 		<band height="72">
 			<frame>
@@ -46,9 +43,9 @@
 		<band height="1"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="60">
+		<band height="50">
 			<staticText>
-				<reportElement x="180" y="0" width="200" height="40" uuid="e7fb8652-db7a-4226-9f66-77d9f9a879fb"/>
+				<reportElement x="180" y="0" width="200" height="30" uuid="e7fb8652-db7a-4226-9f66-77d9f9a879fb"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
 					<font fontName="Georgia" size="18" isBold="false" isItalic="false" isStrikeThrough="false"/>
 					<paragraph lineSpacing="Fixed"/>
@@ -56,37 +53,37 @@
 				<text><![CDATA[My Events plan ]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="200" y="40" width="70" height="20" uuid="d09caea3-f11b-424d-bd66-26da2b73dac5"/>
+				<reportElement x="200" y="30" width="59" height="20" uuid="d09caea3-f11b-424d-bd66-26da2b73dac5"/>
 				<textFieldExpression><![CDATA[$P{fromDate}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="290" y="40" width="100" height="20" uuid="c50c4373-da4f-46b0-873c-800703c675c9"/>
+				<reportElement x="280" y="30" width="100" height="20" uuid="c50c4373-da4f-46b0-873c-800703c675c9"/>
 				<textFieldExpression><![CDATA[$P{toDate}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="170" y="40" width="30" height="20" uuid="c4d2b53a-f5ef-434e-8f23-66acd22d4292"/>
+				<reportElement x="170" y="30" width="30" height="20" uuid="c4d2b53a-f5ef-434e-8f23-66acd22d4292"/>
 				<textElement textAlignment="Left"/>
 				<text><![CDATA[From]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="270" y="40" width="20" height="20" uuid="19ad859c-d7ca-4324-ae8a-85366d1abc3a"/>
+				<reportElement x="260" y="30" width="20" height="20" uuid="19ad859c-d7ca-4324-ae8a-85366d1abc3a"/>
 				<text><![CDATA[to]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="300">
+		<band height="231">
 			<line>
 				<reportElement x="-20" y="0" width="595" height="1" forecolor="#666666" uuid="2ed30a92-8cf0-4910-9f8e-b023c05e0703"/>
 			</line>
 			<textField>
-				<reportElement x="230" y="10" width="100" height="30" uuid="20122e69-a0c6-44fd-b895-6b6011221887">
+				<reportElement x="230" y="10" width="150" height="19" uuid="20122e69-a0c6-44fd-b895-6b6011221887">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4f0401c5-3ad0-4f56-9f75-80f453b9203c"/>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="80" y="70" width="400" height="65" uuid="eb135848-f59d-47e8-851a-25cdb9351929">
+				<reportElement x="80" y="60" width="400" height="60" uuid="eb135848-f59d-47e8-851a-25cdb9351929">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="439cd8ab-1c8e-4d8e-b4de-23993bb99c02"/>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
@@ -101,7 +98,7 @@
 				<textFieldExpression><![CDATA[$F{place}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="135" width="80" height="30" uuid="a8d5eb44-8c3b-40f7-9dff-a55ecdc3ee87">
+				<reportElement x="0" y="135" width="80" height="24" uuid="a8d5eb44-8c3b-40f7-9dff-a55ecdc3ee87">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5136c09d-237b-467d-b501-51df020ea795"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -119,7 +116,7 @@
 				<textFieldExpression><![CDATA[$F{timeLineStart}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="80" y="210" width="400" height="30" uuid="91332db6-ce67-43d3-87be-ba7d7b7e36d5">
+				<reportElement x="80" y="210" width="400" height="21" uuid="91332db6-ce67-43d3-87be-ba7d7b7e36d5">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="fd31f9ce-c570-4869-9a76-3edd7ff6e66e"/>
 				</reportElement>
 				<textElement>
@@ -128,7 +125,7 @@
 				<textFieldExpression><![CDATA[$F{timeLineFinish}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="175" width="80" height="25" uuid="f22c6536-70f4-43db-869b-494bd922af63">
+				<reportElement x="0" y="175" width="80" height="15" uuid="f22c6536-70f4-43db-869b-494bd922af63">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3ff7dd12-851c-4942-9908-052d7bb878a8"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -137,7 +134,7 @@
 				<text><![CDATA[Start:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="215" width="80" height="25" uuid="c581f622-1b9c-4c43-8d5f-3eda1437fa9f">
+				<reportElement x="0" y="215" width="80" height="15" uuid="c581f622-1b9c-4c43-8d5f-3eda1437fa9f">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="fd31f9ce-c570-4869-9a76-3edd7ff6e66e"/>
 				</reportElement>
 				<textElement textAlignment="Center">
@@ -146,49 +143,43 @@
 				<text><![CDATA[End:]]></text>
 			</staticText>
 			<line>
-				<reportElement positionType="FixRelativeToBottom" x="-19" y="250" width="593" height="1" uuid="7ea56cac-de38-432f-8137-98e89738cb39"/>
+				<reportElement positionType="FixRelativeToBottom" x="-16" y="230" width="593" height="1" uuid="7ea56cac-de38-432f-8137-98e89738cb39"/>
 			</line>
 			<textField>
-				<reportElement x="180" y="40" width="100" height="30" uuid="2d6d2cb4-cee7-4349-b56d-64e3ffb63d2f">
+				<reportElement x="180" y="40" width="59" height="20" uuid="2d6d2cb4-cee7-4349-b56d-64e3ffb63d2f">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c0ba09a7-836a-4a60-863f-c551bfcc3641"/>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{creator}.getName()]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="140" y="40" width="40" height="30" uuid="67a04b06-8997-4616-a9c9-2f89766a5859">
+				<reportElement x="140" y="40" width="40" height="20" uuid="67a04b06-8997-4616-a9c9-2f89766a5859">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c0ba09a7-836a-4a60-863f-c551bfcc3641"/>
 				</reportElement>
 				<text><![CDATA[Creator:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="280" y="40" width="130" height="30" uuid="647a91ae-7803-407c-a8c8-da80e9efc071">
+				<reportElement x="240" y="40" width="60" height="20" uuid="647a91ae-7803-407c-a8c8-da80e9efc071">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="c0ba09a7-836a-4a60-863f-c551bfcc3641"/>
 				</reportElement>
 				<textFieldExpression><![CDATA[$F{creator}.getSurName()]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
-	<columnFooter>
-		<band/>
-	</columnFooter>
 	<pageFooter>
-		<band height="77">
+		<band height="20">
 			<textField>
-				<reportElement mode="Opaque" x="-19" y="64" width="515" height="13" backcolor="#E6E6E6" uuid="6944183a-8478-471f-9577-4d1c58a87a1b"/>
+				<reportElement mode="Opaque" x="-20" y="4" width="510" height="13" backcolor="#E6E6E6" uuid="6944183a-8478-471f-9577-4d1c58a87a1b"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 			</textField>
 			<textField evaluationTime="Report">
-				<reportElement mode="Opaque" x="496" y="64" width="78" height="13" backcolor="#E6E6E6" uuid="42c497ab-ee9d-45bf-bc08-e390c12060aa"/>
+				<reportElement mode="Opaque" x="490" y="4" width="84" height="13" backcolor="#E6E6E6" uuid="42c497ab-ee9d-45bf-bc08-e390c12060aa"/>
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement x="-19" y="64" width="100" height="13" uuid="47f1e80f-46ce-4288-be40-a21ed7fc2626"/>
-				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+				<reportElement x="0" y="4" width="140" height="13" uuid="47f1e80f-46ce-4288-be40-a21ed7fc2626"/>
+				<textFieldExpression><![CDATA[java.time.LocalDate.now()]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageFooter>
-	<summary>
-		<band/>
-	</summary>
 </jasperReport>
