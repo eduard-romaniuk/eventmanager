@@ -26,14 +26,14 @@
 			<staticText>
 				<reportElement stretchType="RelativeToBandHeight" x="20" y="20" width="200" height="43" forecolor="#FFFFFF" uuid="babe6d7b-b008-496e-93fb-3fc2d5f6e940"/>
 				<textElement rotation="None">
-					<font fontName="Lucida Calligraphy" size="20" isBold="true"/>
+					<font fontName="SansSerif" size="20" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Event manager]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="395" y="43" width="180" height="20" forecolor="#FFFFFF" uuid="49aa3abc-3ec3-4a17-aeae-1da6814c3841"/>
 				<textElement textAlignment="Right">
-					<font fontName="Lucida Calligraphy" size="14" isBold="false"/>
+					<font fontName="SansSerif" size="14" isBold="false"/>
 				</textElement>
 				<text><![CDATA[Events plan]]></text>
 			</staticText>
@@ -47,13 +47,16 @@
 			<staticText>
 				<reportElement x="180" y="0" width="200" height="30" uuid="e7fb8652-db7a-4226-9f66-77d9f9a879fb"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle" markup="styled">
-					<font fontName="Georgia" size="18" isBold="false" isItalic="false" isStrikeThrough="false"/>
+					<font fontName="SansSerif" size="18" isBold="false" isItalic="false" isStrikeThrough="false"/>
 					<paragraph lineSpacing="Fixed"/>
 				</textElement>
 				<text><![CDATA[My Events plan ]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="200" y="30" width="59" height="20" uuid="d09caea3-f11b-424d-bd66-26da2b73dac5"/>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$P{fromDate}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -62,7 +65,9 @@
 			</textField>
 			<staticText>
 				<reportElement x="170" y="30" width="30" height="20" uuid="c4d2b53a-f5ef-434e-8f23-66acd22d4292"/>
-				<textElement textAlignment="Left"/>
+				<textElement textAlignment="Left">
+					<font fontName="SansSerif"/>
+				</textElement>
 				<text><![CDATA[From]]></text>
 			</staticText>
 			<staticText>
