@@ -126,7 +126,7 @@ public class EventController {
     }
 
     @RequestMapping(value = "/join", method = RequestMethod.POST)
-    public void publish(@RequestBody User user, Event event) {
+    public void join(@RequestBody User user, Event event) {
         logger.info("POST /join");
 
         eventService.joinToEvent(user, event);
@@ -163,6 +163,16 @@ public class EventController {
         LocalDate toDate = LocalDate.parse(to);
         emailService.sendEventsPlan(fromDate, toDate);
 
+    }
+    @RequestMapping(value = "{id}/priority", method = RequestMethod.GET)
+    public String getPriority(@PathVariable Long id) {
+        logger.info("GET /EventPriority");
+        return eventService.getPriority(id);
+    }
+    @RequestMapping(value = "{id}/priority", method = RequestMethod.POST)
+    public void getPriority(@PathVariable Long id,@RequestParam Long priority_id) {
+        logger.info("GET /EventPriority");
+        eventService.changePriority(id,priority_id);
     }
 
 }

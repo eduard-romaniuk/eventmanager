@@ -80,4 +80,14 @@ public class EventService {
     public void deleteEvent(Event event){
         eventRepository.delete(event);
     }
+
+    public String getPriority(Long event_id){
+
+        return eventRepository.getPriority(userService.getCurrentUser().getId(),event_id);
+    }
+
+    public void changePriority(Long event_id, Long priority_id){
+
+        eventRepository.changePriority(userService.getCurrentUser().getId(),event_id,priority_id);
+    }
 }
