@@ -45,8 +45,6 @@ export class ViewEventComponent {
         this.eventService.isParticipantRequest(id).subscribe((participation:String) => {
           if (participation) {
             this.participationStr = participation;
-            console.log(this.participationStr);
-            console.log(this.participationStr=="true");
             this.isParticipant =(this.participationStr=="true");
           } else {
             console.log(`Participation not found!`);
@@ -64,7 +62,6 @@ export class ViewEventComponent {
        this.eventService.getPriority(id).subscribe((priority:String) => {
           if (priority) {
             this.priority = priority;
-            console.log(priority);
           } else {
             console.log(`Priority not found!`);
           }
@@ -85,6 +82,10 @@ export class ViewEventComponent {
       }
     });
     console.log("Priority change to "+this.priority_id);
+  }
+  public join(){
+    this.eventService.joinToEvent(this.event.id).subscribe();
+    window.location.reload();
   }
   public isCreator(): boolean {
     return this.userId === this.event.creator.id;

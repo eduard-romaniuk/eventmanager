@@ -67,7 +67,10 @@ export class EventService {
     )
   }
   public isParticipantRequest(id) {
-    console.log(this.base_url + id + "/isParticipant");
     return this.http.get(this.base_url + id + "/isParticipant", {responseType: 'text'});
+  }
+
+  public joinToEvent(id){
+    return this.http.get(this.base_url + id + "/join");
   }
 }
