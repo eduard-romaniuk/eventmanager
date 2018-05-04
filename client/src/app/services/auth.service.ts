@@ -24,13 +24,12 @@ export class AuthService {
   }
 
   authenticate(credentials, callback?, errorCallback?) {
-
-    sessionStorage.setItem('authToken', 'Basic ' + btoa(credentials.login + ':' + credentials.password));
+    this.setSessionAuthToken(credentials.login, credentials.password);
 
     this.http.get(this.base_url + '/').subscribe(response => {
         if (response['name']) {
           this.authenticated = true;
-          sessionStorage.setItem('login', credentials.login);
+          this.setSessionLogin(credentials.login);
           this.current_user = this.users.getUser(credentials.login);
         } else {
           this.logout();
@@ -68,19 +67,12 @@ export class AuthService {
     return this.current_user;
   }
 
-  // reauthenticate(credentials, callback?, errorCallback?) {
-  //   console.log("reauthenticate");
-  //   this.logout(() => {
-  //     console.log("logout");
-  //     this.authenticate(credentials, () => {{
-  //         console.log("authenticate");
-  //         return callback && callback();
-  //       }},
-  //       () => {
-  //         this.logout();
-  //         return errorCallback && errorCallback();
-  //       });
-  //   });
-  // }
+  setSessionAuthToken(login: String, password: String){
+    sessionStorage.setItem('authToken', 'Basic ' + btoa(login + ':' + password));
+  }
+
+  setSessionLogin(login: String){
+    sessionStorage.setItem('login', login.toString());
+  }
 
 }

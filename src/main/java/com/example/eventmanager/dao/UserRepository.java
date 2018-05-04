@@ -82,7 +82,7 @@ public class UserRepository implements CrudRepository<User> {
 
     @Override
     public Iterable<User> findAll() {
-        return namedJdbcTemplate.query(env.getProperty("findAll"), new UserMapper());
+        return namedJdbcTemplate.query(env.getProperty("findAllUser"), new UserMapper());
     }
 
     @Override
