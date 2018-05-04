@@ -59,9 +59,9 @@ public class EventService {
         return eventRepository.findAllPublicEvents();
     }
 
-    public void joinToEvent(User user,Event event){
+    public void joinToEvent(Long event_id){
 
-        eventRepository.addUserToEvent(user.getId(),event.getId());
+        eventRepository.addUserToEvent(userService.getCurrentUser().getId(),event_id);
 
     }
 

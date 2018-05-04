@@ -125,11 +125,10 @@ public class EventController {
         return eventService.getEventsWithUserParticipation(user);
     }
 
-    @RequestMapping(value = "/join", method = RequestMethod.POST)
-    public void join(@RequestBody User user, Event event) {
+    @RequestMapping(value = "/{id}/join", method = RequestMethod.POST)
+    public void join(@PathVariable Long id) {
         logger.info("POST /join");
-
-        eventService.joinToEvent(user, event);
+        eventService.joinToEvent(id);
     }
 
     @RequestMapping(value = "/addParticipants", method = RequestMethod.POST)
