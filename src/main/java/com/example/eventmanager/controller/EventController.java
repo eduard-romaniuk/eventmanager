@@ -145,7 +145,7 @@ public class EventController {
         LocalDate fromDate = LocalDate.parse(from);
         LocalDate toDate = LocalDate.parse(to);
 
-        JasperPrint eventsPlan = exportService.createEventsPlan(fromDate, toDate);
+        JasperPrint eventsPlan = exportService.exporEventsPlan(fromDate, toDate);
 
         try {
             final OutputStream outputStream = response.getOutputStream();

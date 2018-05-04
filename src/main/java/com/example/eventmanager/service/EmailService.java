@@ -1,12 +1,16 @@
 package com.example.eventmanager.service;
 
+import com.example.eventmanager.domain.PlanSetting;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.activation.DataSource;
@@ -16,18 +20,22 @@ import javax.mail.util.ByteArrayDataSource;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 
+
 @Service
 public class EmailService {
 
     private final JavaMailSender emailSender;
     private final ExportEventService exportEventService;
     private final UserService userService;
+    private final PlanSettingService planSettingService;
+    private final Logger logger = LogManager.getLogger(EmailService.class);
 
     @Autowired
-    public EmailService(JavaMailSender emailSender, ExportEventService exportEventService, UserService userService) {
+    public EmailService(JavaMailSender emailSender, ExportEventService exportEventService, UserService userService, PlanSettingService planSettingService) {
         this.emailSender = emailSender;
         this.exportEventService = exportEventService;
         this.userService = userService;
+        this.planSettingService = planSettingService;
     }
 
     public void sendVerificationLink(String email, String token) {
@@ -60,5 +68,24 @@ public class EmailService {
 
     }
 
+    private final String TIME_TO_SEND_NOTIFICATIONS = "*/10 * * * * *"; //every 10 seconds
 
+    @Scheduled(cron = TIME_TO_SEND_NOTIFICATIONS)
+    public void sendEventPlanNotification() {
+
+
+    }
+
+    public void senPlan(PlanSetting planSetting){
+        planSetting = planSettingService.getPlanSetting();
+
+        if (planSetting.isSendPlan()){
+
+            LocalDate from = planSetting.getFrom();
+
+
+        } else {
+
+        }
+    }
 }

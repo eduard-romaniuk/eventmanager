@@ -5,15 +5,8 @@ import com.example.eventmanager.domain.Event;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import javax.activation.DataSource;
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import javax.mail.util.ByteArrayDataSource;
-import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -22,19 +15,16 @@ import java.util.Map;
 @Service
 public class ExportEventService {
 
-    private final EventRepository eventRepository;
-    private final UserService userService;
+    private final EventService eventService;
+
 
     @Autowired
-    public ExportEventService(EventRepository eventRepository,UserService userService) {
-        this.eventRepository = eventRepository;
-        this.userService = userService;
+    public ExportEventService(EventService eventService) {
+        this.eventService = eventService;
+
     }
 
-    public JasperPrint createEventsPlan(LocalDate fromDate, LocalDate toDate) {
-
-        Long id = userService.getCurrentUser().getId();
-        List<Event> events = eventRepository.eventsListForPeriod(id, fromDate, toDate);
+    public JasperPrint createEventsPlan(LocalDate fromDate, LocalDate toDate, List<Event> events ) {
 
         Map<String,Object> params=new HashMap<>();
         params.put("fromDate",fromDate);
@@ -49,6 +39,12 @@ public class ExportEventService {
             ex.printStackTrace();
             return null;
         }
+
+    }
+
+    public JasperPrint exporEventsPlan(LocalDate fromDate, LocalDate toDate){
+        List<Event> events = eventService.eventsForPeriod(fromDate, toDate);
+        return createEventsPlan(fromDate, toDate,events);
 
     }
 }
