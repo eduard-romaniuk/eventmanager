@@ -1,7 +1,7 @@
 <div class="md-form text-center">
 {{event.name}}<br><br>
- Priority: {{priority}}
-   <button type="button" class="btn btn-info btn-xs"  data-toggle="modal" data-target="#myModal">Change</button>
+ Priority: {{this.priority}}
+   <button type="button" class="btn btn-info btn-xs"  data-toggle="modal" data-target="#priorityChange">Change</button>
  <br>
 Description:<br>
   {{event.description}}<br><br>
@@ -16,7 +16,7 @@ Description:<br>
   <button class="btn btn-info" (click)="goToChat()"> Chat </button>
 </div>
 
-<div id="myModal" class="modal fade">
+<div id="priorityChange" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
      <div class="modal-header"> <h4> Select priority</h4>

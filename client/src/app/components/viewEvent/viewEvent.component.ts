@@ -64,6 +64,14 @@ export class ViewEventComponent {
 
   public submitPriority(){
     this.eventService.changePriority(this.event.id,this.priority_id).subscribe();
+    this.eventService.getPriority(this.event.id).subscribe((priority:String) => {
+      if (priority) {
+        this.priority = priority;
+        console.log(priority);
+      } else {
+        console.log(`Priority not found!`);
+      }
+    });
     console.log("Priority change to "+this.priority_id);
   }
   public isCreator(): boolean {
