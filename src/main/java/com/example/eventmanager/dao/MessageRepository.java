@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,7 +54,7 @@ public class MessageRepository implements CrudRepository<Message> {
 
     @Override
     public Iterable<Message> findAll() {
-        return namedJdbcTemplate.query(env.getProperty("findAll"), new MessageMapper());
+        return namedJdbcTemplate.query(env.getProperty("findAllEvent"), new MessageMapper());
     }
 
     @Override

@@ -24,13 +24,11 @@ public class ExportEventService {
 
     private final EventRepository eventRepository;
     private final UserService userService;
-    private final JavaMailSender emailSender;
 
     @Autowired
-    public ExportEventService(EventRepository eventRepository,UserService userService, JavaMailSender emailSender) {
+    public ExportEventService(EventRepository eventRepository,UserService userService) {
         this.eventRepository = eventRepository;
         this.userService = userService;
-        this.emailSender = emailSender;
     }
 
     public JasperPrint createEventsPlan(LocalDate fromDate, LocalDate toDate) {
@@ -53,26 +51,4 @@ public class ExportEventService {
         }
 
     }
-
-    public void sendEventsPlan(LocalDate fromDate, LocalDate toDate){
-
-        JasperPrint eventsPlan = createEventsPlan(fromDate, toDate);
-        MimeMessage message = emailSender.createMimeMessage();
-        String email = userService.getCurrentUser().getEmail();
-        try {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            JasperExportManager.exportReportToPdfStream(eventsPlan, baos);
-            DataSource aAttachment =  new ByteArrayDataSource(baos.toByteArray(), "application/pdf");
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setTo(email);
-            helper.setSubject("Events plan");
-            helper.addAttachment("events-plan.pdf", aAttachment);
-            helper.setText("Events plan from: "+fromDate+" to: "+toDate);
-            emailSender.send(helper.getMimeMessage());
-        } catch (MessagingException | JRException e) {
-            e.printStackTrace();
-        }
-
-    }
-
 }
