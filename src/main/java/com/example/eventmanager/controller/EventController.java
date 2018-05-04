@@ -176,7 +176,7 @@ public class EventController {
 
     @RequestMapping(value = "{id}/isParticipant", method = RequestMethod.GET)
     public boolean isParticipant(@PathVariable Long id) {
-        logger.info("GET /EventPriority");
+        logger.info("GET /isParticipant");
        return eventService.isParticipant(id);
     }
 

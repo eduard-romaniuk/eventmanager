@@ -23,6 +23,8 @@ export class ViewEventComponent {
   priority:String;
   form: FormGroup;
   priority_id:number;
+  isParticipant:boolean;
+  participationStr:String;
 
   sub: Subscription;
 
@@ -40,6 +42,16 @@ export class ViewEventComponent {
     this.sub = this.route.params.subscribe(params => {
       const id = params['id'];
       if (id) {
+        this.eventService.isParticipantRequest(id).subscribe((participation:String) => {
+          if (participation) {
+            this.participationStr = participation;
+            console.log(this.participationStr);
+            console.log(this.participationStr=="true");
+            this.isParticipant =(this.participationStr=="true");
+          } else {
+            console.log(`Participation not found!`);
+          }
+        });
         this.eventService.getEventById(id).subscribe((event: any) => {
           if (event) {
             this.event = event;
@@ -76,11 +88,6 @@ export class ViewEventComponent {
   }
   public isCreator(): boolean {
     return this.userId === this.event.creator.id;
-  }
-
-  public isParticipant():boolean {
-
-    return true;
   }
 
   goToChat() {

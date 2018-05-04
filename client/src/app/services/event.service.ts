@@ -51,7 +51,7 @@ export class EventService {
     return this.http.get<Event[]>(this.base_url);
   }
 
-  getPriority(id) {
+ public getPriority(id) {
 
     return this.http.get(this.base_url + id + "/priority", {responseType: 'text'});
   }
@@ -65,5 +65,9 @@ export class EventService {
         }
       }
     )
+  }
+  public isParticipantRequest(id) {
+    console.log(this.base_url + id + "/isParticipant");
+    return this.http.get(this.base_url + id + "/isParticipant", {responseType: 'text'});
   }
 }
