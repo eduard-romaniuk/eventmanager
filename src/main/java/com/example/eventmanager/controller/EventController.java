@@ -145,7 +145,7 @@ public class EventController {
         LocalDate fromDate = LocalDate.parse(from);
         LocalDate toDate = LocalDate.parse(to);
 
-        JasperPrint eventsPlan = exportService.exporEventsPlan(fromDate, toDate);
+        JasperPrint eventsPlan = exportService.eventsPlanForExport(fromDate, toDate);
 
         try {
             final OutputStream outputStream = response.getOutputStream();
@@ -160,7 +160,7 @@ public class EventController {
         logger.info("GET /sendPlan");
         LocalDate fromDate = LocalDate.parse(from);
         LocalDate toDate = LocalDate.parse(to);
-        emailService.sendEventsPlan(fromDate, toDate);
+        emailService.sendEventsPlanExport(fromDate, toDate);
 
     }
     @RequestMapping(value = "{id}/priority", method = RequestMethod.GET)

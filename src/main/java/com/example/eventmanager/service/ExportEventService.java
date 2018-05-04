@@ -42,7 +42,7 @@ public class ExportEventService {
 
     }
 
-    public JasperPrint exporEventsPlan(LocalDate fromDate, LocalDate toDate){
+    public JasperPrint eventsPlanForExport(LocalDate fromDate, LocalDate toDate){
         List<Event> events = eventService.eventsForPeriod(fromDate, toDate);
         return createEventsPlan(fromDate, toDate,events);
 

@@ -1,5 +1,6 @@
 package com.example.eventmanager.service;
 
+import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.PlanSetting;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -19,6 +20,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Service
@@ -28,14 +30,17 @@ public class EmailService {
     private final ExportEventService exportEventService;
     private final UserService userService;
     private final PlanSettingService planSettingService;
+    private final EventService eventService;
     private final Logger logger = LogManager.getLogger(EmailService.class);
+    private final String TIME_TO_SEND_NOTIFICATIONS = "*/10 * * * * *"; //every 10 seconds
 
     @Autowired
-    public EmailService(JavaMailSender emailSender, ExportEventService exportEventService, UserService userService, PlanSettingService planSettingService) {
+    public EmailService(JavaMailSender emailSender, ExportEventService exportEventService, UserService userService, PlanSettingService planSettingService, EventService eventService) {
         this.emailSender = emailSender;
         this.exportEventService = exportEventService;
         this.userService = userService;
         this.planSettingService = planSettingService;
+        this.eventService = eventService;
     }
 
     public void sendVerificationLink(String email, String token) {
@@ -47,45 +52,45 @@ public class EmailService {
         emailSender.send(message);
     }
 
-    public void sendEventsPlan(LocalDate fromDate, LocalDate toDate){
+    private void sendPlan(JasperPrint eventsPlan) {
 
-        JasperPrint eventsPlan = exportEventService.exporEventsPlan(fromDate, toDate);
         MimeMessage message = emailSender.createMimeMessage();
         String email = userService.getCurrentUser().getEmail();
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             JasperExportManager.exportReportToPdfStream(eventsPlan, baos);
-            DataSource aAttachment =  new ByteArrayDataSource(baos.toByteArray(), "application/pdf");
+            DataSource aAttachment = new ByteArrayDataSource(baos.toByteArray(), "application/pdf");
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setTo(email);
             helper.setSubject("Events plan");
             helper.addAttachment("events-plan.pdf", aAttachment);
-            helper.setText("Events plan from: "+fromDate+" to: "+toDate);
+            helper.setText("Personal events plan");
             emailSender.send(helper.getMimeMessage());
         } catch (MessagingException | JRException e) {
             e.printStackTrace();
         }
-
     }
 
-    private final String TIME_TO_SEND_NOTIFICATIONS = "*/10 * * * * *"; //every 10 seconds
+    public void sendEventsPlanExport(LocalDate fromDate, LocalDate toDate) {
+        JasperPrint eventsPlan = exportEventService.eventsPlanForExport(fromDate, toDate);
+        sendPlan(eventsPlan);
+    }
 
     @Scheduled(cron = TIME_TO_SEND_NOTIFICATIONS)
-    public void sendEventPlanNotification() {
+    public void sendPersonalPlanNotification() {
 
+        PlanSetting planSetting = planSettingService.getPlanSetting();
 
-    }
-
-    public void senPlan(PlanSetting planSetting){
-        planSetting = planSettingService.getPlanSetting();
-
-        if (planSetting.isSendPlan()){
+        if (planSetting.isSendPlan()) {
 
             LocalDate from = planSetting.getFrom();
-
+            LocalDate to = from.plusDays(planSetting.getPeriod());
+            List<Event> events = eventService.eventsFromDate(planSetting.getFrom());
+            JasperPrint eventsPlan = exportEventService.createEventsPlan(from, to, events);
+            sendPlan(eventsPlan);
 
         } else {
-
+            logger.info("Sending Personal Plan disable");
         }
     }
 }
