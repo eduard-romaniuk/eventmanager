@@ -83,11 +83,13 @@ public class EmailService {
 
         if (planSetting.isSendPlan()) {
 
-            LocalDate from = planSetting.getFrom();
-            LocalDate to = from.plusDays(planSetting.getPeriod());
-            List<Event> events = eventService.eventsFromDate(planSetting.getFrom());
+            LocalDate from = planSetting.getFromDate();
+            LocalDate to = from.plusDays(planSetting.getPlanPeriod());
+            List<Event> events = eventService.eventsForPeriod(from,to);
             JasperPrint eventsPlan = exportEventService.createEventsPlan(from, to, events);
             sendPlan(eventsPlan);
+            planSetting.setFromDate(to);
+            planSettingService.updatePlanSetting(planSetting);
 
         } else {
             logger.info("Sending Personal Plan disable");

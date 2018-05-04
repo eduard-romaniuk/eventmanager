@@ -7,8 +7,9 @@ public class PlanSetting {
 
     private User user;
     private boolean sendPlan;
-    private LocalDate from;
-    private Integer period;
+    private LocalDate fromDate;
+    private Integer planPeriod;
+    private Integer notificationPeriod;
 
     public User getUser() {
         return user;
@@ -26,19 +27,27 @@ public class PlanSetting {
         this.sendPlan = sendPlan;
     }
 
-    public LocalDate getFrom() {
-        return from;
+    public LocalDate getFromDate() {
+        return fromDate;
     }
 
-    public void setFrom(LocalDate from) {
-        this.from = from;
+    public void setFromDate(LocalDate fromDate) {
+        this.fromDate = fromDate;
     }
 
-    public Integer getPeriod() {
-        return period;
+    public Integer getPlanPeriod() {
+        return planPeriod;
     }
 
-    public void setPeriod(Integer period) {
-        this.period = period;
+    public void setPlanPeriod(Integer planPeriod) {
+        this.planPeriod = planPeriod;
+    }
+
+    public Integer getNotificationPeriod() {
+        return notificationPeriod;
+    }
+
+    public void setNotificationPeriod(Integer notificationPeriod) {
+        this.notificationPeriod = notificationPeriod;
     }
 }

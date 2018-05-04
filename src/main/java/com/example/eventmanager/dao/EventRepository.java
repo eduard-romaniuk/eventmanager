@@ -172,18 +172,6 @@ public class EventRepository implements CrudRepository<Event> {
         }
 
     }
-    public List<Event> eventsFromDate(Long id, LocalDate fromDate){
-        try {
-            Map<String, Object> namedParams = new HashMap<>();
-            namedParams.put("user_id", id);
-            namedParams.put("fromDate", fromDate);
-            return namedJdbcTemplate.query(env.getProperty("event.fromDate"), namedParams,new EventWithCreator());
-        } catch (EmptyResultDataAccessException e) {
-            logger.info("Events not found");
-            return Collections.emptyList();
-        }
-
-    }
 
     public String getPriority(Long user_id, Long event_id) {
         try {

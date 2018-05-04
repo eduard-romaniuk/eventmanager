@@ -32,8 +32,9 @@ public class PlanSettingRepository implements CrudRepository<PlanSetting> {
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("user_id", plan.getUser().getId());
         namedParams.put("sendPlan", plan.isSendPlan());
-        namedParams.put("from", plan.getFrom());
-        namedParams.put("period", plan.getPeriod());
+        namedParams.put("from", plan.getFromDate());
+        namedParams.put("planPeriod", plan.getPlanPeriod());
+        namedParams.put("notificationPeriod", plan.getNotificationPeriod());
         return namedJdbcTemplate.update(env.getProperty("plan.insert"), namedParams);
 
     }
@@ -59,8 +60,9 @@ public class PlanSettingRepository implements CrudRepository<PlanSetting> {
 
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("sendPlan", plan.isSendPlan());
-        namedParams.put("from", plan.getFrom());
-        namedParams.put("period", plan.getPeriod());
+        namedParams.put("from", plan.getFromDate());
+        namedParams.put("planPeriod", plan.getPlanPeriod());
+        namedParams.put("notificationPeriod", plan.getNotificationPeriod());
         namedParams.put("user_id", plan.getUser().getId());
         namedJdbcTemplate.update(env.getProperty("plan.update"), namedParams);
 
@@ -72,7 +74,6 @@ public class PlanSettingRepository implements CrudRepository<PlanSetting> {
 
     }
 
-
     private static final class PersonalPlanExtractor implements ResultSetExtractor<PlanSetting> {
 
         @Override
@@ -81,8 +82,9 @@ public class PlanSettingRepository implements CrudRepository<PlanSetting> {
             User user = new User();
             while (rs.next()) {
                 plan.setSendPlan(rs.getBoolean("personal_plan_notification"));
-                plan.setFrom(rs.getDate("from_date").toLocalDate());
-                plan.setPeriod(rs.getInt("period"));
+                plan.setFromDate(rs.getDate("from_date").toLocalDate());
+                plan.setPlanPeriod(rs.getInt("planPeriod"));
+                plan.setNotificationPeriod(rs.getInt("notificationPeriod"));
                 user.setId(rs.getLong("id"));
                 user.setLogin(rs.getString("login"));
                 plan.setUser(user);
