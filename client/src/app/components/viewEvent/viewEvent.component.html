@@ -1,8 +1,8 @@
 <div class="md-form text-center">
 {{event.name}}<br><br>
- Priority: {{this.priority}}
+ <p *ngIf="isParticipant()"> Priority: {{this.priority}}
    <button type="button" class="btn btn-info btn-xs"  data-toggle="modal" data-target="#priorityChange">Change</button>
- <br>
+ </p>
 Description:<br>
   {{event.description}}<br><br>
   Place:<br>
@@ -14,6 +14,7 @@ Description:<br>
   <button class="btn btn-default mt-2" [routerLink]="['/event', event.id, 'edit']"> <!--*ngIf="isCreator()"-->Edit</button>
   <button class="btn btn-default mt-2" (click)="publish()" [disabled]="true">Invite members</button>
   <button class="btn btn-info" (click)="goToChat()"> Chat </button>
+  <button *ngIf="!isParticipant()" class="btn btn-default mt-2" (click)="join()"> Join</button>
 </div>
 
 <div id="priorityChange" class="modal fade">

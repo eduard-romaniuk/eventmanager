@@ -174,6 +174,12 @@ public class EventController {
         eventService.changePriority(id,priority_id);
     }
 
+    @RequestMapping(value = "{id}/isParticipant", method = RequestMethod.GET)
+    public boolean isParticipant(@PathVariable Long id) {
+        logger.info("GET /EventPriority");
+       return eventService.isParticipant(id);
+    }
+
 }
 
 

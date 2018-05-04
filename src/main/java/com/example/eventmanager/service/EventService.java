@@ -90,4 +90,9 @@ public class EventService {
 
         eventRepository.changePriority(userService.getCurrentUser().getId(),event_id,priority_id);
     }
+
+    public boolean isParticipant(Long event_id){
+
+        return eventRepository.isParticipant(userService.getCurrentUser().getId(),event_id);
+    }
 }

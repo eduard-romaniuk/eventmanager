@@ -194,6 +194,18 @@ public class EventRepository implements CrudRepository<Event> {
             
     }
 
+    public boolean isParticipant(Long user_id,Long event_id) {
+        try {
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("user_id", user_id);
+            namedParams.put("event_id", event_id);
+            namedJdbcTemplate.queryForObject(env.getProperty("isParticipant"), namedParams, Long.class);
+            return true;
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("User is not a participant");
+            return false;
+        }
+    }
     
 
     private static final class EventMapper implements RowMapper<Event> {

@@ -77,6 +77,12 @@ export class ViewEventComponent {
   public isCreator(): boolean {
     return this.userId === this.event.creator.id;
   }
+
+  public isParticipant():boolean {
+
+    return true;
+  }
+
   goToChat() {
       this.router.navigate(['/chats']);
     }
