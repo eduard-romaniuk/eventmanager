@@ -6,6 +6,7 @@ DROP TRIGGER IF EXISTS t_create_chats ON events;
 DROP TRIGGER IF EXISTS t_delete_chats ON events;
 DROP TRIGGER IF EXISTS t_user_reg_date_upd ON users;
 DROP TRIGGER IF EXISTS t_image_null_values ON images;
+DROP TRIGGER IF EXISTS t_friend_controll ON relationships;
 
 select * from users;
 -- --- -------------------------------
@@ -138,4 +139,33 @@ $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER t_image_null_values
 	BEFORE UPDATE OR INSERT ON images FOR EACH ROW EXECUTE PROCEDURE controll_null_value();
+	
+-- --- -------------------------------
+-- Trigger for adding friends
+-- --- -------------------------------
+CREATE OR REPLACE FUNCTION friends_controll() RETURNS TRIGGER AS $$
+DECLARE
+	first_friend	integer;
+BEGIN
+    IF    TG_OP = 'UPDATE' OR TG_OP = 'INSERT' THEN
+       IF (NEW.action_user_id != NEW.user_one_id) AND (NEW.action_user_id != NEW.user_two_id) THEN
+       
+                RAISE EXCEPTION 'USER ACTION ID MUST BE ONE OF THE FRIENDS ID`S!';
+                
+       ELSIF (NEW.user_one_id > NEW.user_two_id) THEN
+       
+		first_friend = NEW.user_two_id;
+		NEW.user_two_id = NEW.user_one_id;
+		NEW.user_one_id = first_friend;
+
+       END IF;
+       RETURN NEW;
+	
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER t_friend_controll
+	BEFORE UPDATE OR INSERT ON relationships FOR EACH ROW EXECUTE PROCEDURE friends_controll();
+
 
