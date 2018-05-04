@@ -59,7 +59,8 @@ CREATE TABLE IF NOT EXISTS public.settings (
   user_id INT NOT NULL,
   personal_plan_notification BOOLEAN NOT NULL DEFAULT FALSE,
   from_date DATE NULL,
-  period INT NULL,
+  plan_period INT NULL,
+  notification_period INT NULL,
   
   CONSTRAINT pk_settings_id PRIMARY KEY (user_id),
   CONSTRAINT fk_settings_users FOREIGN KEY (user_id)
