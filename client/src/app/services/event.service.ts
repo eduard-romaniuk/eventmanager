@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Event } from '../model/event';
-import { User } from '../model/user';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Event} from '../model/event';
+import {User} from '../model/user';
 //import { AuthService } from 'auth.service';
 import {Observable} from "rxjs/Observable";
-import { ActivatedRoute, Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' })
+  headers: new HttpHeaders({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'})
 };
 
 @Injectable()
@@ -32,15 +32,15 @@ export class EventService {
 
     this.http.post(this.base_url, event).subscribe(
       (id: number) => {
-             console.log("Id: " + id)
-             this.router.navigate(['event/', id]);
-           }
-         );
+        console.log("Id: " + id)
+        this.router.navigate(['event/', id]);
+      }
+    );
 
   }
 
   public getEvent(id: number): Observable<Event> {
-     return this.http.get<Event>(this.base_url + id);
+    return this.http.get<Event>(this.base_url + id);
   }
 
   public updateEvent(event: Event): Observable<Object> {
@@ -49,5 +49,21 @@ export class EventService {
 
   public getPublicEvents(): Observable<Event[]> {
     return this.http.get<Event[]>(this.base_url);
+  }
+
+  getPriority(id) {
+
+    return this.http.get(this.base_url + id + "/priority", {responseType: 'text'});
+  }
+
+  public changePriority(id,priority_id) {
+
+    return this.http.get(this.base_url + id + "/priority/change",
+      {
+        params: {
+          priority_id:priority_id
+        }
+      }
+    )
   }
 }
