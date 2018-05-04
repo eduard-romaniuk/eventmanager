@@ -109,7 +109,7 @@ public class UserRepository implements CrudRepository<User> {
     public void delete(User user) {
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("id", user.getId());
-        namedJdbcTemplate.update(env.getProperty("delete"), namedParams);
+        namedJdbcTemplate.update(env.getProperty("event.delete"), namedParams);
     }
 
     public void changePass(User user) {

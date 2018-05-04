@@ -49,7 +49,7 @@ public class EmailService {
 
     public void sendEventsPlan(LocalDate fromDate, LocalDate toDate){
 
-        JasperPrint eventsPlan = exportEventService.createEventsPlan(fromDate, toDate);
+        JasperPrint eventsPlan = exportEventService.exporEventsPlan(fromDate, toDate);
         MimeMessage message = emailSender.createMimeMessage();
         String email = userService.getCurrentUser().getEmail();
         try {
