@@ -1,5 +1,6 @@
 package com.example.eventmanager.dao;
 
+import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.NotificationSettings;
 import com.example.eventmanager.domain.User;
 import org.apache.logging.log4j.LogManager;
@@ -129,17 +130,16 @@ public class NotificationSettingsRepository implements CrudRepository<Notificati
         }
     }
 
-    public List<Map<String,Object>> findNotificationToSendByUserId(Long userId, LocalDate date) {
+    public List<Event> findEventsToNotificateByUserId(Long userId, LocalDate date) {
         try {
-            logger.info("findNotificationToSendByUserId with id {}", userId);
+            logger.info("findEventsToNotificateByUserId with id {}", userId);
 
             Map<String, Object> namedParams = new HashMap<>();
             namedParams.put("user_id", userId);
             namedParams.put("date", date);
 
-            return namedJdbcTemplate.queryForList(env.getProperty("findNotificationToSendByUserId"),
-                    namedParams);
-
+            return namedJdbcTemplate.query(env.getProperty("findEventsToNotificateByUserId"),
+                    namedParams, new EventRepository.EventMapper());
         } catch (EmptyResultDataAccessException e) {
             logger.info("findNotificationToSendByUserId for user with id {} not found", userId);
             return Collections.emptyList();

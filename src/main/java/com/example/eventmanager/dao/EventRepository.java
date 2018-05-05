@@ -196,7 +196,7 @@ public class EventRepository implements CrudRepository<Event> {
 
     
 
-    private static final class EventMapper implements RowMapper<Event> {
+    public static final class EventMapper implements RowMapper<Event> {
         @Override
         public Event mapRow(ResultSet rs, int rowNum) throws SQLException {
             Event event = new Event();

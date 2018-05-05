@@ -1,5 +1,6 @@
 package com.example.eventmanager.service;
 
+import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class NotificationService {
@@ -39,9 +39,9 @@ public class NotificationService {
 
         List<User> activeUsers = userService.findAllActive();
         for(User user : activeUsers){
-            List<Map<String,Object>> notificationsToSend =
-                    notificationSettingsService.findNotificationToSendByUserId(user.getId(), LocalDate.now());
-            this.emailService.sendEventNotification(user, notificationsToSend);
+            List<Event> eventsToNotificate =
+                    notificationSettingsService.findEventsToNotificateByUserId(user.getId(), LocalDate.now());
+            this.emailService.sendEventNotification(user, eventsToNotificate);
         }
 
         logger.info("End sending notifications");

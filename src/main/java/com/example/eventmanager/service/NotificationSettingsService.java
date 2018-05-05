@@ -1,6 +1,7 @@
 package com.example.eventmanager.service;
 
 import com.example.eventmanager.dao.NotificationSettingsRepository;
+import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.NotificationSettings;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,7 +12,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class NotificationSettingsService {
@@ -54,8 +54,8 @@ public class NotificationSettingsService {
         return notificationSettingsRepository.findAllNotificationByUserId(userId);
     }
 
-    public List<Map<String,Object>> findNotificationToSendByUserId(Long userId, LocalDate date){
+    public List<Event> findEventsToNotificateByUserId(Long userId, LocalDate date){
         logger.info("findAllNotificationByUserId with user id {}", userId);
-        return notificationSettingsRepository.findNotificationToSendByUserId(userId, date);
+        return notificationSettingsRepository.findEventsToNotificateByUserId(userId, date);
     }
 }
