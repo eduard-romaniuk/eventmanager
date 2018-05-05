@@ -173,6 +173,10 @@ public class UserRepository implements CrudRepository<User> {
             return null;
         }
     }
+
+    public List<User> findAllActive() {
+        return namedJdbcTemplate.query(env.getProperty("findAllActiveUsers"), new UserMapper());
+    }
 }
 
 

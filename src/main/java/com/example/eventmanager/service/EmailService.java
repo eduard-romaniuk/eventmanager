@@ -1,5 +1,6 @@
 package com.example.eventmanager.service;
 
+import com.example.eventmanager.domain.User;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -15,6 +16,8 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class EmailService {
@@ -60,5 +63,24 @@ public class EmailService {
 
     }
 
+    public void sendEventNotification(User user, List<Map<String,Object>> notificationsToSend) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(user.getEmail());
+        message.setSubject("Notification about your events");
 
+        String messageText = "Hello, " + user.getLogin() + "! \n\n Here is notification about your upcoming events:\n";
+
+        for (Map m : notificationsToSend){
+
+            String eventInfo = "Event \'" + m.get("name").toString() + "\'\n" +
+                    "Start at " + m.get("timeline_start").toString() + "\n" +
+                    "End at " + m.get("timeline_finish").toString() + "\n\n";
+
+            messageText += eventInfo;
+        }
+
+        messageText += "Have fun! \nYour Event manager team.";
+        message.setText(messageText);
+        emailSender.send(message);
+    }
 }

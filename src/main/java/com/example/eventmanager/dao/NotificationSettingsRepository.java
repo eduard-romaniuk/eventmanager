@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.RowMapper;
@@ -14,11 +15,13 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@PropertySource("classpath:queries/notification.properties")
 @Repository
 public class NotificationSettingsRepository implements CrudRepository<NotificationSettings> {
 
@@ -125,4 +128,22 @@ public class NotificationSettingsRepository implements CrudRepository<Notificati
             return Collections.emptyList();
         }
     }
+
+    public List<Map<String,Object>> findNotificationToSendByUserId(Long userId, LocalDate date) {
+        try {
+            logger.info("findNotificationToSendByUserId with id {}", userId);
+
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("user_id", userId);
+            namedParams.put("date", date);
+
+            return namedJdbcTemplate.queryForList(env.getProperty("findNotificationToSendByUserId"),
+                    namedParams);
+
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("findNotificationToSendByUserId for user with id {} not found", userId);
+            return Collections.emptyList();
+        }
+    }
+
 }

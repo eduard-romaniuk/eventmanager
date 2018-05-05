@@ -7,9 +7,11 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class NotificationSettingsService {
@@ -50,5 +52,10 @@ public class NotificationSettingsService {
     public List<NotificationSettings> findAllByUserId(Long userId){
         logger.info("findAllNotificationByUserId with user id {}", userId);
         return notificationSettingsRepository.findAllNotificationByUserId(userId);
+    }
+
+    public List<Map<String,Object>> findNotificationToSendByUserId(Long userId, LocalDate date){
+        logger.info("findAllNotificationByUserId with user id {}", userId);
+        return notificationSettingsRepository.findNotificationToSendByUserId(userId, date);
     }
 }

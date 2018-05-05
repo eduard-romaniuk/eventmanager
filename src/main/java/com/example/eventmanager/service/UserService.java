@@ -76,4 +76,8 @@ public class UserService {
     public User getCurrentUser(){
         return findUser(getCurrentUsername());
     }
+
+    public List<User> findAllActive(){
+        return userRepository.findAllActive();
+    }
 }
