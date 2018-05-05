@@ -17,6 +17,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -25,6 +26,8 @@ public class EmailService {
     private final JavaMailSender emailSender;
     private final ExportEventService exportEventService;
     private final UserService userService;
+
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
 
     @Autowired
     public EmailService(JavaMailSender emailSender, ExportEventService exportEventService, UserService userService) {
@@ -72,8 +75,8 @@ public class EmailService {
 
         for (Event event : eventsToNotificate){
             String eventInfo = "Event \'" + event.getName() + "\'\n" +
-                    "Start at " + event.getTimeLineStart() + "\n" +
-                    "End at " + event.getTimeLineFinish() + "\n\n";
+                    "Start at " + event.getTimeLineStart().format(formatter) + "\n" +
+                    "End at " + event.getTimeLineFinish().format(formatter) + "\n\n";
             messageText += eventInfo;
         }
 
