@@ -20,6 +20,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 @Service
 public class EmailService {
 
@@ -66,21 +68,37 @@ public class EmailService {
 
     }
 
-    public void sendEventNotification(User user, List<Event> events) {
+    public void sendEventNotification(User user, List<Event> eventsWithoutCountdown, List<Event> eventsWithCountdown) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(user.getEmail());
         message.setSubject("Notification about your events");
 
-        String messageText = "Hello, " + user.getLogin() + "! \n\n Here is your upcoming events:\n";
+        String messageText = "Hello, " + user.getLogin() + "! \n\n";
 
-        for (Event event : events){
-            String eventInfo = "Event \'" + event.getName() + "\'\n" +
-                    "Start at " + event.getTimeLineStart().format(formatter) + "\n" +
-                    "End at " + event.getTimeLineFinish().format(formatter) + "\n\n";
-            messageText += eventInfo;
+        if(eventsWithoutCountdown.size() > 0){
+            messageText += "Your upcoming events:\n";
+            for (Event event : eventsWithoutCountdown){
+                String eventInfo = "Event \'" + event.getName() + "\'\n" +
+                        "Start at " + event.getTimeLineStart().format(formatter) + "\n" +
+                        "End at " + event.getTimeLineFinish().format(formatter) + "\n\n";
+                messageText += eventInfo;
+            }
         }
 
-        messageText += "Have fun! \nYour Event manager team.";
+        if(eventsWithCountdown.size() > 0){
+            messageText += "Countdown to your selected events:\n";
+            for (Event event : eventsWithCountdown){
+                long countDown = DAYS.between(LocalDate.now(), event.getTimeLineStart().toLocalDate());
+
+                String eventInfo = "Event \'" + event.getName() + "\'\n" +
+                        "Start at " + event.getTimeLineStart().format(formatter) + "\n" +
+                        "End at " + event.getTimeLineFinish().format(formatter) + "\n" +
+                        "Left " + countDown + " days\n\n";
+                messageText += eventInfo;
+            }
+        }
+
+        messageText += "Have fun! \nYour Event manager team";
         message.setText(messageText);
         emailSender.send(message);
     }

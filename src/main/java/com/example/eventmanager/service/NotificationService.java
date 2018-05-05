@@ -63,9 +63,14 @@ public class NotificationService {
     private void sendEventNotificationToUser(User user){
         logger.info("Start sending Event Notification to user with id {}", user.getId());
 
-        List<Event> events =
+        List<Event> eventsWithoutCountdown =
                 notificationSettingsService.findEventsToNotificateByUserId(user.getId(), LocalDate.now());
-        this.emailService.sendEventNotification(user, events);
+        List<Event> eventsWithCountdown =
+                notificationSettingsService.findEventsWithCountdownToNotificateByUserId(user.getId(), LocalDate.now());
+
+        if(eventsWithoutCountdown.size() > 0 || eventsWithCountdown.size() > 0){
+            this.emailService.sendEventNotification(user, eventsWithoutCountdown, eventsWithCountdown);
+        }
 
         logger.info("End sending Event Notification to user with id {}", user.getId());
     }

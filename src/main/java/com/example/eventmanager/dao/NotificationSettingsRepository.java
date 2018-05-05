@@ -146,4 +146,20 @@ public class NotificationSettingsRepository implements CrudRepository<Notificati
         }
     }
 
+    public List<Event> findEventsWithCountdownToNotificateByUserId(Long userId, LocalDate date) {
+        try {
+            logger.info("findEventsWithCountdownToNotificateByUserId with id {}", userId);
+
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("user_id", userId);
+            namedParams.put("date", date);
+
+            return namedJdbcTemplate.query(env.getProperty("findEventsWithCountdownToNotificateByUserId"),
+                    namedParams, new EventRepository.EventMapper());
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("findNotificationToSendByUserId for user with id {} not found", userId);
+            return Collections.emptyList();
+        }
+    }
+
 }

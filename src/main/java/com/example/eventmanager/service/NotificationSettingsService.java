@@ -58,4 +58,9 @@ public class NotificationSettingsService {
         logger.info("findAllNotificationByUserId with user id {}", userId);
         return notificationSettingsRepository.findEventsToNotificateByUserId(userId, date);
     }
+
+    public List<Event> findEventsWithCountdownToNotificateByUserId(Long userId, LocalDate date){
+        logger.info("findEventsWithCountdownToNotificateByUserId with user id {}", userId);
+        return notificationSettingsRepository.findEventsWithCountdownToNotificateByUserId(userId, date);
+    }
 }
