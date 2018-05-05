@@ -4,6 +4,9 @@ import { HttpClientModule, HttpInterceptor, HttpHandler, HttpRequest, HTTP_INTER
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Ng2CloudinaryModule } from 'ng2-cloudinary';
 import { FileUploadModule } from 'ng2-file-upload';
+import { CommonModule } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 import { environment }           from '../environments/environment';
 import { AppRoutingModule }      from './modules/app-routing.module';
@@ -90,7 +93,12 @@ export class AddressInterceptor implements HttpInterceptor {
     FormsModule,
     ReactiveFormsModule,
     Ng2CloudinaryModule,
-    FileUploadModule
+    FileUploadModule,
+    CommonModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 2000
+    }),
   ],
   providers: [
     AuthService,
