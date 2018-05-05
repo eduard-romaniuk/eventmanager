@@ -60,7 +60,7 @@ public class PlanSettingRepository implements CrudRepository<PlanSetting> {
 
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("sendPlan", plan.isSendPlan());
-        namedParams.put("from", plan.getFromDate());
+        namedParams.put("fromDate", plan.getFromDate());
         namedParams.put("planPeriod", plan.getPlanPeriod());
         namedParams.put("notificationPeriod", plan.getNotificationPeriod());
         namedParams.put("user_id", plan.getUser().getId());

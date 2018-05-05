@@ -3,6 +3,7 @@ package com.example.eventmanager.domain;
 import com.example.eventmanager.service.PersonalPlanSendEmailJob;
 import lombok.Data;
 import org.quartz.JobBuilder;
+import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
 import org.quartz.Trigger;
 
@@ -11,14 +12,23 @@ import java.util.List;
 import java.util.Set;
 
 
-@Data
+
 public class PersonalPlanJobDescriptor {
+
+    private Long user_id;
 
     private List<PersonalPlanTriggerDescriptor>  planTriggerDescriptors;
 
-
     public List<PersonalPlanTriggerDescriptor> getPlanTriggerDescriptors() {
         return planTriggerDescriptors;
+    }
+
+    public Long getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(Long user_id) {
+        this.user_id = user_id;
     }
 
     public void setPlanTriggerDescriptor(List<PersonalPlanTriggerDescriptor> planTriggerDescriptors) {
@@ -34,9 +44,9 @@ public class PersonalPlanJobDescriptor {
     }
 
     public JobDetail buildJobDetail() {
-
         return JobBuilder.newJob(PersonalPlanSendEmailJob.class)
-                .withIdentity("Job for user " + planTriggerDescriptors.get(0).getPlanSetting().getUser().getId())
+                .withIdentity("Job for user " + user_id)
+                .usingJobData("user_id",user_id)
                 .build();
     }
 

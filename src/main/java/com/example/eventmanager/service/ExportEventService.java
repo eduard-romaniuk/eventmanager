@@ -1,6 +1,5 @@
 package com.example.eventmanager.service;
 
-import com.example.eventmanager.dao.EventRepository;
 import com.example.eventmanager.domain.Event;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -16,12 +15,13 @@ import java.util.Map;
 public class ExportEventService {
 
     private final EventService eventService;
+    private final UserService userService;
 
 
     @Autowired
-    public ExportEventService(EventService eventService) {
+    public ExportEventService(EventService eventService, UserService userService) {
         this.eventService = eventService;
-
+        this.userService = userService;
     }
 
     public JasperPrint createEventsPlan(LocalDate fromDate, LocalDate toDate, List<Event> events ) {
@@ -43,7 +43,7 @@ public class ExportEventService {
     }
 
     public JasperPrint eventsPlanForExport(LocalDate fromDate, LocalDate toDate){
-        List<Event> events = eventService.eventsForPeriod(fromDate, toDate);
+        List<Event> events = eventService.eventsForPeriod(userService.getCurrentUser().getId(),fromDate, toDate);
         return createEventsPlan(fromDate, toDate,events);
 
     }

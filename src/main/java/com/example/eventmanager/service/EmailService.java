@@ -2,6 +2,7 @@ package com.example.eventmanager.service;
 
 import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.PlanSetting;
+import com.example.eventmanager.domain.User;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -50,10 +51,10 @@ public class EmailService {
         emailSender.send(message);
     }
 
-    public void sendPlan(JasperPrint eventsPlan) {
+    public void sendPlan(JasperPrint eventsPlan, User user) {
 
         MimeMessage message = emailSender.createMimeMessage();
-        String email = userService.getCurrentUser().getEmail();
+        String email = user.getEmail();
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             JasperExportManager.exportReportToPdfStream(eventsPlan, baos);
@@ -70,24 +71,30 @@ public class EmailService {
     }
 
     public void sendEventsPlanExport(LocalDate fromDate, LocalDate toDate) {
+
         JasperPrint eventsPlan = exportEventService.eventsPlanForExport(fromDate, toDate);
-        sendPlan(eventsPlan);
+        sendPlan(eventsPlan,userService.getCurrentUser());
     }
 
 
-    public void sendPersonalPlanNotification() {
+    public void sendPersonalPlanNotification(Long user_id) {
 
-        PlanSetting planSetting = planSettingService.getPlanSetting(2l);
+        PlanSetting planSetting = planSettingService.getPlanSetting(user_id);
 
         if (planSetting.isSendPlan()) {
 
             LocalDate from = planSetting.getFromDate();
             LocalDate to = from.plusDays(planSetting.getPlanPeriod());
-            List<Event> events = eventService.eventsForPeriod(from,to);
+            List<Event> events = eventService.eventsForPeriod(user_id,from,to);
             JasperPrint eventsPlan = exportEventService.createEventsPlan(from, to, events);
-            sendPlan(eventsPlan);
+            sendPlan(eventsPlan,userService.getUser(user_id));
+
+            logger.info("Personal Plan for user {} was sending",user_id);
+
             planSetting.setFromDate(to);
             planSettingService.updatePlanSetting(planSetting);
+            logger.info("Event from date for user {} was updating, current date : {}",user_id,planSetting.getFromDate());
+
 
         } else {
             logger.info("Sending Personal Plan disable");

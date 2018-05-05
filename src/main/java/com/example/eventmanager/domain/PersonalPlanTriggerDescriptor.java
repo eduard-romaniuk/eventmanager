@@ -1,17 +1,12 @@
 package com.example.eventmanager.domain;
 
-import org.quartz.JobDataMap;
 import org.quartz.Trigger;
 
-
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.TimeZone;
 
 import static java.time.ZoneId.systemDefault;
 import static org.quartz.CronExpression.isValidExpression;
 import static org.quartz.CronScheduleBuilder.cronSchedule;
-import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
 import static org.springframework.util.ObjectUtils.isEmpty;
 
@@ -47,7 +42,7 @@ public class PersonalPlanTriggerDescriptor {
     }
 
     private String buildCrone(){
-        return "0 0 0 1/"+planSetting.getNotificationPeriod()+" * ? *";
+        return "0 */"+getPlanSetting().getNotificationPeriod()+" * ? * *";
     }
 
     private String buildName() {
@@ -61,7 +56,7 @@ public class PersonalPlanTriggerDescriptor {
                 throw new IllegalArgumentException("Provided expression " + cron + " is not a valid cron expression");
             return newTrigger()
                     .withIdentity(buildName())
-                    .withSchedule(cronSchedule("0 * * ? * *")
+                    .withSchedule(cronSchedule(cron)
                             .withMisfireHandlingInstructionFireAndProceed()
                             .inTimeZone(TimeZone.getTimeZone(systemDefault())))
                     .build();

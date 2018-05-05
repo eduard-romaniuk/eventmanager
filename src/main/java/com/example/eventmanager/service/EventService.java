@@ -58,9 +58,9 @@ public class EventService {
         return eventRepository.findAllPublicEvents();
     }
 
-    public List<Event> eventsForPeriod(LocalDate fromDate, LocalDate toDate){
+    public List<Event> eventsForPeriod(Long user_id,LocalDate fromDate, LocalDate toDate){
 
-        return eventRepository.eventsForPeriod(userService.getCurrentUser().getId(),fromDate,toDate);
+        return eventRepository.eventsForPeriod(user_id,fromDate,toDate);
     }
 
     public void joinToEvent(Long event_id){
