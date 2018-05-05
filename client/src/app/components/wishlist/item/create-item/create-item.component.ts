@@ -6,6 +6,9 @@ import { JQueryStatic } from 'jquery';
 import {FormGroup, FormBuilder, Validators, FormArray} from '@angular/forms';
 import {ItemService} from '../../../../services/item.service';
 import {Item} from '../../../../model/item';
+import {Tag} from '../../../../model/tag';
+import {WishList} from "../../../../model/wishlist";
+import {WishListService} from "../../../../services/wishlist.service";
 declare var $:JQueryStatic;
 
   @Component({
@@ -51,8 +54,12 @@ declare var $:JQueryStatic;
 
     const arr: FormArray = <FormArray>this.form.get("tags");
     this.item.tags = [];
+    this.item.wishList = new WishList();
+    this.item.wishList.id = 1;
     for (let i = 0; i < arr.length-1; i++){
-      this.item.tags.push(<String>arr.at(i).get("name").value);
+      var tag = new Tag();
+      tag.name = <String>arr.at(i).get("name").value
+      this.item.tags.push(tag);
     }
 
     console.log(this.item);
@@ -65,6 +72,7 @@ declare var $:JQueryStatic;
         this.form.setControl('tags', new FormArray([this.createTag()]));
       }
     )
+
   }
 
 

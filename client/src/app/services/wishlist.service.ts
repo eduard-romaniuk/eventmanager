@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {Item} from '../model/item';
 import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
+import {Event} from "../model/event";
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' })
@@ -28,5 +29,9 @@ export class WishListService {
 
   getViewingItem(): Observable<Item> {
     return this.subject.asObservable()
+  }
+
+  getItemsFromWishList( wishListId: number ) : Observable<Item[]> {
+    return this.http.get<Item[]>(this.base_url + "/" + wishListId);
   }
 }

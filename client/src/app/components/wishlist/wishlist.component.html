@@ -16,7 +16,7 @@
 
         <!-- Use an element to toggle between a like/dislike icon -->
 
-        <i class="likes fa fa-thumbs-up" >{{item.likes}}</i>
+        <i class="likes fa fa-thumbs-up" >{{item.likesCount}}</i>
 
       </button>
 
@@ -26,7 +26,7 @@
               data-toggle="modal" data-target="#viewItem"
               (click)="sendViewingItem(item)">
         {{item.name}}
-        <i class="fa fa-thumbs-up" >{{item.likes}}</i>
+        <i class="fa fa-thumbs-up" >{{item.likesCount}}</i>
       </button>
     </div>
     <div *ngIf="item.priority == 0">
@@ -34,7 +34,7 @@
               data-toggle="modal" data-target="#viewItem"
               (click)="sendViewingItem(item)">
         {{item.name}}
-        <i class="fa fa-thumbs-up">{{item.likes}}</i>
+        <i class="fa fa-thumbs-up">{{item.likesCount}}</i>
       </button>
 
     </div>

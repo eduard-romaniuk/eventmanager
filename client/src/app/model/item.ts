@@ -1,15 +1,18 @@
 import {User} from './user';
+import {Tag} from "./tag";
+import {WishList} from "./wishlist";
 
 export class Item {
   id: number;
   name: String;
-  descriprion: String;
+  description: String;
   priority: number;
-  wishList: any;
+  wishList: WishList;
   images: String[];
   booker: User;
   likes: number;
-  tags: String[];
+  tags: Tag[];
+  likesCount: number;
 
   //TODO: duedate, links
 }
