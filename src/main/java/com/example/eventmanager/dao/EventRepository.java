@@ -20,7 +20,6 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 
@@ -32,7 +31,7 @@ public class EventRepository implements CrudRepository<Event> {
     private final Environment env;
     private final Logger logger = LogManager.getLogger(EventRepository.class);
     private static final int FIRST_ELEMENT = 0;
-    private static final int NORMAL_PRIORITY=0;
+    private static final int NORMAL_PRIORITY = 0;
 
     @Autowired
     public EventRepository(NamedParameterJdbcTemplate namedJdbcTemplate, Environment env) {
@@ -90,7 +89,7 @@ public class EventRepository implements CrudRepository<Event> {
     @Override
     public Iterable<Event> findAll() {
         try {
-            return namedJdbcTemplate.query(env.getProperty("findAll"), new EventMapper());
+            return namedJdbcTemplate.query(env.getProperty("findAllEvent"), new EventMapper());
         } catch (EmptyResultDataAccessException e) {
             logger.info("Events not found");
             return Collections.emptyList();
@@ -173,7 +172,41 @@ public class EventRepository implements CrudRepository<Event> {
         }
 
     }
+    public String getPriority(Long user_id, Long event_id) {
+        try {
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("user_id", user_id);
+            namedParams.put("event_id", event_id);
+            return namedJdbcTemplate.queryForObject(env.getProperty("getEventPriority"), namedParams,String.class);
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("Priority not set for user"+user_id+"and event"+event_id);
+            return "";
+        }
+    }
+    public void changePriority(Long user_id, Long event_id,Long priority_id) {
+        
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("user_id", user_id);
+            namedParams.put("event_id", event_id);
+            namedParams.put("priority_id", priority_id);
+            namedJdbcTemplate.update(env.getProperty("changeEventPriority"),namedParams);
+            logger.info( user_id+"change priority for event"+event_id);
+            
+    }
 
+    public boolean isParticipant(Long user_id,Long event_id) {
+        try {
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("user_id", user_id);
+            namedParams.put("event_id", event_id);
+            namedJdbcTemplate.queryForObject(env.getProperty("isParticipant"), namedParams, Long.class);
+            return true;
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("User is not a participant");
+            return false;
+        }
+    }
+    
 
     private static final class EventMapper implements RowMapper<Event> {
         @Override

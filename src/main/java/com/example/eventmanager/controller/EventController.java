@@ -3,9 +3,9 @@ package com.example.eventmanager.controller;
 import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.EventView;
 import com.example.eventmanager.domain.User;
+import com.example.eventmanager.service.EmailService;
 import com.example.eventmanager.service.EventService;
 import com.example.eventmanager.service.ExportEventService;
-import com.example.eventmanager.service.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -13,7 +13,6 @@ import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,18 +24,18 @@ import java.io.OutputStream;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.springframework.http.MediaType.APPLICATION_PDF;
-
 @RestController
 @RequestMapping(value = "/event")
 public class EventController {
 
     private final EventService eventService;
     private final ExportEventService exportService;
+    private final EmailService emailService;
     private final Logger logger = LogManager.getLogger(EventController.class);
 
     @Autowired
-    public EventController(EventService eventService, ExportEventService exportService) {
+    public EventController(EventService eventService, ExportEventService exportService, EmailService emailService) {
+        this.emailService = emailService;
         logger.info("Class initialized");
 
         this.exportService = exportService;
@@ -126,11 +125,10 @@ public class EventController {
         return eventService.getEventsWithUserParticipation(user);
     }
 
-    @RequestMapping(value = "/join", method = RequestMethod.POST)
-    public void publish(@RequestBody User user, Event event) {
+    @RequestMapping(value = "/{id}/join", method = RequestMethod.GET)
+    public void join(@PathVariable Long id) {
         logger.info("POST /join");
-
-        eventService.joinToEvent(user, event);
+        eventService.joinToEvent(id);
     }
 
     @RequestMapping(value = "/addParticipants", method = RequestMethod.POST)
@@ -162,8 +160,24 @@ public class EventController {
         logger.info("GET /sendPlan");
         LocalDate fromDate = LocalDate.parse(from);
         LocalDate toDate = LocalDate.parse(to);
-        exportService.sendEventsPlan(fromDate, toDate);
+        emailService.sendEventsPlan(fromDate, toDate);
 
+    }
+    @RequestMapping(value = "{id}/priority", method = RequestMethod.GET)
+    public String getPriority(@PathVariable Long id) {
+        logger.info("GET /EventPriority");
+        return eventService.getPriority(id);
+    }
+    @RequestMapping(value = "{id}/priority/change", method = RequestMethod.GET)
+    public void getPriority(@PathVariable Long id,@RequestParam Long priority_id) {
+        logger.info("GET /EventPriority");
+        eventService.changePriority(id,priority_id);
+    }
+
+    @RequestMapping(value = "{id}/isParticipant", method = RequestMethod.GET)
+    public boolean isParticipant(@PathVariable Long id) {
+        logger.info("GET /isParticipant");
+       return eventService.isParticipant(id);
     }
 
 }

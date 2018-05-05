@@ -59,9 +59,9 @@ public class EventService {
         return eventRepository.findAllPublicEvents();
     }
 
-    public void joinToEvent(User user,Event event){
+    public void joinToEvent(Long event_id){
 
-        eventRepository.addUserToEvent(user.getId(),event.getId());
+        eventRepository.addUserToEvent(userService.getCurrentUser().getId(),event_id);
 
     }
 
@@ -79,5 +79,20 @@ public class EventService {
 
     public void deleteEvent(Event event){
         eventRepository.delete(event);
+    }
+
+    public String getPriority(Long event_id){
+
+        return eventRepository.getPriority(userService.getCurrentUser().getId(),event_id);
+    }
+
+    public void changePriority(Long event_id, Long priority_id){
+
+        eventRepository.changePriority(userService.getCurrentUser().getId(),event_id,priority_id);
+    }
+
+    public boolean isParticipant(Long event_id){
+
+        return eventRepository.isParticipant(userService.getCurrentUser().getId(),event_id);
     }
 }
