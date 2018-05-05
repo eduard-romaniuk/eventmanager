@@ -21,10 +21,10 @@ public class NotificationService {
 
     //TODO Move to external file
     //Pattern - second, minute, hour, day of month, month, day(s) of week
-    //private final String TIME_TO_SEND_NOTIFICATIONS = "0 0 10 * * ?"; // every day at 10 a.m.
-    private final String TIME_TO_SEND_NOTIFICATIONS = "0/30 * * * * *"; //every 30 seconds
+    private final String TIME_TO_SEND_NOTIFICATIONS = "0 0 10 * * ?"; // every day at 10 a.m.
+    // private final String TIME_TO_SEND_NOTIFICATIONS = "0/30 * * * * *"; //every 30 seconds
     //TODO Change
-    private final int LIMIT = 2;
+    private final int LIMIT = 10;
 
     @Autowired
     public NotificationService(UserService userService,
