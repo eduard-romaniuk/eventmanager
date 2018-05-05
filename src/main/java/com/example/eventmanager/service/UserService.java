@@ -80,4 +80,8 @@ public class UserService {
     public List<User> findAllActive(){
         return userRepository.findAllActive();
     }
+
+    public List<User> findAllActivePagination(int limit, int offset){
+        return userRepository.findAllActivePagination(limit, offset);
+    }
 }

@@ -66,14 +66,14 @@ public class EmailService {
 
     }
 
-    public void sendEventNotification(User user, List<Event> eventsToNotificate) {
+    public void sendEventNotification(User user, List<Event> events) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(user.getEmail());
         message.setSubject("Notification about your events");
 
-        String messageText = "Hello, " + user.getLogin() + "! \n\n Here is notification about your upcoming events:\n";
+        String messageText = "Hello, " + user.getLogin() + "! \n\n Here is your upcoming events:\n";
 
-        for (Event event : eventsToNotificate){
+        for (Event event : events){
             String eventInfo = "Event \'" + event.getName() + "\'\n" +
                     "Start at " + event.getTimeLineStart().format(formatter) + "\n" +
                     "End at " + event.getTimeLineFinish().format(formatter) + "\n\n";

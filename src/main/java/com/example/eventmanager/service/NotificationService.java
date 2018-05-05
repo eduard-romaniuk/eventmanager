@@ -22,7 +22,9 @@ public class NotificationService {
     //TODO Move to external file
     //Pattern - second, minute, hour, day of month, month, day(s) of week
     //private final String TIME_TO_SEND_NOTIFICATIONS = "0 0 10 * * ?"; // every day at 10 a.m.
-    private final String TIME_TO_SEND_NOTIFICATIONS = "0/30 * * * * *"; //every 30 minutes
+    private final String TIME_TO_SEND_NOTIFICATIONS = "0/30 * * * * *"; //every 30 seconds
+    //TODO Change
+    private final int LIMIT = 2;
 
     @Autowired
     public NotificationService(UserService userService,
@@ -37,13 +39,34 @@ public class NotificationService {
     public void sendNotifications() {
         logger.info("Start sending notifications");
 
-        List<User> activeUsers = userService.findAllActive();
-        for(User user : activeUsers){
-            List<Event> eventsToNotificate =
-                    notificationSettingsService.findEventsToNotificateByUserId(user.getId(), LocalDate.now());
-            this.emailService.sendEventNotification(user, eventsToNotificate);
-        }
+        int offset = 0;
+        boolean hasActiveUsers = true;
+        do{
+            logger.info("offset - " + offset);
+
+            List<User> activeUsers = userService.findAllActivePagination(LIMIT, offset);
+            logger.info("activeUsers - " + activeUsers.toString());
+
+            for (User user : activeUsers) {
+                sendEventNotificationToUser(user);
+            }
+
+            offset += LIMIT;
+            if (activeUsers.size() < LIMIT)
+                hasActiveUsers = false;
+
+        } while (hasActiveUsers);
 
         logger.info("End sending notifications");
+    }
+
+    private void sendEventNotificationToUser(User user){
+        logger.info("Start sending Event Notification to user with id {}", user.getId());
+
+        List<Event> events =
+                notificationSettingsService.findEventsToNotificateByUserId(user.getId(), LocalDate.now());
+        this.emailService.sendEventNotification(user, events);
+
+        logger.info("End sending Event Notification to user with id {}", user.getId());
     }
 }
