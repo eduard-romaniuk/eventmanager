@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.activation.DataSource;
@@ -32,7 +31,6 @@ public class EmailService {
     private final PlanSettingService planSettingService;
     private final EventService eventService;
     private final Logger logger = LogManager.getLogger(EmailService.class);
-    private final String TIME_TO_SEND_NOTIFICATIONS = "*/10 * * * * *"; //every 10 seconds
 
     @Autowired
     public EmailService(JavaMailSender emailSender, ExportEventService exportEventService, UserService userService, PlanSettingService planSettingService, EventService eventService) {
@@ -52,7 +50,7 @@ public class EmailService {
         emailSender.send(message);
     }
 
-    private void sendPlan(JasperPrint eventsPlan) {
+    public void sendPlan(JasperPrint eventsPlan) {
 
         MimeMessage message = emailSender.createMimeMessage();
         String email = userService.getCurrentUser().getEmail();
@@ -76,10 +74,10 @@ public class EmailService {
         sendPlan(eventsPlan);
     }
 
-    @Scheduled(cron = TIME_TO_SEND_NOTIFICATIONS)
+
     public void sendPersonalPlanNotification() {
 
-        PlanSetting planSetting = planSettingService.getPlanSetting();
+        PlanSetting planSetting = planSettingService.getPlanSetting(2l);
 
         if (planSetting.isSendPlan()) {
 

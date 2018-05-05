@@ -83,8 +83,8 @@ public class PlanSettingRepository implements CrudRepository<PlanSetting> {
             while (rs.next()) {
                 plan.setSendPlan(rs.getBoolean("personal_plan_notification"));
                 plan.setFromDate(rs.getDate("from_date").toLocalDate());
-                plan.setPlanPeriod(rs.getInt("planPeriod"));
-                plan.setNotificationPeriod(rs.getInt("notificationPeriod"));
+                plan.setPlanPeriod(rs.getInt("plan_period"));
+                plan.setNotificationPeriod(rs.getInt("notification_period"));
                 user.setId(rs.getLong("id"));
                 user.setLogin(rs.getString("login"));
                 plan.setUser(user);

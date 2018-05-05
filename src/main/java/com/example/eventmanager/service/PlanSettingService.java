@@ -27,8 +27,12 @@ public class PlanSettingService {
         plan.setUser(userService.getCurrentUser());
         planSettingRepository.update(plan);
     }
+//
+//    public PlanSetting getPlanSetting(){
+//        return planSettingRepository.findOne(userService.getCurrentUser().getId());
+//    }
 
-    public PlanSetting getPlanSetting(){
-        return planSettingRepository.findOne(userService.getCurrentUser().getId());
+    public PlanSetting getPlanSetting(Long id ){
+        return planSettingRepository.findOne(id);
     }
 }
