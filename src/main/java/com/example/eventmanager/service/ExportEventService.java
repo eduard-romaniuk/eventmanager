@@ -26,29 +26,21 @@ public class ExportEventService {
     private final UserService userService;
 
     @Autowired
-    public ExportEventService(EventRepository eventRepository,UserService userService) {
+    public ExportEventService(EventRepository eventRepository, UserService userService) {
         this.eventRepository = eventRepository;
         this.userService = userService;
     }
 
-    public JasperPrint createEventsPlan(LocalDate fromDate, LocalDate toDate) {
-
+    public JasperPrint createEventsPlan(LocalDate fromDate, LocalDate toDate) throws JRException {
         Long id = userService.getCurrentUser().getId();
         List<Event> events = eventRepository.eventsListForPeriod(id, fromDate, toDate);
 
-        Map<String,Object> params=new HashMap<>();
-        params.put("fromDate",fromDate);
-        params.put("toDate",toDate);
+        Map<String, Object> params = new HashMap<>();
+        params.put("fromDate", fromDate);
+        params.put("toDate", toDate);
 
-        try {
-            JasperReport eventsPlan = JasperCompileManager.compileReport("src/main/resources/eventsPlan.jrxml");
-            JRBeanCollectionDataSource dataSource= new JRBeanCollectionDataSource(events);
-            return JasperFillManager.fillReport(eventsPlan,params,dataSource);
-
-        } catch (JRException ex){
-            ex.printStackTrace();
-            return null;
-        }
-
+        JasperReport eventsPlan = JasperCompileManager.compileReport("src/main/resources/eventsPlan.jrxml");
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(events);
+        return JasperFillManager.fillReport(eventsPlan, params, dataSource);
     }
 }
