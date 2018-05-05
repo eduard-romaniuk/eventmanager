@@ -62,7 +62,7 @@ public class NotificationSettingsRepository implements CrudRepository<Notificati
 
     @Override
     public int save(NotificationSettings notificationSettings) {
-        logger.info("save");
+        logger.info("Save");
 
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("participant_id", notificationSettings.getParticipant().getId());
@@ -78,7 +78,7 @@ public class NotificationSettingsRepository implements CrudRepository<Notificati
     @Override
     public NotificationSettings findOne(Long id) {
         try {
-            logger.info("findOne with id {}", id);
+            logger.info("FindOne with id {}", id);
 
             Map<String, Object> namedParams = new HashMap<>();
             namedParams.put("participant_id", id);
@@ -92,13 +92,13 @@ public class NotificationSettingsRepository implements CrudRepository<Notificati
 
     @Override
     public Iterable<NotificationSettings> findAll() {
-        logger.info("findAll");
+        logger.info("FindAll");
         return namedJdbcTemplate.query(env.getProperty("findAllNotification"), new NotificationSettingsMapper());
     }
 
     @Override
     public void update(NotificationSettings notificationSettings) {
-        logger.info("update with id {}", notificationSettings.getParticipant().getId());
+        logger.info("Update with id {}", notificationSettings.getParticipant().getId());
 
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("count_down_on", notificationSettings.getCountDownOn());
@@ -113,51 +113,59 @@ public class NotificationSettingsRepository implements CrudRepository<Notificati
 
     @Override
     public void delete(NotificationSettings notificationSettings) {
-        logger.error("delete does not supported");
+        logger.error("Delete does not supported");
     }
 
     public List<NotificationSettings> findAllNotificationByUserId(Long userId) {
         try {
-            logger.info("findAllNotificationByUserId with id {}", userId);
+            logger.info("Find all notification by user with id {}", userId);
 
             Map<String, Object> namedParams = new HashMap<>();
             namedParams.put("userId", userId);
             return namedJdbcTemplate.query(env.getProperty("findAllNotificationByUserId"),
                     namedParams, new NotificationSettingsMapper());
         } catch (EmptyResultDataAccessException e) {
-            logger.info("NotificationSettings for user with id {} not found", userId);
+            logger.info("Event notification for user with id {} not found", userId);
             return Collections.emptyList();
         }
     }
 
     public List<Event> findEventsToNotificateByUserId(Long userId, LocalDate date) {
         try {
-            logger.info("findEventsToNotificateByUserId with id {}", userId);
+            logger.info("Find events to notificate by user with id {}", userId);
 
             Map<String, Object> namedParams = new HashMap<>();
             namedParams.put("user_id", userId);
             namedParams.put("date", date);
 
-            return namedJdbcTemplate.query(env.getProperty("findEventsToNotificateByUserId"),
-                    namedParams, new EventRepository.EventMapper());
+            String query = new StringBuilder()
+                    .append(env.getProperty("findEventsToNotificateByUserId"))
+                    .append(" AND notifications_sett.count_down_on = false")
+                    .toString();
+
+            return namedJdbcTemplate.query(query, namedParams, new EventRepository.EventMapper());
         } catch (EmptyResultDataAccessException e) {
-            logger.info("findNotificationToSendByUserId for user with id {} not found", userId);
+            logger.info("Find events to notificate for user with id {} not found", userId);
             return Collections.emptyList();
         }
     }
 
     public List<Event> findEventsWithCountdownToNotificateByUserId(Long userId, LocalDate date) {
         try {
-            logger.info("findEventsWithCountdownToNotificateByUserId with id {}", userId);
+            logger.info("Find events to notificate with countdown by user with id {}", userId);
 
             Map<String, Object> namedParams = new HashMap<>();
             namedParams.put("user_id", userId);
             namedParams.put("date", date);
 
-            return namedJdbcTemplate.query(env.getProperty("findEventsWithCountdownToNotificateByUserId"),
-                    namedParams, new EventRepository.EventMapper());
+            String query = new StringBuilder()
+                    .append(env.getProperty("findEventsToNotificateByUserId"))
+                    .append(" AND notifications_sett.count_down_on = true")
+                    .toString();
+
+            return namedJdbcTemplate.query(query, namedParams, new EventRepository.EventMapper());
         } catch (EmptyResultDataAccessException e) {
-            logger.info("findNotificationToSendByUserId for user with id {} not found", userId);
+            logger.info("Find events to notificate with countdown for user with id {} not found", userId);
             return Collections.emptyList();
         }
     }
