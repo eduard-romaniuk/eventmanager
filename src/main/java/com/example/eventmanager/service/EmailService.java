@@ -35,7 +35,7 @@ public class EmailService {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
         message.setSubject("Email verification");
-        message.setText("Please verify your email:\nhttp://localhost:4200/email-verification/" + token);
+        message.setText("Please verify your email:\nhttps://web-event-manager.firebaseapp.com/email-verification/" + token);
         emailSender.send(message);
     }
 
