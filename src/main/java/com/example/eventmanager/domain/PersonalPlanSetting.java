@@ -3,7 +3,7 @@ package com.example.eventmanager.domain;
 
 import java.time.LocalDate;
 
-public class PlanSetting {
+public class PersonalPlanSetting {
 
     private User user;
     private boolean sendPlan;

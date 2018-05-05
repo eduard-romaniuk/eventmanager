@@ -14,7 +14,7 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 public class PersonalPlanTriggerDescriptor {
 
     private String name;
-    private PlanSetting planSetting;
+    private PersonalPlanSetting personalPlanSetting;
     private String cron;
 
     public String getName() {
@@ -25,12 +25,12 @@ public class PersonalPlanTriggerDescriptor {
         this.name = name;
     }
 
-    public PlanSetting getPlanSetting() {
-        return planSetting;
+    public PersonalPlanSetting getPersonalPlanSetting() {
+        return personalPlanSetting;
     }
 
-    public void setPlanSetting(PlanSetting planSetting) {
-        this.planSetting = planSetting;
+    public void setPersonalPlanSetting(PersonalPlanSetting personalPlanSetting) {
+        this.personalPlanSetting = personalPlanSetting;
     }
 
     public String getCron() {
@@ -42,11 +42,11 @@ public class PersonalPlanTriggerDescriptor {
     }
 
     private String buildCrone(){
-        return "0 */"+getPlanSetting().getNotificationPeriod()+" * ? * *";
+        return "0 */"+ getPersonalPlanSetting().getNotificationPeriod()+" * ? * *";
     }
 
     private String buildName() {
-        return "Trigger for user " + planSetting.getUser().getId();
+        return "Trigger for user " + personalPlanSetting.getUser().getId();
     }
 
     public Trigger buildTrigger(){

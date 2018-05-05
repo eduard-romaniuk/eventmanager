@@ -1,37 +1,37 @@
 package com.example.eventmanager.service;
 
-import com.example.eventmanager.dao.PlanSettingRepository;
-import com.example.eventmanager.domain.PlanSetting;
+import com.example.eventmanager.dao.PersonalPlanSettingRepository;
+import com.example.eventmanager.domain.PersonalPlanSetting;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PlanSettingService {
+public class PersonalPlanSettingService {
 
-    private final PlanSettingRepository planSettingRepository;
+    private final PersonalPlanSettingRepository planSettingRepository;
     private final UserService userService;
 
 
     @Autowired
-    public PlanSettingService(PlanSettingRepository planSettingRepository, UserService userService) {
+    public PersonalPlanSettingService(PersonalPlanSettingRepository planSettingRepository, UserService userService) {
         this.planSettingRepository = planSettingRepository;
         this.userService = userService;
     }
 
-    public int createPlanSetting(PlanSetting plan){
+    public int createPlanSetting(PersonalPlanSetting plan){
         plan.setUser(userService.getCurrentUser());
         return planSettingRepository.save(plan);
     }
 
-    public void updatePlanSetting(PlanSetting plan){
+    public void updatePlanSetting(PersonalPlanSetting plan){
         planSettingRepository.update(plan);
     }
 
-    public PlanSetting getPlanSetting(){
+    public PersonalPlanSetting getPlanSetting(){
         return planSettingRepository.findOne(userService.getCurrentUser().getId());
     }
 
-    public PlanSetting getPlanSetting(Long id ){
+    public PersonalPlanSetting getPlanSetting(Long id ){
         return planSettingRepository.findOne(id);
     }
 }

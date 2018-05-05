@@ -21,20 +21,20 @@ public class PersonalPlanService {
 
     private final Scheduler scheduler;
     private final Logger logger = LogManager.getLogger(PersonalPlanService.class);
-    private final PlanSettingService planSettingService;
+    private final PersonalPlanSettingService planSettingService;
     private final UserService userService;
 
     @Autowired
-    public PersonalPlanService(Scheduler scheduler, PlanSettingService planSettingService, UserService userService) {
+    public PersonalPlanService(Scheduler scheduler, PersonalPlanSettingService personalPlanSettingService, UserService userService) {
         this.scheduler = scheduler;
-        this.planSettingService = planSettingService;
+        this.planSettingService = personalPlanSettingService;
         this.userService = userService;
     }
 
     public void createJob(User user) {
         //user = userService.getCurrentUser();
         PersonalPlanTriggerDescriptor planTriggerDescriptor = new PersonalPlanTriggerDescriptor();
-        planTriggerDescriptor.setPlanSetting(planSettingService.getPlanSetting(user.getId()));
+        planTriggerDescriptor.setPersonalPlanSetting(planSettingService.getPlanSetting(user.getId()));
         PersonalPlanJobDescriptor planJobDescriptor = new PersonalPlanJobDescriptor();
         planJobDescriptor.setPlanTriggerDescriptor(Collections.singletonList(planTriggerDescriptor));
         planJobDescriptor.setUser_id(user.getId());
@@ -54,10 +54,10 @@ public class PersonalPlanService {
 
     @Transactional
     public void updateJob(User user) {
-        user = userService.getCurrentUser();
+        //user = userService.getCurrentUser();
         deleteJob(user);
         createJob(user);
-        logger.info("Updated job with key - {}",userService.getCurrentUser().getId());
+        logger.info("Updated job with key - {}",user.getId());
     }
 
     public void deleteJob(User user) {

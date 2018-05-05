@@ -1,6 +1,6 @@
 package com.example.eventmanager.dao;
 
-import com.example.eventmanager.domain.PlanSetting;
+import com.example.eventmanager.domain.PersonalPlanSetting;
 import com.example.eventmanager.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
@@ -16,19 +16,19 @@ import java.util.*;
 
 @PropertySource("classpath:queries/plan-setting.properties")
 @Repository
-public class PlanSettingRepository implements CrudRepository<PlanSetting> {
+public class PersonalPlanSettingRepository implements CrudRepository<PersonalPlanSetting> {
 
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
     private final Environment env;
 
     @Autowired
-    public PlanSettingRepository(NamedParameterJdbcTemplate namedJdbcTemplate, Environment env) {
+    public PersonalPlanSettingRepository(NamedParameterJdbcTemplate namedJdbcTemplate, Environment env) {
         this.namedJdbcTemplate = namedJdbcTemplate;
         this.env = env;
     }
 
     @Override
-    public int save(PlanSetting plan) {
+    public int save(PersonalPlanSetting plan) {
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("user_id", plan.getUser().getId());
         namedParams.put("sendPlan", plan.isSendPlan());
@@ -40,7 +40,7 @@ public class PlanSettingRepository implements CrudRepository<PlanSetting> {
     }
 
     @Override
-    public PlanSetting findOne(Long id) {
+    public PersonalPlanSetting findOne(Long id) {
         try {
             Map<String, Object> namedParams = new HashMap<>();
             namedParams.put("user_id", id);
@@ -51,12 +51,12 @@ public class PlanSettingRepository implements CrudRepository<PlanSetting> {
     }
 
     @Override
-    public Iterable<PlanSetting> findAll() {
+    public Iterable<PersonalPlanSetting> findAll() {
         return Collections.emptyList();
     }
 
     @Override
-    public void update(PlanSetting plan) {
+    public void update(PersonalPlanSetting plan) {
 
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("sendPlan", plan.isSendPlan());
@@ -70,15 +70,15 @@ public class PlanSettingRepository implements CrudRepository<PlanSetting> {
     }
 
     @Override
-    public void delete(PlanSetting entity) {
+    public void delete(PersonalPlanSetting entity) {
 
     }
 
-    private static final class PersonalPlanExtractor implements ResultSetExtractor<PlanSetting> {
+    private static final class PersonalPlanExtractor implements ResultSetExtractor<PersonalPlanSetting> {
 
         @Override
-        public PlanSetting extractData(ResultSet rs) throws SQLException {
-            PlanSetting plan = new PlanSetting();
+        public PersonalPlanSetting extractData(ResultSet rs) throws SQLException {
+            PersonalPlanSetting plan = new PersonalPlanSetting();
             User user = new User();
             while (rs.next()) {
                 plan.setSendPlan(rs.getBoolean("personal_plan_notification"));

@@ -1,7 +1,7 @@
 package com.example.eventmanager.service;
 
 import com.example.eventmanager.domain.Event;
-import com.example.eventmanager.domain.PlanSetting;
+import com.example.eventmanager.domain.PersonalPlanSetting;
 import com.example.eventmanager.domain.User;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -29,16 +29,16 @@ public class EmailService {
     private final JavaMailSender emailSender;
     private final ExportEventService exportEventService;
     private final UserService userService;
-    private final PlanSettingService planSettingService;
+    private final PersonalPlanSettingService personalPlanSettingService;
     private final EventService eventService;
     private final Logger logger = LogManager.getLogger(EmailService.class);
 
     @Autowired
-    public EmailService(JavaMailSender emailSender, ExportEventService exportEventService, UserService userService, PlanSettingService planSettingService, EventService eventService) {
+    public EmailService(JavaMailSender emailSender, ExportEventService exportEventService, UserService userService, PersonalPlanSettingService personalPlanSettingService, EventService eventService) {
         this.emailSender = emailSender;
         this.exportEventService = exportEventService;
         this.userService = userService;
-        this.planSettingService = planSettingService;
+        this.personalPlanSettingService = personalPlanSettingService;
         this.eventService = eventService;
     }
 
@@ -79,21 +79,21 @@ public class EmailService {
 
     public void sendPersonalPlanNotification(Long user_id) {
 
-        PlanSetting planSetting = planSettingService.getPlanSetting(user_id);
+        PersonalPlanSetting personalPlanSetting = personalPlanSettingService.getPlanSetting(user_id);
 
-        if (planSetting.isSendPlan()) {
+        if (personalPlanSetting.isSendPlan()) {
 
-            LocalDate from = planSetting.getFromDate();
-            LocalDate to = from.plusDays(planSetting.getPlanPeriod());
+            LocalDate from = personalPlanSetting.getFromDate();
+            LocalDate to = from.plusDays(personalPlanSetting.getPlanPeriod());
             List<Event> events = eventService.eventsForPeriod(user_id,from,to);
             JasperPrint eventsPlan = exportEventService.createEventsPlan(from, to, events);
             sendPlan(eventsPlan,userService.getUser(user_id));
 
             logger.info("Personal Plan for user {} was sending",user_id);
 
-            planSetting.setFromDate(to);
-            planSettingService.updatePlanSetting(planSetting);
-            logger.info("Event from date for user {} was updating, current date : {}",user_id,planSetting.getFromDate());
+            personalPlanSetting.setFromDate(to);
+            personalPlanSettingService.updatePlanSetting(personalPlanSetting);
+            logger.info("Event from date for user {} was updating, current date : {}",user_id, personalPlanSetting.getFromDate());
 
 
         } else {
