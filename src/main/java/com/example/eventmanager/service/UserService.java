@@ -2,6 +2,8 @@ package com.example.eventmanager.service;
 
 import com.example.eventmanager.dao.UserRepository;
 import com.example.eventmanager.domain.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,6 +17,7 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final Logger logger = LogManager.getLogger(UserService.class);
 
     @Autowired
     public UserService(UserRepository userRepository) {
@@ -75,5 +78,34 @@ public class UserService {
 
     public User getCurrentUser(){
         return findUser(getCurrentUsername());
+    }
+
+    //Friends functionality
+
+    public void saveRelationship(Long userOneId, Long userTwoId, Long statusId, Long actionUserId) {
+        logger.info("Save relationship for user with id {} and user with id {} with status id {}",
+                userOneId, userTwoId, statusId);
+        userRepository.saveRelationship(userOneId, userTwoId, statusId, actionUserId);
+    }
+
+    public void updateRelationship(Long userOneId, Long userTwoId, Long statusId, Long actionUserId){
+        logger.info("Update relationship for user with id {} and user with id {} with status id {}",
+                userOneId, userTwoId, statusId);
+        userRepository.updateRelationship(userOneId, userTwoId, statusId, actionUserId);
+    }
+
+    public void deleteRelationship(Long userOneId, Long userTwoId){
+        logger.info("Delete relationship for user with id {} and user with id {}", userOneId, userTwoId);
+        userRepository.deleteRelationship(userOneId, userTwoId);
+    }
+
+    public String getRelationshipStatus(Long userOneId, Long userTwoId){
+        logger.info("Get relationship status for user with id {} and user with id {}", userOneId, userTwoId);
+        return userRepository.getRelationshipStatus(userOneId, userTwoId);
+    }
+
+    public List<User> getFriendsByUserId(Long userId){
+        logger.info("Get friends for user with id {}", userId);
+        return userRepository.getFriendsByUserId(userId);
     }
 }
