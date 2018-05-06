@@ -227,6 +227,24 @@ public class UserRepository implements CrudRepository<User> {
         }
     }
 
+    public List<User> getOutcomingRequests(Long userId){
+        logger.info("Get outcoming requests for user with id {}", userId);
+
+        Map<String, Object> namedParams = new HashMap<>();
+        namedParams.put("user_id", userId);
+
+        return namedJdbcTemplate.query(env.getProperty("getOutcomingRequests"), namedParams, new UserMapper());
+    }
+
+    public List<User> getIncomingRequests(Long userId){
+        logger.info("Get incoming requests for user with id {}", userId);
+
+        Map<String, Object> namedParams = new HashMap<>();
+        namedParams.put("user_id", userId);
+
+        return namedJdbcTemplate.query(env.getProperty("getIncomingRequests"), namedParams, new UserMapper());
+    }
+
     public List<User> getFriendsByUserId(Long userId){
         logger.info("Get friends for user with id {}", userId);
 

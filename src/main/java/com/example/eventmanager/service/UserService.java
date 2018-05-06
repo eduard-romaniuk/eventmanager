@@ -104,6 +104,16 @@ public class UserService {
         return userRepository.getRelationshipStatus(userOneId, userTwoId);
     }
 
+    public List<User> getOutcomingRequests(Long userId){
+        logger.info("Get outcoming requests for user with id {}", userId);
+        return userRepository.getOutcomingRequests(userId);
+    }
+
+    public List<User> getIncomingRequests(Long userId){
+        logger.info("Get incoming requests for user with id {}", userId);
+        return userRepository.getIncomingRequests(userId);
+    }
+
     public List<User> getFriendsByUserId(Long userId){
         logger.info("Get friends for user with id {}", userId);
         return userRepository.getFriendsByUserId(userId);

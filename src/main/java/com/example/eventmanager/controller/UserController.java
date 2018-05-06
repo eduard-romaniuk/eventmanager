@@ -206,6 +206,18 @@ public class UserController {
         return userService.getRelationshipStatus(from, to);
     }
 
+    @RequestMapping(value = "/{id}/outcomingRequests", method = RequestMethod.GET)
+    public List<User> getOutcomingRequests(@PathVariable(value = "id") Long userId) {
+        logger.info("GET /{}/outcomingRequests", userId);
+        return userService.getOutcomingRequests(userId);
+    }
+
+    @RequestMapping(value = "/{id}/incomingRequests", method = RequestMethod.GET)
+    public List<User> getIncomingRequests(@PathVariable(value = "id") Long userId) {
+        logger.info("GET /{}/incomingRequests", userId);
+        return userService.getIncomingRequests(userId);
+    }
+
     @RequestMapping(value = "/{id}/friends", method = RequestMethod.GET)
     public List<User> getFriendsByUserId(@PathVariable(value = "id") Long userId) {
         logger.info("GET /{}/friends", userId);
