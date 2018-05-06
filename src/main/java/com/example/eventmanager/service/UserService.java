@@ -82,13 +82,13 @@ public class UserService {
 
     //Friends functionality
 
-    public void saveRelationship(Long userOneId, Long userTwoId, Long statusId, Long actionUserId) {
+    public void saveRelationship(Long userOneId, Long userTwoId, int statusId, Long actionUserId) {
         logger.info("Save relationship for user with id {} and user with id {} with status id {}",
                 userOneId, userTwoId, statusId);
         userRepository.saveRelationship(userOneId, userTwoId, statusId, actionUserId);
     }
 
-    public void updateRelationship(Long userOneId, Long userTwoId, Long statusId, Long actionUserId){
+    public void updateRelationship(Long userOneId, Long userTwoId, int statusId, Long actionUserId){
         logger.info("Update relationship for user with id {} and user with id {} with status id {}",
                 userOneId, userTwoId, statusId);
         userRepository.updateRelationship(userOneId, userTwoId, statusId, actionUserId);

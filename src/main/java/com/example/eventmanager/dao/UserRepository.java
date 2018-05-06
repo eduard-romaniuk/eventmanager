@@ -176,7 +176,7 @@ public class UserRepository implements CrudRepository<User> {
 
     //Friends functionality
 
-    public int saveRelationship(Long userOneId, Long userTwoId, Long statusId, Long actionUserId) {
+    public int saveRelationship(Long userOneId, Long userTwoId, int statusId, Long actionUserId) {
         logger.info("Save relationship for user with id {} and user with id {} with status id {}",
                 userOneId, userTwoId, statusId);
 
@@ -189,7 +189,7 @@ public class UserRepository implements CrudRepository<User> {
         return namedJdbcTemplate.update(env.getProperty("saveRelationship"), namedParams);
     }
 
-    public void updateRelationship(Long userOneId, Long userTwoId, Long statusId, Long actionUserId) {
+    public void updateRelationship(Long userOneId, Long userTwoId, int statusId, Long actionUserId) {
         logger.info("Update relationship for user with id {} and user with id {} with status id {}",
                 userOneId, userTwoId, statusId);
 
