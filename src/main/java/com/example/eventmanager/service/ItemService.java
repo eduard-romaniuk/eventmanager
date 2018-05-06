@@ -37,11 +37,11 @@ public class ItemService {
         }
 
         itemRepository.save(item);
-        tagRepository.saveItemTags(item);
+        tagRepository.saveItemTags(item.getTags(), item.getId());
     }
 
-    public List<Item> getItemsForWishList (WishList wishList) {
-        return itemRepository.getItemsForWishList(wishList);
+    public List<Item> getItemsForWishList (Long wishListId) {
+        return itemRepository.getItemsForWishList(wishListId);
     }
 
 

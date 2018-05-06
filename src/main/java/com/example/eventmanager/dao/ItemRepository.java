@@ -30,27 +30,35 @@ public class ItemRepository implements CrudRepository<Item>{
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
     private final Environment env;
     private final Logger logger = LogManager.getLogger(ItemRepository.class);
+
     private final TagRepository tagRepository;
+    private final LikeRepository likeRepository;
 
     @Autowired
-    public ItemRepository(NamedParameterJdbcTemplate namedJdbcTemplate, Environment env, TagRepository tagRepository) {
+    public ItemRepository(
+            NamedParameterJdbcTemplate namedJdbcTemplate,
+            Environment env,
+            TagRepository tagRepository,
+            LikeRepository likeRepository
+    ) {
         logger.info("ItemRepository initialized");
 
         this.namedJdbcTemplate = namedJdbcTemplate;
         this.env = env;
         this.tagRepository = tagRepository;
+        this.likeRepository = likeRepository;
     }
 
     @Override
     public int save(Item item) {
-        logger.info("Save item. Item looks like: " + item);
+        logger.info("Saving item: " + item);
 
         MapSqlParameterSource namedParams = new MapSqlParameterSource();
 
         namedParams.addValue("name", item.getName());
         namedParams.addValue("description", item.getDescription());
         namedParams.addValue("priority_id", item.getPriority());
-        namedParams.addValue("wishlist_id", item.getWishList().getId());
+        namedParams.addValue("wishlist_id", item.getWishListId());
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         int update = namedJdbcTemplate.update(env.getProperty("saveItem"), namedParams, keyHolder);
@@ -89,28 +97,29 @@ public class ItemRepository implements CrudRepository<Item>{
 
     }
 
-    public List<Item> getItemsForWishList ( WishList wishList ){
+    public List<Item> getItemsForWishList ( Long wishListId ){
         try {
             Map<String, Object> namedParams = new HashMap<>();
-            namedParams.put("wishListId", wishList.getId());
+            namedParams.put("wishListId", wishListId);
             return namedJdbcTemplate.query(env.getProperty("getItemsForWishList"), namedParams,
                     (rs, rowNum) -> {
                         Item item = new Item();
+
 
                         item.setId(rs.getLong("id"));
                         item.setName(rs.getString("name"));
                         item.setPriority(rs.getInt("priority_id"));
                         item.setDescription(rs.getString("description"));
-                        item.setLikeCounts(rs.getInt("likesCount"));
-                        item.setWishList(wishList);
-                        item.setTags(tagRepository.getItemsForWishList(item));
+                        item.setWishListId(wishListId);
+                        item.setLikes(likeRepository.getLikesCountForItem(item.getId()));
+                        item.setTags(tagRepository.getTagsForItem(item.getId()));
 
                         logger.info("Item got! " + item.toString());
                         return item;
                     }
                     );
         } catch (EmptyResultDataAccessException e) {
-            logger.info("Items for wish list with id: " + wishList.getId() + " not found");
+            logger.info("Items for wish list with id: " + wishListId + " not found");
             return Collections.emptyList();
         }
     }

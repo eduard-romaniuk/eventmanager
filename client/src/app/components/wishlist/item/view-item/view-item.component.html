@@ -1,6 +1,6 @@
 <div *ngIf="item">
 
-  <h4 class="text-uppercase">{{item.name}} <i class="likes fa fa-thumbs-up" >{{item.likesCount}}</i></h4>
+  <h4 class="text-uppercase">{{item.name}} <i class="likes fa fa-thumbs-up" >{{item.likes}}</i></h4>
   <button type="button" class="exbutt btn" *ngFor="let tag of item.tags">
       #{{tag.name}}
   </button>

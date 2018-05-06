@@ -3,12 +3,14 @@ package com.example.eventmanager.controller;
 import com.example.eventmanager.domain.Item;
 import com.example.eventmanager.domain.Tag;
 import com.example.eventmanager.domain.WishList;
+import com.example.eventmanager.domain.transfer.validation.ItemValidation;
 import com.example.eventmanager.service.ItemService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,7 +30,7 @@ public class ItemController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public void createEvent(@RequestBody Item item, UriComponentsBuilder ucBuilder) {
+    public void createItem (@Validated(ItemValidation.New.class) @RequestBody Item item, UriComponentsBuilder ucBuilder) {
         logger.info("POST / create new item");
 
         itemService.saveItem(item);

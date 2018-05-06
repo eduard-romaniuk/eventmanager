@@ -7,12 +7,11 @@ export class Item {
   name: String;
   description: String;
   priority: number;
-  wishList: WishList;
+  wishListId: number;
   images: String[];
   booker: User;
   likes: number;
   tags: Tag[];
-  likesCount: number;
 
   //TODO: duedate, links
 }

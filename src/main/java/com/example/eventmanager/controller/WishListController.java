@@ -2,7 +2,9 @@ package com.example.eventmanager.controller;
 
 import com.example.eventmanager.domain.Item;
 import com.example.eventmanager.domain.WishList;
+import com.example.eventmanager.domain.transfer.view.ItemView;
 import com.example.eventmanager.service.ItemService;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.apache.logging.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,15 +27,11 @@ public class WishListController {
         logger.info("Class initialized");
     }
 
+    @JsonView(ItemView.ShortView.class)
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<List<Item>> createEvent(@PathVariable("id") Long id) {
-        logger.info("GET /" + id +" get items for wish list");
+    public ResponseEntity<List<Item>> getListOfItems(@PathVariable("id") Long wishListId) {
+        logger.info("GET /" + wishListId +" get items for wish list");
 
-        //TODO: CHANGE!!!
-        WishList wishList = new WishList();
-
-        wishList.setId(id);
-
-        return new ResponseEntity<>(itemService.getItemsForWishList(wishList), HttpStatus.OK);
+        return new ResponseEntity<>(itemService.getItemsForWishList(wishListId), HttpStatus.OK);
     }
 }

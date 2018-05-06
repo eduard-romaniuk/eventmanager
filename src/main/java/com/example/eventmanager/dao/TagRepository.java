@@ -89,13 +89,13 @@ public class TagRepository implements CrudRepository<Tag>{
         }
     }
 
-    public int saveItemTags(Item item) {
-        logger.info("Saving tags for item with id : " + item.getId());
+    public int saveItemTags(List<Tag> tags, Long itemId) {
+        logger.info("Saving tags for item with id : " + itemId);
 
         int update = 0;
 
-        for ( Tag tag : item.getTags()) {
-           update += addItemTag(item.getId(), tag.getId());
+        for ( Tag tag : tags) {
+           update += addItemTag(itemId, tag.getId());
         }
 
         logger.info("Summary was updated : " + update + " row");
@@ -115,10 +115,10 @@ public class TagRepository implements CrudRepository<Tag>{
         return update;
     }
 
-    public List<Tag> getItemsForWishList (Item item){
+    public List<Tag> getTagsForItem (Long itemId){
         try {
             Map<String, Object> namedParams = new HashMap<>();
-            namedParams.put("itemId", item.getId());
+            namedParams.put("itemId", itemId);
             return namedJdbcTemplate.query(env.getProperty("getTagsForItem"), namedParams,
                     (rs, rowNum) -> {
                         Tag tag = new Tag();
@@ -126,13 +126,13 @@ public class TagRepository implements CrudRepository<Tag>{
                         tag.setId(rs.getLong("id"));
                         tag.setName(rs.getString("tag_name"));
 
-                        logger.info("Tag for item " + item.getId() + " - "  + tag.getName() + " got!");
+                        logger.info("Tag for item " + itemId + " - "  + tag.getName() + " got!");
 
                         return tag;
                     }
             );
         } catch (EmptyResultDataAccessException e) {
-            logger.info("Tags for items with id: " + item.getId() + " not found");
+            logger.info("Tags for items with id: " + itemId + " not found");
             return Collections.emptyList();
         }
     }

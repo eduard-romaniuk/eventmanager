@@ -54,8 +54,10 @@ declare var $:JQueryStatic;
 
     const arr: FormArray = <FormArray>this.form.get("tags");
     this.item.tags = [];
-    this.item.wishList = new WishList();
-    this.item.wishList.id = 1;
+
+    //TODO: CHANGE!!!
+    this.item.wishListId = 1;
+
     for (let i = 0; i < arr.length-1; i++){
       var tag = new Tag();
       tag.name = <String>arr.at(i).get("name").value
