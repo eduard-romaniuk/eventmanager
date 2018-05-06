@@ -2,7 +2,7 @@ package com.example.eventmanager.dao;
 
 import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.NotificationSettings;
-import com.example.eventmanager.domain.User;
+import com.example.eventmanager.domain.Participant;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +47,7 @@ public class NotificationSettingsRepository implements CrudRepository<Notificati
         public NotificationSettings mapRow(ResultSet resultSet, int rowNum) throws SQLException {
             NotificationSettings notificationSettings = new NotificationSettings();
 
-//            notificationSettings.setParticipant(resultSet.getLong("participant_id"));
-            notificationSettings.setParticipant(appContext.getBean(User.class, resultSet.getLong("participant_id")));
+            notificationSettings.setParticipant(appContext.getBean(Participant.class, resultSet.getLong("participant_id")));
             notificationSettings.setCountDownOn(resultSet.getBoolean("count_down_on"));
             notificationSettings.setPeriod(resultSet.getInt("period"));
             notificationSettings.setStartDate(resultSet.getDate("start_date") != null ?
@@ -121,7 +120,8 @@ public class NotificationSettingsRepository implements CrudRepository<Notificati
             logger.info("Find all notification by user with id {}", userId);
 
             Map<String, Object> namedParams = new HashMap<>();
-            namedParams.put("userId", userId);
+            namedParams.put("user_id", userId);
+
             return namedJdbcTemplate.query(env.getProperty("findAllNotificationByUserId"),
                     namedParams, new NotificationSettingsMapper());
         } catch (EmptyResultDataAccessException e) {
@@ -137,13 +137,10 @@ public class NotificationSettingsRepository implements CrudRepository<Notificati
             Map<String, Object> namedParams = new HashMap<>();
             namedParams.put("user_id", userId);
             namedParams.put("date", date);
+            namedParams.put("count_down_on", false);
 
-            String query = new StringBuilder()
-                    .append(env.getProperty("findEventsToNotificateByUserId"))
-                    .append(" AND notifications_sett.count_down_on = false")
-                    .toString();
-
-            return namedJdbcTemplate.query(query, namedParams, new EventRepository.EventMapper());
+            return namedJdbcTemplate.query(env.getProperty("findEventsToNotificateByUserId"),
+                    namedParams, new EventRepository.EventMapper());
         } catch (EmptyResultDataAccessException e) {
             logger.info("Find events to notificate for user with id {} not found", userId);
             return Collections.emptyList();
@@ -157,13 +154,10 @@ public class NotificationSettingsRepository implements CrudRepository<Notificati
             Map<String, Object> namedParams = new HashMap<>();
             namedParams.put("user_id", userId);
             namedParams.put("date", date);
+            namedParams.put("count_down_on", true);
 
-            String query = new StringBuilder()
-                    .append(env.getProperty("findEventsToNotificateByUserId"))
-                    .append(" AND notifications_sett.count_down_on = true")
-                    .toString();
-
-            return namedJdbcTemplate.query(query, namedParams, new EventRepository.EventMapper());
+            return namedJdbcTemplate.query(env.getProperty("findEventsToNotificateByUserId"),
+                    namedParams, new EventRepository.EventMapper());
         } catch (EmptyResultDataAccessException e) {
             logger.info("Find events to notificate with countdown for user with id {} not found", userId);
             return Collections.emptyList();
