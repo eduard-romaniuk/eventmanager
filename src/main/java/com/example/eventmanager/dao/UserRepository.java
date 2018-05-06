@@ -173,6 +173,68 @@ public class UserRepository implements CrudRepository<User> {
             return null;
         }
     }
+
+    //Friends functionality
+
+    public int saveRelationship(Long userOneId, Long userTwoId, Long statusId, Long actionUserId) {
+        logger.info("Save relationship for user with id {} and user with id {} with status id {}",
+                userOneId, userTwoId, statusId);
+
+        Map<String, Object> namedParams = new HashMap<>();
+        namedParams.put("user_one_id", userOneId);
+        namedParams.put("user_two_id", userTwoId);
+        namedParams.put("status_id", statusId);
+        namedParams.put("action_user_id", actionUserId);
+
+        return namedJdbcTemplate.update(env.getProperty("saveRelationship"), namedParams);
+    }
+
+    public void updateRelationship(Long userOneId, Long userTwoId, Long statusId, Long actionUserId) {
+        logger.info("Update relationship for user with id {} and user with id {} with status id {}",
+                userOneId, userTwoId, statusId);
+
+        Map<String, Object> namedParams = new HashMap<>();
+        namedParams.put("user_one_id", userOneId);
+        namedParams.put("user_two_id", userTwoId);
+        namedParams.put("status_id", statusId);
+        namedParams.put("action_user_id", actionUserId);
+
+        namedJdbcTemplate.update(env.getProperty("updateRelationship"), namedParams);
+    }
+
+    public void deleteRelationship(Long userOneId, Long userTwoId) {
+        logger.info("Delete relationship for user with id {} and user with id {}", userOneId, userTwoId);
+
+        Map<String, Object> namedParams = new HashMap<>();
+        namedParams.put("user_one_id", userOneId);
+        namedParams.put("user_two_id", userTwoId);
+
+        namedJdbcTemplate.update(env.getProperty("deleteRelationship"), namedParams);
+    }
+
+    public String getRelationshipStatus(Long userOneId, Long userTwoId) {
+        try {
+            logger.info("Get relationship status for user with id {} and user with id {}", userOneId, userTwoId);
+
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("user_one_id", userOneId);
+            namedParams.put("user_two_id", userTwoId);
+
+            return namedJdbcTemplate.queryForObject(env.getProperty("getRelationshipStatus"), namedParams, String.class);
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("User with id {} and user with id {} are not friends", userOneId, userTwoId);
+            return "";
+        }
+    }
+
+    public List<User> getFriendsByUserId(Long userId){
+        logger.info("Get friends for user with id {}", userId);
+
+        Map<String, Object> namedParams = new HashMap<>();
+        namedParams.put("user_id", userId);
+
+        return namedJdbcTemplate.query(env.getProperty("getFriendsByUserId"), namedParams, new UserMapper());
+    }
 }
 
 
