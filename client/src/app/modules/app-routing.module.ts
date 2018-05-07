@@ -82,7 +82,8 @@ const routes: Routes = [
     component: ExportEventsPlanComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'users/setting/plan',
-    component: PersonalPlanSettingComponent},
+    component: PersonalPlanSettingComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: '**', redirectTo: '/hello', pathMatch: 'full'}
 ];
 

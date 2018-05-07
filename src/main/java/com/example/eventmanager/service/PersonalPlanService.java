@@ -22,15 +22,12 @@ public class PersonalPlanService {
 
     private final Scheduler scheduler;
     private final Logger logger = LogManager.getLogger(PersonalPlanService.class);
-    private final PersonalPlanSettingService planSettingService;
     private final PersonalPlanSettingRepository planSettingRepository;
     private final UserService userService;
 
     @Autowired
-    public PersonalPlanService(Scheduler scheduler, PersonalPlanSettingService personalPlanSettingService, PersonalPlanSettingRepository planSettingRepository, UserService userService) {
+    public PersonalPlanService(Scheduler scheduler, PersonalPlanSettingRepository planSettingRepository, UserService userService) {
         this.scheduler = scheduler;
-        this.planSettingService = personalPlanSettingService;
-
         this.planSettingRepository = planSettingRepository;
         this.userService = userService;
     }
@@ -45,11 +42,15 @@ public class PersonalPlanService {
         return planSettingRepository.findOne(userService.getCurrentUser().getId());
     }
 
+    public PersonalPlanSetting getPlanSetting(Long id ){
+
+        return planSettingRepository.findOne(id);
+    }
     public void updateJob() {
         Long user_id = userService.getCurrentUser().getId();
         deleteJob(user_id);
 
-        PersonalPlanSetting setting = planSettingService.getPlanSetting(user_id);
+        PersonalPlanSetting setting = getPlanSetting(user_id);
         if (setting.isSendPlan()) {
             createJob(user_id);
             logger.info("Updated job with key - {}", user_id);
@@ -58,7 +59,7 @@ public class PersonalPlanService {
 
     private void createJob(Long user_id) {
         PersonalPlanTriggerDescriptor planTriggerDescriptor = new PersonalPlanTriggerDescriptor();
-        planTriggerDescriptor.setPersonalPlanSetting(planSettingService.getPlanSetting(user_id));
+        planTriggerDescriptor.setPersonalPlanSetting(getPlanSetting(user_id));
         PersonalPlanJobDescriptor planJobDescriptor = new PersonalPlanJobDescriptor();
         planJobDescriptor.setPlanTriggerDescriptor(Collections.singletonList(planTriggerDescriptor));
         planJobDescriptor.setUser_id(user_id);

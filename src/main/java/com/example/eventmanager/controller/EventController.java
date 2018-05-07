@@ -154,7 +154,7 @@ public class EventController {
         LocalDate fromDate = LocalDate.parse(from);
         LocalDate toDate = LocalDate.parse(to);
 
-        JasperPrint eventsPlan = exportService.createEventsPlan(fromDate, toDate);
+        JasperPrint eventsPlan = exportService.eventsPlanForExport(fromDate, toDate);
         final OutputStream outputStream = response.getOutputStream();
         JasperExportManager.exportReportToPdfStream(eventsPlan, outputStream);
 
@@ -162,20 +162,14 @@ public class EventController {
     }
 
     @RequestMapping(value = "/sendPlan", method = RequestMethod.GET)
-    public void sendEventsPlan(@RequestParam String from, @RequestParam String to) throws JRException, MessagingException {
+    public void sendEventsPlan(@RequestParam String from, @RequestParam String to) {
         logger.info("GET /sendPlan");
         LocalDate fromDate = LocalDate.parse(from);
         LocalDate toDate = LocalDate.parse(to);
-        JasperPrint eventsPlan = exportService.createEventsPlan(fromDate, toDate);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        JasperExportManager.exportReportToPdfStream(eventsPlan, baos);
-        DataSource plan = new ByteArrayDataSource(baos.toByteArray(), "application/pdf");
-        emailService.sendMailWithAttachments(
-                userService.getCurrentUser().getEmail(),
-                "Events Plan",
-                "Events plan from: "+fromDate+" to: "+toDate,
-                Collections.singletonMap("events-plan.pdf", plan));
-    }
+        JasperPrint eventsPlan = exportService.eventsPlanForExport(fromDate, toDate);
+        String email =  userService.getCurrentUser().getEmail();
+        exportService.sendEventsPlan(email,eventsPlan,fromDate,toDate);
+}
 
     @RequestMapping(value = "{id}/priority", method = RequestMethod.GET)
     public String getPriority(@PathVariable Long id) {
