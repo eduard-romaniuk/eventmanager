@@ -36,17 +36,15 @@ public class EventController {
 
     private final EventService eventService;
     private final ExportEventService exportService;
-    private final EmailService emailService;
     private final UserService userService;
     private final Logger logger = LogManager.getLogger(EventController.class);
 
     @Autowired
-    public EventController(EventService eventService, ExportEventService exportService,
-                           EmailService emailService, UserService userService) {
+    public EventController(EventService eventService, ExportEventService exportService, UserService userService) {
         logger.info("Class initialized");
 
         this.userService = userService;
-        this.emailService = emailService;
+
         this.exportService = exportService;
         this.eventService = eventService;
     }
@@ -110,7 +108,7 @@ public class EventController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @JsonView(EventView.FullView.class)
+
     @RequestMapping(value = "/{id}/participants", method = RequestMethod.GET)
     public ResponseEntity<List<User>> getParticipants(@PathVariable Long id) {
         logger.info("GET /" + id + "/participants");
