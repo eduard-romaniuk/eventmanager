@@ -10,6 +10,7 @@ import {Tag} from '../../../../model/tag';
 import {WishList} from "../../../../model/wishlist";
 import {WishListService} from "../../../../services/wishlist.service";
 import {AuthService} from "../../../../services/auth.service";
+import {Subscription} from "rxjs/Subscription";
 declare var $:JQueryStatic;
 
   @Component({
@@ -27,6 +28,7 @@ declare var $:JQueryStatic;
               private itemService: ItemService,
               private formBuilder: FormBuilder,
               private auth : AuthService
+
   ) { }
 
   ngOnInit(){

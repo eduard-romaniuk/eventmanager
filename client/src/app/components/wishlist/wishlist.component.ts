@@ -8,6 +8,7 @@ import { Event } from '../../model/event'
 import {Item} from '../../model/item';
 import {Subscription} from 'rxjs/Subscription';
 import {LikeService} from "../../services/like.service";
+import {ItemService} from "../../services/item.service";
 
 @Component({
   selector: 'app-wish-list',
@@ -20,12 +21,12 @@ export class WishListComponent implements OnInit {
   title = 'Your Wish Board!';
   items: Item[] = [];
   subscription: Subscription;
-  hasLike: boolean;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private wishListService: WishListService,
-              private likeService: LikeService
+              private likeService: LikeService,
+              private itemService: ItemService
               ) {
 
   }
@@ -37,7 +38,6 @@ export class WishListComponent implements OnInit {
     this.wishListService.getItemsFromWishList(this.wishListId)
       .subscribe( (items : any) => {
         this.items = items;
-        console.log(items);
       });
 
     for ( let item of this.items){
@@ -51,7 +51,10 @@ export class WishListComponent implements OnInit {
   }
 
   sendViewingItem(item: Item){
-    this.wishListService.sendViewingItem(item);
+    this.itemService.getItem(item.id).subscribe( (fullItem: Item) => {
+      console.log(fullItem);
+      this.wishListService.sendViewingItem(fullItem)
+    } );
   }
 
   hideViewingItem(){
@@ -65,8 +68,6 @@ export class WishListComponent implements OnInit {
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
-
-
 
 
 }
