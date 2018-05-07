@@ -269,7 +269,6 @@ public class EventRepository implements CrudRepository<Event> {
     private static final class UserMapper implements RowMapper<User> {
         @Override
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-            System.out.println("EventRepository.UserMapper.mapRow");
             User participant = new User();
             participant.setId(rs.getLong("id"));
             participant.setLogin(rs.getString("login"));

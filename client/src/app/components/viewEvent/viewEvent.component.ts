@@ -25,6 +25,7 @@ export class ViewEventComponent {
   priority_id:number;
   isParticipant:boolean;
   participationStr:String;
+  participants: User[];
 
   sub: Subscription;
 
@@ -91,6 +92,13 @@ export class ViewEventComponent {
     return this.userId === this.event.creator.id;
   }
 
+  public showParticipants() {
+    this.eventService.getParticipants(this.event.id)
+      .subscribe( (users : any) => {
+        this.participants = users;
+      });
+    console.log(this.participants)
+  }
   goToChat() {
       this.router.navigate(['/chats']);
     }
