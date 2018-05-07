@@ -11,6 +11,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.awt.geom.Point2D;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -224,6 +225,25 @@ public class UserRepository implements CrudRepository<User> {
         } catch (EmptyResultDataAccessException e) {
             logger.info("User with id {} and user with id {} are not friends", userOneId, userTwoId);
             return "";
+        }
+    }
+
+    public Map<String, Object> getRelationshipStatusAndActiveUserId(Long userOneId, Long userTwoId) {
+        try {
+            logger.info("Get relationship status and active user id for user with id {} and user with id {}", userOneId, userTwoId);
+
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("user_one_id", userOneId);
+            namedParams.put("user_two_id", userTwoId);
+
+            return namedJdbcTemplate.queryForMap(env.getProperty("getRelationshipStatusAndActiveUserId"),
+                    namedParams);
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("User with id {} and user with id {} are not friends", userOneId, userTwoId);
+
+            Map <String, Object> noRelationshipMap = new HashMap<>();
+            noRelationshipMap.put("", 0);
+            return noRelationshipMap;
         }
     }
 

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -170,7 +171,7 @@ public class UserController {
                                                       @RequestParam Boolean accept) {
         logger.info("PUT /answerFriendRequest");
 
-        if(userService.getRelationshipStatus(requester, accepter).equals("pending")){
+        if(userService.getRelationshipStatus(requester, accepter).matches("pending|declined")){
             userService.updateRelationship(requester, accepter, accept ? ACCEPTED : DECLINED, accepter);
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
@@ -204,6 +205,12 @@ public class UserController {
     public String getRelationshipStatus(@RequestParam Long from, @RequestParam Long to) {
         logger.info("GET /getRelationshipStatus");
         return userService.getRelationshipStatus(from, to);
+    }
+
+    @RequestMapping(value = "/getRelationshipStatusAndActiveUserId", params = {"from", "to"}, method = RequestMethod.GET)
+    public Map<String, Object> getRelationshipStatusAndActiveUserId(@RequestParam Long from, @RequestParam Long to) {
+        logger.info("GET /getRelationshipStatusAndActiveUserId");
+        return userService.getRelationshipStatusAndActiveUserId(from, to);
     }
 
     @RequestMapping(value = "/{id}/outcomingRequests", method = RequestMethod.GET)

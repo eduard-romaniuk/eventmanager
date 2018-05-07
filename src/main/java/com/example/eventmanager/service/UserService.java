@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -102,6 +103,11 @@ public class UserService {
     public String getRelationshipStatus(Long userOneId, Long userTwoId){
         logger.info("Get relationship status for user with id {} and user with id {}", userOneId, userTwoId);
         return userRepository.getRelationshipStatus(userOneId, userTwoId);
+    }
+
+    public Map<String, Object> getRelationshipStatusAndActiveUserId(Long userOneId, Long userTwoId){
+        logger.info("Get relationship status and active user id for user with id {} and user with id {}", userOneId, userTwoId);
+        return userRepository.getRelationshipStatusAndActiveUserId(userOneId, userTwoId);
     }
 
     public List<User> getOutcomingRequests(Long userId){
