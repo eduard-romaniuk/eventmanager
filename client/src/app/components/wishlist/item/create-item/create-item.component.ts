@@ -9,6 +9,7 @@ import {Item} from '../../../../model/item';
 import {Tag} from '../../../../model/tag';
 import {WishList} from "../../../../model/wishlist";
 import {WishListService} from "../../../../services/wishlist.service";
+import {AuthService} from "../../../../services/auth.service";
 declare var $:JQueryStatic;
 
   @Component({
@@ -19,14 +20,19 @@ declare var $:JQueryStatic;
   export class CreateItemComponent implements OnInit{
   form: FormGroup;
   item: Item = new Item();
+  userId: number;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private itemService: ItemService,
-              private formBuilder: FormBuilder
+              private formBuilder: FormBuilder,
+              private auth : AuthService
   ) { }
 
   ngOnInit(){
+    this.auth.getUser().subscribe((user: any) => {
+      this.userId = user.id;
+    });
     this.initForm();
   }
 

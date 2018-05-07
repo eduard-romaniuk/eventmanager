@@ -26,7 +26,7 @@
               data-toggle="modal" data-target="#viewItem"
               (click)="sendViewingItem(item)">
         {{item.name}}
-        <i class="fa fa-thumbs-up" >{{item.likes}}</i>
+        <a class="fa fa-thumbs-up" (click)="clickOnLikeButt(item)">{{item.likes}}</a>
       </button>
     </div>
     <div *ngIf="item.priority == 0">

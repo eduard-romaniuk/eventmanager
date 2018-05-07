@@ -35,6 +35,7 @@ import { ViewItemComponent } from './components/wishlist/item/view-item/view-ite
 import { ChatComponent } from './components/chat/chat.component';
 import { ExportEventsPlanComponent } from './components/export-events-plan/export-events-plan.component';
 import { UserEditPasswordComponent } from './components/user/user-edit-password/user-edit-password.component';
+import {LikeService} from "./services/like.service";
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -99,6 +100,7 @@ export class AddressInterceptor implements HttpInterceptor {
     ImageUploaderService,
     WishListService,
     ItemService,
+    LikeService,
     { provide: HTTP_INTERCEPTORS,
       useClass: AddressInterceptor,
       multi: true},

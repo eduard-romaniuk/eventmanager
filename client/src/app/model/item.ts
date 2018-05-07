@@ -12,6 +12,7 @@ export class Item {
   booker: User;
   likes: number;
   tags: Tag[];
+  hasLiked: boolean;
 
   //TODO: duedate, links
 }
