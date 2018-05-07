@@ -47,9 +47,6 @@ public class EventController {
         logger.info("POST /");
 
         eventService.createEvent(event);
-        //HttpHeaders headers = new HttpHeaders();
-        //headers.add("id", "1" + event.getId());
-        //headers.setLocation(ucBuilder.path("/event/{id}").buildAndExpand(event.getId()).toUri());
         return new ResponseEntity<>(event.getId(), HttpStatus.CREATED);
     }
 

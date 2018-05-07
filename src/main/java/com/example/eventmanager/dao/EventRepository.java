@@ -55,7 +55,7 @@ public class EventRepository implements CrudRepository<Event> {
 
     @Override
     public int save(Event event) {
-        System.out.println(event);
+        logger.info("Saving event");
         MapSqlParameterSource namedParams = new MapSqlParameterSource();
         namedParams.addValue("creator_id", event.getCreator().getId());
         namedParams.addValue("name", event.getName());
@@ -69,8 +69,6 @@ public class EventRepository implements CrudRepository<Event> {
         namedParams.addValue("is_private", event.isPrivate());
         KeyHolder keyHolder = new GeneratedKeyHolder();
         namedJdbcTemplate.update(env.getProperty("saveEvent"), namedParams, keyHolder);
-        //return keyHolder.getKey().intValue();
-        System.out.println("newEvent = " + keyHolder.getKeys());
         return (Integer)keyHolder.getKeys().get("id");
     }
 

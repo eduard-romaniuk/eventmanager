@@ -1,12 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { EventService } from '../../services/event.service';
-import { HttpClient } from '@angular/common/http';
-import {Router, ActivatedRoute} from '@angular/router';
-import { JQueryStatic } from 'jquery';
+import {Component} from '@angular/core';
+import {EventService} from '../../services/event.service';
+import {JQueryStatic} from 'jquery';
 
 import { Event } from '../../model/event'
-import {User} from "../../model/user";
-import {Observable} from "rxjs/Observable";
 import {AuthService} from "../../services/auth.service";
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 

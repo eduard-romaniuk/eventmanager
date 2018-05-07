@@ -11,7 +11,7 @@ Description:<br>
   {{event.timeLineStart}}<br><br>
   Time of finish:<br>
   {{event.timeLineFinish}}<br>
-  <button class="btn btn-default mt-2" [routerLink]="['/event', event.id, 'edit']"> <!--*ngIf="isCreator()"-->Edit</button>
+  <button class="btn btn-default mt-2" [routerLink]="['/event', event.id, 'edit']">Edit</button>
   <button class="btn btn-default mt-2" (click)="publish()" [disabled]="true">Invite members</button>
   <p *ngIf="this.isParticipant">
    	<button class="btn btn-default mt-2" (click)="goToChatWithCreator()"> Chat With Creator</button>

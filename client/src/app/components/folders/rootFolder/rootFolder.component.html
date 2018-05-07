@@ -1,0 +1,21 @@
+<div class="md-form text-left">
+  <!--<button class="btn btn-default mt-2" (click)="create()">Create folder</button>-->
+  <button type="button" class="btn btn-default mt-2"  data-toggle="modal" data-target="#createFolder">Create folder</button>
+  <button class="btn btn-default mt-2">Create note</button>
+</div>
+
+
+<div id="createFolder" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"> <h4> New folder name</h4>
+        <button class="close" type="button" data-dismiss="modal">×</button></div>
+      <div class="modal-body">
+        <div class="md-form text-center">
+          <input type="text" id="newFolderName" class="form-control mt-2" placeholder="Name of new folder" [(ngModel)]="folder.name">
+        </div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-default" type="button" (click)="create()" data-dismiss="modal">Submit</button></div>
+    </div>
+  </div>
+</div>
