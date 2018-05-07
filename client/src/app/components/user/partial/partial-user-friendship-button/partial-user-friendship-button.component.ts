@@ -16,27 +16,34 @@ export class PartialUserFriendshipButtonComponent implements OnInit {
   relationshipStatus: String;
   currentUserIsActionUser: boolean;
 
+  isCurrentUser: boolean = false;
+
   constructor(private userService: UserService) { }
 
   ngOnInit() {
     console.log("this.currentUser.id - \'" + this.currentUser.id + "'");
 
-    this.userService.getRelationshipStatusAndActionUserId(this.currentUser.id, this.user.id)
-      .subscribe((data: Map<string, any>) => {
-        const statusName = data['status_name'];
+    if(this.currentUser.id==this.user.id){
+      this.isCurrentUser = true;
+    } else {
+      this.userService.getRelationshipStatusAndActionUserId(this.currentUser.id, this.user.id)
+        .subscribe((data: Map<string, any>) => {
+          const statusName = data['status_name'];
 
-        //TODO Fix
-        if(isUndefined(statusName)){
-          this.relationshipStatus = '';
-          this.currentUserIsActionUser = false;
-        } else {
-          this.relationshipStatus = data['status_name'];
-          this.currentUserIsActionUser = (data['action_user_id'] == this.currentUser.id);
-        }
+          //TODO Fix
+          if(isUndefined(statusName)){
+            this.relationshipStatus = '';
+            this.currentUserIsActionUser = false;
+          } else {
+            this.relationshipStatus = data['status_name'];
+            this.currentUserIsActionUser = (data['action_user_id'] == this.currentUser.id);
+          }
 
-        console.log("this.relationshipStatus - \'" + this.relationshipStatus + "'");
-        console.log("this.currentUserIsActionUser - " + this.currentUserIsActionUser);
-      });
+          console.log("this.relationshipStatus - \'" + this.relationshipStatus + "'");
+          console.log("this.currentUserIsActionUser - " + this.currentUserIsActionUser);
+        });
+    }
+
   }
 
   addToFriends(userId: number) {

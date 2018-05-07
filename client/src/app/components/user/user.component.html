@@ -29,6 +29,8 @@
         </app-partial-user-friendship-button>
       </div>
 
+      <button type="button" class="btn btn-info" data-toggle="modal" data-target="#friendsList">Friends</button>
+
     </div>
 
     <div class="col-sm-9">
@@ -47,5 +49,29 @@
 
     </div>
 
+  </div>
+</div>
+
+<div id="friendsList" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"> <h4> Friends list </h4>
+        <button class="close" type="button" data-dismiss="modal">×</button></div>
+      <div class="modal-body">
+
+        <div *ngIf="userFriends">
+          <div *ngFor="let friend of userFriends">
+            <app-partial-user-list *ngIf="currentUser.id && friend.id"
+                                   [currentUser]="currentUser" [user]="friend">
+            </app-partial-user-list>
+          </div>
+        </div>
+
+        <div *ngIf="userFriends?.length < 1">
+          <p>No friends:(</p>
+        </div>
+
+      </div>
+    </div>
   </div>
 </div>

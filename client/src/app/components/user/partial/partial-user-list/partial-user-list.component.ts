@@ -8,7 +8,8 @@ import {User} from "../../../../model/user";
 })
 export class PartialUserListComponent implements OnInit {
 
-  @Input() user: User;
+  @Input() currentUser: User = new User();
+  @Input() user: User = new User();
 
   constructor() { }
 

@@ -17,6 +17,7 @@ export class UserComponent implements OnInit, OnDestroy {
   user: User = new User();
 
   userEvents: Event[];
+  userFriends: User[];
   sub: Subscription;
 
   currentUserPage: boolean;
@@ -47,6 +48,12 @@ export class UserComponent implements OnInit, OnDestroy {
                   .subscribe((events: any) => {
                     console.log("events - " + events);
                     this.userEvents = events;
+                  });
+
+                this.userService.getFriends(this.user.id)
+                  .subscribe((friends: any) => {
+                    console.log("friends - " + friends);
+                    this.userFriends = friends;
                   });
 
               } else {

@@ -141,7 +141,7 @@ export class UserService {
     return this.http.get<User[]>(this.base_url + "/" + id + "/incomingRequests");
   }
 
-  public getFriendsBy(id) {
+  public getFriends(id) {
     return this.http.get<User[]>(this.base_url + "/" + id + "/friends");
   }
 

@@ -9,7 +9,9 @@
 
   <div *ngIf="users">
     <div *ngFor="let user of users">
-      <app-partial-user-list [user]="user"></app-partial-user-list>
+      <app-partial-user-list *ngIf="currentUser.id && user.id"
+                             [currentUser]="currentUser" [user]="user">
+      </app-partial-user-list>
     </div>
   </div>
 
