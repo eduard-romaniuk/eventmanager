@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { EventService } from '../../services/event.service';
-import { HttpClient } from '@angular/common/http';
 import {Router, ActivatedRoute} from '@angular/router';
 import { JQueryStatic } from 'jquery';
 
 import { Event } from '../../model/event'
 import {User} from "../../model/user";
-import {Observable} from "rxjs/Observable";
 import {AuthService} from "../../services/auth.service";
 import {Subscription} from "rxjs/Subscription";
 import {FormGroup} from "@angular/forms";
@@ -25,6 +23,7 @@ export class ViewEventComponent {
   priority_id:number;
   isParticipant:boolean;
   participationStr:String;
+  participants:User[];
 
   sub: Subscription;
 
