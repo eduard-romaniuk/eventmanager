@@ -48,9 +48,9 @@ public class EventService {
        return eventRepository.findByCreator(id);
     }
 
-    public List<Event> getEventsWithUserParticipation(User user){
+    public List<Event> getEventsWithUserParticipation(Long id){
 
-        return eventRepository.findEventsWithUserParticipation(user.getId());
+        return eventRepository.findEventsWithUserParticipation(id);
     }
 
     public List<Event> getAllPublicEvents(){

@@ -136,7 +136,7 @@ public class UserController {
     public ResponseEntity<List<Event>> getUserEvents(@PathVariable Long id) {
         logger.info("GET /" + id + "/events");
 
-        List<Event> eventList = eventService.getUserEvents(id);
+        List<Event> eventList = eventService.getEventsWithUserParticipation(id);
         return new ResponseEntity<>(eventList, HttpStatus.OK);
     }
 
