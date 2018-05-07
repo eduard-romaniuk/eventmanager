@@ -1,8 +1,5 @@
 package com.example.eventmanager.service;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperPrint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -22,7 +19,6 @@ public class EmailService {
     @Autowired
     public EmailService(JavaMailSender emailSender) {
         this.emailSender = emailSender;
-
     }
 
     public void sendTextMail(String email, String subject, String text) {
@@ -45,8 +41,6 @@ public class EmailService {
             helper.addAttachment(name, attachments.get(name));
         }
         emailSender.send(helper.getMimeMessage());
-
     }
-
 
 }
