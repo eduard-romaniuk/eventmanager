@@ -8,6 +8,9 @@
   </p>
 Description:<br>
   {{event.description}}<br><br>
+  <div *ngIf="event.image">
+    <img class="bigImage" [src]="event.image" id="image" name="image"> <br/>
+  </div>
   Place:<br>
   {{event.place}}<br><br>
   Time of start:<br>

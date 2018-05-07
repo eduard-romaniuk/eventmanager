@@ -41,6 +41,7 @@ import { ExportEventsPlanComponent } from './components/export-events-plan/expor
 import { UserEditPasswordComponent } from './components/user/user-edit-password/user-edit-password.component';
 import { PersonalPlanSettingComponent } from './components/personal-plan-setting/personal-plan-setting.component';
 import {PersonalPanSettingService} from "./services/personal-pan-setting.service";
+import { EventEditImageComponent } from './components/event-edit-image/event-edit-image.component';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -87,7 +88,8 @@ export class AddressInterceptor implements HttpInterceptor {
     ViewItemComponent,
     ChatComponent,
     ExportEventsPlanComponent,
-    PersonalPlanSettingComponent
+    PersonalPlanSettingComponent,
+    EventEditImageComponent
   ],
   imports: [
     BrowserModule,

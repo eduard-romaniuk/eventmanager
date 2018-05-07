@@ -131,11 +131,11 @@ public class EventController {
         eventService.joinToEvent(id);
     }
 
-    @RequestMapping(value = "/addParticipants", method = RequestMethod.POST)
-    public void addParticipants(@RequestBody List<User> users, Event event) {
-        logger.info("POST /addParticipants");
+    @RequestMapping(value = "{id}/participants", method = RequestMethod.POST)
+    public void addParticipants(@RequestBody List<User> users, @PathVariable Long id) {
+        logger.info("POST /add Participants");
 
-        eventService.AddUsersToEvent(users, event);
+        eventService.AddUsersToEvent(users, id);
     }
 
     @RequestMapping(value = "/downloadPlan", method = RequestMethod.GET)

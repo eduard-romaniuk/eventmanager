@@ -69,10 +69,10 @@ public class EventService {
 
     }
 
-    public void AddUsersToEvent(List<User> users,Event event){
+    public void AddUsersToEvent(List<User> users,Long id){
 
         for (User user:users) {
-            eventRepository.addUserToEvent(user.getId(),event.getId());
+            eventRepository.addUserToEvent(user.getId(),id);
         }
     }
 
