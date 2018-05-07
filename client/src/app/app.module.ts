@@ -35,6 +35,8 @@ import { ViewItemComponent } from './components/wishlist/item/view-item/view-ite
 import { ChatComponent } from './components/chat/chat.component';
 import { ExportEventsPlanComponent } from './components/export-events-plan/export-events-plan.component';
 import { UserEditPasswordComponent } from './components/user/user-edit-password/user-edit-password.component';
+import { PersonalPlanSettingComponent } from './components/personal-plan-setting/personal-plan-setting.component';
+import {PersonalPanSettingService} from "./services/personal-pan-setting.service";
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -80,7 +82,8 @@ export class AddressInterceptor implements HttpInterceptor {
     CreateItemComponent,
     ViewItemComponent,
     ChatComponent,
-    ExportEventsPlanComponent
+    ExportEventsPlanComponent,
+    PersonalPlanSettingComponent
   ],
   imports: [
     BrowserModule,
@@ -99,6 +102,7 @@ export class AddressInterceptor implements HttpInterceptor {
     ImageUploaderService,
     WishListService,
     ItemService,
+    PersonalPanSettingService,
     { provide: HTTP_INTERCEPTORS,
       useClass: AddressInterceptor,
       multi: true},

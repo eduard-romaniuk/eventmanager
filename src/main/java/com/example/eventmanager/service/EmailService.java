@@ -81,14 +81,11 @@ public class EmailService {
 
         PersonalPlanSetting personalPlanSetting = personalPlanSettingService.getPlanSetting(user_id);
 
-        if (personalPlanSetting.isSendPlan()) {
-
             LocalDate from = personalPlanSetting.getFromDate();
             LocalDate to = from.plusDays(personalPlanSetting.getPlanPeriod());
             List<Event> events = eventService.eventsForPeriod(user_id,from,to);
             JasperPrint eventsPlan = exportEventService.createEventsPlan(from, to, events);
             sendPlan(eventsPlan,userService.getUser(user_id));
-
             logger.info("Personal Plan for user {} was sending",user_id);
 
             personalPlanSetting.setFromDate(to);
@@ -96,8 +93,5 @@ public class EmailService {
             logger.info("Event from date for user {} was updating, current date : {}",user_id, personalPlanSetting.getFromDate());
 
 
-        } else {
-            logger.info("Sending Personal Plan disable");
-        }
     }
 }

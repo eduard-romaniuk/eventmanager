@@ -28,13 +28,13 @@ public class PersonalPlanSettingRepository implements CrudRepository<PersonalPla
     }
 
     @Override
-    public int save(PersonalPlanSetting plan) {
+    public int save(PersonalPlanSetting planSetting) {
         Map<String, Object> namedParams = new HashMap<>();
-        namedParams.put("user_id", plan.getUser().getId());
-        namedParams.put("sendPlan", plan.isSendPlan());
-        namedParams.put("from", plan.getFromDate());
-        namedParams.put("planPeriod", plan.getPlanPeriod());
-        namedParams.put("notificationPeriod", plan.getNotificationPeriod());
+        namedParams.put("user_id", planSetting.getUser().getId());
+        namedParams.put("sendPlan", planSetting.isSendPlan());
+        namedParams.put("from", planSetting.getFromDate());
+        namedParams.put("planPeriod", planSetting.getPlanPeriod());
+        namedParams.put("notificationPeriod", planSetting.getNotificationPeriod());
         return namedJdbcTemplate.update(env.getProperty("plan.insert"), namedParams);
 
     }
@@ -56,14 +56,14 @@ public class PersonalPlanSettingRepository implements CrudRepository<PersonalPla
     }
 
     @Override
-    public void update(PersonalPlanSetting plan) {
+    public void update(PersonalPlanSetting planSetting) {
 
         Map<String, Object> namedParams = new HashMap<>();
-        namedParams.put("sendPlan", plan.isSendPlan());
-        namedParams.put("fromDate", plan.getFromDate());
-        namedParams.put("planPeriod", plan.getPlanPeriod());
-        namedParams.put("notificationPeriod", plan.getNotificationPeriod());
-        namedParams.put("user_id", plan.getUser().getId());
+        namedParams.put("sendPlan", planSetting.isSendPlan());
+        namedParams.put("fromDate", planSetting.getFromDate());
+        namedParams.put("planPeriod", planSetting.getPlanPeriod());
+        namedParams.put("notificationPeriod", planSetting.getNotificationPeriod());
+        namedParams.put("user_id", planSetting.getUser().getId());
         namedJdbcTemplate.update(env.getProperty("plan.update"), namedParams);
 
 
@@ -78,19 +78,19 @@ public class PersonalPlanSettingRepository implements CrudRepository<PersonalPla
 
         @Override
         public PersonalPlanSetting extractData(ResultSet rs) throws SQLException {
-            PersonalPlanSetting plan = new PersonalPlanSetting();
+            PersonalPlanSetting setting = new PersonalPlanSetting();
             User user = new User();
             while (rs.next()) {
-                plan.setSendPlan(rs.getBoolean("personal_plan_notification"));
-                plan.setFromDate(rs.getDate("from_date").toLocalDate());
-                plan.setPlanPeriod(rs.getInt("plan_period"));
-                plan.setNotificationPeriod(rs.getInt("notification_period"));
+                setting.setSendPlan(rs.getBoolean("personal_plan_notification"));
+                setting.setFromDate(rs.getDate("from_date").toLocalDate());
+                setting.setPlanPeriod(rs.getInt("plan_period"));
+                setting.setNotificationPeriod(rs.getInt("notification_period"));
                 user.setId(rs.getLong("id"));
                 user.setLogin(rs.getString("login"));
-                plan.setUser(user);
+                setting.setUser(user);
             }
 
-            return plan;
+            return setting;
         }
     }
 }

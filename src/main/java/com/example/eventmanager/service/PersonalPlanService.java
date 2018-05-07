@@ -3,10 +3,11 @@ package com.example.eventmanager.service;
 import java.util.Collections;
 import java.util.Set;
 
+import com.example.eventmanager.dao.PersonalPlanSettingRepository;
 import com.example.eventmanager.domain.PersonalPlanJobDescriptor;
 
+import com.example.eventmanager.domain.PersonalPlanSetting;
 import com.example.eventmanager.domain.PersonalPlanTriggerDescriptor;
-import com.example.eventmanager.domain.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.quartz.*;
@@ -22,22 +23,45 @@ public class PersonalPlanService {
     private final Scheduler scheduler;
     private final Logger logger = LogManager.getLogger(PersonalPlanService.class);
     private final PersonalPlanSettingService planSettingService;
+    private final PersonalPlanSettingRepository planSettingRepository;
     private final UserService userService;
 
     @Autowired
-    public PersonalPlanService(Scheduler scheduler, PersonalPlanSettingService personalPlanSettingService, UserService userService) {
+    public PersonalPlanService(Scheduler scheduler, PersonalPlanSettingService personalPlanSettingService, PersonalPlanSettingRepository planSettingRepository, UserService userService) {
         this.scheduler = scheduler;
         this.planSettingService = personalPlanSettingService;
+
+        this.planSettingRepository = planSettingRepository;
         this.userService = userService;
     }
 
-    public void createJob(User user) {
-        //user = userService.getCurrentUser();
+    public void updatePlanSetting(PersonalPlanSetting setting) {
+        planSettingRepository.update(setting);
+    }
+
+
+    public PersonalPlanSetting getPlanSetting() {
+
+        return planSettingRepository.findOne(userService.getCurrentUser().getId());
+    }
+
+    public void updateJob() {
+        Long user_id = userService.getCurrentUser().getId();
+        deleteJob(user_id);
+
+        PersonalPlanSetting setting = planSettingService.getPlanSetting(user_id);
+        if (setting.isSendPlan()) {
+            createJob(user_id);
+            logger.info("Updated job with key - {}", user_id);
+        } else logger.info("Sending plan disable");
+    }
+
+    private void createJob(Long user_id) {
         PersonalPlanTriggerDescriptor planTriggerDescriptor = new PersonalPlanTriggerDescriptor();
-        planTriggerDescriptor.setPersonalPlanSetting(planSettingService.getPlanSetting(user.getId()));
+        planTriggerDescriptor.setPersonalPlanSetting(planSettingService.getPlanSetting(user_id));
         PersonalPlanJobDescriptor planJobDescriptor = new PersonalPlanJobDescriptor();
         planJobDescriptor.setPlanTriggerDescriptor(Collections.singletonList(planTriggerDescriptor));
-        planJobDescriptor.setUser_id(user.getId());
+        planJobDescriptor.setUser_id(user_id);
 
         JobDetail jobDetail = planJobDescriptor.buildJobDetail();
         Set<Trigger> triggersForJob = planJobDescriptor.buildTriggers();
@@ -52,16 +76,8 @@ public class PersonalPlanService {
         }
     }
 
-    @Transactional
-    public void updateJob(User user) {
-        //user = userService.getCurrentUser();
-        deleteJob(user);
-        createJob(user);
-        logger.info("Updated job with key - {}",user.getId());
-    }
-
-    public void deleteJob(User user) {
-        String name = "Job for user " + user.getId();
+    private void deleteJob(Long user_id) {
+        String name = "Job for user " + user_id;
         try {
             scheduler.deleteJob(JobKey.jobKey(name));
             logger.info("Deleted job with key - {}", name);

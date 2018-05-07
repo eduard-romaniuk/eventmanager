@@ -17,6 +17,7 @@ import {WishListComponent} from '../components/wishlist/wishlist.component';
 import {ChatComponent} from "../components/chat/chat.component";
 import {ExportEventsPlanComponent} from "../components/export-events-plan/export-events-plan.component";
 import {UserEditPasswordComponent} from "../components/user/user-edit-password/user-edit-password.component";
+import {PersonalPlanSettingComponent} from "../components/personal-plan-setting/personal-plan-setting.component";
 
 @Injectable()
 class OnlyLoggedInUsersGuard implements CanActivate {
@@ -73,6 +74,8 @@ const routes: Routes = [
     component: ChatComponent},
   { path: 'events/export',
     component: ExportEventsPlanComponent},
+  { path: 'users/setting/plan',
+    component: PersonalPlanSettingComponent},
   { path: '**', redirectTo: '/hello', pathMatch: 'full'}
 ];
 
