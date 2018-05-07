@@ -26,17 +26,17 @@ public class NotificationSettingsService {
     }
 
     public void save(NotificationSettings notificationSettings) {
-        logger.info("save");
+        logger.info("Save");
         notificationSettingsRepository.save(notificationSettings);
     }
 
     public NotificationSettings get(Long id){
-        logger.info("get with id {}", id);
+        logger.info("Get with id {}", id);
         return notificationSettingsRepository.findOne(id);
     }
 
     public List<NotificationSettings> getAll(){
-        logger.info("getAll");
+        logger.info("Get all");
         Iterator<NotificationSettings> iter = notificationSettingsRepository.findAll().iterator();
         List<NotificationSettings> copy = new ArrayList<>();
         while (iter.hasNext())
@@ -45,22 +45,22 @@ public class NotificationSettingsService {
     }
 
     public void update(NotificationSettings notificationSettings){
-        logger.info("update with id {}", notificationSettings.getParticipant());
+        logger.info("Update with id {}", notificationSettings.getParticipantId());
         notificationSettingsRepository.update(notificationSettings);
     }
 
     public List<NotificationSettings> findAllByUserId(Long userId){
-        logger.info("findAllNotificationByUserId with user id {}", userId);
+        logger.info("Find all notification by user with id {}", userId);
         return notificationSettingsRepository.findAllNotificationByUserId(userId);
     }
 
     public List<Event> findEventsToNotificateByUserId(Long userId, LocalDate date){
-        logger.info("findAllNotificationByUserId with user id {}", userId);
+        logger.info("Find all notification to notificate by user with id {}", userId);
         return notificationSettingsRepository.findEventsToNotificateByUserId(userId, date);
     }
 
     public List<Event> findEventsWithCountdownToNotificateByUserId(Long userId, LocalDate date){
-        logger.info("findEventsWithCountdownToNotificateByUserId with user id {}", userId);
+        logger.info("Find all notification with countdown to notificate by user with id {}", userId);
         return notificationSettingsRepository.findEventsWithCountdownToNotificateByUserId(userId, date);
     }
 }

@@ -1,7 +1,5 @@
 package com.example.eventmanager.service;
 
-import com.example.eventmanager.domain.Event;
-import com.example.eventmanager.domain.User;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -17,10 +15,6 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.util.ByteArrayDataSource;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-
-import static java.time.temporal.ChronoUnit.DAYS;
 
 @Service
 public class EmailService {
@@ -28,8 +22,6 @@ public class EmailService {
     private final JavaMailSender emailSender;
     private final ExportEventService exportEventService;
     private final UserService userService;
-
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
 
     @Autowired
     public EmailService(JavaMailSender emailSender, ExportEventService exportEventService, UserService userService) {
@@ -44,6 +36,15 @@ public class EmailService {
         message.setTo(email);
         message.setSubject("Email verification");
         message.setText("Please verify your email:\nhttp://localhost:4200/email-verification/" + token);
+        emailSender.send(message);
+    }
+
+    public void sendTextMail(String email, String subject, String text) {
+        // TODO: Errors handlers
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email);
+        message.setSubject(subject);
+        message.setText(text);
         emailSender.send(message);
     }
 
@@ -68,38 +69,5 @@ public class EmailService {
 
     }
 
-    public void sendEventNotification(User user, List<Event> eventsWithoutCountdown, List<Event> eventsWithCountdown) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(user.getEmail());
-        message.setSubject("Notification about your events");
 
-        String messageText = "Hello, " + user.getLogin() + "! \n\n";
-
-        if(eventsWithoutCountdown.size() > 0){
-            messageText += "Your upcoming events:\n";
-            for (Event event : eventsWithoutCountdown){
-                String eventInfo = "Event \'" + event.getName() + "\'\n" +
-                        "Start at " + event.getTimeLineStart().format(formatter) + "\n" +
-                        "End at " + event.getTimeLineFinish().format(formatter) + "\n\n";
-                messageText += eventInfo;
-            }
-        }
-
-        if(eventsWithCountdown.size() > 0){
-            messageText += "Countdown to your selected events:\n";
-            for (Event event : eventsWithCountdown){
-                long countDown = DAYS.between(LocalDate.now(), event.getTimeLineStart().toLocalDate());
-
-                String eventInfo = "Event \'" + event.getName() + "\'\n" +
-                        "Start at " + event.getTimeLineStart().format(formatter) + "\n" +
-                        "End at " + event.getTimeLineFinish().format(formatter) + "\n" +
-                        "Left " + countDown + " days\n\n";
-                messageText += eventInfo;
-            }
-        }
-
-        messageText += "Have fun! \nYour Event manager team";
-        message.setText(messageText);
-        emailSender.send(message);
-    }
 }

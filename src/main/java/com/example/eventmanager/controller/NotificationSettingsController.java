@@ -58,7 +58,7 @@ public class NotificationSettingsController {
         if (oldNotificationSettings == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        newNotificationSettings.setParticipant(oldNotificationSettings.getParticipant());
+        newNotificationSettings.setParticipantId(oldNotificationSettings.getParticipantId());
         notificationSettingsService.update(newNotificationSettings);
         return new ResponseEntity<>(newNotificationSettings, HttpStatus.OK);
     }

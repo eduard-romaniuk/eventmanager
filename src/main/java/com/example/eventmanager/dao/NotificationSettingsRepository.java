@@ -2,11 +2,9 @@ package com.example.eventmanager.dao;
 
 import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.NotificationSettings;
-import com.example.eventmanager.domain.Participant;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -27,18 +25,15 @@ import java.util.Map;
 public class NotificationSettingsRepository implements CrudRepository<NotificationSettings> {
 
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
-    private final ApplicationContext appContext;
     private final Environment env;
     private final Logger logger = LogManager.getLogger(NotificationSettingsRepository.class);
 
     @Autowired
     public NotificationSettingsRepository(NamedParameterJdbcTemplate namedJdbcTemplate,
-                                          ApplicationContext appContext,
                                           Environment env) {
         logger.info("Class initialized");
 
         this.namedJdbcTemplate = namedJdbcTemplate;
-        this.appContext = appContext;
         this.env = env;
     }
 
@@ -47,7 +42,7 @@ public class NotificationSettingsRepository implements CrudRepository<Notificati
         public NotificationSettings mapRow(ResultSet resultSet, int rowNum) throws SQLException {
             NotificationSettings notificationSettings = new NotificationSettings();
 
-            notificationSettings.setParticipant(appContext.getBean(Participant.class, resultSet.getLong("participant_id")));
+            notificationSettings.setParticipantId(resultSet.getLong("participant_id"));
             notificationSettings.setCountDownOn(resultSet.getBoolean("count_down_on"));
             notificationSettings.setPeriod(resultSet.getInt("period"));
             notificationSettings.setStartDate(resultSet.getDate("start_date") != null ?
@@ -64,7 +59,7 @@ public class NotificationSettingsRepository implements CrudRepository<Notificati
         logger.info("Save");
 
         Map<String, Object> namedParams = new HashMap<>();
-        namedParams.put("participant_id", notificationSettings.getParticipant().getId());
+        namedParams.put("participant_id", notificationSettings.getParticipantId());
         namedParams.put("count_down_on", notificationSettings.getCountDownOn());
         namedParams.put("period", notificationSettings.getPeriod());
         namedParams.put("start_date", notificationSettings.getStartDate());
@@ -97,7 +92,7 @@ public class NotificationSettingsRepository implements CrudRepository<Notificati
 
     @Override
     public void update(NotificationSettings notificationSettings) {
-        logger.info("Update with id {}", notificationSettings.getParticipant().getId());
+        logger.info("Update with id {}", notificationSettings.getParticipantId());
 
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("count_down_on", notificationSettings.getCountDownOn());
@@ -105,7 +100,7 @@ public class NotificationSettingsRepository implements CrudRepository<Notificati
         namedParams.put("start_date", notificationSettings.getStartDate());
         namedParams.put("email_notif_on", notificationSettings.getEmailNotificationOn());
         namedParams.put("bell_notif_on", notificationSettings.getBellNotificationOn());
-        namedParams.put("participant_id", notificationSettings.getParticipant().getId());
+        namedParams.put("participant_id", notificationSettings.getParticipantId());
 
         namedJdbcTemplate.update(env.getProperty("updateNotification"), namedParams);
     }

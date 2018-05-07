@@ -9,7 +9,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 @Service
 public class NotificationService {
@@ -19,10 +22,12 @@ public class NotificationService {
     private final EmailService emailService;
     private final Logger logger = LogManager.getLogger(NotificationService.class);
 
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
+
     //TODO Move to external file
     //Pattern - second, minute, hour, day of month, month, day(s) of week
     private final String TIME_TO_SEND_NOTIFICATIONS = "0 0 10 * * ?"; // every day at 10 a.m.
-    // private final String TIME_TO_SEND_NOTIFICATIONS = "0/30 * * * * *"; //every 30 seconds
+//     private final String TIME_TO_SEND_NOTIFICATIONS = "0/30 * * * * *"; //every 30 seconds
     //TODO Change
     private final int LIMIT = 10;
 
@@ -69,9 +74,42 @@ public class NotificationService {
                 notificationSettingsService.findEventsWithCountdownToNotificateByUserId(user.getId(), LocalDate.now());
 
         if(eventsWithoutCountdown.size() > 0 || eventsWithCountdown.size() > 0){
-            this.emailService.sendEventNotification(user, eventsWithoutCountdown, eventsWithCountdown);
+            sendEventNotification(user, eventsWithoutCountdown, eventsWithCountdown);
         }
 
         logger.info("End sending Event Notification to user with id {}", user.getId());
     }
+
+    private void sendEventNotification(User user, List<Event> eventsWithoutCountdown, List<Event> eventsWithCountdown) {
+        String subject = "Notification about your events";
+        String messageText = "Hello, " + user.getLogin() + "! \n\n";
+
+        if(eventsWithoutCountdown.size() > 0){
+            messageText += "Your upcoming events:\n";
+            for (Event event : eventsWithoutCountdown){
+                String eventInfo = "Event \'" + event.getName() + "\'\n" +
+                        "Start at " + event.getTimeLineStart().format(formatter) + "\n" +
+                        "End at " + event.getTimeLineFinish().format(formatter) + "\n\n";
+                messageText += eventInfo;
+            }
+        }
+
+        if(eventsWithCountdown.size() > 0){
+            messageText += "Countdown to your selected events:\n";
+            for (Event event : eventsWithCountdown){
+                long countDown = DAYS.between(LocalDate.now(), event.getTimeLineStart().toLocalDate());
+
+                String eventInfo = "Event \'" + event.getName() + "\'\n" +
+                        "Start at " + event.getTimeLineStart().format(formatter) + "\n" +
+                        "End at " + event.getTimeLineFinish().format(formatter) + "\n" +
+                        "Left " + countDown + " days\n\n";
+                messageText += eventInfo;
+            }
+        }
+
+        messageText += "Have fun! \nYour Event manager team";
+
+        emailService.sendTextMail(user.getEmail(), subject, messageText);
+    }
+
 }

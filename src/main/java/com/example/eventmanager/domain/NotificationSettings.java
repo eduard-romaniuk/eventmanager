@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Data
 public class NotificationSettings {
     @JsonView(NotificationSettingsView.View.class)
-    private Participant participant;
+    private Long participantId;
     @JsonView(NotificationSettingsView.View.class)
     private Boolean countDownOn;
     @JsonView(NotificationSettingsView.View.class)
@@ -20,12 +20,12 @@ public class NotificationSettings {
     @JsonView(NotificationSettingsView.View.class)
     private Boolean bellNotificationOn;
 
-    public Participant getParticipant() {
-        return participant;
+    public Long getParticipantId() {
+        return participantId;
     }
 
-    public void setParticipant(Participant participant) {
-        this.participant = participant;
+    public void setParticipantId(Long participantId) {
+        this.participantId = participantId;
     }
 
     public Boolean getCountDownOn() {
