@@ -13,10 +13,7 @@ import javax.mail.MessagingException;
 import javax.mail.util.ByteArrayDataSource;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ExportEventService {
@@ -41,18 +38,29 @@ public class ExportEventService {
         params.put("fromDate", fromDate);
         params.put("toDate", toDate);
 
-        try {
-            JasperReport eventsPlan = JasperCompileManager.compileReport("src/main/resources/eventsPlan.jrxml");
-            JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(events);
-            return JasperFillManager.fillReport(eventsPlan, params, dataSource);
+        if (!events.isEmpty()) {
+            try {
+                JasperReport eventsPlan = JasperCompileManager.compileReport("src/main/resources/eventsPlan.jrxml");
 
-        } catch (JRException ex) {
-            ex.printStackTrace();
-            return null;
+
+                JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(events);
+                logger.info("Events plan successfully crated");
+                return JasperFillManager.fillReport(eventsPlan, params, dataSource);
+
+            } catch (JRException ex) {
+                logger.info("Problem with create events plan", ex.getMessage());
+                ex.printStackTrace();
+                throw new IllegalArgumentException();
+
+            }
+
+        } else {
+            logger.info("No events for period {}-{}",fromDate,toDate);
+            throw new IllegalArgumentException();
+
+
         }
-
     }
-
     public JasperPrint eventsPlanForExport(LocalDate fromDate, LocalDate toDate) {
         List<Event> events = eventService.eventsForPeriod(userService.getCurrentUser().getId(), fromDate, toDate);
         return createEventsPlan(fromDate, toDate, events);
