@@ -4,12 +4,16 @@ import { HttpClientModule, HttpInterceptor, HttpHandler, HttpRequest, HTTP_INTER
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Ng2CloudinaryModule } from 'ng2-cloudinary';
 import { FileUploadModule } from 'ng2-file-upload';
+import { CommonModule } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 import { environment }           from '../environments/environment';
 import { AppRoutingModule }      from './modules/app-routing.module';
 import { AuthService }           from './services/auth.service';
 import { UserService }           from './services/user.service';
 import { LoggerService }         from './services/logger.service';
+import { ToastService }         from './services/toast.service';
 import { AppComponent }          from './app.component';
 import { LoginComponent }        from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
@@ -26,11 +30,11 @@ import { UserEditComponent } from './components/user/user-edit.component';
 import { EventListComponent } from './components/event-list/event-list.component';
 import { UserEditImageComponent } from './components/user/user-edit-image.component';
 import { UserSearchComponent } from './components/user/user-search.component';
-import {ImageUploaderService} from "./services/image-uploader.service";
-import {WishListComponent} from './components/wishlist/wishlist.component';
-import {WishListService} from './services/wishlist.service';
-import {CreateItemComponent} from './components/wishlist/item/create-item/create-item.component';
-import {ItemService} from './services/item.service';
+import { ImageUploaderService } from "./services/image-uploader.service";
+import { WishListComponent } from './components/wishlist/wishlist.component';
+import { WishListService } from './services/wishlist.service';
+import { CreateItemComponent } from './components/wishlist/item/create-item/create-item.component';
+import { ItemService } from './services/item.service';
 import { ViewItemComponent } from './components/wishlist/item/view-item/view-item.component';
 import { ChatComponent } from './components/chat/chat.component';
 import { ExportEventsPlanComponent } from './components/export-events-plan/export-events-plan.component';
@@ -92,13 +96,19 @@ export class AddressInterceptor implements HttpInterceptor {
     FormsModule,
     ReactiveFormsModule,
     Ng2CloudinaryModule,
-    FileUploadModule
+    FileUploadModule,
+    CommonModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot({
+      timeOut: 2000
+    }),
   ],
   providers: [
     AuthService,
     EventService,
     UserService,
     LoggerService,
+    ToastService,
     ImageUploaderService,
     WishListService,
     ItemService,

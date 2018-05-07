@@ -47,7 +47,12 @@ public class UserController {
         userService.saveUser(
                 securityService.encodePass(
                         securityService.verificationToken(user)));
-        emailService.sendVerificationLink(user.getEmail(), user.getToken());
+        emailService.sendTextMail(
+                user.getEmail(),
+                "Email verification",
+                "Please verify your email:\n" +
+                        "https://web-event-manager.firebaseapp.com/email-verification/" +
+                        user.getToken());
     }
 
 //    @RequestMapping(value = "/{id}", method = RequestMethod.PATCH)

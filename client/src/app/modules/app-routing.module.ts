@@ -6,17 +6,18 @@ import { CreateEventComponent }       from '../components/createEvent/createEven
 import { ViewEventComponent }       from '../components/viewEvent/viewEvent.component';
 import { AuthService } 			  from '../services/auth.service';
 
+import { EmailVerificationComponent } from '../components/email-verification/email-verification.component';
 import { UserComponent } from '../components/user/user.component';
 import { UserListComponent } from '../components/user/user-list.component';
 import { UserEditComponent } from '../components/user/user-edit.component';
 import { EventEditComponent } from '../components/event-edit/event-edit.component';
 import { EventListComponent } from '../components/event-list/event-list.component';
 import { UserEditImageComponent } from '../components/user/user-edit-image.component';
-import {UserSearchComponent} from "../components/user/user-search.component";
-import {WishListComponent} from '../components/wishlist/wishlist.component';
-import {ChatComponent} from "../components/chat/chat.component";
-import {ExportEventsPlanComponent} from "../components/export-events-plan/export-events-plan.component";
-import {UserEditPasswordComponent} from "../components/user/user-edit-password/user-edit-password.component";
+import { UserSearchComponent } from "../components/user/user-search.component";
+import { WishListComponent } from '../components/wishlist/wishlist.component';
+import { ChatComponent } from "../components/chat/chat.component";
+import { ExportEventsPlanComponent } from "../components/export-events-plan/export-events-plan.component";
+import { UserEditPasswordComponent } from "../components/user/user-edit-password/user-edit-password.component";
 import {PersonalPlanSettingComponent} from "../components/personal-plan-setting/personal-plan-setting.component";
 
 @Injectable()
@@ -36,6 +37,8 @@ const routes: Routes = [
   { path: '', redirectTo: '/hello', pathMatch: 'full' },
   { path: 'hello',
   	component: HelloComponent },
+  { path: 'email-verification/:token',
+    component: EmailVerificationComponent },
   { path: 'home',
     component: HomeComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
@@ -53,8 +56,7 @@ const routes: Routes = [
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'wishlist',
     component: WishListComponent,
-    canActivate: [ OnlyLoggedInUsersGuard ]
-  },
+    canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'users/:id',
     component: UserComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
@@ -65,15 +67,20 @@ const routes: Routes = [
     component: EventEditComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'users/:id/updateImage',
-    component: UserEditImageComponent},
+    component: UserEditImageComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'changePassword',
-    component: UserEditPasswordComponent},
+    component: UserEditPasswordComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'searchUsers',
-    component: UserSearchComponent},
+    component: UserSearchComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'chats',
-    component: ChatComponent},
+    component: ChatComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'events/export',
-    component: ExportEventsPlanComponent},
+    component: ExportEventsPlanComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'users/setting/plan',
     component: PersonalPlanSettingComponent},
   { path: '**', redirectTo: '/hello', pathMatch: 'full'}
