@@ -22,6 +22,7 @@ export class ViewEventComponent {
   form: FormGroup;
   priority_id:number;
   isParticipant:boolean;
+  isCreator:boolean;
   participationStr:String;
   participants:User[];
 
@@ -52,19 +53,22 @@ export class ViewEventComponent {
         this.eventService.getEventById(id).subscribe((event: any) => {
           if (event) {
             this.event = event;
+            this.isCreator=this.isCreatorTest();
             console.log(`Event with id '${id}' was loaded!`);
             console.log(event);
           } else {
             console.log(`Event with id '${id}' not found!`);
           }
         });
-       this.eventService.getPriority(id).subscribe((priority:String) => {
+
+        this.eventService.getPriority(id).subscribe((priority:String) => {
           if (priority) {
             this.priority = priority;
           } else {
             console.log(`Priority not found!`);
           }
         });
+
       }
     });
     console.log("loadedEventCreator = " + this.event.creator)
@@ -86,7 +90,7 @@ export class ViewEventComponent {
     this.eventService.joinToEvent(this.event.id).subscribe();
     window.location.reload();
   }
-  public isCreator(): boolean {
+  public isCreatorTest(): boolean {
     return this.userId === this.event.creator.id;
   }
 
