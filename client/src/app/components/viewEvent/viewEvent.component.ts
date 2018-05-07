@@ -91,7 +91,10 @@ export class ViewEventComponent {
     return this.userId === this.event.creator.id;
   }
 
-  goToChat() {
-      this.router.navigate(['/chats']);
+  goToChatWithCreator() {
+      this.router.navigate(['event', this.event.id, 'chats','withCreator']);
+    }
+  goToChatWithoutCreator() {
+      this.router.navigate(['event', this.event.id, 'chats','withoutCreator']);
     }
 }

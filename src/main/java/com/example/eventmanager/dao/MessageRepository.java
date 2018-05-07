@@ -54,7 +54,7 @@ public class MessageRepository implements CrudRepository<Message> {
 
     @Override
     public Iterable<Message> findAll() {
-        return namedJdbcTemplate.query(env.getProperty("findAllEvent"), new MessageMapper());
+        return namedJdbcTemplate.query(env.getProperty("findAllMsgs"), new MessageMapper());
     }
 
     @Override
@@ -76,7 +76,7 @@ public class MessageRepository implements CrudRepository<Message> {
         namedParams.put("participant_id", msg.getParticipantId());
         namedParams.put("text", msg.getText());
 
-        return namedJdbcTemplate.update(env.getProperty("save"), namedParams);
+        return namedJdbcTemplate.update(env.getProperty("saveMsg"), namedParams);
 
     }
 }
