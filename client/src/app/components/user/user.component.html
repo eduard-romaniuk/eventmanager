@@ -23,27 +23,11 @@
           </p>
         </div>
 
-        <div *ngIf="!currentUserPage">
-          <div *ngIf="relationshipStatus==''">
-            <button class="btn btn-info" (click)="addToFriends(user.id)"> Add to friends </button>
-          </div>
-          <div *ngIf="relationshipStatus=='pending' && currentUserIsActionUser">
-            <button class="btn btn-danger" (click)="deleteRequest(user.id)"> Decline request </button>
-          </div>
-          <div *ngIf="relationshipStatus=='pending' && !currentUserIsActionUser">
-            <button class="btn btn-info" (click)="acceptRequest(user.id)"> Accept request </button>
-            <button class="btn btn-danger" (click)="declineRequest(user.id)"> Decline request </button>
-          </div>
-          <div *ngIf="relationshipStatus=='accepted'">
-            <button class="btn btn-danger" (click)="deleteFromFriends(user.id)"> Delete from friends </button>
-          </div>
-          <div *ngIf="relationshipStatus=='declined' && currentUserIsActionUser">
-            <button class="btn btn-info" (click)="acceptRequest(user.id)"> Accept request </button>
-          </div>
-          <div *ngIf="relationshipStatus=='declined' && !currentUserIsActionUser">
-            <p>Declined</p>
-          </div>
-        </div>
+      <div *ngIf="!currentUserPage">
+        <app-partial-user-friendship-button *ngIf="currentUser.id && user.id"
+                                            [currentUser]="currentUser" [user]="user">
+        </app-partial-user-friendship-button>
+      </div>
 
     </div>
 
