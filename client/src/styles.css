@@ -19,9 +19,8 @@ html, body {
   padding: 5px;
 }
 
-.profileImage{
-  border-radius: 50%;
-  object-fit: cover;
+.centerDiv{
+  margin: 0 auto;
 }
 
 .mediumImage{
@@ -34,6 +33,20 @@ html, body {
   width: 150px;
 }
 
+.profileImage{
+  height: 100%;
+  width: 100%;
+}
+
+.profileImage img {
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 .button{
   margin: 10px;
 }
+
+

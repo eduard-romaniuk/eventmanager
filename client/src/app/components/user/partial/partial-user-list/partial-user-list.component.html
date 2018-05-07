@@ -1,0 +1,12 @@
+<div class="row border list">
+  <div class="col-sm-3">
+
+    <div class="mediumImage">
+      <app-partial-user-image [user]="user"></app-partial-user-image>
+    </div>
+
+  </div>
+  <div>
+    <a [routerLink]="['/users', user.id]"> {{ user.login }} </a>
+  </div>
+</div>

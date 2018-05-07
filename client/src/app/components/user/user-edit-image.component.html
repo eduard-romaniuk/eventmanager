@@ -5,17 +5,10 @@
     </header>
     <input type="hidden" name="href" [(ngModel)]="user.id">
     <div>
-      <label for="image">Your image:</label>
+      <p>Your image:</p>
 
-      <!--TODO Partial-->
-      <div *ngIf="user.image">
-        <img class="profileImage bigImage" [src]="user.image" id="image" name="image"> <br/>
-      </div>
-      <div *ngIf="!user.image && user.sex">
-        <img class="profileImage bigImage" src="../../../assets/images/default_user_male.png" name="image"> <br/>
-      </div>
-      <div *ngIf="!user.image && !user.sex">
-        <img class="profileImage bigImage" src="../../../assets/images/default_user_female.png" name="image"> <br/>
+      <div class="bigImage centerDiv">
+        <app-partial-user-image [user]="user"></app-partial-user-image>
       </div>
 
       <input

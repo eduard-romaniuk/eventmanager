@@ -39,6 +39,8 @@ import { ViewItemComponent } from './components/wishlist/item/view-item/view-ite
 import { ChatComponent } from './components/chat/chat.component';
 import { ExportEventsPlanComponent } from './components/export-events-plan/export-events-plan.component';
 import { UserEditPasswordComponent } from './components/user/user-edit-password/user-edit-password.component';
+import { PartialUserListComponent } from './components/user/partial/partial-user-list/partial-user-list.component';
+import { PartialUserImageComponent } from './components/user/partial/partial-user-image/partial-user-image.component';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -84,7 +86,9 @@ export class AddressInterceptor implements HttpInterceptor {
     CreateItemComponent,
     ViewItemComponent,
     ChatComponent,
-    ExportEventsPlanComponent
+    ExportEventsPlanComponent,
+    PartialUserListComponent,
+    PartialUserImageComponent
   ],
   imports: [
     BrowserModule,
