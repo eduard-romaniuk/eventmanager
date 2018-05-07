@@ -91,6 +91,14 @@ export class ViewEventComponent {
     return this.userId === this.event.creator.id;
   }
 
+  public showParticipants() {
+    this.eventService.getParticipants(this.event.id)
+      .subscribe( (users : any) => {
+        this.participants = users;
+      });
+    console.log(this.participants)
+  }
+
   goToChatWithCreator() {
       this.router.navigate(['event', this.event.id, 'chats','withCreator']);
     }

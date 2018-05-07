@@ -76,7 +76,7 @@ public class MessageRepository implements CrudRepository<Message> {
         namedParams.put("participant_id", msg.getParticipantId());
         namedParams.put("text", msg.getText());
 
-        return namedJdbcTemplate.update(env.getProperty("saveMsg"), namedParams);
+        return namedJdbcTemplate.update(env.getProperty("save"), namedParams);
 
     }
 }

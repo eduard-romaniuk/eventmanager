@@ -2,14 +2,13 @@ package com.example.eventmanager.service;
 
 
 import com.example.eventmanager.dao.EventRepository;
-import com.example.eventmanager.dao.UserRepository;
 import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -57,6 +56,11 @@ public class EventService {
     public List<Event> getAllPublicEvents(){
 
         return eventRepository.findAllPublicEvents();
+    }
+
+    public List<Event> eventsForPeriod(Long user_id,LocalDate fromDate, LocalDate toDate){
+
+        return eventRepository.eventsForPeriod(user_id,fromDate,toDate);
     }
 
     public void joinToEvent(Long event_id){

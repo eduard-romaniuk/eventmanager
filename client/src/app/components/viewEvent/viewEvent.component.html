@@ -11,6 +11,15 @@ Description:<br>
   {{event.timeLineStart}}<br><br>
   Time of finish:<br>
   {{event.timeLineFinish}}<br>
+
+  <div class="md-form text-center">
+    <button class="btn btn-info mt-2" data-toggle="collapse" (click)="showParticipants()" data-target="#hide-me">Show Participants</button>
+  <div id= "hide-me" class="collapse in">
+    <div class="md-form text-center" *ngFor="let user of participants">
+        <a [routerLink]="['/users', user.id]"> {{ user.login }} </a>
+    </div>
+  </div>
+</div>
   <button class="btn btn-default mt-2" [routerLink]="['/event', event.id, 'edit']"> <!--*ngIf="isCreator()"-->Edit</button>
   <button class="btn btn-default mt-2" (click)="publish()" [disabled]="true">Invite members</button>
   <p *ngIf="this.isParticipant">
