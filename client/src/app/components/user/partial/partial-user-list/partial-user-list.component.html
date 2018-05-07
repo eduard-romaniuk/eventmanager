@@ -1,15 +1,15 @@
 <div class="row border list">
   <div class="col-sm-3">
-
     <div class="mediumImage">
       <app-partial-user-image [user]="user"></app-partial-user-image>
     </div>
-
   </div>
-  <div>
-    <a [routerLink]="['/users', user.id]" data-dismiss="modal"> {{ user.login }} </a>
-    <app-partial-user-friendship-button *ngIf="currentUser.id && user.id"
-                                        [currentUser]="currentUser" [user]="user">
-    </app-partial-user-friendship-button>
+  <div class="col-sm-9">
+    <div><a [routerLink]="['/users', user.id]" data-dismiss="modal"> {{ user.login }} </a></div>
+    <div>
+      <app-partial-user-friendship-button *ngIf="currentUser.id && user.id"
+                                          [currentUser]="currentUser" [user]="user">
+      </app-partial-user-friendship-button>
+    </div>
   </div>
 </div>

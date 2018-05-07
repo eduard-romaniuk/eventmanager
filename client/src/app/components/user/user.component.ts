@@ -18,6 +18,7 @@ export class UserComponent implements OnInit, OnDestroy {
 
   userEvents: Event[];
   userFriends: User[];
+  incomeRequests: User[];
   sub: Subscription;
 
   currentUserPage: boolean;
@@ -50,12 +51,6 @@ export class UserComponent implements OnInit, OnDestroy {
                     this.userEvents = events;
                   });
 
-                this.userService.getFriends(this.user.id)
-                  .subscribe((friends: any) => {
-                    console.log("friends - " + friends);
-                    this.userFriends = friends;
-                  });
-
               } else {
                 console.log(`User with id '${id}' not found!`);
                 this.gotoList();
@@ -83,7 +78,21 @@ export class UserComponent implements OnInit, OnDestroy {
   };
 
   gotoList() {
-    this.router.navigate(['/users']);
+    this.router.navigate(['/users/all']);
+  }
+
+  getIncomingRequests() {
+    this.userService.getIncomingRequests(this.user.id)
+      .subscribe((incomeRequests: any) => {
+        this.incomeRequests = incomeRequests;
+      });
+  }
+
+  getFriends() {
+    this.userService.getFriends(this.user.id)
+      .subscribe((friends: any) => {
+        this.userFriends = friends;
+      });
   }
 
 }
