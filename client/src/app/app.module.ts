@@ -45,6 +45,9 @@ import { EventEditImageComponent } from './components/event-edit-image/event-edi
 import { RecoverPasswordComponent } from './components/recover-password/recover-password.component';
 import { RecoverLoginComponent } from './components/recover-login/recover-login.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { PartialUserListComponent } from './components/user/partial/partial-user-list/partial-user-list.component';
+import { PartialUserImageComponent } from './components/user/partial/partial-user-image/partial-user-image.component';
+import { PartialUserFriendshipButtonComponent } from './components/user/partial/partial-user-friendship-button/partial-user-friendship-button.component';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -95,7 +98,11 @@ export class AddressInterceptor implements HttpInterceptor {
     EventEditImageComponent,
     RecoverLoginComponent,
     RecoverPasswordComponent,
-    ChangePasswordComponent
+    ChangePasswordComponent,
+    ExportEventsPlanComponent,
+    PartialUserListComponent,
+    PartialUserImageComponent,
+    PartialUserFriendshipButtonComponent
   ],
   imports: [
     BrowserModule,

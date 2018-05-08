@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/users")
@@ -27,6 +28,11 @@ public class UserController {
     private final EmailService emailService;
     private final EventService eventService;
     private final Logger logger = LogManager.getLogger(UserController.class);
+
+    private static final int PENDING = 0;
+    private static final int ACCEPTED = 1;
+    private static final int DECLINED = 2;
+    private static final int BLOCKED = 3;
 
     @Autowired
     public UserController(UserService userService, SecurityService securityService, EmailService emailService,
@@ -139,6 +145,87 @@ public class UserController {
 
         List<User> users = userService.searchByLogin(login);
         return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    //Friends functionality
+
+    @RequestMapping(value = "/addFriendRequest", params = {"from", "to"}, method = RequestMethod.POST)
+    public ResponseEntity<String> addFriendRequest(@RequestParam Long from, @RequestParam Long to) {
+        logger.info("POST /addFriendRequest");
+
+        if(userService.getRelationshipStatus(from, to).equals("")){
+            userService.saveRelationship(from, to, PENDING, from);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            logger.info("Users {} and {} already have some relationship", from, to);
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
+    @RequestMapping(value = "/answerFriendRequest", params = {"requester", "accepter", "accept"},
+            method = RequestMethod.PUT)
+    public ResponseEntity<String> answerFriendRequest(@RequestParam Long requester, @RequestParam Long accepter,
+                                                      @RequestParam Boolean accept) {
+        logger.info("PUT /answerFriendRequest");
+
+        if(userService.getRelationshipStatus(requester, accepter).matches("pending|declined")){
+            userService.updateRelationship(requester, accepter, accept ? ACCEPTED : DECLINED, accepter);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            logger.info("There is no request for friendship from user {} or user {} or they have other relationship",
+                    requester, accepter);
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
+    //TODO What behavior?
+//    @RequestMapping(value = "/blockFriend", params = {"from", "to"}, method = RequestMethod.PUT)
+//    public void blockFriend(@RequestParam Long from, @RequestParam Long to) {
+//        logger.info("PUT /blockFriend");
+//        userService.updateRelationship(from, to, BLOCKED, from);
+//    }
+
+    @RequestMapping(value = "/deleteRelationship", params = {"from", "to"}, method = RequestMethod.DELETE)
+    public ResponseEntity<String> deleteRelationship(@RequestParam Long from, @RequestParam Long to) {
+        logger.info("DELETE /deleteRelationship");
+
+        if(userService.getRelationshipStatus(from, to).matches("accepted|pending")){
+            userService.deleteRelationship(from, to);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            logger.info("User {} and user {} was not friends", from, to);
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
+    @RequestMapping(value = "/getRelationshipStatus", params = {"from", "to"}, method = RequestMethod.GET)
+    public String getRelationshipStatus(@RequestParam Long from, @RequestParam Long to) {
+        logger.info("GET /getRelationshipStatus");
+        return userService.getRelationshipStatus(from, to);
+    }
+
+    @RequestMapping(value = "/getRelationshipStatusAndActiveUserId", params = {"from", "to"}, method = RequestMethod.GET)
+    public Map<String, Object> getRelationshipStatusAndActiveUserId(@RequestParam Long from, @RequestParam Long to) {
+        logger.info("GET /getRelationshipStatusAndActiveUserId");
+        return userService.getRelationshipStatusAndActiveUserId(from, to);
+    }
+
+    @RequestMapping(value = "/{id}/outcomingRequests", method = RequestMethod.GET)
+    public List<User> getOutcomingRequests(@PathVariable(value = "id") Long userId) {
+        logger.info("GET /{}/outcomingRequests", userId);
+        return userService.getOutcomingRequests(userId);
+    }
+
+    @RequestMapping(value = "/{id}/incomingRequests", method = RequestMethod.GET)
+    public List<User> getIncomingRequests(@PathVariable(value = "id") Long userId) {
+        logger.info("GET /{}/incomingRequests", userId);
+        return userService.getIncomingRequests(userId);
+    }
+
+    @RequestMapping(value = "/{id}/friends", method = RequestMethod.GET)
+    public List<User> getFriendsByUserId(@PathVariable(value = "id") Long userId) {
+        logger.info("GET /{}/friends", userId);
+        return userService.getFriendsByUserId(userId);
     }
 
 }
