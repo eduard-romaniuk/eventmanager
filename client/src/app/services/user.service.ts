@@ -25,7 +25,7 @@ export class UserService {
   }
 
   public createUser(user) {
-    return this.http.post(this.base_url, user);
+    return this.http.post(this.base_url + "/", user);
   }
 
   //TODO Do update without headers
