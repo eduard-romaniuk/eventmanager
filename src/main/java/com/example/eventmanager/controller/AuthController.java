@@ -4,7 +4,6 @@ import com.example.eventmanager.domain.User;
 import com.example.eventmanager.service.EmailService;
 import com.example.eventmanager.service.SecurityService;
 import com.example.eventmanager.service.UserService;
-import com.sun.deploy.net.HttpResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
