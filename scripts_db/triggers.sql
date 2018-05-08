@@ -7,6 +7,7 @@ DROP TRIGGER IF EXISTS t_delete_chats ON events;
 DROP TRIGGER IF EXISTS t_user_reg_date_upd ON users;
 DROP TRIGGER IF EXISTS t_image_null_values ON images;
 DROP TRIGGER IF EXISTS t_friend_controll ON relationships;
+DROP TRIGGER IF EXISTS t_create_default_wish_list ON wishlists;
 
 select * from users;
 -- --- -------------------------------
@@ -168,4 +169,22 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER t_friend_controll
 	BEFORE UPDATE OR INSERT ON relationships FOR EACH ROW EXECUTE PROCEDURE friends_controll();
 
+
+-- --- -------------------------------
+-- Triggers for autocreating wish list for user
+-- --- -------------------------------
+CREATE OR REPLACE FUNCTION create_default_wish_list() RETURNS TRIGGER AS $$
+
+BEGIN
+    IF    TG_OP = 'INSERT' THEN
+        INSERT INTO public.wishlists(user_id) 
+		values (NEW.id);
+        RETURN NEW;
+
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER t_create_default_wish_list
+	AFTER INSERT ON users FOR EACH ROW EXECUTE PROCEDURE create_default_wish_list();
 

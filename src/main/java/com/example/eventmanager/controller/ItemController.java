@@ -4,7 +4,9 @@ import com.example.eventmanager.domain.Item;
 import com.example.eventmanager.domain.Tag;
 import com.example.eventmanager.domain.WishList;
 import com.example.eventmanager.domain.transfer.validation.ItemValidation;
+import com.example.eventmanager.domain.transfer.view.ItemView;
 import com.example.eventmanager.service.ItemService;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +28,47 @@ public class ItemController {
         logger.info("Class initialized");
     }
 
+    @JsonView(ItemView.ShortView.class)
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public void createItem (@Validated(ItemValidation.New.class) @RequestBody Item item, UriComponentsBuilder ucBuilder) {
-        logger.info("POST / create new item");
+    public ResponseEntity<Item> createItem (@Validated(ItemValidation.New.class) @RequestBody Item item) {
+        logger.info("POST /");
 
         itemService.saveItem(item);
-        //HttpHeaders headers = new HttpHeaders();
-        //headers.add("id", "1" + event.getId());
-        //headers.setLocation(ucBuilder.path("/event/{id}").buildAndExpand(event.getId()).toUri());
+
+        item.setLikes(0);
+
+        return new ResponseEntity<>(item, HttpStatus.OK);
+    }
+
+    @JsonView(ItemView.FullView.class)
+    @RequestMapping(value = "/{itemId}", method = RequestMethod.GET)
+    public ResponseEntity<Item> getItem(@PathVariable("itemId") Long itemId) {
+        logger.info("GET /" + itemId );
+
+        Item item = itemService.getItem(itemId);
+
+        if (item == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+
+        return new ResponseEntity<>(item, HttpStatus.OK);
+    }
+
+    @JsonView(ItemView.ShortView.class)
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    public ResponseEntity<Item> updateItem(@PathVariable("id") Long itemId, @Validated(ItemValidation.Exist.class)@RequestBody Item newItem) {
+        logger.info("POST /" + itemId);
+
+        Item oldItem = itemService.getItem(itemId);
+
+        if (oldItem == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        itemService.updateItem(newItem);
+
+        return new ResponseEntity<>(newItem, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/like/{id}", method = RequestMethod.POST)

@@ -9,6 +9,9 @@ import {Item} from '../../model/item';
 import {Subscription} from 'rxjs/Subscription';
 import {LikeService} from "../../services/like.service";
 import {ItemService} from "../../services/item.service";
+import {WishList} from "../../model/wishlist";
+import {AuthService} from "../../services/auth.service";
+import {User} from "../../model/user";
 
 @Component({
   selector: 'app-wish-list',
@@ -17,7 +20,7 @@ import {ItemService} from "../../services/item.service";
 })
 export class WishListComponent implements OnInit {
 
-  wishListId: number = 1;
+  wishList: WishList;
   title = 'Your Wish Board!';
   items: Item[] = [];
   subscription: Subscription;
@@ -26,25 +29,50 @@ export class WishListComponent implements OnInit {
               private router: Router,
               private wishListService: WishListService,
               private likeService: LikeService,
-              private itemService: ItemService
+              private itemService: ItemService,
+              private auth: AuthService
               ) {
 
   }
 
   ngOnInit() {
 
-    this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
+    this.auth.getUser().subscribe((user: User) => {
+      this.initWishList(user.id);
+    });
 
-    this.wishListService.getItemsFromWishList(this.wishListId)
-      .subscribe( (items : any) => {
-        this.items = items;
-      });
 
-    for ( let item of this.items){
-      this.likeService.wasLiked(item.id).subscribe( (hasLike: boolean) => {
-        item.hasLiked = hasLike;
-      });
-    }
+  }
+
+  initWishList(userId: number): void{
+    this.wishListService.getWishListByUser(userId).subscribe(
+
+
+      ( wishList: WishList ) => {
+        if (wishList != null) {
+          this.wishList = wishList;
+          console.log(this.wishList);
+
+          //TODO: CHANGE!!!
+          this.wishListService.getItemsFromWishList(this.wishList.id)
+            .subscribe((items: any) => {
+              this.items = items;
+            });
+
+          for (let item of this.items) {
+            this.likeService.wasLiked(item.id).subscribe((hasLike: boolean) => {
+              item.hasLiked = hasLike;
+            });
+
+          }
+          this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
+          //TODO:END!!!
+
+
+        }
+      }
+
+    )
   }
 
   create() {

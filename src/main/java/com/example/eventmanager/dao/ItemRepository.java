@@ -78,8 +78,35 @@ public class ItemRepository implements CrudRepository<Item>{
 
 
     @Override
-    public Item findOne(Long id) {
-        return null;
+    public Item findOne(Long itemId) {
+        try {
+            Map<String, Object> namedParams = new HashMap<>();
+
+            namedParams.put("itemId", itemId);
+
+            return namedJdbcTemplate.query(env.getProperty("getItemById"), namedParams,
+                    rs -> {
+                        rs.next();
+
+                        Item item = new Item();
+
+                        item.setId(itemId);
+                        item.setName(rs.getString("name"));
+                        item.setPriority(rs.getInt("priority_id"));
+                        item.setDescription(rs.getString("description"));
+                        item.setWishListId(rs.getLong("wishlist_id"));
+                        item.setLikes(likeRepository.getLikesCountForItem(item.getId()));
+                        item.setTags(tagRepository.getTagsForItem(item.getId()));
+
+                        logger.info("Item got! " + item.toString());
+                        return item;
+                    }
+            );
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("Items with id: " + itemId + " not found");
+            return null;
+        }
+
     }
 
     @Override
@@ -88,7 +115,16 @@ public class ItemRepository implements CrudRepository<Item>{
     }
 
     @Override
-    public void update(Item entity) {
+    public void update(Item item) {
+
+        Map<String, Object> namedParams = new HashMap<>();
+
+        namedParams.put("name", item.getName());
+        namedParams.put("description", item.getDescription());
+        namedParams.put("priorityId", item.getPriority());
+        namedParams.put("itemId", item.getId());
+
+        namedJdbcTemplate.update(env.getProperty("updateEvent"), namedParams);
 
     }
 
@@ -123,7 +159,7 @@ public class ItemRepository implements CrudRepository<Item>{
             return Collections.emptyList();
         }
     }
-//
+
 //    private static final class ItemMapper implements RowMapper<Item> {
 //        @Override
 //        public Item mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -131,12 +167,13 @@ public class ItemRepository implements CrudRepository<Item>{
 //
 //            item.setId(rs.getLong("id"));
 //            item.setName(rs.getString("name"));
-//            item.setPriority(rs.getInt("priority"));
+//            item.setPriority(rs.getInt("priority_id"));
 //            item.setDescription(rs.getString("description"));
-//            item.setCountLikes(rs.getInt("likesCount"));
-//            item.setWishList(wishListId);
-//            item.setTags();
+//            item.setWishListId(rs.getLong("wishListId"));
+//            item.setLikes(likeRepository.getLikesCountForItem(item.getId()));
+//            item.setTags(tagRepository.getTagsForItem(item.getId()));
 //
+//            logger.info("Item got! " + item.toString());
 //            return item;
 //        }
 //    }

@@ -5,6 +5,7 @@ import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
 import {Event} from "../model/event";
 import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import {WishList} from "../model/wishlist";
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' })
@@ -17,6 +18,7 @@ export class WishListService {
   private base_url = '/wishlist';
   private subject=new Subject<Item>();
   private subItemArr = new BehaviorSubject<Item[]>([]);
+  private wishList = new WishList();
   private items: Item[] = [];
 
   constructor(private http: HttpClient) {
@@ -35,6 +37,7 @@ export class WishListService {
   }
 
   getItemsFromWishList( wishListId: number ) : Observable<Item[]> {
+    console.log("im here " + wishListId)
     this.http.get<Item[]>(this.base_url + "/" + wishListId).subscribe( (items : Item[]) => {
       this.items = items;
       this.subItemArr.next(this.items);
@@ -47,6 +50,10 @@ export class WishListService {
   addItemIntoArr(item: Item) : void {
     this.items.push(item);
     this.subItemArr.next(this.items);
+  }
+
+  getWishListByUser ( userId: number) : Observable<WishList> {
+    return this.http.get<WishList>(this.base_url + "/user/" + userId);
   }
 
 }

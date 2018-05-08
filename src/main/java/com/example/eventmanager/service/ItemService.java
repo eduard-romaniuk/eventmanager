@@ -29,18 +29,23 @@ public class ItemService {
 
     public void saveItem(Item item){
 
-        for ( Tag tag : item.getTags() ){
-            Long tagId = tagRepository.findByName(tag.getName());
-
-            if ( tagId == null){
-                tagRepository.save(tag);
-            } else {
-                tag.setId(tagId);
-            }
-        }
+        setNewTags(item.getTags());
 
         itemRepository.save(item);
         tagRepository.saveItemTags(item.getTags(), item.getId());
+    }
+
+    public Item getItem (Long itemId) {
+        return itemRepository.findOne(itemId);
+    }
+
+    public void updateItem(Item item){
+
+        setNewTags( item.getTags() );
+
+        itemRepository.update( item );
+        tagRepository.saveItemTags( item.getTags(), item.getId() );
+        tagRepository.deleteUnusedTags( item.getTags(), item.getId() );
     }
 
     public List<Item> getItemsForWishList (Long wishListId) {
@@ -61,6 +66,20 @@ public class ItemService {
         if (likeRepository.isUserLikesItem(userId, itemId))
             likeRepository.delete(userId, itemId);
         else logger.info("The user " + userId + " doesnt like the item " + itemId);
+    }
+
+    private void setNewTags (List<Tag> tags) {
+
+        for ( Tag tag : tags ){
+            Long tagId = tagRepository.findByName(tag.getName());
+
+            if ( tagId == null){
+                tagRepository.save(tag);
+            } else {
+                tag.setId(tagId);
+            }
+        }
+
     }
 
 

@@ -14,10 +14,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @PropertySource("classpath:queries/tag.properties")
 @Repository
@@ -126,7 +124,7 @@ public class TagRepository implements CrudRepository<Tag>{
                         tag.setId(rs.getLong("id"));
                         tag.setName(rs.getString("tag_name"));
 
-                        logger.info("Tag for item " + itemId + " - "  + tag.getName() + " got!");
+                        logger.info("Tag for item " + itemId + " - "  + tag + " got!");
 
                         return tag;
                     }
@@ -135,6 +133,39 @@ public class TagRepository implements CrudRepository<Tag>{
             logger.info("Tags for items with id: " + itemId + " not found");
             return Collections.emptyList();
         }
+    }
+
+    public int deleteUnusedTags ( List<Tag> usedTags, Long itemId) {
+        logger.info("Deleting unused tags for item: " + itemId );
+
+        List<Long> tagsIds = usedTags.stream().map(
+                Tag::getId
+        ).collect(Collectors.toList());
+
+        Map<String, Object> namedParams = new HashMap<>();
+
+        namedParams.put("itemId", itemId);
+        namedParams.put("usedTags", tagsIds);
+
+        int deleted = namedJdbcTemplate.update(env.getProperty("deleteAllUnusedTagForItem"), namedParams);
+
+        logger.info(deleted + " row was deleted from table item_tags...");
+
+        cleanTags();
+
+        return deleted;
+    }
+
+    public int cleanTags () {
+        logger.info( "Cleaning tags...");
+
+        Map<String, Object> namedParams = new HashMap<>();
+
+        int deleted = namedJdbcTemplate.update(env.getProperty("cleanTags"), namedParams);
+
+        logger.info(deleted + " row was deleted from table tags after cleaning...");
+
+        return deleted;
     }
 
 

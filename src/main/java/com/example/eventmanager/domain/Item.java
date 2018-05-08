@@ -12,7 +12,6 @@ import java.util.List;
 public class Item {
 
     @JsonView({ItemView.ShortView.class})
-    @Null(groups = ItemValidation.New.class)
     @NotNull(groups = ItemValidation.Exist.class, message = "Id cannot be null")
     private Long id;
 
@@ -123,12 +122,15 @@ public class Item {
 
     @Override
     public String toString() {
-        return "Item{" +
+
+        return "Item{" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", priority='" + priority + '\'' +
                 ", wishlist id=" + wishListId +
                 ", likes id=" + likes +
+                tags
+                +
                 '}';
     }
 }

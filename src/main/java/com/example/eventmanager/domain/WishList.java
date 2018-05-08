@@ -14,12 +14,12 @@ public class WishList {
     private Long id;
 
     @NotNull(groups = { WishListValidation.UpdateName.class, WishListValidation.New.class})
-    @Size(min=1, max=45)
+    @Size(max=45)
     private String name;
 
     @NotNull(groups = WishListValidation.New.class, message = "WishList: Creator id cannot be null")
     @Null(groups = WishListValidation.Exist.class)
-    private User user;
+    private Long userId;
 
     private List<Item> items;
 
@@ -39,12 +39,12 @@ public class WishList {
         this.name = name;
     }
 
-    public User getUser() {
-        return user;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public List<Item> getItems() {
