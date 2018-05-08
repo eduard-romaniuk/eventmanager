@@ -14,7 +14,7 @@ import * as $ from 'jquery';
 })
 export class ChatComponent {
   currentUser: User = new User();
-  private serverUrl = 'http://localhost:8080/socket'
+  private serverUrl = 'https://web-event-manager.herokuapp.com/socket'
   private title = 'Chat';
   private stompClient;
       
@@ -45,5 +45,5 @@ export class ChatComponent {
   sendMessage(message){
     this.stompClient.send("/app/send"+this.router.url, {}, message);
     $('#input').val('');
-}
+  }
 }

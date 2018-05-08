@@ -12,20 +12,26 @@ import com.example.eventmanager.domain.Message;
 
 @Service
 public class MessageService {
-	@Autowired
 	private MessageRepository msgRepository;
-	
-	public void saveMessage(Message msg){
+
+	@Autowired
+	public MessageService(MessageRepository msgRepository) {
+		this.msgRepository = msgRepository;
+	}
+
+	public void saveMessage(Message msg) {
 		msgRepository.save(msg);
 	}
-	
-	public List<Message> getAllMessages(){
-        Iterator<Message> iter = msgRepository.findAll().iterator();
-        List<Message> copy = new ArrayList<>();
-        while (iter.hasNext())
-            copy.add(iter.next());
-        //System.out.println(copy);
+
+	public List<Message> getAllMessages() {
+		Iterator<Message> iter = msgRepository.findAll().iterator();
+		List<Message> copy = new ArrayList<>();
+		while (iter.hasNext())
+			copy.add(iter.next());
 		return copy;
 	}
-	
+	public Long findParticipantId(Long userId, Long eventId){
+		return msgRepository.findParticipantId(userId, eventId);
+	}
 }
+
