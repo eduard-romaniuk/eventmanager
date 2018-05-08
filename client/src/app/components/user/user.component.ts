@@ -19,6 +19,7 @@ export class UserComponent implements OnInit, OnDestroy {
   userEvents: Event[];
   userFriends: User[];
   incomeRequests: User[];
+  outcomeRequests: User[];
   sub: Subscription;
 
   currentUserPage: boolean;
@@ -83,8 +84,15 @@ export class UserComponent implements OnInit, OnDestroy {
 
   getIncomingRequests() {
     this.userService.getIncomingRequests(this.user.id)
-      .subscribe((incomeRequests: any) => {
+      .subscribe((incomeRequests: User[]) => {
         this.incomeRequests = incomeRequests;
+      });
+  }
+
+  getOutcomingRequests() {
+    this.userService.getOutcomingRequests(this.user.id)
+      .subscribe((outcomeRequests: User[]) => {
+        this.outcomeRequests = outcomeRequests;
       });
   }
 

@@ -77,21 +77,51 @@
   </div>
 </div>
 
-<div id="requests" class="modal fade">
-  <div class="modal-dialog">
+<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="requests" role="dialog" tabindex="-1">
+  <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header"> <h4> Income requests </h4>
-        <button class="close" type="button" data-dismiss="modal">×</button></div>
       <div class="modal-body">
-        <div *ngIf="incomeRequests">
-          <div *ngFor="let request of incomeRequests">
-            <app-partial-user-list *ngIf="currentUser.id && request.id"
-                                   [currentUser]="currentUser" [user]="request">
-            </app-partial-user-list>
+        <div role="tabpanel">
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <a id="incomeReqTab" aria-controls="incomeRequestsTab" class="nav-link active" data-toggle="tab" href="#incomeRequestsTab" role="tab"
+                 (click)="getIncomingRequests()">
+                Income requests
+              </a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a id="outcomeReqTab" aria-controls="outcomeRequestsTab" class="nav-link" data-toggle="tab" href="#outcomeRequestsTab" role="tab"
+                 (click)="getOutcomingRequests()">
+                Outcome requests
+              </a>
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" id="incomeRequestsTab" role="tabpanel">
+              <div *ngIf="incomeRequests">
+                <div *ngFor="let request of incomeRequests">
+                  <app-partial-user-list *ngIf="currentUser.id && request.id"
+                                         [currentUser]="currentUser" [user]="request">
+                  </app-partial-user-list>
+                </div>
+              </div>
+              <div *ngIf="incomeRequests?.length < 1">
+                <p>No requests:(</p>
+              </div>
+            </div>
+            <div class="tab-pane" id="outcomeRequestsTab" role="tabpanel">
+              <div *ngIf="outcomeRequests">
+                <div *ngFor="let request of outcomeRequests">
+                  <app-partial-user-list *ngIf="currentUser.id && request.id"
+                                         [currentUser]="currentUser" [user]="request">
+                  </app-partial-user-list>
+                </div>
+              </div>
+              <div *ngIf="outcomeRequests?.length < 1">
+                <p>No requests:(</p>
+              </div>
+            </div>
           </div>
-        </div>
-        <div *ngIf="incomeRequests?.length < 1">
-          <p>No requests:(</p>
         </div>
       </div>
     </div>
