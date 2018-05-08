@@ -14,9 +14,9 @@ Description:<br>
   Place:<br>
   {{event.place}}<br><br>
   Time of start:<br>
-  {{event.timeLineStart}}<br><br>
+  {{event.timeLineStart|date: 'MMM d, y h:mm a'}}<br><br>
   Time of finish:<br>
-  {{event.timeLineFinish}}<br>
+  {{event.timeLineFinish|date: 'MMM d, y h:mm a'}}<br>
 
   <div class="md-form text-center">
     <button class="btn btn-info mt-2" data-toggle="collapse" (click)="showParticipants()" data-target="#hide-me">Show Participants</button>
