@@ -1,22 +1,12 @@
 <!-- TODO: Fix items align -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <span class="navbar-brand mb-0 h1">{{ title }}</span>
+<nav class="navbar navbar-expand-lg navbar-light bg-light" [hidden]="!authenticated()">
+    <a class="navbar-brand" routerLink="/home">{{ title }}</a>
     <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
-
-
     <div class="collapse navbar-collapse ml-auto" id="navbarSupportedContent">
-        <div [hidden]="authenticated()">
-            <button class="btn btn-primary" type="button" routerLink="/login">
-                Sign In
-            </button>
-            <button class="btn btn-primary" type="button" routerLink="/registration">
-                Sign Up
-            </button>
-        </div>
-        <div [hidden]="!authenticated()">
+        <div>
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="" id="usersDropdown" role="button"
@@ -36,7 +26,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="eventsDropdown">
                         <a class="dropdown-item" routerLink="/events/list">All public events</a>
-                        <a class="dropdown-item" (click)="createEvent()">Create</a>
+                        <a class="dropdown-item" routerLink="/event/create">Create</a>
                         <a class="dropdown-item" routerLink="/events/export">Export events plan</a>
                     </div>
                 </li>
@@ -61,10 +51,6 @@
                 </div>
               </li>
 
-              <!--<li>-->
-                <!--You logged in as <a [routerLink]="['/users', user.id]"> {{ user.login }} </a>-->
-              <!--</li>-->
-
             </ul>
             <button (click)="logout()" class="btn btn-primary" type="button">
                 Log Out
@@ -72,4 +58,20 @@
         </div>
     </div>
 </nav>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light" [hidden]="authenticated()">
+    <span class="navbar-brand mb-0 h1">{{ title }}</span>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse ml-auto" id="navbarSupportedContent">
+      <button class="btn btn-primary mr-2" type="button" routerLink="/login">
+          Sign In
+      </button>
+      <button class="btn btn-primary" type="button" routerLink="/registration">
+          Sign Up
+      </button>
+    </div>
+</nav>
+
 <router-outlet></router-outlet>

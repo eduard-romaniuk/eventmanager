@@ -51,7 +51,10 @@ export class RegistrationComponent implements OnInit {
       this.loading = false;
       this.router.navigateByUrl('/login');
       this.toast.success('Account registered');
-    }, error => this.error = true);
+    }, error => {
+      this.error = true;
+      this.loading = false;
+    });
   }
 
   emailExists(control: AbstractControl) {
