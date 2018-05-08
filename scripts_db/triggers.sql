@@ -9,6 +9,7 @@ DROP TRIGGER IF EXISTS t_image_null_values ON images;
 DROP TRIGGER IF EXISTS t_friend_controll ON relationships;
 DROP TRIGGER IF EXISTS t_create_default_wish_list ON users;
 
+
 -- --- -------------------------------
 -- Triggers for autoremoving and autocreating users settings
 -- --- -------------------------------

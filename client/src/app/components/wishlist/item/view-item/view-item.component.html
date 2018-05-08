@@ -1,12 +1,12 @@
 <div *ngIf="item">
 
-  <h4 class="text-uppercase">{{item.name}} <i class="likes fa fa-thumbs-up" >{{item.likes}}</i></h4>
+  <h4 class="text-uppercase">{{item.name}} <a class="fa fa-thumbs-up" (click)="clickOnLikeButt(item)">{{item.likes}}</a></h4>
   <button type="button" class="exbutt btn" *ngFor="let tag of item.tags">
-      #{{tag}}
+      #{{tag.name}}
   </button>
   <img src="../../../../../assets/images/mock/test.jpg" alt="Smiley face" height="200">
   <p>
-    {{item.descriprion}}
+    {{item.description}}
   </p>
   <button type="button" class=" btn">
     <img src="../../../../../assets/images/mock/copy-icon.png" alt="Smiley face" height="20">
@@ -16,7 +16,13 @@
     <img src="../../../../../assets/images/mock/Vote-512.png" alt="Smiley face" height="20">
     Booking
   </button>
+  <button type="button" class="button btn btn-success btn-lg "
+          data-toggle="modal" data-target="#editItem" data-dismiss="modal">
+    Edit
+  </button>
 
 </div>
+
+
 
 
