@@ -1,0 +1,28 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form class="md-form text-center" [formGroup]="form" (submit)="send()">
+                <div class="form-group">
+                  <input type="email" id="email" class="form-control mt-2" placeholder="Email"
+                         formControlName="email" [(ngModel)]="email"
+                         [ngClass]="{
+                              'is-invalid': form.get('email').invalid && (form.get('email').dirty || form.get('email').touched)
+                          }">
+                  <div *ngIf="form.get('email').invalid && (form.get('email').dirty || form.get('email').touched)"
+                       class="text-danger">
+                    <div *ngIf = "form.get('email').errors.required">
+                      Email field can't be blank
+                    </div>
+                    <div *ngIf = "form.get('email').errors.email">
+                      Enter valid email
+                    </div>
+                    <div *ngIf = "form.get('email').errors.notexists">
+                      Email not existen
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-default mt-2" type="submit" [disabled] = "!form.valid">Send login</button>
+            </form>
+        </div>
+    </div>
+</div>

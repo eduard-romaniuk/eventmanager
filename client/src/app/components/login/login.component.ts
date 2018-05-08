@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { JQueryStatic } from 'jquery';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-
-declare var $:JQueryStatic;
 
 @Component({
   selector: 'app-login',
@@ -33,8 +30,6 @@ export class LoginComponent implements OnInit {
     this.error = false;
 
     this.auth.authenticate(this.credentials, () => {
-        $('#signInModal').modal('hide');
-
         this.form.reset();
         this.credentials.password = '';
         this.credentials.login = '';

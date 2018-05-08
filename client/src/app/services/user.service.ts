@@ -71,14 +71,8 @@ export class UserService {
     return this.http.get<Event[]>(this.base_url + "/"+ id + "/events");
   }
 
-  updateUserPassword(newUser: User, callback?, errorCallback?) {
+  updateUserPassword(newUser: User) {
     console.log("user in updateUserPassword - " + newUser);
-    this.http.put(this.base_url + "/changePassword", newUser).subscribe(
-      response => {
-        return callback && callback();
-      },
-      error => {
-        return errorCallback && errorCallback();
-      })
+    return this.http.put(this.base_url + "/changePassword", newUser)
   }
 }

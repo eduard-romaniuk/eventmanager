@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -74,19 +73,12 @@ public class UserController {
         userService.updateUser(newUser);
         return new ResponseEntity<>(newUser, HttpStatus.OK);
     }
-    
+
     @RequestMapping(value = "/changePassword", method = RequestMethod.PUT)
     public void changePass(@RequestBody User user) {
         logger.info("PUT /changePassword");
 
         userService.changePass(securityService.encodePass(user));
-    }
-
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public Principal user(Principal user) {
-        logger.info("GET /");
-
-        return user;
     }
 
     @RequestMapping(value = "/by-username/{username}", method = RequestMethod.GET)

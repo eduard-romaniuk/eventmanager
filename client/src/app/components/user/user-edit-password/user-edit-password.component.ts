@@ -36,14 +36,13 @@ export class UserEditPasswordComponent implements OnInit {
   save() {
     this.user.password = this.formContent.newPassword;
 
-    this.userService.updateUserPassword(this.user, () => {
+    this.userService.updateUserPassword(this.user).subscribe(response => {
       this.auth.setSessionAuthToken(this.user.login, this.user.password);
       this.auth.current_user.subscribe(
         current_user => {
           console.log(current_user);
           this.router.navigate(['users', current_user.id]);
         });
-    }, () => {
     });
   }
 

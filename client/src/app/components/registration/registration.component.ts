@@ -10,8 +10,6 @@ import { User } from '../../model/user';
 import { passConfirm, boolean } from '../../utils/validation-tools';
 import 'rxjs/add/operator/map';
 
-declare var $:JQueryStatic;
-
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',

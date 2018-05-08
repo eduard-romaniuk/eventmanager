@@ -9,7 +9,7 @@ export class AuthService {
 
   authenticated: boolean;
   login: string;
-  base_url = '/users';
+  base_url = '/auth';
   current_user: Observable<User>;
 
   constructor(private http: HttpClient, private users: UserService) {
@@ -43,11 +43,7 @@ export class AuthService {
   }
 
   registration(user: User) {
-    return this.http.post(this.base_url + '/', user)
-  }
-
-  emailVerification(str: String) {
-    alert('it\'s work');
+    return this.users.createUser(user);
   }
 
   logout(callback?) {
@@ -69,4 +65,15 @@ export class AuthService {
     sessionStorage.setItem('login', login.toString());
   }
 
+  recoverPassword(login: string) {
+    return this.http.post(this.base_url + '/recover/password/' + login, '');
+  }
+
+  recoverLogin(email: string) {
+    return this.http.post(this.base_url + '/recover/login/' + email, '');
+  }
+
+  updateUserPassword(login: string, token: string, pass: string) {
+    return this.http.put(`${this.base_url}/changePassword/${login}/${token}`, pass)
+  }
 }

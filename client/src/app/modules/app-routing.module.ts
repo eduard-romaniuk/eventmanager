@@ -21,7 +21,10 @@ import { ChatComponent } from "../components/chat/chat.component";
 import { ExportEventsPlanComponent } from "../components/export-events-plan/export-events-plan.component";
 import { UserEditPasswordComponent } from "../components/user/user-edit-password/user-edit-password.component";
 import { PersonalPlanSettingComponent } from "../components/personal-plan-setting/personal-plan-setting.component";
-import {EventEditImageComponent} from "../components/event-edit-image/event-edit-image.component";
+import { EventEditImageComponent } from "../components/event-edit-image/event-edit-image.component";
+import { RecoverPasswordComponent } from '../components/recover-password/recover-password.component';
+import { RecoverLoginComponent } from '../components/recover-login/recover-login.component';
+import { ChangePasswordComponent } from '../components/change-password/change-password.component';
 
 @Injectable()
 class OnlyLoggedInUsersGuard implements CanActivate {
@@ -46,6 +49,12 @@ const routes: Routes = [
     component: LoginComponent },
   { path: 'registration',
     component: RegistrationComponent },
+  { path: 'recover/password',
+    component: RecoverPasswordComponent },
+  { path: 'recover/login',
+    component: RecoverLoginComponent },
+  { path: 'recover-password/:token',
+    component: ChangePasswordComponent },
   { path: 'home',
     component: HomeComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },

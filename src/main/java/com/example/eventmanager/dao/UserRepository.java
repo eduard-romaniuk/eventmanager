@@ -188,6 +188,17 @@ public class UserRepository implements CrudRepository<User> {
                 .toString();
         return namedJdbcTemplate.query(query, new UserMapper());
     }
+
+    public User findByEmail(String email) {
+        try {
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("email", email);
+            return namedJdbcTemplate.queryForObject(env.getProperty("findUserByEmail"), namedParams, new UserMapper());
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("User not found");
+            return null;
+        }
+    }
 }
 
 
