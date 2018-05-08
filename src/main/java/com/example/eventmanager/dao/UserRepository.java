@@ -109,7 +109,7 @@ public class UserRepository implements CrudRepository<User> {
     public void delete(User user) {
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("id", user.getId());
-        namedJdbcTemplate.update(env.getProperty("delete"), namedParams);
+        namedJdbcTemplate.update(env.getProperty("event.delete"), namedParams);
     }
 
     public void changePass(User user) {
@@ -172,6 +172,21 @@ public class UserRepository implements CrudRepository<User> {
             logger.info("User not found");
             return null;
         }
+    }
+
+    public List<User> findAllActive() {
+        return namedJdbcTemplate.query(env.getProperty("findAllActiveUsers"), new UserMapper());
+    }
+
+    public List<User> findAllActivePagination(int limit, int offset) {
+        String query = new StringBuilder()
+                .append(env.getProperty("findAllActiveUsers"))
+                .append(" LIMIT ")
+                .append(limit)
+                .append(" OFFSET ")
+                .append(offset)
+                .toString();
+        return namedJdbcTemplate.query(query, new UserMapper());
     }
 }
 

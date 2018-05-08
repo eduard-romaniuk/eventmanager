@@ -2,14 +2,13 @@ package com.example.eventmanager.service;
 
 
 import com.example.eventmanager.dao.EventRepository;
-import com.example.eventmanager.dao.UserRepository;
 import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -49,14 +48,19 @@ public class EventService {
        return eventRepository.findByCreator(id);
     }
 
-    public List<Event> getEventsWithUserParticipation(User user){
+    public List<Event> getEventsWithUserParticipation(Long id){
 
-        return eventRepository.findEventsWithUserParticipation(user.getId());
+        return eventRepository.findEventsWithUserParticipation(id);
     }
 
     public List<Event> getAllPublicEvents(){
 
         return eventRepository.findAllPublicEvents();
+    }
+
+    public List<Event> eventsForPeriod(Long user_id,LocalDate fromDate, LocalDate toDate){
+
+        return eventRepository.eventsForPeriod(user_id,fromDate,toDate);
     }
 
     public void joinToEvent(Long event_id){
@@ -65,10 +69,10 @@ public class EventService {
 
     }
 
-    public void AddUsersToEvent(List<User> users,Event event){
+    public void AddUsersToEvent(List<User> users,Long id){
 
         for (User user:users) {
-            eventRepository.addUserToEvent(user.getId(),event.getId());
+            eventRepository.addUserToEvent(user.getId(),id);
         }
     }
 

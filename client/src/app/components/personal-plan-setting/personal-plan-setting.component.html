@@ -1,0 +1,24 @@
+<div class="md-form text-center">
+
+  <div class="md-form text-left">
+    Date which to start sending a personal event plan:
+  </div>
+  <input type="date" id="fromDate" class="form-control mt-2"
+         [(ngModel)]="setting.fromDate">
+  <div class="md-form text-left">
+    Number of days in  personal events plan:
+  </div>
+  <input type="number" id="planPeriod" class="form-control mt-2"
+         [(ngModel)]="setting.planPeriod">
+  <div class="md-form text-left">
+    Period of notifications in days:
+  </div>
+  <input type="number" id="notificationPeriod" class="form-control mt-2"
+         [(ngModel)]="setting.notificationPeriod">
+  <div class="form-control mt-2">
+    Send personal events plan via e-mail ?
+    <input type="checkbox" id="sendPlan"
+           [(ngModel)]="setting.sendPlan">
+  </div>
+  <button class="btn btn-default mt-2" (click)="update()">Update</button>
+</div>

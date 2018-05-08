@@ -9,8 +9,11 @@
 
     <div class="collapse navbar-collapse ml-auto" id="navbarSupportedContent">
         <div [hidden]="authenticated()">
-            <button class="btn btn-primary" data-target="#signInModal" data-toggle="modal" type="button">
+            <button class="btn btn-primary" type="button" routerLink="/login">
                 Sign In
+            </button>
+            <button class="btn btn-primary" type="button" routerLink="/registration">
+                Sign Up
             </button>
         </div>
         <div [hidden]="!authenticated()">
@@ -22,6 +25,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="usersDropdown">
                         <a class="dropdown-item" routerLink="/users">All</a>
+                       <a class="dropdown-item" routerLink="/users/setting/plan">Personal Plan Setting</a>
                     </div>
                 </li>
 
@@ -68,36 +72,4 @@
         </div>
     </div>
 </nav>
-
-<!-- modal -->
-<div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="signInModal" role="dialog" tabindex="-1">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <div role="tabpanel">
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li class="nav-item" role="presentation">
-                            <a id="logTab" aria-controls="loginTab" class="nav-link active" data-toggle="tab" href="#loginTab" role="tab">
-                                Login
-                            </a>
-                        </li>
-                        <li class="nav-item" role="presentation">
-                            <a id="regTab" aria-controls="registrationTab" class="nav-link" data-toggle="tab" href="#registrationTab" role="tab">
-                                Registration
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="loginTab" role="tabpanel">
-                            <app-login></app-login>
-                        </div>
-                        <div class="tab-pane" id="registrationTab" role="tabpanel">
-                            <app-registration></app-registration>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 <router-outlet></router-outlet>

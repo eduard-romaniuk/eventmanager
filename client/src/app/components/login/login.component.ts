@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import {HttpClient} from '@angular/common/http';
 import { Router } from '@angular/router';
 import { JQueryStatic } from 'jquery';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
@@ -19,7 +18,7 @@ export class LoginComponent implements OnInit {
   loading = false;
   error = false;
 
-  constructor(private auth: AuthService, private http: HttpClient, private router: Router, private formBuilder: FormBuilder) {
+  constructor(private auth: AuthService, private router: Router, private formBuilder: FormBuilder) {
   }
 
   ngOnInit() {
@@ -50,7 +49,7 @@ export class LoginComponent implements OnInit {
       },
       () => {
         this.error = true,
-          this.loading = false
+        this.loading = false
       });
   }
 

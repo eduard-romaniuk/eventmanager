@@ -41,33 +41,8 @@ export class UserService {
   //     })
   // }
 
-  public updateUser(newUser : User) {
-    console.log("newUser in updateUser" + newUser);
-    const url = `${this.base_url}/${newUser.id}`;
-
-    this.headers = new HttpHeaders(newUser? {newUser: JSON.stringify({
-      id: newUser.id,
-      login: newUser.login,
-      password: newUser.password,
-      name: newUser.name,
-      surName: newUser.surName,
-      email: newUser.email,
-      birth: newUser.birth,
-      phone: newUser.phone,
-      sex: newUser.sex,
-      verified: newUser.verified,
-      image: newUser.image,
-      regDate: newUser.regDate,
-      friends: newUser.friends,
-      wishList: newUser.wishList,
-      events: newUser.events,
-      settings: newUser.settings,
-      token: newUser.token
-    }) } : {});
-
-    console.log(`Update User(${this.headers.get("newUser")})`);
-
-    return this.http.put(url, newUser, httpOptions);
+  public updateUser(newUser : User): Observable<User> {
+    return this.http.put<User>(`${this.base_url}/${newUser.id}`, newUser);
   }
 
   public deleteUser(user) {
