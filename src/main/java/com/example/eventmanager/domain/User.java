@@ -26,14 +26,13 @@ public class User {
     private LocalDate birth;
     @JsonView(UserView.FullView.class)
     private String phone;
-    @JsonView(UserView.FullView.class)
+    @JsonView(UserView.ShortView.class)
     private Boolean sex;
     @JsonView(UserView.FullView.class)
     private LocalDate regDate;
     @JsonView(UserView.FullView.class)
     private List<User> friends;
 
-    //TODO Delete password from FullView
     private String password;
     //private WishList wishList;
     private List<Event> events;

@@ -90,7 +90,6 @@ public class UserRepository implements CrudRepository<User> {
         System.out.println("UserRepository.update");
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("login", user.getLogin());
-        namedParams.put("password", user.getPassword());
         namedParams.put("name", user.getName());
         namedParams.put("surname", user.getSurName());
         namedParams.put("email", user.getEmail());
@@ -99,7 +98,6 @@ public class UserRepository implements CrudRepository<User> {
                 null : user.getPhone());
         namedParams.put("sex", user.getSex());
         namedParams.put("image", user.getImage());
-        namedParams.put("is_active", user.getVerified());
         namedParams.put("id", user.getId());
 
         namedJdbcTemplate.update(env.getProperty("update"), namedParams);
