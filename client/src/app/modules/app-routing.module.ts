@@ -8,6 +8,8 @@ import { AuthService } 			  from '../services/auth.service';
 
 import { EmailVerificationComponent } from '../components/email-verification/email-verification.component';
 import { UserComponent } from '../components/user/user.component';
+import { LoginComponent } from '../components/login/login.component';
+import { RegistrationComponent } from '../components/registration/registration.component';
 import { UserListComponent } from '../components/user/user-list.component';
 import { UserEditComponent } from '../components/user/user-edit.component';
 import { EventEditComponent } from '../components/event-edit/event-edit.component';
@@ -18,7 +20,7 @@ import { WishListComponent } from '../components/wishlist/wishlist.component';
 import { ChatComponent } from "../components/chat/chat.component";
 import { ExportEventsPlanComponent } from "../components/export-events-plan/export-events-plan.component";
 import { UserEditPasswordComponent } from "../components/user/user-edit-password/user-edit-password.component";
-import {PersonalPlanSettingComponent} from "../components/personal-plan-setting/personal-plan-setting.component";
+import { PersonalPlanSettingComponent } from "../components/personal-plan-setting/personal-plan-setting.component";
 import {EventEditImageComponent} from "../components/event-edit-image/event-edit-image.component";
 
 @Injectable()
@@ -40,6 +42,10 @@ const routes: Routes = [
   	component: HelloComponent },
   { path: 'email-verification/:token',
     component: EmailVerificationComponent },
+  { path: 'login',
+    component: LoginComponent },
+  { path: 'registration',
+    component: RegistrationComponent },
   { path: 'home',
     component: HomeComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },

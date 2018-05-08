@@ -42,14 +42,8 @@ export class AuthService {
       });
   }
 
-  registration(user: User, callback?, errorCallback?) {
-    this.http.post(this.base_url + '/', user).subscribe(
-      response => {
-        return callback && callback();
-      },
-      error => {
-        return errorCallback && errorCallback();
-      })
+  registration(user: User) {
+    return this.http.post(this.base_url + '/', user)
   }
 
   emailVerification(str: String) {
