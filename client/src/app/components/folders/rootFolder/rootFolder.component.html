@@ -1,7 +1,12 @@
 <div class="md-form text-left">
-  <!--<button class="btn btn-default mt-2" (click)="create()">Create folder</button>-->
   <button type="button" class="btn btn-default mt-2"  data-toggle="modal" data-target="#createFolder">Create folder</button>
   <button class="btn btn-default mt-2">Create note</button>
+  <tr *ngFor="let folder of folders">
+    <td *ngIf="hideElement">{{ folder.id }}</td>
+    <td>
+      <a [routerLink]="['/folder', folder.id]"> {{ folder.name }} </a>
+    </td>
+  </tr>
 </div>
 
 

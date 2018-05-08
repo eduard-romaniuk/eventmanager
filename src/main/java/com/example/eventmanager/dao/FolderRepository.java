@@ -1,6 +1,7 @@
 package com.example.eventmanager.dao;
 
 
+import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.Folder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -49,6 +50,17 @@ public class FolderRepository implements CrudRepository<Folder> {
         return (Integer)keyHolder.getKeys().get("id");
     }
 
+    public List<Folder> findByCreator(Long creatorId) {
+        try {
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("creator_id", creatorId);
+            return namedJdbcTemplate.query(env.getProperty("findAllFoldersByCreator"), namedParams, new FolderMapper());
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("Events not found");
+            return Collections.emptyList();
+        }
+    }
+
     @Override
     public void update(Folder folder) {
         Map<String, Object> namedParams = new HashMap<>();
@@ -94,4 +106,15 @@ public class FolderRepository implements CrudRepository<Folder> {
             return folder;
         }
     }
+
+//    private static final class FolderWithNotesMapper implements RowMapper<Folder> {
+//        @Override
+//        public Folder mapRow(ResultSet rs, int rowNum) throws SQLException {
+//            Folder folder = new Folder();
+//            folder.setId(rs.getLong("id"));
+//            folder.setName(rs.getString("folder_name"));
+//
+//            return folder;
+//        }
+//    }
 }

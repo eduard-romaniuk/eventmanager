@@ -26,4 +26,9 @@ export class FolderService {
     );
   }
 
+  public getFolders(creatorId: number) {
+    console.log('creator id = ' + creatorId);
+    return this.http.get(this.base_url + creatorId + '/all');
+  }
+
 }

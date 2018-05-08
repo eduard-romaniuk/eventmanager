@@ -7,6 +7,8 @@ import com.example.eventmanager.domain.Folder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class FolderService {
@@ -22,5 +24,10 @@ public class FolderService {
     public void createFolder(Folder folder){
         folder.setId((long) folderRepository.save(folder));
         //eventRepository.addUserToEvent(userService.getCurrentUser().getId(),event.getId());
+    }
+
+    public List<Folder> getUserFolders(Long id){
+
+        return folderRepository.findByCreator(id);
     }
 }
