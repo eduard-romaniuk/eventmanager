@@ -12,6 +12,7 @@ import {ItemService} from "../../services/item.service";
 import {WishList} from "../../model/wishlist";
 import {AuthService} from "../../services/auth.service";
 import {User} from "../../model/user";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-wish-list',
@@ -24,23 +25,48 @@ export class WishListComponent implements OnInit {
   title = 'Your Wish Board!';
   items: Item[] = [];
   subscription: Subscription;
+  isOwn: boolean = false;
+  user: User = new User();
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private wishListService: WishListService,
               private likeService: LikeService,
               private itemService: ItemService,
-              private auth: AuthService
+              private auth: AuthService,
+              private userService: UserService
               ) {
 
   }
 
   ngOnInit() {
 
-    this.auth.getUser().subscribe((user: User) => {
-      this.initWishList(user.id);
-    });
+    if (this.router.url == '/wishlist') this.isOwn = true;
 
+    if (this.isOwn) {
+      this.auth.getUser().subscribe((user: User) => {
+        this.initWishList(user.id);
+      });
+    } else {
+
+      this.route.params.subscribe(params => {
+        const id = params['id'];
+
+        if (id) {
+          this.userService.getUserById(id).subscribe((user: User) => {
+            if (user) {
+              this.user = user;
+              this.initWishList(user.id)
+            } else {
+              console.log(`User with id '${id}' not found!`);
+            }
+          });
+        }
+
+
+      });
+
+    }
 
   }
 
@@ -68,7 +94,6 @@ export class WishListComponent implements OnInit {
           this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
           //TODO:END!!!
 
-
         }
       }
 
@@ -95,6 +120,10 @@ export class WishListComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  }
+
+  isOwnBoard(): boolean {
+    return this.isOwn;
   }
 
 

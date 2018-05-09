@@ -70,7 +70,7 @@ const routes: Routes = [
   { path: 'users',
     component: UserListComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
-  { path: 'users/:id/wishlist',
+  { path: 'wishlist',
     component: WishListComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'users/:id',

@@ -83,7 +83,7 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   goToUserWishList(user: User): void {
-        this.router.navigate(['users', user.id, 'wishlist']);
+    this.router.navigate(['users', user.id, 'wishlist']);
   }
 
   getIncomingRequests() {
