@@ -1,4 +1,4 @@
-import {AbstractControl, ValidatorFn} from '@angular/forms';
+import {AbstractControl, FormGroup, ValidatorFn} from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 
 
@@ -15,18 +15,26 @@ export function boolean(control: AbstractControl) {
   return control.value === '' ? { boolean: true } : null;
 }
 
-export function dateValidator(now): ValidatorFn {
-  return (control: AbstractControl): {[key: string]: any} => {
-    const dateStr = control.value;
-
-
-    console.log("1",dateStr);
-    console.log("2",now);
-    const invalidObj = { 'date': true };
-
-    const date = new Date(dateStr);
-    if (date <= now) {
-      return invalidObj;
+export function dateValidator(from:string){
+  return (group: FormGroup): {[key: string]: any} => {
+    let f = new Date(group.controls[from].value);
+    let now = new Date();
+    console.log(f);
+    console.log(now);
+    if (f < now) {
+      group.get(from).setErrors({ dateValidator: true });
+    }
+    return null;
+  }
+}
+export function dateLessThan(from: string, to: string) {
+  return (group: FormGroup): {[key: string]: any} => {
+    let f = group.controls[from];
+    let t = group.controls[to];
+    console.log(f.value);
+    console.log(t.value);
+    if (f.value > t.value) {
+      group.get(to).setErrors({ dateLessThan: true });
     }
     return null;
   }

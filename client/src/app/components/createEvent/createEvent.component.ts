@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { EventService } from '../../services/event.service';
 import { HttpClient } from '@angular/common/http';
 import {Router, ActivatedRoute} from '@angular/router';
@@ -9,7 +9,7 @@ import {User} from "../../model/user";
 import {Observable} from "rxjs/Observable";
 import {AuthService} from "../../services/auth.service";
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import {dateValidator} from "../../utils/validation-tools";
+import {dateLessThan, dateValidator} from "../../utils/validation-tools";
 
 @Component({
   selector: 'app-createEvent',
@@ -36,12 +36,16 @@ export class CreateEventComponent implements OnInit{
     this.form = this.formBuilder.group({
       eventNameControl: ['', [ Validators.required]],
       descriptionControl: ['', [ Validators.required]],
-      timeLineStartControl:['', [ Validators.required,dateValidator(new Date())]],
-      timeLineFinishControl: ['', [ Validators.required,dateValidator(new Date(this.event.timeLineStart))]],
+      timeLineStartControl:['', [ Validators.required]],
+      timeLineFinishControl: ['', [ Validators.required]],
       periodControl: ['', [ Validators.required, Validators.min(0)]],
-    });
+    },{ validators:dateValidator('timeLineStartControl'),
+      asyncValidators:dateLessThan('timeLineStartControl', 'timeLineFinishControl')
+     });
     this.setCurrentPosition();
   }
+
+
 
   create() {
     // TODO: Handle create error
