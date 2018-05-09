@@ -1,4 +1,5 @@
-﻿DROP TABLE IF EXISTS item_tags;
+﻿DROP TABLE IF EXISTS folders_users;
+DROP TABLE IF EXISTS item_tags;
 DROP TABLE IF EXISTS likes;
 DROP TABLE IF EXISTS tags;
 DROP TABLE IF EXISTS bookers;
@@ -331,4 +332,21 @@ CREATE TABLE IF NOT EXISTS public.images (
 
   CONSTRAINT fk_message_images_message FOREIGN KEY (message_id)
     REFERENCES public.messages (id)
+  );
+  
+-- -----------------------------------------------------
+-- Table public.folders_users
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS public.folders_users (
+  user_id INT NOT NULL,
+  folder_id INT NOT NULL,
+  is_creator BOOLEAN,
+  
+  CONSTRAINT pk_folders_users_folderId_userId PRIMARY KEY (user_id, folder_id),
+  
+  CONSTRAINT fk_folders_users_users FOREIGN KEY (user_id)
+    REFERENCES public.users (id),
+    
+  CONSTRAINT fk_folders_users_folders FOREIGN KEY (folder_id)
+    REFERENCES public.folders (id)
   );
