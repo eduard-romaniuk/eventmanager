@@ -9,15 +9,19 @@ import {User} from "../../model/user";
 import {Observable} from "rxjs/Observable";
 import {AuthService} from "../../services/auth.service";
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import {dateValidator} from "../../utils/validation-tools";
 
 @Component({
   selector: 'app-createEvent',
   templateUrl: './createEvent.component.html',
   styleUrls: ['./createEvent.component.css']
 })
-export class CreateEventComponent {
+export class CreateEventComponent implements OnInit{
 
-  private event : Event = new Event();
+  event : Event = new Event();
+
+  latitude: number;
+  longitude: number;
 
   form: FormGroup;
 
@@ -32,9 +36,11 @@ export class CreateEventComponent {
     this.form = this.formBuilder.group({
       eventNameControl: ['', [ Validators.required]],
       descriptionControl: ['', [ Validators.required]],
-      timeLineFinishControl: ['', [ Validators.min(this.event.timeLineStart)]],
+      timeLineStartControl:['', [ Validators.required,dateValidator(new Date())]],
+      timeLineFinishControl: ['', [ Validators.required,dateValidator(new Date(this.event.timeLineStart))]],
       periodControl: ['', [ Validators.required, Validators.min(0)]],
     });
+    this.setCurrentPosition();
   }
 
   create() {
@@ -48,5 +54,21 @@ export class CreateEventComponent {
     this.event.isSent = true;
     this.eventService.createEvent(this.event);
   }
+  private setCurrentPosition() {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.latitude = position.coords.latitude;
+        this.longitude = position.coords.longitude;
+      });
+    }
+  }
+
+  onChoseLocation(event){
+    console.log(event);
+    this.latitude=event.coords.lat;
+    this.longitude=event.coords.lng;
+
+  }
+
 
 }

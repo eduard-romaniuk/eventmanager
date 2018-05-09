@@ -7,6 +7,7 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { AgmCoreModule } from '@agm/core';
 
 import { environment }           from '../environments/environment';
 import { AppRoutingModule }      from './modules/app-routing.module';
@@ -117,6 +118,9 @@ export class AddressInterceptor implements HttpInterceptor {
     ToastrModule.forRoot({
       timeOut: 2000
     }),
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyAM7RXrVYjGXrOIM1NrlifgXf8pdmzVZf0'
+    })
   ],
   providers: [
     AuthService,

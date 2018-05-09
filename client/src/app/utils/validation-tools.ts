@@ -1,4 +1,4 @@
-import { AbstractControl } from '@angular/forms';
+import {AbstractControl, ValidatorFn} from '@angular/forms';
 import { AuthService } from '../services/auth.service';
 
 
@@ -15,4 +15,19 @@ export function boolean(control: AbstractControl) {
   return control.value === '' ? { boolean: true } : null;
 }
 
+export function dateValidator(now): ValidatorFn {
+  return (control: AbstractControl): {[key: string]: any} => {
+    const dateStr = control.value;
 
+
+    console.log("1",dateStr);
+    console.log("2",now);
+    const invalidObj = { 'date': true };
+
+    const date = new Date(dateStr);
+    if (date <= now) {
+      return invalidObj;
+    }
+    return null;
+  }
+}
