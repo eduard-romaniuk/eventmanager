@@ -1,52 +1,60 @@
-<div class="md-form text-center">
-{{event.name}}<br><br>
- <p *ngIf="this.isParticipant"> Priority: {{this.priority}}
-   <button type="button" class="btn btn-info btn-xs"  data-toggle="modal" data-target="#priorityChange">Change</button>
- </p>
-  <p *ngIf="!this.isCreator">
-   Creator: {{event.creator.name}} {{event.creator.surName}}
-  </p>
-Description:<br>
-  {{event.description}}<br><br>
-  <div *ngIf="event.image">
-    <img class="bigImage" [src]="event.image" id="image" name="image"> <br/>
-  </div>
-  Place:<br>
-  {{event.place}}<br><br>
-  Time of start:<br>
-  {{event.timeLineStart}}<br><br>
-  Time of finish:<br>
-  {{event.timeLineFinish}}<br>
 
-  <div class="md-form text-center">
-    <button class="btn btn-info mt-2" data-toggle="collapse" (click)="showParticipants()" data-target="#hide-me">Show Participants</button>
-  <div id= "hide-me" class="collapse in">
-    <div class="md-form text-center" *ngFor="let user of participants">
-        <a [routerLink]="['/users', user.id]"> {{ user.login }} </a>
+<div class="container">
+
+  <h1 class="my-4">{{event.name}}
+    <small *ngIf="!this.isCreator">{{event.creator.name}} {{event.creator.surName}}</small>
+  </h1>
+
+  <div class="row">
+
+    <div class="col-md-4" *ngIf="event.image">
+      <img class="img-fluid" [src]="event.image" id="image1" name="image">
     </div>
-  </div>
+
+    <div class="col-md-8">
+      <h3 class="my-3">Event Description</h3>
+      <p>{{event.description}}</p>
+      <h3 class="my-3">Event Details</h3>
+      <ul>
+        <li>Place {{event.place}} </li>
+        <li>Start {{event.timeLineStart|date: "MMM d, y HH:mm"}}</li>
+        <li>Finish {{event.timeLineFinish|date: "MMM d, y HH:mm"}}</li>
+        <li *ngIf="this.isParticipant"> Priority {{this.priority}}
+          <button *ngIf="this.isParticipant" type="button" class="btn btn-info btn-xs"  data-toggle="modal" data-target="#priorityChange">Change</button>
+        </li>
+      </ul>
+        <button class="btn btn-info mt-2" data-toggle="collapse" (click)="showParticipants()" data-target="#hide-me">Show Participants</button>
+        <div id= "hide-me" class="collapse in">
+          <div class="md-form text-center" *ngFor="let user of participants">
+            <a [routerLink]="['/users', user.id]"> {{ user.login }} </a>
+          </div>
+        </div>
+    </div>
+
 </div>
+
+</div>
+
+<div class="container my-4 ">
   <button class="btn btn-default mt-2" [routerLink]="['/event', event.id, 'edit']"> <!--*ngIf="isCreator()"-->Edit</button>
   <button class="btn btn-default mt-2" (click)="publish()" [disabled]="true">Invite members</button>
-  <p *ngIf="this.isParticipant">
-   	<button class="btn btn-default mt-2" (click)="goToChatWithCreator()"> Chat With Creator</button>
-   	<button *ngIf="!this.isCreator" class="btn btn-default mt-2" (click)="goToChatWithoutCreator()"> Chat Without Creator</button>
-  </p>
+  <button *ngIf="this.isParticipant" class="btn btn-default mt-2" (click)="goToChatWithCreator()"> Chat With Creator</button>
+  <button *ngIf="!this.isCreator" class="btn btn-default mt-2" (click)="goToChatWithoutCreator()"> Chat Without Creator</button>
   <button *ngIf="!this.isParticipant" class="btn btn-default mt-2" (click)="join()"> Join</button>
 </div>
 
 <div id="priorityChange" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
-     <div class="modal-header"> <h4> Select priority</h4>
-       <button class="close" type="button" data-dismiss="modal">×</button></div>
+      <div class="modal-header"> <h4> Select priority</h4>
+        <button class="close" type="button" data-dismiss="modal">×</button></div>
       <div class="modal-body">
         <div class="form-group">
           <select name="priority" id="priority" class="custom-select" [(ngModel)]="priority_id">
             <option selected></option>
-            <option value="0">low</option>
-            <option value="1">normal</option>
-            <option value="2">urgent</option>
+            <option value="0">Low</option>
+            <option value="1">Normal</option>
+            <option value="2">Urgent</option>
           </select>
         </div>
       </div>
