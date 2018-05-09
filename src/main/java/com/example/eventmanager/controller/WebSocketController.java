@@ -31,26 +31,33 @@ public class WebSocketController {
 		this.msgService = msgService;
 		this.chatService = chatService;
 	}
-
+	
 	@MessageMapping("/send/event/{eventId}/chats/{creator}")
 	private void sendAndSaveMessage(@DestinationVariable Long eventId, @DestinationVariable String creator, String message) {
+		String[] data = message.split(";");
+		Long userId = Long.parseLong(data[0]);
+		String messageToSend = data[1];
 		Date date = new Date();
-		String login = "";
+		String login = userService.getUser(userId).getLogin();
 		
 		template.convertAndSend("/event/" + eventId + "/chats/" + creator,
-				login + ": " + message + " --- " + new SimpleDateFormat("HH:mm:ss").format(date));
+				login + ": " + messageToSend + " --- " + new SimpleDateFormat("HH:mm:ss").format(date));
 		
+		saveMessage(messageToSend, creator, eventId, userId, date);
+		
+	}
+	
+	private void saveMessage(String text,String creator, Long eventId, Long userId, Date date){
 		Message msg = new Message();
-		//Long userId = userService.getCurrentUser().getId();
-		//Long participantId = msgService.findParticipantId(userId, eventId);
 		if(creator.equals("withCreator")){
 			msg.setChatId(chatService.findChatId(eventId,true));
 		}else{
 			msg.setChatId(chatService.findChatId(eventId,false));
 		}
-		//msg.setDate(date);
-		//msg.setParticipantId(participantId);
-		//msg.setText(message);
-		//msgService.saveMessage(msg);
+		msg.setDate(date);
+		msg.setParticipantId(msgService.findParticipantId(userId, eventId));
+		msg.setText(text);
+		msgService.saveMessage(msg);
 	}
+	
 }
