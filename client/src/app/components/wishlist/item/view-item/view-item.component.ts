@@ -2,6 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import {Item} from '../../../../model/item';
 import {WishListService} from '../../../../services/wishlist.service';
 import {Subscription} from 'rxjs/Subscription';
+import {AuthService} from "../../../../services/auth.service";
+import {LikeService} from "../../../../services/like.service";
 
 @Component({
   selector: 'app-view-item',
@@ -11,20 +13,36 @@ import {Subscription} from 'rxjs/Subscription';
 export class ViewItemComponent implements OnInit {
   item: Item;
   subscription: Subscription;
+  userId: number;
 
   constructor(
-    private wishListService: WishListService
+    private wishListService: WishListService,
+    private auth : AuthService,
+    private likeService : LikeService
   ){
-    this.ngOnInit();
-
-    this.subscription = this.wishListService.getViewingItem().subscribe(item => {this.item = item;});
-  }
+ }
 
   ngOnInit(): void {
+
+    this.subscription = this.wishListService.getViewingItem().subscribe(item => {
+      this.item = item;
+      this.likeService.wasLiked(this.item.id).subscribe( (hasLike: boolean) => {
+          this.item.hasLiked = hasLike;
+        });
+    });
+
+    this.auth.getUser().subscribe((user: any) => {
+      this.userId = user.id;
+    });
+
   }
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  }
+
+  clickOnLikeButt(): void {
+    this.likeService.addLike(this.item);
   }
 
 

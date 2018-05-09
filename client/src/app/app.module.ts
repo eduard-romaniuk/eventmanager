@@ -48,6 +48,8 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
 import { PartialUserListComponent } from './components/user/partial/partial-user-list/partial-user-list.component';
 import { PartialUserImageComponent } from './components/user/partial/partial-user-image/partial-user-image.component';
 import { PartialUserFriendshipButtonComponent } from './components/user/partial/partial-user-friendship-button/partial-user-friendship-button.component';
+import {LikeService} from "./services/like.service";
+import { EditItemComponent } from './components/wishlist/item/edit-item/edit-item.component';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -102,7 +104,8 @@ export class AddressInterceptor implements HttpInterceptor {
     ExportEventsPlanComponent,
     PartialUserListComponent,
     PartialUserImageComponent,
-    PartialUserFriendshipButtonComponent
+    PartialUserFriendshipButtonComponent,
+    EditItemComponent
   ],
   imports: [
     BrowserModule,
@@ -128,6 +131,8 @@ export class AddressInterceptor implements HttpInterceptor {
     WishListService,
     ItemService,
     PersonalPanSettingService,
+    LikeService,
+
     { provide: HTTP_INTERCEPTORS,
       useClass: AddressInterceptor,
       multi: true},

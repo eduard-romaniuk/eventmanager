@@ -6,6 +6,11 @@ import { JQueryStatic } from 'jquery';
 import {FormGroup, FormBuilder, Validators, FormArray} from '@angular/forms';
 import {ItemService} from '../../../../services/item.service';
 import {Item} from '../../../../model/item';
+import {Tag} from '../../../../model/tag';
+import {WishList} from "../../../../model/wishlist";
+import {WishListService} from "../../../../services/wishlist.service";
+import {AuthService} from "../../../../services/auth.service";
+import {Subscription} from "rxjs/Subscription";
 declare var $:JQueryStatic;
 
   @Component({
@@ -16,14 +21,20 @@ declare var $:JQueryStatic;
   export class CreateItemComponent implements OnInit{
   form: FormGroup;
   item: Item = new Item();
+  userId: number;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
               private itemService: ItemService,
-              private formBuilder: FormBuilder
+              private formBuilder: FormBuilder,
+              private auth : AuthService
+
   ) { }
 
   ngOnInit(){
+    this.auth.getUser().subscribe((user: any) => {
+      this.userId = user.id;
+    });
     this.initForm();
   }
 
@@ -51,8 +62,14 @@ declare var $:JQueryStatic;
 
     const arr: FormArray = <FormArray>this.form.get("tags");
     this.item.tags = [];
+
+    //TODO: CHANGE!!!
+    this.item.wishListId = 1;
+
     for (let i = 0; i < arr.length-1; i++){
-      this.item.tags.push(<String>arr.at(i).get("name").value);
+      var tag = new Tag();
+      tag.name = <String>arr.at(i).get("name").value
+      this.item.tags.push(tag);
     }
 
     console.log(this.item);
@@ -65,6 +82,7 @@ declare var $:JQueryStatic;
         this.form.setControl('tags', new FormArray([this.createTag()]));
       }
     )
+
   }
 
 

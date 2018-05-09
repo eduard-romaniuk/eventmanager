@@ -14,28 +14,31 @@ import * as $ from 'jquery';
 })
 export class ChatComponent {
   currentUser: User = new User();
-  private serverUrl = 'https://web-event-manager.herokuapp.com/socket'
+  private serverUrl = 'https://web-event-manager.herokuapp.com/socket'//https://web-event-manager.herokuapp.com/socket
   private title = 'Chat';
   private stompClient;
+  private id;
       
   constructor(private router: Router,private auth: AuthService){
     this.initializeWebSocketConnection();
   }
-
-  initializeWebSocketConnection(){
-    let login;
+  
+  ngOnInit() {
     this.auth.current_user.subscribe(
       current_user => {
         this.currentUser = current_user;
-       login = this.currentUser.login;
+        this.id = this.currentUser.id;
       });
+    }
+  
+  initializeWebSocketConnection(){
     let ws = new SockJS(this.serverUrl);
     this.stompClient = Stomp.over(ws);
     let that = this;
     this.stompClient.connect({}, function(frame) {
       that.stompClient.subscribe(that.router.url, (message) => {
         if(message.body) {
-          $(".chat").append("<div class='message'>"+login+': '+message.body+"</div>")
+          $(".chat").append("<div class='message'>"+message.body+"</div>")
           console.log(message.body);
         }
       });
@@ -43,7 +46,7 @@ export class ChatComponent {
   }
 
   sendMessage(message){
-    this.stompClient.send("/app/send"+this.router.url, {}, message);
+    this.stompClient.send("/app/send"+this.router.url, {}, this.id+";"+message);
     $('#input').val('');
   }
 }

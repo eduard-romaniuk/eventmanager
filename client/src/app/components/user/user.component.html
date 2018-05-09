@@ -24,6 +24,7 @@
           <p>
             <button class="btn btn-info" (click)="goToEditPasswordPage()"> Edit password </button>
           </p>
+
         </div>
 
       <div *ngIf="!currentUserPage">
@@ -34,6 +35,9 @@
 
       <button type="button" class="btn btn-info" data-toggle="modal"
               data-target="#friendsList" (click)="getFriends()">Friends</button>
+
+      <button type="button" class="btn btn-info" data-toggle="modal"
+              data-target="#friendsList" (click)="goToUserWishList(user)"> View user Wish Board </button>
 
     </div>
 

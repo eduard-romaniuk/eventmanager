@@ -1,4 +1,4 @@
-<form class="md-form text-center" [formGroup]="form" (submit)="createItem()">
+<form class="md-form text-center" [formGroup]="form" (submit)="editItem()">
 
   <!-- name -->
   <div class="form-group">
@@ -26,7 +26,7 @@
       <input type="radio" name="priority" value="1" id="prior02" formControlName="priority" [(ngModel)]="item.priority" >
       <label class="form-check-label" for="prior02">normal</label>
 
-      <input type="radio" name="priority" value="2" id="prior03"formControlName="priority" [(ngModel)]="item.priority">
+      <input type="radio" name="priority" value="2" id="prior03" formControlName="priority" [(ngModel)]="item.priority">
       <label class="form-check-label" for="prior03">urgent</label>
     </div>
 
@@ -35,38 +35,37 @@
   <!-- images -->
   <!--TODO-->
 
-  <!--tags-->
+  tags
   <div class="form-group">
 
-    <div class="d-inline" formArrayName="tags"
-         *ngFor="let tag of form.get('tags').controls; let i = index; let last = last" >
+    <!--<div class="d-inline" formArrayName="tags"-->
+         <!--*ngFor="let tag of form.get('tags').controls; let i = index; let last = last" >-->
 
-      <div class="d-inline" [formGroupName]="i">
+      <!--<div class="d-inline" [formGroupName]="i">-->
 
-        <input class="form-control" *ngIf="last" formControlName="name" placeholder="Tag">
+        <!--<input class="form-control" *ngIf="last" formControlName="name" placeholder="Tag">-->
 
-        <div class="exbutt" *ngIf="!last">
+        <!--<div class="exbutt" *ngIf="!last">-->
 
-          {{ form.controls.tags.controls[i].controls.name.value }}
-          <button class="close" type="button" (click)="removeTag(i)">×</button>
+          <!--{{ form.controls.tags.controls[i].controls.name.value }}-->
+          <!--<button class="close" type="button" >×</button>-->
 
-        </div>
+        <!--</div>-->
 
 
-      </div>
+      <!--</div>-->
 
-    </div>
+    <!--</div>-->
 
-    <button type="button" class="btn btn-default mt-2" (click)="addTag()" [disabled]="isTagControlInvalid('name')">
+    <button type="button" class="btn btn-default mt-2">
       Add new tag
     </button>
 
   </div>
 
 
-  <button class="btn btn-default mt-2" type="submit"
-          [disabled]="isControlInvalid('name') || isControlInvalid('priority')">
-    Create new item
+  <button class="btn btn-default mt-2" type="submit">
+    Save
   </button>
 </form>
 
