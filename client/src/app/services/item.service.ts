@@ -31,9 +31,6 @@ export class ItemService {
       error => {
         return errorCallback && errorCallback();
       });
-
-    //TODO: delete after adding backend
-    return callback && callback();
   }
 
   public getItem( itemId: number ): Observable<Item> {
