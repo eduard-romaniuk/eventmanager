@@ -59,7 +59,7 @@ declare var $:JQueryStatic;
   }
 
 
-  createItem() {
+  public createItem() {
 
     const arr: FormArray = <FormArray>this.form.get("tags");
     this.item.tags = [];
@@ -84,6 +84,7 @@ declare var $:JQueryStatic;
     )
 
   }
+
 
 
   private createTag(): FormGroup {

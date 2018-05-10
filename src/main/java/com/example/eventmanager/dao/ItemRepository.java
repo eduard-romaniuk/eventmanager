@@ -124,7 +124,7 @@ public class ItemRepository implements CrudRepository<Item>{
         namedParams.put("priorityId", item.getPriority());
         namedParams.put("itemId", item.getId());
 
-        namedJdbcTemplate.update(env.getProperty("updateEvent"), namedParams);
+        namedJdbcTemplate.update(env.getProperty("updateItem"), namedParams);
 
     }
 

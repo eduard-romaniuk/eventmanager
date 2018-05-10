@@ -37,6 +37,17 @@ export class ItemService {
     return this.http.get<Item>(this.base_url + "/" + itemId);
   }
 
+  public editItem(item: Item, callback?, errorCallback?) {
+    console.log(item);
+    this.http.post(this.base_url + '/' + item.id, item).subscribe(
+      (item: Item) => {
+        return callback && callback();
+      },
+      error => {
+        return errorCallback && errorCallback();
+      });
+  }
+
 
 
 }
