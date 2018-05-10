@@ -48,6 +48,17 @@ public class ItemService {
         tagRepository.deleteUnusedTags( item.getTags(), item.getId() );
     }
 
+    public Long copyItem ( Long toWishListId, Long itemId ) {
+        Long newItemId = itemRepository.copyItem (toWishListId, itemId);
+        List<Tag> tags = tagRepository.getTagsForItem(itemId);
+
+        for ( Tag tag : tags ) {
+            tagRepository.addItemTag( newItemId, tag.getId());
+        }
+
+        return newItemId;
+    }
+
     public List<Item> getItemsForWishList (Long wishListId) {
         return itemRepository.getItemsForWishList(wishListId);
     }
@@ -81,6 +92,7 @@ public class ItemService {
         }
 
     }
+
 
 
 }

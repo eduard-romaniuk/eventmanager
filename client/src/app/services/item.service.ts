@@ -48,6 +48,12 @@ export class ItemService {
       });
   }
 
+  public copyItem (item: Item) {
+    this.http.post(this.base_url + '/copy/' + item.id, this.wishListService.getCurrentWishListId()).subscribe(
+      (itemId: number) => {console.log("copy item. Created new item with id: " + itemId)}
+    );
+  }
+
 
 
 }

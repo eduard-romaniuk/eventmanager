@@ -160,6 +160,26 @@ public class ItemRepository implements CrudRepository<Item>{
         }
     }
 
+    public Long copyItem ( Long toWishListId, Long itemId ) {
+        logger.info("Copy item: " + itemId);
+
+        MapSqlParameterSource namedParams = new MapSqlParameterSource();
+
+        namedParams.addValue("toWishListId", toWishListId);
+        namedParams.addValue("itemId", itemId);
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        int update = namedJdbcTemplate.update(env.getProperty("copyItem"), namedParams, keyHolder);
+
+        logger.info(update + " row was updated from table items...");
+        logger.info("Item was copy = " + keyHolder.getKeys());
+
+        return ((Integer)keyHolder
+                .getKeys()
+                .get("id"))
+                .longValue();
+    }
+
 //    private static final class ItemMapper implements RowMapper<Item> {
 //        @Override
 //        public Item mapRow(ResultSet rs, int rowNum) throws SQLException {

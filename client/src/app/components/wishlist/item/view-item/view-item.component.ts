@@ -4,6 +4,7 @@ import {WishListService} from '../../../../services/wishlist.service';
 import {Subscription} from 'rxjs/Subscription';
 import {AuthService} from "../../../../services/auth.service";
 import {LikeService} from "../../../../services/like.service";
+import {ItemService} from "../../../../services/item.service";
 
 @Component({
   selector: 'app-view-item',
@@ -18,7 +19,8 @@ export class ViewItemComponent implements OnInit {
   constructor(
     private wishListService: WishListService,
     private auth : AuthService,
-    private likeService : LikeService
+    private likeService : LikeService,
+    private itemService: ItemService
   ){
  }
 
@@ -43,6 +45,10 @@ export class ViewItemComponent implements OnInit {
 
   clickOnLikeButt(): void {
     this.likeService.addLike(this.item);
+  }
+
+  public copyItem(): void {
+    this.itemService.copyItem(this.item);
   }
 
 
