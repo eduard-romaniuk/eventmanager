@@ -207,7 +207,14 @@ public class EventRepository implements CrudRepository<Event> {
             return false;
         }
     }
-    
+
+    public void deleteParticipant(Long user_id,Long event_id){
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("user_id", user_id);
+            namedParams.put("event_id", event_id);
+            namedJdbcTemplate.update(env.getProperty("event.leave"), namedParams);
+        }
+
 
     public static final class EventMapper implements RowMapper<Event> {
         @Override

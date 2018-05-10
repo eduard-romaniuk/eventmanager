@@ -98,13 +98,17 @@ export class ViewEventComponent {
   }
 
   public leave() {
-
+    this.eventService.leaveEvent(this.event.id).subscribe();
+    window.location.reload();
   }
 
   public delete() {
 
   }
 
+  invite(){
+
+  }
   public isCreatorTest(): boolean {
     return this.userId === this.event.creator.id;
   }

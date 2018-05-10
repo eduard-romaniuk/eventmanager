@@ -99,4 +99,9 @@ public class EventService {
 
         return eventRepository.isParticipant(userService.getCurrentUser().getId(),event_id);
     }
+
+    public void leaveEvent(Long event_id){
+
+        eventRepository.deleteParticipant(userService.getCurrentUser().getId(),event_id);
+    }
 }

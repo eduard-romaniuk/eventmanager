@@ -77,4 +77,8 @@ export class EventService {
   public getParticipants(id){
     return this.http.get(this.base_url+id+"/participants")
   }
+
+  public leaveEvent(id){
+    return this.http.get(this.base_url+id+"/leave")
+  }
 }

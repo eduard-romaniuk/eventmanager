@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div  class="container-fluid">
   <div class="row">
     <div class="col-md-6">
       <h1>{{event.name}}</h1>
@@ -6,7 +6,7 @@
         <small *ngIf="!this.isCreator"> Creator: {{event.creator.name}} {{event.creator.surName}}</small>
       </h3>
 
-      <div *ngIf="this.isParticipant" class="container-fluid my-4">
+      <div *ngIf="this.isParticipant" class="container-fluid ">
         <div *ngIf="low()">
           <h4> Event priority: <strong class="text-success">Low </strong></h4>
         </div>
@@ -20,10 +20,12 @@
       </div>
 
 
-      <img class="rounded my-4" [src]="event.image" id="image" name="image">
+     <div class="my-2">
+       <img class="rounded " [src]="event.image" id="image" name="image">
+     </div>
 
-      <button *ngIf="!this.isCreator && this.isParticipant" class="btn btn-warning " (click)="leave()"
-              [disabled]="true"> Leave
+      <button *ngIf="!this.isCreator && this.isParticipant" class="btn btn-warning " (click)="leave()">
+        Leave
       </button>
 
       <button *ngIf="!this.isParticipant" class="btn btn-primary" (click)="join()"> Join</button>
@@ -33,6 +35,9 @@
       </button>
       <button *ngIf="this.isCreator" class="btn btn-primary" [routerLink]="['/event', event.id, 'edit']">
         Edit
+      </button>
+      <button *ngIf="this.isParticipant" class="btn btn-primary" (click)="invite()" [disabled]="true">
+        Invite
       </button>
 
       <button class="btn btn-info left-button" data-toggle="collapse" (click)="showParticipants()"
@@ -48,20 +53,20 @@
     </div>
 
     <div class="col-md-6">
-      <h3 class="my-4">
+      <h3 class="my-2">
         Description
       </h3>
       <p>
         {{this.event.description}}
       </p>
-      <h3 class="my-4">
+      <h3 class="my-2">
         Place
       </h3>
       <agm-map [mapTypeControl]="true" [fullscreenControl]="true"
                [latitude]="latitude" [longitude]="longitude">
         <agm-marker [latitude]="latitude" [longitude]="longitude" [title]=this.event.name></agm-marker>
       </agm-map>
-      <h3 class="my-3">Time</h3>
+      <h3 class="my-2">Time</h3>
       <ul>
         <li><strong>Start:</strong> {{event.timeLineStart|date: "MMM d, y HH:mm"}}</li>
         <li><strong>End:</strong> {{event.timeLineFinish|date: "MMM d, y HH:mm"}}</li>

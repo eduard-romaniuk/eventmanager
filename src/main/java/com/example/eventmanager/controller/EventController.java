@@ -180,6 +180,12 @@ public class EventController {
         return eventService.isParticipant(id);
     }
 
+    @RequestMapping(value = "{id}/leave", method = RequestMethod.GET)
+    public void leave(@PathVariable Long id) {
+        logger.info("GET /leave");
+         eventService.leaveEvent(id);
+    }
+
 }
 
 
