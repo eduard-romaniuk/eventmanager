@@ -8,6 +8,7 @@ import {User} from "../../model/user";
 import {AuthService} from "../../services/auth.service";
 import {Subscription} from "rxjs/Subscription";
 import {FormGroup} from "@angular/forms";
+import {ToastService} from "../../services/toast.service";
 
 @Component({
   selector: 'app-createEvent',
@@ -31,7 +32,8 @@ export class ViewEventComponent {
   constructor(private auth : AuthService,
               private route: ActivatedRoute,
               private router: Router,
-              private eventService: EventService) {
+              private eventService: EventService,
+              private toast: ToastService) {
   }
 
   ngOnInit() {
@@ -89,6 +91,7 @@ export class ViewEventComponent {
   public join(){
     this.eventService.joinToEvent(this.event.id).subscribe();
     window.location.reload();
+    this.toast.success('You become a participant in this event');
   }
   public isCreatorTest(): boolean {
     return this.userId === this.event.creator.id;

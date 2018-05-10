@@ -8,6 +8,7 @@ import {CloudinaryUploader} from 'ng2-cloudinary';
 import {ImageUploaderService} from "../../services/image-uploader.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {imageExtension} from "../../utils/validation-tools";
+import {ToastService} from '../../services/toast.service';
 
 @Component({
   selector: 'app-user-edit-image',
@@ -29,7 +30,8 @@ export class UserEditImageComponent implements OnInit, OnDestroy {
   constructor(private route: ActivatedRoute,
               private router: Router,
               private userService: UserService,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              private toast: ToastService) {
     this.uploader.onSuccessItem = (item: any, response: string, status: number, headers: any): any => {
       this.imageUploading = false;
       let res: any = JSON.parse(response);
@@ -75,6 +77,7 @@ export class UserEditImageComponent implements OnInit, OnDestroy {
     this.userService.updateUser(this.user).subscribe((user: any) => {
       this.savingChanges = false;
       this.goHome();
+      this.toast.success('Profile image successfully updated');
     }, error => {
       console.error(error);
       this.error = true;
