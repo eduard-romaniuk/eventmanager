@@ -6,6 +6,8 @@ import {UserService} from "../../services/user.service";
 
 import {CloudinaryUploader} from 'ng2-cloudinary';
 import {ImageUploaderService} from "../../services/image-uploader.service";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {imageExtension} from "../../utils/validation-tools";
 
 @Component({
   selector: 'app-user-edit-image',
@@ -17,12 +19,19 @@ export class UserEditImageComponent implements OnInit, OnDestroy {
   user: User = new User();
   sub: Subscription;
 
+  form: FormGroup;
+  imageUploading = false;
+  savingChanges = false;
+  error = false;
+
   uploader: CloudinaryUploader = ImageUploaderService.getUploader();
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private userService: UserService) {
+              private userService: UserService,
+              private formBuilder: FormBuilder) {
     this.uploader.onSuccessItem = (item: any, response: string, status: number, headers: any): any => {
+      this.imageUploading = false;
       let res: any = JSON.parse(response);
       this.user.image = res.url;
       console.log(`res - ` + JSON.stringify(res) );
@@ -31,6 +40,11 @@ export class UserEditImageComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.form = this.formBuilder.group({
+        image: ['', [ Validators.required ]]},
+      {validator: imageExtension}
+    );
+
     this.sub = this.route.params.subscribe(params => {
       const id = params['id'];
       if (id) {
@@ -50,14 +64,22 @@ export class UserEditImageComponent implements OnInit, OnDestroy {
   }
 
   upload() {
-    this.uploader.uploadAll();
+    if(this.form.get("image").valid){
+      this.imageUploading = true;
+      this.uploader.uploadAll();
+    }
   }
 
   uploadImage() {
-    console.log("this.user - " + this.user);
+    this.savingChanges = true;
     this.userService.updateUser(this.user).subscribe((user: any) => {
+      this.savingChanges = false;
       this.goHome();
-    }, error => console.error(error));
+    }, error => {
+      console.error(error);
+      this.error = true;
+      this.savingChanges = false;
+    });
   }
 
   goHome(): void {
