@@ -18,17 +18,12 @@ export class FolderService {
 
   }
 
-  public createFolder(folder) {
-    this.http.post(this.base_url, folder).subscribe(
-      (id: number) => {
-        this.router.navigate(['note/', id]);
-      }
-    );
+  public  createFolder(folder) {
+    return this.http.post(this.base_url, folder);
   }
 
-  public getFolders(creatorId: number) {
-    console.log('creator id = ' + creatorId);
-    return this.http.get(this.base_url + creatorId + '/all');
+  public getFolders(userId: number) {
+    return this.http.get(this.base_url + userId + '/all');
   }
 
 }

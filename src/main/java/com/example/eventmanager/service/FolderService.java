@@ -21,13 +21,17 @@ public class FolderService {
     }
 
 
-    public void createFolder(Folder folder){
-        folder.setId((long) folderRepository.save(folder));
-        //eventRepository.addUserToEvent(userService.getCurrentUser().getId(),event.getId());
+    public Folder createFolder(Folder folder){
+        folderRepository.save(folder);
+        return folder;
     }
 
     public List<Folder> getUserFolders(Long id){
 
-        return folderRepository.findByCreator(id);
+        return folderRepository.findByUser(id);
+    }
+
+    public Folder getFolder(Long id) {
+        return folderRepository.findOne(id);
     }
 }

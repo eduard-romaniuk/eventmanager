@@ -41,6 +41,7 @@ import { ExportEventsPlanComponent } from './components/export-events-plan/expor
 import { UserEditPasswordComponent } from './components/user/user-edit-password/user-edit-password.component';
 import { FolderService } from "./services/folder.service";
 import { RootFolderComponent } from './components/folders/rootFolder/rootFolder.component';
+import { FolderComponent } from './components/folders/folder/folder.component';
 import { CreateNoteComponent } from './components/notes/createNote/createNote.component';
 
 @Injectable()
@@ -89,6 +90,7 @@ export class AddressInterceptor implements HttpInterceptor {
     ChatComponent,
     ExportEventsPlanComponent,
     RootFolderComponent,
+    FolderComponent,
     CreateNoteComponent
   ],
   imports: [

@@ -59,7 +59,6 @@ public class EventRepository implements CrudRepository<Event> {
         logger.info("Saving event");
         MapSqlParameterSource namedParams = new MapSqlParameterSource();
         namedParams.addValue("creator_id", event.getCreator().getId());
-        namedParams.addValue("folder_id", event.getFolder().getId());
         namedParams.addValue("name", event.getName());
         namedParams.addValue("description", event.getDescription());
         namedParams.addValue("place", event.getPlace());
@@ -239,7 +238,6 @@ public class EventRepository implements CrudRepository<Event> {
             while (rs.next()) {
                 Event event = new Event();
                 User creator = new User();
-                Folder folder = new Folder();
                 event.setId(rs.getLong("id"));
                 event.setName(rs.getString("name"));
                 event.setDescription(rs.getString("description"));
@@ -259,10 +257,6 @@ public class EventRepository implements CrudRepository<Event> {
                 creator.setName(rs.getString("creator_name"));
                 creator.setSurName(rs.getString("surname"));
                 event.setCreator(creator);
-                folder.setId(rs.getLong("folder_id"));
-                folder.setName(rs.getString("folder_name"));
-                System.out.println("loaded folder name = " + folder.getName());
-                event.setFolder(folder);
                 events.add(event);
             }
 

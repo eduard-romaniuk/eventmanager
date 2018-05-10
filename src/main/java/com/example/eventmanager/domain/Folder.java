@@ -17,6 +17,8 @@ public class Folder {
     private String name;
     @JsonView(FolderView.FullView.class)
     private List<Event> events;
+    @JsonView(FolderView.FullView.class)
+    private User creator;
 
     public Long getId() {
         return id;
@@ -40,5 +42,13 @@ public class Folder {
 
     public void setEvents(List<Event> events) {
         this.events = events;
+    }
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
 }

@@ -47,14 +47,23 @@ public class FolderRepository implements CrudRepository<Folder> {
         namedParams.addValue("folder_name", folder.getName());
         KeyHolder keyHolder = new GeneratedKeyHolder();
         namedJdbcTemplate.update(env.getProperty("saveFolder"), namedParams, keyHolder);
-        return (Integer)keyHolder.getKeys().get("id");
+        logger.info("Created folder with id: " + keyHolder.getKeys().get("id"));
+        folder.setId(new Long((int)keyHolder.getKeys().get("id")));
+
+        namedParams = new MapSqlParameterSource();
+        namedParams.addValue("folderId", folder.getId());
+        namedParams.addValue("userId", folder.getCreator().getId());
+        namedParams.addValue("isCreator", true);
+        namedJdbcTemplate.update(env.getProperty("connectFolderToUser"), namedParams, keyHolder);
+
+        return folder.getId().intValue();
     }
 
-    public List<Folder> findByCreator(Long creatorId) {
+    public List<Folder> findByUser(Long userId) {
         try {
             Map<String, Object> namedParams = new HashMap<>();
-            namedParams.put("creator_id", creatorId);
-            return namedJdbcTemplate.query(env.getProperty("findAllFoldersByCreator"), namedParams, new FolderMapper());
+            namedParams.put("user_id", userId);
+            return namedJdbcTemplate.query(env.getProperty("findAllFoldersByUser"), namedParams, new FolderMapper());
         } catch (EmptyResultDataAccessException e) {
             logger.info("Events not found");
             return Collections.emptyList();
@@ -106,15 +115,4 @@ public class FolderRepository implements CrudRepository<Folder> {
             return folder;
         }
     }
-
-//    private static final class FolderWithNotesMapper implements RowMapper<Folder> {
-//        @Override
-//        public Folder mapRow(ResultSet rs, int rowNum) throws SQLException {
-//            Folder folder = new Folder();
-//            folder.setId(rs.getLong("id"));
-//            folder.setName(rs.getString("folder_name"));
-//
-//            return folder;
-//        }
-//    }
 }

@@ -18,8 +18,9 @@ import { WishListComponent } from '../components/wishlist/wishlist.component';
 import { ChatComponent } from "../components/chat/chat.component";
 import { ExportEventsPlanComponent } from "../components/export-events-plan/export-events-plan.component";
 import { UserEditPasswordComponent } from "../components/user/user-edit-password/user-edit-password.component";
-import {RootFolderComponent} from "../components/folders/rootFolder/rootFolder.component"
-import {CreateNoteComponent} from "../components/notes/createNote/createNote.component"
+import { RootFolderComponent } from "../components/folders/rootFolder/rootFolder.component"
+import { CreateNoteComponent } from "../components/notes/createNote/createNote.component"
+import { FolderComponent } from "../components/folders/folder/folder.component"
 
 @Injectable()
 class OnlyLoggedInUsersGuard implements CanActivate {
@@ -49,13 +50,16 @@ const routes: Routes = [
   { path: 'folders/rootFolder',
     component: RootFolderComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'folders/rootFolder/folder/:id',
+    component: FolderComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'events/list',
       component: EventListComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'event/:id',
     component: ViewEventComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
-  { path: 'note/:folderId',
+  { path: 'note/create',
     component: CreateNoteComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'users',

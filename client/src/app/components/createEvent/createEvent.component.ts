@@ -4,7 +4,7 @@ import {JQueryStatic} from 'jquery';
 
 import { Event } from '../../model/event'
 import {AuthService} from "../../services/auth.service";
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-createEvent',

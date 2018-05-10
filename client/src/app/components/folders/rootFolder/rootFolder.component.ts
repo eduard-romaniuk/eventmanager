@@ -3,6 +3,8 @@ import {FolderService} from '../../../services/folder.service'
 import {Folder} from '../../../model/folder'
 import {AuthService} from "../../../services/auth.service";
 import {User} from "../../../model/user";
+import { FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {Note} from "../../../model/note";
 
 
 @Component({
@@ -14,26 +16,35 @@ export class RootFolderComponent {
 
   private folder: Folder = new Folder;
   folders: Folder[];
-  creator: User = new User;
+  notes: Note[];
+  currentUser: User;
+  form: FormGroup;
 
   constructor(private auth : AuthService,
-              private folderService: FolderService) {
+              private folderService: FolderService,
+              private formBuilder: FormBuilder) {
   }
 
   ngOnInit() {
-    this.auth.current_user.subscribe((data: any) => {this.creator = data, console.log('data from auth.getUser:' + data)});
-    console.log('Creator id - ' + this.creator.id);
-    this.folderService.getFolders(3).subscribe(
-      (folders: any) => {
-        this.folders = folders;
-      }
-    );
-
+    this.auth.current_user.subscribe((currentUser: any) => {
+      this.currentUser = currentUser;
+      this.folderService.getFolders(this.currentUser.id).subscribe(
+        (folders: any) => {
+          this.folders = folders;
+        }
+      );
+    });
+    this.form = this.formBuilder.group({
+      folderNameControl: ['', [ Validators.required]]
+    });
   }
 
-  create() {
+  createFolder() {
     console.log('Creating folder: ' + this.folder.name);
-    this.folderService.createFolder(this.folder);
+    this.folder.creator = this.currentUser;
+    this.folderService.createFolder(this.folder).subscribe((folder: Folder) => {
+      this.folders.push(folder);
+    });
   }
 
 }

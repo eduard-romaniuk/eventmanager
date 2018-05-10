@@ -25,25 +25,32 @@ public class FolderController {
     @Autowired
     public FolderController(FolderService folderService) {
         logger.info("Class initialized");
-
         this.folderService = folderService;
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public ResponseEntity<Long> createFolder(@RequestBody Folder folder, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Folder> createFolder(@RequestBody Folder folder) {
         logger.info("POST /");
 
-        folderService.createFolder(folder);
-        return new ResponseEntity<>(folder.getId(), HttpStatus.CREATED);
+        return new ResponseEntity<>(folderService.createFolder(folder), HttpStatus.CREATED);
     }
 
     @JsonView(FolderView.FullView.class)
     @RequestMapping(value = "/{id}/all", method = RequestMethod.GET)
-    public ResponseEntity<List<Folder>> getFolderByCreator(@PathVariable Long id) {
+    public ResponseEntity<List<Folder>> getFolderByUser(@PathVariable Long id) {
         logger.info("GET /{id}/all");
 
         List<Folder> folderList = folderService.getUserFolders(id);
-        return new ResponseEntity<>(folderList, HttpStatus.CREATED);
+        return new ResponseEntity<>(folderList, HttpStatus.OK);
+    }
+
+    @JsonView(FolderView.FullView.class)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Folder> getFolderById(@PathVariable Long id) {
+        logger.info("GET /{id}");
+
+        Folder folder = folderService.getFolder(id);
+        return new ResponseEntity<>(folder, HttpStatus.OK);
     }
 
 }

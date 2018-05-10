@@ -3,10 +3,10 @@ import {EventService} from '../../../services/event.service';
 import {JQueryStatic} from 'jquery';
 import { ActivatedRoute} from '@angular/router';
 
-import { Event } from '../../../model/event'
 import {AuthService} from "../../../services/auth.service";
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import {Folder} from "../../../model/folder";
+import {Note} from "../../../model/note";
 
 @Component({
   selector: 'app-createEvent',
@@ -15,7 +15,7 @@ import {Folder} from "../../../model/folder";
 })
 export class CreateNoteComponent {
 
-  private note : Event = new Event();
+  private note : Note = new Note();
 
   form: FormGroup;
   folder: Folder;

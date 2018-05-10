@@ -24,8 +24,6 @@ public class Event {
     @JsonView(EventView.FullView.class)
     private User creator;
     @JsonView(EventView.FullView.class)
-    private Folder folder;
-    @JsonView(EventView.FullView.class)
     private Integer period;
     // private WishList wishList;
     @JsonView(EventView.FullView.class)
@@ -132,14 +130,6 @@ public class Event {
 
     public void setParticipants(List<User> participants) {
         this.participants = participants;
-    }
-
-    public Folder getFolder() {
-        return folder;
-    }
-
-    public void setFolder(Folder folder) {
-        this.folder = folder;
     }
 
     @Override

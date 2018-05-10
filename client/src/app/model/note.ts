@@ -1,15 +1,14 @@
 import {User} from "./user";
-export class Event {
+import {Folder} from "./folder";
+export class Note {
   id: number;
   creator: User;
   name: string;
   description: string;
   place: string;
-  timeLineStart: any;//TODO date & time
-  timeLineFinish: any;//TODO date & time
   period: number; //
   image: any;//TODO image
   isSent: boolean;
   isPrivate: boolean;
-  participants: any[]; //TODO User[]
+  folder: Folder;
 }
