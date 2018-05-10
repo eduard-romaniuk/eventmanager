@@ -6,6 +6,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ItemService} from "../../../../services/item.service";
 import {WishListService} from "../../../../services/wishlist.service";
 import {Tag} from "../../../../model/tag";
+import { JQueryStatic } from 'jquery';
 declare var $:JQueryStatic;
 
 @Component({
@@ -115,11 +116,10 @@ export class EditItemComponent implements OnInit {
       this.item.tags.push(tag);
     }
 
-    this.item.name = <String>this.form.get("name");
-    this.item.description = <String>this.form.get("description");
-    this.item.priority = <number>this.form.get("priority");
-console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyyyyy")
-console.log(this.item)
+    this.item.name = <String>this.form.get("name").value;
+    this.item.description = <String>this.form.get("description").value;
+    this.item.priority = <number>this.form.get("priority").value;
+
     this.itemService.editItem(
       this.item,
 
