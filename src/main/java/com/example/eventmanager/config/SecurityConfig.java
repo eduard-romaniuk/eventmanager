@@ -43,10 +43,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers(HttpMethod.GET,"/users/exists/**").permitAll()
                     .antMatchers(HttpMethod.POST,"/users/").permitAll()
-                    .antMatchers(HttpMethod.GET,"/users/").permitAll()
+                    .antMatchers(HttpMethod.GET,"/auth/").permitAll()
                     .antMatchers(HttpMethod.PUT,"/users/").permitAll()
                     .antMatchers(HttpMethod.GET,"/socket/**").permitAll()
                     .antMatchers(HttpMethod.POST,"/socket/**").permitAll()
+                    .antMatchers("/auth/**").permitAll()
                     .anyRequest().authenticated()
             .and()
                 .csrf().disable();

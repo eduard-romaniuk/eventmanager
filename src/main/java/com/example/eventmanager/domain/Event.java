@@ -13,13 +13,13 @@ public class Event {
     @JsonView(EventView.ShortView.class)
     private String name;
 
-    @JsonView(EventView.FullView.class)
+    @JsonView(EventView.ShortView.class)
     private String description;
     @JsonView(EventView.FullView.class)
     private String place;
-    @JsonView(EventView.FullView.class)
+    @JsonView(EventView.ShortView.class)
     private LocalDateTime timeLineStart;
-    @JsonView(EventView.FullView.class)
+    @JsonView(EventView.ShortView.class)
     private LocalDateTime timeLineFinish;
     @JsonView(EventView.FullView.class)
     private User creator;

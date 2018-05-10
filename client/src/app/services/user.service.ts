@@ -25,7 +25,7 @@ export class UserService {
   }
 
   public createUser(user) {
-    return this.http.post(this.base_url, user);
+    return this.http.post(this.base_url + "/", user);
   }
 
   //TODO Do update without headers
@@ -71,14 +71,72 @@ export class UserService {
     return this.http.get<Event[]>(this.base_url + "/"+ id + "/events");
   }
 
-  updateUserPassword(newUser: User, callback?, errorCallback?) {
+  updateUserPassword(newUser: User) {
     console.log("user in updateUserPassword - " + newUser);
-    this.http.put(this.base_url + "/changePassword", newUser).subscribe(
-      response => {
-        return callback && callback();
-      },
-      error => {
-        return errorCallback && errorCallback();
-      })
+    return this.http.put(this.base_url + "/changePassword", newUser)
   }
+
+  // Friends functionality
+
+  public addFriendRequest(from, to) {
+    const params = new HttpParams()
+      .set('from', from)
+      .set('to', to);
+    return this.http.post(this.base_url + "/addFriendRequest",
+      {}, {params: params});
+  }
+
+  public acceptFriendRequest(requester, accepter) {
+    const params = new HttpParams()
+      .set('requester', requester)
+      .set('accepter', accepter)
+      .set('accept', "true");
+    return this.http.put(this.base_url + "/answerFriendRequest",
+      {}, {params: params});
+  }
+
+  public declineFriendRequest(requester, accepter) {
+    const params = new HttpParams()
+      .set('requester', requester)
+      .set('accepter', accepter)
+      .set('accept', "false");
+    return this.http.put(this.base_url + "/answerFriendRequest",
+      {}, {params: params});
+  }
+
+  public deleteRelationship(from, to) {
+    const params = new HttpParams()
+      .set('from', from)
+      .set('to', to);
+    return this.http.delete(this.base_url + "/deleteRelationship", {params: params});
+  }
+
+  public getRelationshipStatus(from, to) {
+    const params = new HttpParams()
+      .set('from', from)
+      .set('to', to);
+    return this.http.get(this.base_url + "/getRelationshipStatus",
+      {params: params, responseType: 'text'});
+  }
+
+  public getRelationshipStatusAndActionUserId(from, to) {
+    const params = new HttpParams()
+      .set('from', from)
+      .set('to', to);
+    return this.http.get<Map<string, any>>(this.base_url + "/getRelationshipStatusAndActiveUserId",
+      {params: params});
+  }
+
+  public getOutcomingRequests(id) {
+    return this.http.get<User[]>(this.base_url + "/" + id + "/outcomingRequests");
+  }
+
+  public getIncomingRequests(id) {
+    return this.http.get<User[]>(this.base_url + "/" + id + "/incomingRequests");
+  }
+
+  public getFriends(id) {
+    return this.http.get<User[]>(this.base_url + "/" + id + "/friends");
+  }
+
 }

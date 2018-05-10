@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../services/user.service';
+import { ToastService } from '../../services/toast.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { JQueryStatic } from 'jquery';
@@ -8,8 +9,6 @@ import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from
 import { User } from '../../model/user';
 import { passConfirm, boolean } from '../../utils/validation-tools';
 import 'rxjs/add/operator/map';
-
-declare var $:JQueryStatic;
 
 @Component({
   selector: 'app-registration',
@@ -19,9 +18,12 @@ declare var $:JQueryStatic;
 export class RegistrationComponent implements OnInit {
   form: FormGroup;
   loading = false;
+  error = false;
   user: User = new User();
 
-  constructor(private auth: AuthService, private users: UserService, private http: HttpClient, private router: Router, private formBuilder: FormBuilder) { }
+  constructor(private auth: AuthService, private users: UserService,
+    private http: HttpClient, private router: Router,
+    private formBuilder: FormBuilder, private toast: ToastService) { }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
@@ -43,9 +45,16 @@ export class RegistrationComponent implements OnInit {
 
   registration(){
     console.log(this.user);
-    // this.form.reset();
-    this.auth.registration(this.user);
-    $('#logTab').tab('show');
+    this.loading = true;
+    this.error = false;
+    this.auth.registration(this.user).subscribe(response => {
+      this.loading = false;
+      this.router.navigateByUrl('/login');
+      this.toast.success('Account registered');
+    }, error => {
+      this.error = true;
+      this.loading = false;
+    });
   }
 
   emailExists(control: AbstractControl) {

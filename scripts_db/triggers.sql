@@ -7,8 +7,9 @@ DROP TRIGGER IF EXISTS t_delete_chats ON events;
 DROP TRIGGER IF EXISTS t_user_reg_date_upd ON users;
 DROP TRIGGER IF EXISTS t_image_null_values ON images;
 DROP TRIGGER IF EXISTS t_friend_controll ON relationships;
+DROP TRIGGER IF EXISTS t_create_default_wish_list ON users;
 
-select * from users;
+
 -- --- -------------------------------
 -- Triggers for autoremoving and autocreating users settings
 -- --- -------------------------------
@@ -16,7 +17,7 @@ CREATE OR REPLACE FUNCTION set_user_settings() RETURNS TRIGGER AS $$
 
 BEGIN
     IF    TG_OP = 'INSERT' THEN
-        INSERT INTO public.settings(user_id, personal_plan_notification) values (NEW.id, FALSE);
+        INSERT INTO public.settings(user_id, personal_plan_notification, from_date, plan_period, notification_period) values (NEW.id, FALSE, current_timestamp, 1, 1);
         RETURN NEW;
 
     ELSIF TG_OP = 'DELETE' THEN
@@ -32,6 +33,8 @@ CREATE TRIGGER t_add_settings
 
 CREATE TRIGGER t_del_settings
 	BEFORE DELETE ON users FOR EACH ROW EXECUTE PROCEDURE set_user_settings();
+
+
 
 -- --- -------------------------------
 -- Triggers for autoremoving and autocreating participant nottification settings
@@ -168,4 +171,22 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER t_friend_controll
 	BEFORE UPDATE OR INSERT ON relationships FOR EACH ROW EXECUTE PROCEDURE friends_controll();
 
+
+-- --- -------------------------------
+-- Triggers for autocreating wish list for user
+-- --- -------------------------------
+CREATE OR REPLACE FUNCTION create_default_wish_list() RETURNS TRIGGER AS $$
+
+BEGIN
+    IF    TG_OP = 'INSERT' THEN
+        INSERT INTO public.wishlists(user_id) 
+		values (NEW.id);
+        RETURN NEW;
+
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER t_create_default_wish_list
+	AFTER INSERT ON users FOR EACH ROW EXECUTE PROCEDURE create_default_wish_list();
 

@@ -39,6 +39,17 @@ import { ViewItemComponent } from './components/wishlist/item/view-item/view-ite
 import { ChatComponent } from './components/chat/chat.component';
 import { ExportEventsPlanComponent } from './components/export-events-plan/export-events-plan.component';
 import { UserEditPasswordComponent } from './components/user/user-edit-password/user-edit-password.component';
+import { PersonalPlanSettingComponent } from './components/personal-plan-setting/personal-plan-setting.component';
+import { PersonalPanSettingService } from "./services/personal-pan-setting.service";
+import { EventEditImageComponent } from './components/event-edit-image/event-edit-image.component';
+import { RecoverPasswordComponent } from './components/recover-password/recover-password.component';
+import { RecoverLoginComponent } from './components/recover-login/recover-login.component';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { PartialUserListComponent } from './components/user/partial/partial-user-list/partial-user-list.component';
+import { PartialUserImageComponent } from './components/user/partial/partial-user-image/partial-user-image.component';
+import { PartialUserFriendshipButtonComponent } from './components/user/partial/partial-user-friendship-button/partial-user-friendship-button.component';
+import { LikeService } from "./services/like.service";
+import { EditItemComponent } from './components/wishlist/item/edit-item/edit-item.component';
 import { FolderService } from "./services/folder.service";
 import { RootFolderComponent } from './components/folders/rootFolder/rootFolder.component';
 import { FolderComponent } from './components/folders/folder/folder.component';
@@ -91,7 +102,17 @@ export class AddressInterceptor implements HttpInterceptor {
     ExportEventsPlanComponent,
     RootFolderComponent,
     FolderComponent,
-    CreateNoteComponent
+    CreateNoteComponent,
+    PersonalPlanSettingComponent,
+    EventEditImageComponent,
+    RecoverLoginComponent,
+    RecoverPasswordComponent,
+    ChangePasswordComponent,
+    ExportEventsPlanComponent,
+    PartialUserListComponent,
+    PartialUserImageComponent,
+    PartialUserFriendshipButtonComponent,
+    EditItemComponent
   ],
   imports: [
     BrowserModule,
@@ -117,6 +138,9 @@ export class AddressInterceptor implements HttpInterceptor {
     ImageUploaderService,
     WishListService,
     ItemService,
+    PersonalPanSettingService,
+    LikeService,
+
     { provide: HTTP_INTERCEPTORS,
       useClass: AddressInterceptor,
       multi: true},

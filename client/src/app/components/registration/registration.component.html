@@ -1,139 +1,146 @@
-<form class="md-form text-center" [formGroup]="form" (submit)="registration()">
-  <!-- name -->
-  <div class="form-group">
-    <input type="text" id="name" class="form-control mt-2" placeholder="Name"
-           formControlName="name" autocomplete="off" [(ngModel)]="user.name"
-           [ngClass]="{
-                'is-invalid': form.get('name').invalid && (form.get('name').dirty || form.get('name').touched)
-            }">
-    <div *ngIf="form.get('name').invalid && (form.get('name').dirty || form.get('name').touched)"
-         class="text-danger">
-      <div *ngIf = "form.get('name').errors.required">
-        Name field can't be blank
-      </div>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form class="md-form text-center" [formGroup]="form" (submit)="registration()">
+              <!-- name -->
+              <div class="form-group">
+                <input type="text" id="name" class="form-control mt-2" placeholder="Name"
+                       formControlName="name" autocomplete="off" [(ngModel)]="user.name"
+                       [ngClass]="{
+                            'is-invalid': form.get('name').invalid && (form.get('name').dirty || form.get('name').touched)
+                        }">
+                <div *ngIf="form.get('name').invalid && (form.get('name').dirty || form.get('name').touched)"
+                     class="text-danger">
+                  <div *ngIf = "form.get('name').errors.required">
+                    Name field can't be blank
+                  </div>
+                </div>
+              </div>
+
+              <!-- surName -->
+              <div class="form-group">
+                <input type="text" id="surName" class="form-control mt-2" placeholder="Surname"
+                       formControlName="surName" autocomplete="off" [(ngModel)]="user.surName"
+                       [ngClass]="{
+                            'is-invalid': form.get('surName').invalid && (form.get('surName').dirty || form.get('surName').touched)
+                        }">
+                <div *ngIf="form.get('surName').invalid && (form.get('surName').dirty || form.get('surName').touched)"
+                     class="text-danger">
+                  <div *ngIf = "form.get('surName').errors.required">
+                    Surname field can't be blank
+                  </div>
+                </div>
+              </div>
+
+              <!-- sex -->
+              <div class="form-group">
+                <select name="sex" id="sex" formControlName="sex" class="custom-select" [(ngModel)]="user.sex"
+                        [ngClass]="{
+                            'is-invalid': form.get('sex').invalid && (form.get('sex').dirty || form.get('sex').touched)
+                        }">
+                  <option selected></option>
+                  <option value="true">male</option>
+                  <option value="false">female</option>
+                </select>
+                <div *ngIf="form.get('sex').invalid && (form.get('sex').dirty || form.get('sex').touched)"
+                     class="text-danger">
+                  <div *ngIf = "form.get('sex').errors.boolean">
+                    Choose your gender
+                  </div>
+                </div>
+              </div>
+
+              <!-- email -->
+              <div class="form-group">
+                <input type="email" id="email" class="form-control mt-2" placeholder="Email"
+                       formControlName="email" [(ngModel)]="user.email"
+                       [ngClass]="{
+                            'is-invalid': form.get('email').invalid && (form.get('email').dirty || form.get('email').touched)
+                        }">
+                <div *ngIf="form.get('email').invalid && (form.get('email').dirty || form.get('email').touched)"
+                     class="text-danger">
+                  <div *ngIf = "form.get('email').errors.required">
+                    Email field can't be blank
+                  </div>
+                  <div *ngIf = "form.get('email').errors.email">
+                    Enter valid email
+                  </div>
+                  <div *ngIf = "form.get('email').errors.exists">
+                    Email already used
+                  </div>
+                </div>
+              </div>
+
+              <!-- username -->
+              <div class="form-group">
+                <input type="text" id="login" class="form-control mt-2" placeholder="login"
+                       formControlName="login" autocomplete="off" [(ngModel)]="user.login"
+                       [ngClass]="{
+                            'is-invalid': form.get('login').invalid && (form.get('login').dirty || form.get('login').touched)
+                        }">
+                <div *ngIf="form.get('login').invalid && (form.get('login').dirty || form.get('login').touched)"
+                     class="text-danger">
+                  <div *ngIf = "form.get('login').errors.required">
+                    Username field can't be blank
+                  </div>
+                  <div *ngIf = "form.get('login').errors.pattern">
+                    You can use only letters(a-z), digits(0-9) and underscore(_)
+                  </div>
+                  <div *ngIf = "form.get('login').errors.minlength || form.get('login').errors.maxlength">
+                    Username must contain between 3 and 30 symbols
+                  </div>
+                  <div *ngIf = "form.get('login').errors.exists">
+                    Username already used
+                  </div>
+                </div>
+              </div>
+
+              <!-- password -->
+              <div class="form-group">
+                <input type="password" id="password" class="form-control mt-2" placeholder="Password"
+                       formControlName="password" [(ngModel)]="user.password"
+                       [ngClass]="{
+                            'is-invalid': form.get('password').invalid && (form.get('password').dirty || form.get('password').touched)
+                        }">
+                <div *ngIf="form.get('password').invalid && (form.get('password').dirty || form.get('password').touched)"
+                     class="text-danger">
+                  <div *ngIf = "form.get('password').errors.required">
+                    Password field can't be blank
+                  </div>
+                  <div *ngIf = "form.get('password').errors.pattern">
+                    Password must contain letter and digits (special characters are not allowed)
+                  </div>
+                  <div *ngIf = "form.get('password').errors.minlength || form.get('password').errors.maxlength">
+                    Password must contain between 6 and 30 symbols
+                  </div>
+                </div>
+              </div>
+
+              <!-- passConf -->
+              <div class="form-group">
+                <input type="password" id="confirmPassword" class="form-control mt-2" placeholder="Confirm password"
+                       formControlName="confirmPassword"
+                       [ngClass]="{
+                            'is-invalid': form.get('confirmPassword').invalid && (form.get('confirmPassword').dirty || form.get('confirmPassword').touched)
+                        }">
+                <div *ngIf="form.get('confirmPassword').invalid && (form.get('confirmPassword').dirty || form.get('confirmPassword').touched)"
+                     class="text-danger">
+                  <div *ngIf = "form.get('confirmPassword').errors.passconfirm">
+                    Bad confirm
+                  </div>
+                </div>
+              </div>
+
+              <div class="alert alert-primary mt-2" [hidden]="!loading">
+                Please wait...
+              </div>
+
+              <div class="alert alert-danger mt-2" [hidden]="!error">
+                Some errors occurred, try again
+              </div>
+
+              <button class="btn btn-default mt-2" type="submit" [disabled] = "!form.valid">Registration</button>
+            </form>
+        </div>
     </div>
-  </div>
-
-  <!-- surName -->
-  <div class="form-group">
-    <input type="text" id="surName" class="form-control mt-2" placeholder="Surname"
-           formControlName="surName" autocomplete="off" [(ngModel)]="user.surName"
-           [ngClass]="{
-                'is-invalid': form.get('surName').invalid && (form.get('surName').dirty || form.get('surName').touched)
-            }">
-    <div *ngIf="form.get('surName').invalid && (form.get('surName').dirty || form.get('surName').touched)"
-         class="text-danger">
-      <div *ngIf = "form.get('surName').errors.required">
-        Surname field can't be blank
-      </div>
-    </div>
-  </div>
-
-  <!-- sex -->
-  <div class="form-group">
-    <select name="sex" id="sex" formControlName="sex" class="custom-select" [(ngModel)]="user.sex"
-            [ngClass]="{
-                'is-invalid': form.get('sex').invalid && (form.get('sex').dirty || form.get('sex').touched)
-            }">
-      <option selected></option>
-      <option value="true">male</option>
-      <option value="false">female</option>
-    </select>
-    <div *ngIf="form.get('sex').invalid && (form.get('sex').dirty || form.get('sex').touched)"
-         class="text-danger">
-      <div *ngIf = "form.get('sex').errors.boolean">
-        Choose your gender
-      </div>
-    </div>
-  </div>
-
-  <!-- email -->
-  <div class="form-group">
-    <input type="email" id="email" class="form-control mt-2" placeholder="Email"
-           formControlName="email" [(ngModel)]="user.email"
-           [ngClass]="{
-                'is-invalid': form.get('email').invalid && (form.get('email').dirty || form.get('email').touched)
-            }">
-    <div *ngIf="form.get('email').invalid && (form.get('email').dirty || form.get('email').touched)"
-         class="text-danger">
-      <div *ngIf = "form.get('email').errors.required">
-        Email field can't be blank
-      </div>
-      <div *ngIf = "form.get('email').errors.email">
-        Enter valid email
-      </div>
-      <div *ngIf = "form.get('email').errors.exists">
-        Email already used
-      </div>
-    </div>
-  </div>
-
-  <!-- username -->
-  <div class="form-group">
-    <input type="text" id="login" class="form-control mt-2" placeholder="login"
-           formControlName="login" autocomplete="off" [(ngModel)]="user.login"
-           [ngClass]="{
-                'is-invalid': form.get('login').invalid && (form.get('login').dirty || form.get('login').touched)
-            }">
-    <div *ngIf="form.get('login').invalid && (form.get('login').dirty || form.get('login').touched)"
-         class="text-danger">
-      <div *ngIf = "form.get('login').errors.required">
-        Username field can't be blank
-      </div>
-      <div *ngIf = "form.get('login').errors.pattern">
-        You can use only letters(a-z), digits(0-9) and underscore(_)
-      </div>
-      <div *ngIf = "form.get('login').errors.minlength || form.get('login').errors.maxlength">
-        Username must contain between 3 and 30 symbols
-      </div>
-      <div *ngIf = "form.get('login').errors.exists">
-        Username already used
-      </div>
-    </div>
-  </div>
-
-  <!-- password -->
-  <div class="form-group">
-    <input type="password" id="password" class="form-control mt-2" placeholder="Password"
-           formControlName="password" [(ngModel)]="user.password"
-           [ngClass]="{
-                'is-invalid': form.get('password').invalid && (form.get('password').dirty || form.get('password').touched)
-            }">
-    <div *ngIf="form.get('password').invalid && (form.get('password').dirty || form.get('password').touched)"
-         class="text-danger">
-      <div *ngIf = "form.get('password').errors.required">
-        Password field can't be blank
-      </div>
-      <div *ngIf = "form.get('password').errors.pattern">
-        Password must contain letter and digits (special characters are not allowed)
-      </div>
-      <div *ngIf = "form.get('password').errors.minlength || form.get('password').errors.maxlength">
-        Password must contain between 6 and 30 symbols
-      </div>
-    </div>
-  </div>
-
-  <!-- passConf -->
-  <div class="form-group">
-    <input type="password" id="confirmPassword" class="form-control mt-2" placeholder="Confirm password"
-           formControlName="confirmPassword"
-           [ngClass]="{
-                'is-invalid': form.get('confirmPassword').invalid && (form.get('confirmPassword').dirty || form.get('confirmPassword').touched)
-            }">
-    <div *ngIf="form.get('confirmPassword').invalid && (form.get('confirmPassword').dirty || form.get('confirmPassword').touched)"
-         class="text-danger">
-      <div *ngIf = "form.get('confirmPassword').errors.passconfirm">
-        Bad confirm
-      </div>
-    </div>
-  </div>
-
-  <div class="alert alert-primary mt-2" [hidden]="!loading">
-    Please wait...
-  </div>
-  <div class="alert alert-danger mt-2" [hidden]="!error">
-    There was a problem logging in. Please try again.
-  </div>
-
-  <button class="btn btn-default mt-2" type="submit" [disabled] = "!form.valid">Registration</button>
-</form>
+</div>

@@ -62,4 +62,8 @@ export class EventService {
   public joinToEvent(id){
     return this.http.get(this.base_url + id + "/join");
   }
+
+  public getParticipants(id){
+    return this.http.get(this.base_url+id+"/participants")
+  }
 }

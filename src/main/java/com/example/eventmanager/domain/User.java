@@ -26,23 +26,18 @@ public class User {
     private LocalDate birth;
     @JsonView(UserView.FullView.class)
     private String phone;
-    @JsonView(UserView.FullView.class)
+    @JsonView(UserView.ShortView.class)
     private Boolean sex;
     @JsonView(UserView.FullView.class)
     private LocalDate regDate;
     @JsonView(UserView.FullView.class)
     private List<User> friends;
 
-    //TODO Delete password from FullView
-    @JsonView(UserView.FullView.class)
     private String password;
     //private WishList wishList;
-    @JsonView(EventView.FullView.class)
     private List<Event> events;
     // private Settings settings;
-    @JsonView(EventView.FullView.class)
     private String token = "";
-    @JsonView(EventView.FullView.class)
     private Boolean verified = false;
 
     public Long getId() {

@@ -8,6 +8,8 @@ import { AuthService } 			  from '../services/auth.service';
 
 import { EmailVerificationComponent } from '../components/email-verification/email-verification.component';
 import { UserComponent } from '../components/user/user.component';
+import { LoginComponent } from '../components/login/login.component';
+import { RegistrationComponent } from '../components/registration/registration.component';
 import { UserListComponent } from '../components/user/user-list.component';
 import { UserEditComponent } from '../components/user/user-edit.component';
 import { EventEditComponent } from '../components/event-edit/event-edit.component';
@@ -18,6 +20,11 @@ import { WishListComponent } from '../components/wishlist/wishlist.component';
 import { ChatComponent } from "../components/chat/chat.component";
 import { ExportEventsPlanComponent } from "../components/export-events-plan/export-events-plan.component";
 import { UserEditPasswordComponent } from "../components/user/user-edit-password/user-edit-password.component";
+import { PersonalPlanSettingComponent } from "../components/personal-plan-setting/personal-plan-setting.component";
+import { EventEditImageComponent } from "../components/event-edit-image/event-edit-image.component";
+import { RecoverPasswordComponent } from '../components/recover-password/recover-password.component';
+import { RecoverLoginComponent } from '../components/recover-login/recover-login.component';
+import { ChangePasswordComponent } from '../components/change-password/change-password.component';
 import { RootFolderComponent } from "../components/folders/rootFolder/rootFolder.component"
 import { CreateNoteComponent } from "../components/notes/createNote/createNote.component"
 import { FolderComponent } from "../components/folders/folder/folder.component"
@@ -41,26 +48,27 @@ const routes: Routes = [
   	component: HelloComponent },
   { path: 'email-verification/:token',
     component: EmailVerificationComponent },
+  { path: 'login',
+    component: LoginComponent },
+  { path: 'registration',
+    component: RegistrationComponent },
+  { path: 'recover/password',
+    component: RecoverPasswordComponent },
+  { path: 'recover/login',
+    component: RecoverLoginComponent },
+  { path: 'recover-password/:token',
+    component: ChangePasswordComponent },
   { path: 'home',
     component: HomeComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'event/create',
     component: CreateEventComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
-  { path: 'folders/rootFolder',
-    component: RootFolderComponent,
-    canActivate: [ OnlyLoggedInUsersGuard ] },
-  { path: 'folders/rootFolder/folder/:id',
-    component: FolderComponent,
-    canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'events/list',
       component: EventListComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'event/:id',
     component: ViewEventComponent,
-    canActivate: [ OnlyLoggedInUsersGuard ] },
-  { path: 'note/create',
-    component: CreateNoteComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'users',
     component: UserListComponent,
@@ -70,6 +78,9 @@ const routes: Routes = [
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'users/:id',
     component: UserComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'users/:id/wishlist',
+    component: WishListComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'users/:id/edit',
     component: UserEditComponent,
@@ -94,6 +105,21 @@ const routes: Routes = [
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'events/export',
     component: ExportEventsPlanComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'users/setting/plan',
+    component: PersonalPlanSettingComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'event/:id/updateImage',
+    component: EventEditImageComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'folders/rootFolder',
+    component: RootFolderComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'folders/rootFolder/folder/:id',
+    component: FolderComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'note/create',
+    component: CreateNoteComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: '**', redirectTo: '/hello', pathMatch: 'full'}
 ];

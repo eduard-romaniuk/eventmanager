@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { Event } from '../../model/event';
 import { EventService } from '../../services/event.service';
+import {User} from "../../model/user";
 
 @Component({
   selector: 'app-event-edit',
@@ -43,11 +44,13 @@ export class EventEditComponent implements OnInit, OnDestroy {
     this.event.isSent = true;
     this.save();
   }
-  
+
   save() {
     this.eventService.updateEvent(this.event).subscribe(response => {
       this.router.navigate(['home']);
     }, error => console.error(error));
   }
-
+  goToEditImagePage(event: Event): void {
+    this.router.navigate(['event', event.id, 'updateImage']);
+  };
 }

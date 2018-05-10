@@ -69,14 +69,20 @@ public class MessageRepository implements CrudRepository<Message> {
 
 
     @Override
-    public int save(Message msg) {
-        Map<String, Object> namedParams = new HashMap<>();
-        namedParams.put("chat_id", msg.getChatId());
-        namedParams.put("date", msg.getDate());
-        namedParams.put("participant_id", msg.getParticipantId());
-        namedParams.put("text", msg.getText());
+	public int save(Message msg) {
+		Map<String, Object> namedParams = new HashMap<>();
+		namedParams.put("chat_id", msg.getChatId());
+		namedParams.put("date", msg.getDate());
+		namedParams.put("participant_id", msg.getParticipantId());
+		namedParams.put("text", msg.getText());
 
-        return namedJdbcTemplate.update(env.getProperty("saveMsg"), namedParams);
+		return namedJdbcTemplate.update(env.getProperty("saveMsg"), namedParams);
+	}
 
-    }
+	public Long findParticipantId(Long userId, Long eventId){
+		Map<String, Object> namedParams = new HashMap<>();
+		namedParams.put("user_id", userId);
+		namedParams.put("event_id", eventId);
+		return namedJdbcTemplate.queryForObject(env.getProperty("findParticipantId"), namedParams, Long.class);
+	}
 }

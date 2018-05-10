@@ -10,7 +10,7 @@
   <div class="form-group text-left">
 
     <label for="description"> Description: </label>
-    <textarea class="form-control mt-2" id="description" formControlName="description" rows="3" [(ngModel)]="item.descriprion"></textarea>
+    <textarea class="form-control mt-2" id="description" formControlName="description" rows="3" [(ngModel)]="item.description"></textarea>
 
   </div>
 
@@ -70,6 +70,4 @@
   </button>
 </form>
 
-<div>
-  {{form.value | json}}
-</div>
+
