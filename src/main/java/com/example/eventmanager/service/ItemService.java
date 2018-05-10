@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -46,6 +47,14 @@ public class ItemService {
         itemRepository.update( item );
         tagRepository.saveItemTags( item.getTags(), item.getId() );
         tagRepository.deleteUnusedTags( item.getTags(), item.getId() );
+    }
+
+    public void deleteItem (Item item) {
+
+        likeRepository.deleteLikesForItem( item.getId() );
+        tagRepository.deleteUnusedTags( new ArrayList<Tag>(), item.getId() );
+        itemRepository.delete( item );
+
     }
 
     public Long copyItem ( Long toWishListId, Long itemId ) {

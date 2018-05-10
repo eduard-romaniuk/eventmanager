@@ -54,6 +54,12 @@ export class ItemService {
     );
   }
 
+  public deleteItem (item: Item) {
+    this.http.delete(this.base_url + '/' + item.id ).subscribe(
+      //TODO:
+    )
+  }
+
 
 
 }
