@@ -1,19 +1,16 @@
 language: java
 jdk:
 - oraclejdk8
+node_js: "4.0"
 install:
-- mvn -N io.takari:maven:wrapper
-- "./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V"
+  - mvn -N io.takari:maven:wrapper
+  - "./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V"
+  - npm install
+  - npm install -g firebase
+after_success:
+  - cd client
+  - firebase deploy --token $FIREBASE_TOKEN
 branches:
   only:
   - master
   - dev
-
-before_deploy:
-  - cd client
-
-deploy:
-  provider: firebase
-  token:
-    secure: "GQmPbzvRmTuzZwMOhyPMmhddW2iXpyYpyi0RfzqmLuyK2oaplzy73nAedhmsiSSgJ+4sCxVxG8JNfA8F3iirHbdi7gBvzpn+T+5POebNGApZSLOD4E5dcWHfHxehvxhoaiUoT+KoXSo9op2l0Vj0cTUsO97Jmogx6lt3mXsrL0OjkPcJJ/ClpSLDBDVEzeFOhTJYQbx6O+RE1bTxGSa+3IPDMLPV+cQlIjxVAj/8Owd8QInEJ5Vt/eu9i8ZAYp1COpKKq3LQlnwf6G/ng/RDSCwhiEGViKNNn5kvaf6mFls2wz+ge/ZVz1/1mpjC6giVFNIOA0hMlIyoIUcC3r3pwHlhr2vxcGrJk7rSmXystZgqjgxV5nULgTa63PYYHYMHG3u1DpL2bm4UMBAphOihDCCpp9Ll7wgm0fpQFxotj84r3vaEYQVstAHDNJOX1V+FWm1txPY50Tm8k34yPgKiB8jEtHKtsNuguIH98MVjnPdCg5XtYW6m8P4aVHxZMMjdYsvmHs9ES3rQ+tiHscsSk7WpY0EWqwsptyhlmejvZVlcFBnIIeHRHFL5spTNOl+gYI18j+vr/SnKzGWhPYlAEcrThtYXk9X7PFuJGvMCzibFpInJiG/MbXQSe5XYqAGgViR2CBGkw346g/Pa8wTltr0wRH82AvdoY1krSQAxOe0="
-  project: "web-event-manager"
