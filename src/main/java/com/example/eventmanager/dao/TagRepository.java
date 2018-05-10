@@ -143,6 +143,11 @@ public class TagRepository implements CrudRepository<Tag>{
     }
 
     public int deleteUnusedTags ( List<Tag> usedTags, Long itemId) {
+
+        if (usedTags.isEmpty()) {
+            return deleteAllTagsForItem(itemId);
+        }
+
         logger.info("Deleting unused tags for item: " + itemId );
 
         List<Long> tagsIds = usedTags.stream().map(
@@ -154,7 +159,24 @@ public class TagRepository implements CrudRepository<Tag>{
         namedParams.put("itemId", itemId);
         namedParams.put("usedTags", tagsIds);
 
+
         int deleted = namedJdbcTemplate.update(env.getProperty("deleteAllUnusedTagForItem"), namedParams);
+
+        logger.info(deleted + " row was deleted from table item_tags...");
+
+        cleanTags();
+
+        return deleted;
+    }
+
+    public int deleteAllTagsForItem( Long itemId) {
+        logger.info("Deleting tags for item: " + itemId );
+
+        Map<String, Object> namedParams = new HashMap<>();
+
+        namedParams.put("itemId", itemId);
+
+        int deleted = namedJdbcTemplate.update(env.getProperty("deleteAllTagsForItem"), namedParams);
 
         logger.info(deleted + " row was deleted from table item_tags...");
 
@@ -174,6 +196,7 @@ public class TagRepository implements CrudRepository<Tag>{
 
         return deleted;
     }
+
 
 
 }

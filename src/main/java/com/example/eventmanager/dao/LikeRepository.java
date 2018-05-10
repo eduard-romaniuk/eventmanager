@@ -104,4 +104,18 @@ public class LikeRepository {
 
         return deleted;
     }
+
+    public int deleteLikesForItem (Long itemId) {
+        logger.info("Deleting likes for item: " + itemId );
+
+        Map<String, Object> namedParams = new HashMap<>();
+
+        namedParams.put("itemId", itemId);
+
+        int deleted = namedJdbcTemplate.update(env.getProperty("deleteLikesForItem"), namedParams);
+
+        logger.info(deleted + " row was deleted from table likes...");
+
+        return deleted;
+    }
 }
