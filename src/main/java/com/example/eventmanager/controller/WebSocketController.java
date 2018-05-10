@@ -34,9 +34,8 @@ public class WebSocketController {
 	
 	@MessageMapping("/send/event/{eventId}/chats/{creator}")
 	private void sendAndSaveMessage(@DestinationVariable Long eventId, @DestinationVariable String creator, String message) {
-		String[] data = message.split(";");
-		Long userId = Long.parseLong(data[0]);
-		String messageToSend = data[1];
+		Long userId = Long.parseLong(message.substring(0, message.indexOf(";")));
+		String messageToSend = message.substring(message.indexOf(";")+1);
 		Date date = new Date();
 		String login = userService.getUser(userId).getLogin();
 		
@@ -44,7 +43,6 @@ public class WebSocketController {
 				login + ": " + messageToSend + " --- " + new SimpleDateFormat("HH:mm:ss").format(date));
 		
 		saveMessage(messageToSend, creator, eventId, userId, date);
-		
 	}
 	
 	private void saveMessage(String text,String creator, Long eventId, Long userId, Date date){

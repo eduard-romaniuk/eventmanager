@@ -31,13 +31,33 @@ export class ItemService {
       error => {
         return errorCallback && errorCallback();
       });
-
-    //TODO: delete after adding backend
-    return callback && callback();
   }
 
   public getItem( itemId: number ): Observable<Item> {
     return this.http.get<Item>(this.base_url + "/" + itemId);
+  }
+
+  public editItem(item: Item, callback?, errorCallback?) {
+    console.log(item);
+    this.http.post(this.base_url + '/' + item.id, item).subscribe(
+      (item: Item) => {
+        return callback && callback();
+      },
+      error => {
+        return errorCallback && errorCallback();
+      });
+  }
+
+  public copyItem (item: Item) {
+    this.http.post(this.base_url + '/copy/' + item.id, this.wishListService.getCurrentWishListId()).subscribe(
+      (itemId: number) => {console.log("copy item. Created new item with id: " + itemId)}
+    );
+  }
+
+  public deleteItem (item: Item) {
+    this.http.delete(this.base_url + '/' + item.id ).subscribe(
+      //TODO:
+    )
   }
 
 

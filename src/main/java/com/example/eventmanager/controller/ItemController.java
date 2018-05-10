@@ -71,6 +71,28 @@ public class ItemController {
         return new ResponseEntity<>(newItem, HttpStatus.OK);
     }
 
+    @JsonView(ItemView.ShortView.class)
+    @RequestMapping(value = "/copy/{id}", method = RequestMethod.POST)
+    public ResponseEntity<Long> createItem (@PathVariable("id") Long itemId, @RequestBody Long wishListId) {
+        logger.info("POST /copy/" + itemId);
+
+        Long newItemId = itemService.copyItem(wishListId, itemId);
+
+        return new ResponseEntity<>(newItemId, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Item> deleteItem(@PathVariable("id") Long itemId) {
+        logger.info("DELETE /" + itemId);
+
+        Item item = itemService.getItem(itemId);
+        if (item == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        itemService.deleteItem(item);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     @RequestMapping(value = "/like/{id}", method = RequestMethod.POST)
     public void like (@PathVariable("id") Long itemId, @RequestBody Long userId) {
         logger.info("POST /like/" + itemId);

@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { User } from '../../model/user';
 import { UserService } from '../../services/user.service';
 import {AuthService} from "../../services/auth.service";
+import {ToastService} from "../../services/toast.service";
 
 @Component({
   selector: 'app-user-edit',
@@ -18,7 +19,8 @@ export class UserEditComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private userService: UserService) { }
+              private userService: UserService,
+              private toast: ToastService) { }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
@@ -42,6 +44,7 @@ export class UserEditComponent implements OnInit, OnDestroy {
   save() {
     this.userService.updateUser(this.user).subscribe((user: any) => {
       this.router.navigate(['users', user.id]);
+      this.toast.success('Info successfully updated');
     }, error => console.error(error));
     // this.userService.updateUser(this.user);
     // this.router.navigate(['users', this.user.id]);

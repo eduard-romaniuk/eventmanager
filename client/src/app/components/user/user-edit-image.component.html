@@ -4,22 +4,55 @@
       <h2 class="text-center">Change profile image</h2>
     </header>
     <input type="hidden" name="href" [(ngModel)]="user.id">
-    <div>
+
+    <form class="md-form text-center" [formGroup]="form">
       <p>Your image:</p>
 
       <div class="bigImage centerDiv">
         <app-partial-user-image [user]="user"></app-partial-user-image>
       </div>
 
-      <input
-        style="display: none"
-        type="file" accept="image/*" ng2FileSelect [uploader]="uploader" (change)="upload()"
-        #fileInput>
-      <button class="btn btn-info button" (click)="fileInput.click()">Select File</button>
-    </div>
-    <p>
-      <button class="btn btn-danger button" (click)="goHome()">Cancel</button>
-      <button class="btn btn-info button" type="submit" (click)="uploadImage()">Save</button>
-    </p>
+      <div class="form-group">
+        <input
+          style="display: none"
+          type="file" accept=".jpg, .jpeg, .png, .gif" ng2FileSelect [uploader]="uploader" (change)="upload()"
+          #fileInput
+          formControlName="image"
+          [ngClass]="{
+                            'is-invalid': form.get('image').invalid && (form.get('image').dirty || form.get('image').touched)
+                        }">
+        <button class="btn btn-info button" (click)="fileInput.click()">Select new image</button>
+        <div *ngIf="form.get('image').invalid && (form.get('image').dirty || form.get('image').touched)"
+             class="text-danger">
+          <div *ngIf="form.get('image').errors.imageExtension">
+            You can upload files only with following extensions: .jpg, .jpeg, .png, .gif
+          </div>
+        </div>
+      </div>
+
+      <div class="alert mt-2" [hidden]="!imageUploading">
+        <div>
+          Uploading image...
+          <div class="progress" style="">
+            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-primary mt-2" [hidden]="!savingChanges">
+        Saving changes...
+      </div>
+
+      <div class="alert alert-danger mt-2" [hidden]="!error">
+        Some errors occurred, try again
+      </div>
+
+      <div>
+        <button class="btn btn-danger mt-2" (click)="goHome()">Cancel</button>
+        <button class="btn btn-primary mt-2" type="submit" (click)="uploadImage()" [disabled]="!form.valid">Save</button>
+      </div>
+
+    </form>
+
   </div>
 </div>

@@ -27,7 +27,8 @@ declare var $:JQueryStatic;
               private router: Router,
               private itemService: ItemService,
               private formBuilder: FormBuilder,
-              private auth : AuthService
+              private auth : AuthService,
+              private wishListService: WishListService
 
   ) { }
 
@@ -58,19 +59,18 @@ declare var $:JQueryStatic;
   }
 
 
-  createItem() {
+  public createItem() {
 
     const arr: FormArray = <FormArray>this.form.get("tags");
     this.item.tags = [];
-
-    //TODO: CHANGE!!!
-    this.item.wishListId = 1;
 
     for (let i = 0; i < arr.length-1; i++){
       var tag = new Tag();
       tag.name = <String>arr.at(i).get("name").value
       this.item.tags.push(tag);
     }
+
+    this.item.wishListId = this.wishListService.getCurrentWishListId();
 
     console.log(this.item);
     this.itemService.createItem(
@@ -84,6 +84,7 @@ declare var $:JQueryStatic;
     )
 
   }
+
 
 
   private createTag(): FormGroup {

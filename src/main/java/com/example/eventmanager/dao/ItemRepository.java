@@ -124,13 +124,20 @@ public class ItemRepository implements CrudRepository<Item>{
         namedParams.put("priorityId", item.getPriority());
         namedParams.put("itemId", item.getId());
 
-        namedJdbcTemplate.update(env.getProperty("updateEvent"), namedParams);
+        namedJdbcTemplate.update(env.getProperty("updateItem"), namedParams);
 
     }
 
     @Override
-    public void delete(Item entity) {
+    public void delete(Item item) {
 
+        Map<String, Object> namedParams = new HashMap<>();
+
+        namedParams.put("itemId", item.getId());
+
+        int deleted = namedJdbcTemplate.update(env.getProperty("deleteItem"), namedParams);
+
+        logger.info(deleted + " items was deleted from items");
     }
 
     public List<Item> getItemsForWishList ( Long wishListId ){
@@ -158,6 +165,26 @@ public class ItemRepository implements CrudRepository<Item>{
             logger.info("Items for wish list with id: " + wishListId + " not found");
             return Collections.emptyList();
         }
+    }
+
+    public Long copyItem ( Long toWishListId, Long itemId ) {
+        logger.info("Copy item: " + itemId);
+
+        MapSqlParameterSource namedParams = new MapSqlParameterSource();
+
+        namedParams.addValue("toWishListId", toWishListId);
+        namedParams.addValue("itemId", itemId);
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        int update = namedJdbcTemplate.update(env.getProperty("copyItem"), namedParams, keyHolder);
+
+        logger.info(update + " row was updated from table items...");
+        logger.info("Item was copy = " + keyHolder.getKeys());
+
+        return ((Integer)keyHolder
+                .getKeys()
+                .get("id"))
+                .longValue();
     }
 
 //    private static final class ItemMapper implements RowMapper<Item> {
