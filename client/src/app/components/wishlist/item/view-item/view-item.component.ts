@@ -51,6 +51,10 @@ export class ViewItemComponent implements OnInit {
     this.itemService.copyItem(this.item);
   }
 
+  public deleteItem(): void {
+    this.itemService.deleteItem(this.item)
+  }
+
 
 }
 

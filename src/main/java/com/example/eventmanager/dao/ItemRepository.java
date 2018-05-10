@@ -129,8 +129,15 @@ public class ItemRepository implements CrudRepository<Item>{
     }
 
     @Override
-    public void delete(Item entity) {
+    public void delete(Item item) {
 
+        Map<String, Object> namedParams = new HashMap<>();
+
+        namedParams.put("itemId", item.getId());
+
+        int deleted = namedJdbcTemplate.update(env.getProperty("deleteItem"), namedParams);
+
+        logger.info(deleted + " items was deleted from items");
     }
 
     public List<Item> getItemsForWishList ( Long wishListId ){
