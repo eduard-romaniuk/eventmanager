@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Event } from '../../model/event';
 import { EventService } from '../../services/event.service';
 import {User} from "../../model/user";
+import {ToastService} from "../../services/toast.service";
 
 @Component({
   selector: 'app-event-edit',
@@ -19,7 +20,8 @@ export class EventEditComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private eventService: EventService) { }
+              private eventService: EventService,
+              private toast: ToastService) { }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
@@ -48,6 +50,7 @@ export class EventEditComponent implements OnInit, OnDestroy {
   save() {
     this.eventService.updateEvent(this.event).subscribe(response => {
       this.router.navigate(['home']);
+      this.toast.success('Event successfully updated');
     }, error => console.error(error));
   }
   goToEditImagePage(event: Event): void {
