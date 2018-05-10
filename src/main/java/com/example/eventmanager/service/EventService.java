@@ -25,15 +25,10 @@ public class EventService {
 
 
     public void createEvent(Event event){
-       // event.setCreator(creator);
         event.setId((long) eventRepository.save(event));
         eventRepository.addUserToEvent(userService.getCurrentUser().getId(),event.getId());
     }
 
-    public void publishEvent(Event event){
-        event.setSent(true);
-        eventRepository.update(event);
-    }
 
     public void updateEvent(Event event){
         eventRepository.update(event);

@@ -52,11 +52,7 @@ public class EventController {
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public ResponseEntity<Long> createEvent(@RequestBody Event event, UriComponentsBuilder ucBuilder) {
         logger.info("POST /");
-
         eventService.createEvent(event);
-        //HttpHeaders headers = new HttpHeaders();
-        //headers.add("id", "1" + event.getId());
-        //headers.setLocation(ucBuilder.path("/event/{id}").buildAndExpand(event.getId()).toUri());
         return new ResponseEntity<>(event.getId(), HttpStatus.CREATED);
     }
 
@@ -97,7 +93,7 @@ public class EventController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Event> deleteEvent(@PathVariable("id") Long id) {
+    public ResponseEntity<String> deleteEvent(@PathVariable("id") Long id) {
         logger.info("DELETE /" + id);
 
         Event event = eventService.getEvent(id);
@@ -115,14 +111,6 @@ public class EventController {
 
         List<User> userList = eventService.getParticipants(id);
         return new ResponseEntity<>(userList, HttpStatus.OK);
-    }
-
-    //    TODO: Refactor methods which below
-    @RequestMapping(value = "/publish", method = RequestMethod.POST)
-    public void publishEvent(@RequestBody Event event) {
-        logger.info("POST /publish");
-
-        eventService.publishEvent(event);
     }
 
     @RequestMapping(value = "/{id}/join", method = RequestMethod.GET)

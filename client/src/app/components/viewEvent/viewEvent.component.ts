@@ -103,7 +103,9 @@ export class ViewEventComponent {
   }
 
   public delete() {
-
+    this.eventService.deleteEvent(this.event.id).subscribe((user: any) => {
+      this.router.navigate(['home']);
+    }, error => console.error(error));
   }
 
   invite(){

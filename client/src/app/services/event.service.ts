@@ -81,4 +81,8 @@ export class EventService {
   public leaveEvent(id){
     return this.http.get(this.base_url+id+"/leave")
   }
+
+  public deleteEvent(id){
+    return this.http.delete(this.base_url+id)
+  }
 }
