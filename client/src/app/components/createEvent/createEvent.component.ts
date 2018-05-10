@@ -1,14 +1,10 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import { EventService } from '../../services/event.service';
-import { HttpClient } from '@angular/common/http';
-import {Router, ActivatedRoute} from '@angular/router';
-import { JQueryStatic } from 'jquery';
+import {Component, OnInit} from '@angular/core';
+import {EventService} from '../../services/event.service';
+import {JQueryStatic} from 'jquery'
 
-import { Event } from '../../model/event'
-import {User} from "../../model/user";
-import {Observable} from "rxjs/Observable";
+import {Event} from '../../model/event'
 import {AuthService} from "../../services/auth.service";
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {dateLessThan, dateValidator} from "../../utils/validation-tools";
 
 @Component({
@@ -16,35 +12,34 @@ import {dateLessThan, dateValidator} from "../../utils/validation-tools";
   templateUrl: './createEvent.component.html',
   styleUrls: ['./createEvent.component.css']
 })
-export class CreateEventComponent implements OnInit{
+export class CreateEventComponent implements OnInit {
 
-  event : Event = new Event();
+  event: Event = new Event();
 
   latitude: number;
   longitude: number;
 
   form: FormGroup;
 
-  constructor(private auth : AuthService,
+  constructor(private auth: AuthService,
               private eventService: EventService,
               private formBuilder: FormBuilder) {
   }
 
   ngOnInit() {
-    this.auth.getUser().subscribe((data: any) => {this.event.creator = data});
+    this.auth.getUser().subscribe((data: any) => {
+      this.event.creator = data
+    });
     console.log(this.event.creator);
     this.form = this.formBuilder.group({
-      eventNameControl: ['', [ Validators.required]],
-      descriptionControl: ['', [ Validators.required]],
-      timeLineStartControl:['', [ Validators.required]],
-      timeLineFinishControl: ['', [ Validators.required]],
-      periodControl: ['', [ Validators.required, Validators.min(0)]],
-    },{ validators:dateValidator('timeLineStartControl'),
-      asyncValidators:dateLessThan('timeLineStartControl', 'timeLineFinishControl')
-     });
+      eventNameControl: ['', [Validators.required]],
+      descriptionControl: ['', [Validators.required]],
+      timeLineStartControl: ['', [Validators.required, dateValidator()]],
+      timeLineFinishControl: ['', [Validators.required]],
+      periodControl: ['', [Validators.required, Validators.min(0)]],
+    }, {validator: dateLessThan('timeLineStartControl', 'timeLineFinishControl'),});
     this.setCurrentPosition();
   }
-
 
 
   create() {
@@ -58,6 +53,7 @@ export class CreateEventComponent implements OnInit{
     this.event.isSent = true;
     this.eventService.createEvent(this.event);
   }
+
   private setCurrentPosition() {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
@@ -67,11 +63,11 @@ export class CreateEventComponent implements OnInit{
     }
   }
 
-  onChoseLocation(event){
-    console.log(event);
-    this.latitude=event.coords.lat;
-    this.longitude=event.coords.lng;
-
+  onChoseLocation(event) {
+    this.latitude = event.coords.lat;
+    this.longitude = event.coords.lng;
+    this.event.place = this.latitude + "/" + this.longitude
+    console.log(this.event.place)
   }
 
 
