@@ -1,7 +1,7 @@
 <div class="row h-100 justify-content-center align-items-center">
   <div class="col-6 text-center">
     <header>
-      <h2 class="text-center">Change Event image</h2>
+      <h4 class="text-center">Add Event image</h4>
     </header>
     <input type="hidden" name="href" [(ngModel)]="event.id">
     <div>
@@ -9,7 +9,7 @@
 
 
       <div *ngIf="event.image">
-        <img class="bigImage" [src]="event.image" id="image" name="image"> <br/>
+        <img [src]="event.image" id="image" name="image"> <br/>
       </div>
 
       <input

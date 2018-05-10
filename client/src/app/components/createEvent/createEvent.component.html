@@ -2,7 +2,7 @@
 <div class="bootstrap-iso my-4">
   <div class="container-fluid ">
     <div class="row">
-      <div class="col-md-10 col-sm-6 col-xs-12">
+      <div class="col-md-10 col-sm-6 col-xs-12 centerDiv">
         <form class="form-horizontal" [formGroup]="form">
           <div class="form-group ">
             <label class="control-label col-sm-2 requiredField" for="name">
@@ -62,6 +62,22 @@
         Mark the place of the event on the map
        </span>
             </div>
+          </div>
+
+
+          <div class="form-group">
+            <label class="control-label col-sm-2 requiredField">
+              Image </label>
+            <div class="col-sm-10">
+                  <div *ngIf="event.image">
+                    <img [src]="event.image" id="image" name="image"> <br/>
+                  </div>
+                  <input
+                    style="display: none"
+                    type="file" accept="image/*" ng2FileSelect [uploader]="uploader" (change)="upload()"
+                    #fileInput>
+                  <button class="btn btn-info button my-4" (click)="fileInput.click()">Select File</button>
+              </div>
           </div>
           <div class="form-group ">
             <label class="control-label col-sm-2 requiredField" for="timeLineStart">
@@ -144,26 +160,20 @@
               </div>
             </div>
           </div>
-          <div class="form-group ">
-            <label class="control-label col-sm-2 requiredField">
-              Is event private?
-              <span class="asteriskField">*</span>
-            </label>
-            <div class="col-sm-10 ">
-              <div class="checkbox">
-                <label class="checkbox">
-                  <input name="checkbox" type="checkbox" [(ngModel)]="event.isPrivate">
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="col-sm-10 col-sm-offset-6">
-              <button class="btn btn-primary" (click)="create()" [disabled]="!form.valid">Create</button>
-              <button class="btn btn-primary " (click)="publish()" [disabled]="!form.valid">Publish</button>
-            </div>
-          </div>
         </form>
+        <div class="form-group ">
+          <h4 class="text-center">
+           <strong>Is event private?</strong>
+            <span class="asteriskField">*</span>
+            <input name="checkbox" type="checkbox" [(ngModel)]="event.isPrivate">
+          </h4>
+        </div>
+        <div class="form-group my-4">
+          <div class="col-sm-8 col-sm-offset-4">
+            <button class="btn btn-primary" (click)="create()" [disabled]="!form.valid">Create</button>
+            <button class="btn btn-primary " (click)="publish()" [disabled]="!form.valid">Publish</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

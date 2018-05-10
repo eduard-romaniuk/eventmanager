@@ -103,7 +103,7 @@ const routes: Routes = [
   { path: 'users/setting/plan',
     component: PersonalPlanSettingComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
-  { path: 'event/:id/updateImage',
+  { path: 'events/updateImage',
     component: EventEditImageComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: '**', redirectTo: '/hello', pathMatch: 'full'}
