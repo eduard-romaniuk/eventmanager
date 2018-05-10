@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { EventService } from '../../services/event.service';
+import {Component} from '@angular/core';
+import {EventService} from '../../services/event.service';
 import {Router, ActivatedRoute} from '@angular/router';
-import { JQueryStatic } from 'jquery';
+import {JQueryStatic} from 'jquery';
 
-import { Event } from '../../model/event'
+import {Event} from '../../model/event'
 import {User} from "../../model/user";
 import {AuthService} from "../../services/auth.service";
 import {Subscription} from "rxjs/Subscription";
@@ -18,17 +18,20 @@ export class ViewEventComponent {
 
   event: Event = new Event();
   userId: number;
-  priority:String;
+  priority: String;
   form: FormGroup;
-  priority_id:number;
-  isParticipant:boolean;
-  isCreator:boolean;
-  participationStr:String;
-  participants:User[];
+  isParticipant: boolean;
+  isCreator: boolean;
+  participationStr: String;
+  participants: User[];
+
+  latitude: Number;
+  longitude: Number;
+
 
   sub: Subscription;
 
-  constructor(private auth : AuthService,
+  constructor(private auth: AuthService,
               private route: ActivatedRoute,
               private router: Router,
               private eventService: EventService) {
@@ -42,10 +45,10 @@ export class ViewEventComponent {
     this.sub = this.route.params.subscribe(params => {
       const id = params['id'];
       if (id) {
-        this.eventService.isParticipantRequest(id).subscribe((participation:String) => {
+        this.eventService.isParticipantRequest(id).subscribe((participation: String) => {
           if (participation) {
             this.participationStr = participation;
-            this.isParticipant =(this.participationStr=="true");
+            this.isParticipant = (this.participationStr == "true");
           } else {
             console.log(`Participation not found!`);
           }
@@ -53,7 +56,8 @@ export class ViewEventComponent {
         this.eventService.getEventById(id).subscribe((event: any) => {
           if (event) {
             this.event = event;
-            this.isCreator=this.isCreatorTest();
+            this.isCreator = this.isCreatorTest();
+            this.Position();
             console.log(`Event with id '${id}' was loaded!`);
             console.log(event);
           } else {
@@ -61,7 +65,7 @@ export class ViewEventComponent {
           }
         });
 
-        this.eventService.getPriority(id).subscribe((priority:String) => {
+        this.eventService.getPriority(id).subscribe((priority: String) => {
           if (priority) {
             this.priority = priority;
           } else {
@@ -74,38 +78,62 @@ export class ViewEventComponent {
     console.log("loadedEventCreator = " + this.event.creator)
   }
 
-  public submitPriority(){
-    this.eventService.changePriority(this.event.id,this.priority_id).subscribe();
-    this.eventService.getPriority(this.event.id).subscribe((priority:String) => {
-      if (priority) {
-        this.priority = priority;
-        console.log(priority);
-      } else {
-        console.log(`Priority not found!`);
-      }
-    });
-    console.log("Priority change to "+this.priority_id);
+  private Position() {
+
+    let coords = this.event.place.split("/");
+    this.latitude = Number(coords[0]);
+    this.longitude = Number(coords[1]);
+    console.log(this.latitude);
+    console.log(this.longitude);
+
   }
-  public join(){
+
+  public submitPriority() {
+    this.eventService.changePriority(this.event.id, this.priority);
+  }
+
+  public join() {
     this.eventService.joinToEvent(this.event.id).subscribe();
     window.location.reload();
   }
+
+  public leave() {
+
+  }
+
+  public delete() {
+
+  }
+
   public isCreatorTest(): boolean {
     return this.userId === this.event.creator.id;
   }
 
   public showParticipants() {
     this.eventService.getParticipants(this.event.id)
-      .subscribe( (users : any) => {
+      .subscribe((users: any) => {
         this.participants = users;
       });
     console.log(this.participants)
   }
 
   goToChatWithCreator() {
-      this.router.navigate(['event', this.event.id, 'chats','withCreator']);
-    }
+    this.router.navigate(['event', this.event.id, 'chats', 'withCreator']);
+  }
+
   goToChatWithoutCreator() {
-      this.router.navigate(['event', this.event.id, 'chats','withoutCreator']);
-    }
+    this.router.navigate(['event', this.event.id, 'chats', 'withoutCreator']);
+  }
+
+  low() {
+    if (this.priority == "0") return true
+  }
+
+  normal() {
+    if (this.priority == "1") return true
+  }
+
+  urgent() {
+    if (this.priority == "2") return true
+  }
 }
