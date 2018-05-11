@@ -38,14 +38,14 @@ public class EventService {
         return eventRepository.findOne(id);
     }
 
-    public List<Event> getUserEvents(Long id){
+    public List<Event> getUserEvents(){
 
-       return eventRepository.findByCreator(id);
+       return eventRepository.findAllUserEvents(userService.getCurrentUser().getId());
     }
 
-    public List<Event> getEventsWithUserParticipation(Long id){
+    public List<Event> getEventsWithUserParticipation(Long userId,Boolean isPrivate,Boolean isSent){
 
-        return eventRepository.findEventsWithUserParticipation(id);
+        return eventRepository.findEventsWithUserParticipation(userId, isPrivate, isSent);
     }
 
     public List<Event> getAllPublicEvents(){

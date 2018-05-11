@@ -131,10 +131,18 @@ public class UserController {
 
     @JsonView(EventView.FullView.class)
     @RequestMapping(value = "/{id}/events", method = RequestMethod.GET)
-    public ResponseEntity<List<Event>> getUserEvents(@PathVariable Long id) {
+    public ResponseEntity<List<Event>> getUserEvents(@PathVariable Long id,@RequestParam Boolean isPrivate,@RequestParam Boolean isSent) {
         logger.info("GET /" + id + "/events");
 
-        List<Event> eventList = eventService.getEventsWithUserParticipation(id);
+        List<Event> eventList = eventService.getEventsWithUserParticipation(id, isPrivate, isSent);
+        return new ResponseEntity<>(eventList, HttpStatus.OK);
+    }
+    @JsonView(EventView.FullView.class)
+    @RequestMapping(value = "/{id}/myevents", method = RequestMethod.GET)
+    public ResponseEntity<List<Event>> getCurrentUserEvents(@PathVariable Long id) {
+        logger.info("GET /" +id+ "/myevents");
+
+        List<Event> eventList = eventService.getUserEvents();
         return new ResponseEntity<>(eventList, HttpStatus.OK);
     }
 

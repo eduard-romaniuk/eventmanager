@@ -121,10 +121,12 @@ public class EventRepository implements CrudRepository<Event> {
     }
 
 
-    public List<Event> findEventsWithUserParticipation(Long userId) {
+    public List<Event> findEventsWithUserParticipation(Long userId,Boolean isPrivate,Boolean isSent) {
         try {
             Map<String, Object> namedParams = new HashMap<>();
             namedParams.put("user_id", userId);
+            namedParams.put("private", isPrivate);
+            namedParams.put("sent", isSent);
             return namedJdbcTemplate.query(env.getProperty("event.findWithUserParticipation"), namedParams, new EventMapper());
         } catch (EmptyResultDataAccessException e) {
             logger.info("Events not found");
@@ -135,6 +137,17 @@ public class EventRepository implements CrudRepository<Event> {
     public List<Event> findAllPublicEvents() {
         try {
             return namedJdbcTemplate.query(env.getProperty("event.findAllPublic"), new EventMapper());
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("Events not found");
+            return Collections.emptyList();
+        }
+    }
+
+    public List<Event> findAllUserEvents(Long userId) {
+        Map<String, Object> namedParams = new HashMap<>();
+        namedParams.put("userId", userId);
+        try {
+            return namedJdbcTemplate.query(env.getProperty("event.findAllUserEvents"), namedParams,new EventMapper());
         } catch (EmptyResultDataAccessException e) {
             logger.info("Events not found");
             return Collections.emptyList();

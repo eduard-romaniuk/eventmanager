@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { User } from '../model/user';
-import { Observable } from 'rxjs/Observable';
-import { Event } from "../model/event";
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {User} from '../model/user';
+import {Observable} from 'rxjs/Observable';
+import {Event} from "../model/event";
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' })
+  headers: new HttpHeaders({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'})
 };
 
 @Injectable()
@@ -14,14 +14,15 @@ export class UserService {
 
   headers: HttpHeaders;
 
-  constructor(private http:HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
   public getUsers() {
     return this.http.get(this.base_url + "/all");
   }
 
   public getUserById(id) {
-    return this.http.get(this.base_url + "/"+ id);
+    return this.http.get(this.base_url + "/" + id);
   }
 
   public createUser(user) {
@@ -41,12 +42,12 @@ export class UserService {
   //     })
   // }
 
-  public updateUser(newUser : User): Observable<User> {
+  public updateUser(newUser: User): Observable<User> {
     return this.http.put<User>(`${this.base_url}/${newUser.id}`, newUser);
   }
 
   public deleteUser(user) {
-    return this.http.delete(this.base_url + "/"+ user.id);
+    return this.http.delete(this.base_url + "/" + user.id);
   }
 
   isEmailExists(email: String): Observable<boolean> {
@@ -64,11 +65,20 @@ export class UserService {
   searchUserByLogin(login) {
     const params = new HttpParams().set('login', login);
     console.log("Login in searchUserByLogin - " + login);
-    return this.http.get(this.base_url + "/search",{params: params});
+    return this.http.get(this.base_url + "/search", {params: params});
   }
 
-  public getEventsByUserId(id): Observable<Event[]> {
-    return this.http.get<Event[]>(this.base_url + "/"+ id + "/events");
+  public getEventsByUserId(id, isPrivate, isSent): Observable<Event[]> {
+    return this.http.get<Event[]>(this.base_url + "/" + id + "/events", {
+      params: {
+        isPrivate: isPrivate,
+        isSent: isSent
+      }
+    });
+  }
+
+  public getCurrentUserEvents(id): Observable<Event[]> {
+    return this.http.get<Event[]>(this.base_url + "/" + id + "/myevents", );
   }
 
   updateUserPassword(newUser: User) {
