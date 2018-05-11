@@ -97,7 +97,7 @@ export class ViewEventComponent {
   }
 
   public submitPriority() {
-    this.eventService.changePriority(this.event.id, this.priority);
+    this.eventService.changePriority(this.event.id, this.priority).subscribe();
   }
 
   public join() {
@@ -117,7 +117,7 @@ export class ViewEventComponent {
     }, error => console.error(error));
   }
 
-  inviteUsers(){
+  addUsers(){
 
     this.eventService.addUsers(this.newParticipants,this.event.id).subscribe();
   }

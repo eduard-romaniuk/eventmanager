@@ -36,11 +36,11 @@
       <button *ngIf="this.isCreator" class="btn btn-primary" [routerLink]="['/event', event.id, 'edit']">
         Edit
       </button>
-      <button *ngIf="!this.isCreator && this.isParticipant && !this.event.isPrivate" class="btn btn-primary" (click)="invite()" [disabled]="true">
-        Invite
+      <button *ngIf="!this.isCreator && this.isParticipant && !this.event.isPrivate" (click)="getFriends()" data-toggle="modal" data-target="#addFriend">
+        Add Friends
       </button>
       <button *ngIf="this.isCreator" class="btn btn-primary" (click)="getFriends()" data-toggle="modal" data-target="#addFriend">
-        Invite
+        Add Friends
       </button>
 
       <button class="btn btn-info left-button" data-toggle="collapse" (click)="showParticipants()"
@@ -133,7 +133,7 @@
       <div class="modal-body">
         <h4 class="text-center">Are you sure?</h4>
         <div class="modal-footer ">
-          <button class="btn btn-warning centerDiv" [routerLink]="['/event', event.id]" data-dismiss="modal">Cancel
+          <button class="btn btn-warning centerDiv" type="button" data-dismiss="modal">Cancel
           </button>
           <button class="btn btn-success centerDiv" (click)="delete()" data-dismiss="modal">Submit
           </button>
@@ -143,7 +143,6 @@
   </div>
 </div>
 
-
 <div id="addFriend" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -151,8 +150,6 @@
         <button class="close" type="button" data-dismiss="modal">×</button>
       </div>
       <div class="modal-body">
-
-
         <div *ngIf="userFriends">
           <div id="teamCheckboxList" class="checkboxList">
           <div *ngFor="let friend of userFriends">
@@ -163,20 +160,16 @@
                      [checklistValue]="friend" />
               <span><strong>{{friend.name}} {{friend.surName}}</strong></span>
             </label>
-
-
           </div>
         </div>
         </div>
         <div *ngIf="userFriends?.length < 1">
           <p>No friends </p>
         </div>
-
-
         <div class="modal-footer ">
           <button class="btn btn-warning centerDiv" [routerLink]="['/event', event.id]" data-dismiss="modal">Cancel
           </button>
-          <button class="btn btn-success centerDiv" (click)="inviteUsers()" data-dismiss="modal">Submit
+          <button class="btn btn-success centerDiv" (click)="addUsers()" data-dismiss="modal">Submit
           </button>
         </div>
       </div>
