@@ -5,7 +5,8 @@
     </div>
   </div>
   <div class="col-sm-9">
-    <div><a [routerLink]="['/users', user.id]" data-dismiss="modal"> {{ user.login }} </a></div>
+    <div><a [routerLink]="['/users', user.id]" data-dismiss="modal"> {{ user.name }} {{ user.surName}} </a></div>
+    <div> {{ user.login }} </div>
     <div>
       <app-partial-user-friendship-button *ngIf="currentUser.id && user.id"
                                           [currentUser]="currentUser" [user]="user">

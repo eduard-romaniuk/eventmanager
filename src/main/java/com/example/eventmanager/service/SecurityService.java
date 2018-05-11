@@ -22,4 +22,9 @@ public class SecurityService {
         user.setToken(UUID.randomUUID().toString());
         return user;
     }
+
+    public boolean comparePass(User user, String password) {
+        System.out.println("compare pass");
+        return bCryptPasswordEncoder.matches(password, user.getPassword());
+    }
 }

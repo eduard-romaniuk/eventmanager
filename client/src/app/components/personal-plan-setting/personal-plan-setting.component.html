@@ -1,24 +1,115 @@
-<div class="md-form text-center">
 
-  <div class="md-form text-left">
-    Date which to start sending a personal event plan:
+<div class="bootstrap-iso">
+  <div class="container-fluid ">
+    <div class="row">
+      <div class="col-md-8 col-sm-6 col-xs-12 centerDiv">
+        <h2 class="my-4 text-center">Setting the sending of a personal events plan</h2>
+        <form class="form-horizontal" [formGroup]="form">
+          <div class="form-group ">
+            <label class="control-label col-sm-2 requiredField" for="timeLineStart">
+              Start date
+              <span class="asteriskField">*</span>
+            </label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <input class="form-control" id="timeLineStart" name="timeLineStart"  type="date"
+                       [(ngModel)]="setting.fromDate" formControlName="timeLineStartControl"
+                       [ngClass]="{'is-invalid': form.get('timeLineStartControl').invalid &&
+                       (form.get('timeLineStartControl').dirty || form.get('timeLineStartControl').touched)} "/>
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar-check-o">
+                  </i>
+                </div>
+              </div>
+              <span class="help-block" id="hstart">
+        Start date for sending a personal events plan
+       </span>
+              <div *ngIf="form.get('timeLineStartControl').invalid &&
+                (form.get('timeLineStartControl').dirty || form.get('timeLineStartControl').touched ||
+                      form.get('timeLineStartControl').touched)" class="text-danger">
+                <div *ngIf="form.get('timeLineStartControl')">
+                  Start date can't before current date
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group ">
+            <label class="control-label col-sm-2 requiredField" for="planPeriod">
+              For days
+              <span class="asteriskField">*</span>
+            </label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <input class="form-control" id="planPeriod" name="planPeriod" type="number"
+                       [(ngModel)]="setting.notificationPeriod" formControlName="periodControl"
+                       [ngClass]="{'is-invalid': form.get('periodControl').invalid &&
+                       (form.get('periodControl').dirty || form.get('periodControl').touched)}"/>
+                <div class="input-group-addon">
+                  <i class="fa fa-repeat">
+                  </i>
+                </div>
+              </div>
+              <span class="help-block" id="hpper">
+        Number of  days in the personal events plan
+       </span>
+              <div
+                *ngIf="form.get('periodControl').invalid && (form.get('periodControl').dirty || form.get('periodControl').touched)"
+                class="text-danger">
+                <div *ngIf="form.get('periodControl').errors.required">
+                  Period can't be blank
+                </div>
+                <div *ngIf="form.get('periodControl').errors.min">
+                  Period can't < 0
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group ">
+            <label class="control-label col-sm-2 requiredField" for="notificationPeriod">
+              Send period
+              <span class="asteriskField">*</span>
+            </label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <input class="form-control" id="notificationPeriod" name="notificationPeriod" type="number"
+                       [(ngModel)]="setting.notificationPeriod" formControlName="periodControl"
+                       [ngClass]="{'is-invalid': form.get('periodControl').invalid &&
+                       (form.get('periodControl').dirty || form.get('periodControl').touched)}"/>
+                <div class="input-group-addon">
+                  <i class="fa fa-repeat">
+                  </i>
+                </div>
+              </div>
+              <span class="help-block" id="hnper">
+        Every n days send events plan via email
+       </span>
+              <div
+                *ngIf="form.get('periodControl').invalid && (form.get('periodControl').dirty || form.get('periodControl').touched)"
+                class="text-danger">
+                <div *ngIf="form.get('periodControl').errors.required">
+                  Period can't be blank
+                </div>
+                <div *ngIf="form.get('periodControl').errors.min">
+                  Period can't < 0
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+          <h4 class="my-4 text-center">
+           <strong>Send personal events plan via email ?</strong>
+            <span class="asteriskField">* </span>
+            <input id="sendPlan" type="checkbox" [(ngModel)]="setting.sendPlan">
+          </h4>
+
+          <div class="col-sm-8 col-sm-offset-6">
+            <button class="btn btn-primary" (click)="update()" [disabled]="!form.valid">Submit</button>
+          </div>
+      </div>
+    </div>
   </div>
-  <input type="date" id="fromDate" class="form-control mt-2"
-         [(ngModel)]="setting.fromDate">
-  <div class="md-form text-left">
-    Number of days in  personal events plan:
-  </div>
-  <input type="number" id="planPeriod" class="form-control mt-2"
-         [(ngModel)]="setting.planPeriod">
-  <div class="md-form text-left">
-    Period of notifications in days:
-  </div>
-  <input type="number" id="notificationPeriod" class="form-control mt-2"
-         [(ngModel)]="setting.notificationPeriod">
-  <div class="form-control mt-2">
-    Send personal events plan via e-mail ?
-    <input type="checkbox" id="sendPlan"
-           [(ngModel)]="setting.sendPlan">
-  </div>
-  <button class="btn btn-default mt-2" (click)="update()">Update</button>
 </div>
+

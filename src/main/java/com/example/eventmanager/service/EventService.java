@@ -25,15 +25,10 @@ public class EventService {
 
 
     public void createEvent(Event event){
-       // event.setCreator(creator);
         event.setId((long) eventRepository.save(event));
         eventRepository.addUserToEvent(userService.getCurrentUser().getId(),event.getId());
     }
 
-    public void publishEvent(Event event){
-        event.setSent(true);
-        eventRepository.update(event);
-    }
 
     public void updateEvent(Event event){
         eventRepository.update(event);
@@ -43,14 +38,14 @@ public class EventService {
         return eventRepository.findOne(id);
     }
 
-    public List<Event> getUserEvents(Long id){
+    public List<Event> getUserEvents(){
 
-       return eventRepository.findByCreator(id);
+       return eventRepository.findAllUserEvents(userService.getCurrentUser().getId());
     }
 
-    public List<Event> getEventsWithUserParticipation(Long id){
+    public List<Event> getEventsWithUserParticipation(Long userId,Boolean isPrivate,Boolean isSent){
 
-        return eventRepository.findEventsWithUserParticipation(id);
+        return eventRepository.findEventsWithUserParticipation(userId, isPrivate, isSent);
     }
 
     public List<Event> getAllPublicEvents(){
@@ -98,5 +93,10 @@ public class EventService {
     public boolean isParticipant(Long event_id){
 
         return eventRepository.isParticipant(userService.getCurrentUser().getId(),event_id);
+    }
+
+    public void leaveEvent(Long event_id){
+
+        eventRepository.deleteParticipant(userService.getCurrentUser().getId(),event_id);
     }
 }

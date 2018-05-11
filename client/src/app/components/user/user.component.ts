@@ -46,12 +46,19 @@ export class UserComponent implements OnInit, OnDestroy {
                 this.currentUserPage = (this.currentUser.id == this.user.id);
                 console.log("this.currentUserPage - " + this.currentUserPage);
 
-                this.userService.getEventsByUserId(this.user.id)
-                  .subscribe((events: any) => {
-                    console.log("events - " + events);
-                    this.userEvents = events;
-                  });
-
+                if(this.currentUserPage) {
+                  this.userService.getCurrentUserEvents(this.user.id)
+                    .subscribe((events: any) => {
+                      console.log("events - " + events);
+                      this.userEvents = events;
+                    });
+                } else {
+                  this.userService.getEventsByUserId(this.user.id, false, true)
+                    .subscribe((events: any) => {
+                      console.log("events - " + events);
+                      this.userEvents = events;
+                    });
+                }
               } else {
                 console.log(`User with id '${id}' not found!`);
                 this.gotoList();
@@ -66,17 +73,9 @@ export class UserComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  goToEditUserPage(user: User): void {
-    this.router.navigate(['users', user.id, 'edit']);
+  goToSettingsPage(): void {
+    this.router.navigate(['users', this.currentUser.id, 'settings']);
   }
-
-  goToEditImagePage(user: User): void {
-    this.router.navigate(['users', user.id, 'updateImage']);
-  };
-
-  goToEditPasswordPage(): void {
-    this.router.navigate(['changePassword']);
-  };
 
   gotoList() {
     this.router.navigate(['/users/all']);

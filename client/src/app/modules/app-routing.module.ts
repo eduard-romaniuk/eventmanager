@@ -8,8 +8,6 @@ import { AuthService } 			  from '../services/auth.service';
 
 import { EmailVerificationComponent } from '../components/email-verification/email-verification.component';
 import { UserComponent } from '../components/user/user.component';
-import { LoginComponent } from '../components/login/login.component';
-import { RegistrationComponent } from '../components/registration/registration.component';
 import { UserListComponent } from '../components/user/user-list.component';
 import { UserEditComponent } from '../components/user/user-edit.component';
 import { EventEditComponent } from '../components/event-edit/event-edit.component';
@@ -21,13 +19,13 @@ import { ChatComponent } from "../components/chat/chat.component";
 import { ExportEventsPlanComponent } from "../components/export-events-plan/export-events-plan.component";
 import { UserEditPasswordComponent } from "../components/user/user-edit-password/user-edit-password.component";
 import { PersonalPlanSettingComponent } from "../components/personal-plan-setting/personal-plan-setting.component";
-import { EventEditImageComponent } from "../components/event-edit-image/event-edit-image.component";
 import { RecoverPasswordComponent } from '../components/recover-password/recover-password.component';
 import { RecoverLoginComponent } from '../components/recover-login/recover-login.component';
 import { ChangePasswordComponent } from '../components/change-password/change-password.component';
 import { RootFolderComponent } from "../components/folders/rootFolder/rootFolder.component"
 import { CreateNoteComponent } from "../components/notes/createNote/createNote.component"
 import { FolderComponent } from "../components/folders/folder/folder.component"
+import {UserSettingsComponent} from "../components/user/user-settings/user-settings.component";
 
 @Injectable()
 class OnlyLoggedInUsersGuard implements CanActivate {
@@ -48,10 +46,6 @@ const routes: Routes = [
   	component: HelloComponent },
   { path: 'email-verification/:token',
     component: EmailVerificationComponent },
-  { path: 'login',
-    component: LoginComponent },
-  { path: 'registration',
-    component: RegistrationComponent },
   { path: 'recover/password',
     component: RecoverPasswordComponent },
   { path: 'recover/login',
@@ -85,6 +79,9 @@ const routes: Routes = [
   { path: 'users/:id/edit',
     component: UserEditComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'users/:id/settings',
+    component: UserSettingsComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'event/:id/edit',
     component: EventEditComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
@@ -108,9 +105,6 @@ const routes: Routes = [
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'users/setting/plan',
     component: PersonalPlanSettingComponent,
-    canActivate: [ OnlyLoggedInUsersGuard ] },
-  { path: 'event/:id/updateImage',
-    component: EventEditImageComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'folders/rootFolder',
     component: RootFolderComponent,

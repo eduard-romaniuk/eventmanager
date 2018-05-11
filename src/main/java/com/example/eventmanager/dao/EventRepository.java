@@ -2,7 +2,6 @@ package com.example.eventmanager.dao;
 
 
 import com.example.eventmanager.domain.Event;
-import com.example.eventmanager.domain.Folder;
 import com.example.eventmanager.domain.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,6 +16,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -69,7 +69,6 @@ public class EventRepository implements CrudRepository<Event> {
         namedParams.addValue("is_sent", event.isSent());
         namedParams.addValue("is_private", event.isPrivate());
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        namedJdbcTemplate.update(env.getProperty("saveEvent"), namedParams, keyHolder);
         namedJdbcTemplate.update(env.getProperty("event.save"), namedParams, keyHolder);
         return (Integer)keyHolder.getKeys().get("id");
     }
@@ -113,17 +112,21 @@ public class EventRepository implements CrudRepository<Event> {
     }
 
     @Override
+    @Transactional
     public void delete(Event entity) {
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("eventId", entity.getId());
-        namedJdbcTemplate.update(env.getProperty("event.delete"), namedParams);
+        namedJdbcTemplate.update(env.getProperty("event.delete.participants"),namedParams);
+        namedJdbcTemplate.update(env.getProperty("event.delete.event"), namedParams);
     }
 
 
-    public List<Event> findEventsWithUserParticipation(Long userId) {
+    public List<Event> findEventsWithUserParticipation(Long userId,Boolean isPrivate,Boolean isSent) {
         try {
             Map<String, Object> namedParams = new HashMap<>();
             namedParams.put("user_id", userId);
+            namedParams.put("private", isPrivate);
+            namedParams.put("sent", isSent);
             return namedJdbcTemplate.query(env.getProperty("event.findWithUserParticipation"), namedParams, new EventMapper());
         } catch (EmptyResultDataAccessException e) {
             logger.info("Events not found");
@@ -134,6 +137,17 @@ public class EventRepository implements CrudRepository<Event> {
     public List<Event> findAllPublicEvents() {
         try {
             return namedJdbcTemplate.query(env.getProperty("event.findAllPublic"), new EventMapper());
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("Events not found");
+            return Collections.emptyList();
+        }
+    }
+
+    public List<Event> findAllUserEvents(Long userId) {
+        Map<String, Object> namedParams = new HashMap<>();
+        namedParams.put("userId", userId);
+        try {
+            return namedJdbcTemplate.query(env.getProperty("event.findAllUserEvents"), namedParams,new EventMapper());
         } catch (EmptyResultDataAccessException e) {
             logger.info("Events not found");
             return Collections.emptyList();
@@ -207,7 +221,14 @@ public class EventRepository implements CrudRepository<Event> {
             return false;
         }
     }
-    
+
+    public void deleteParticipant(Long user_id,Long event_id){
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("user_id", user_id);
+            namedParams.put("event_id", event_id);
+            namedJdbcTemplate.update(env.getProperty("event.leave"), namedParams);
+        }
+
 
     public static final class EventMapper implements RowMapper<Event> {
         @Override

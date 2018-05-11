@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Event} from '../model/event';
 import {Observable} from "rxjs/Observable";
 import {Router} from '@angular/router';
+import {User} from "../model/user";
 
 @Injectable()
 export class EventService {
@@ -20,11 +21,7 @@ export class EventService {
 
   public createEvent(event) {
 
-    this.http.post(this.base_url, event).subscribe(
-      (id: number) => {
-        this.router.navigate(['event/', id]);
-      }
-    );
+   return this.http.post(this.base_url, event);
 
   }
 
@@ -65,5 +62,19 @@ export class EventService {
 
   public getParticipants(id){
     return this.http.get(this.base_url+id+"/participants")
+  }
+
+  public leaveEvent(id){
+    return this.http.get(this.base_url+id+"/leave")
+  }
+
+  public deleteEvent(id){
+    return this.http.delete(this.base_url+id)
+  }
+
+  public addUsers(users:User[],id){
+
+    return this.http.post(this.base_url+id+"/participants",users)
+
   }
 }

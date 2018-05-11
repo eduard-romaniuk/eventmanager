@@ -1,7 +1,6 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {User} from "../../model/user";
-import {Subscription} from "rxjs/Subscription";
-import {ActivatedRoute, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {UserService} from "../../services/user.service";
 
 import {CloudinaryUploader} from 'ng2-cloudinary';
@@ -15,10 +14,9 @@ import {ToastService} from '../../services/toast.service';
   templateUrl: './user-edit-image.component.html',
   styleUrls: ['./user-edit-image.component.css']
 })
-export class UserEditImageComponent implements OnInit, OnDestroy {
+export class UserEditImageComponent implements OnInit {
 
-  user: User = new User();
-  sub: Subscription;
+  @Input() user: User = new User();
 
   form: FormGroup;
   imageUploading = false;
@@ -27,8 +25,7 @@ export class UserEditImageComponent implements OnInit, OnDestroy {
 
   uploader: CloudinaryUploader = ImageUploaderService.getUploader();
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
+  constructor(private router: Router,
               private userService: UserService,
               private formBuilder: FormBuilder,
               private toast: ToastService) {
@@ -36,37 +33,21 @@ export class UserEditImageComponent implements OnInit, OnDestroy {
       this.imageUploading = false;
       let res: any = JSON.parse(response);
       this.user.image = res.url;
-      console.log(`res - ` + JSON.stringify(res) );
-      return { item, response, status, headers };
+      console.log(`res - ` + JSON.stringify(res));
+      return {item, response, status, headers};
     };
   }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-        image: ['', [ Validators.required ]]},
-      {validator: imageExtension}
+        image: ['', [Validators.required]]
+      },
+      {validator: imageExtension('image')}
     );
-
-    this.sub = this.route.params.subscribe(params => {
-      const id = params['id'];
-      if (id) {
-        this.userService.getUserById(id).subscribe((user: any) => {
-          if (user) {
-            this.user = user;
-          } else {
-            console.log(`User with id '${id}' not found!`);
-          }
-        });
-      }
-    });
-  }
-
-  ngOnDestroy() {
-    this.sub.unsubscribe();
   }
 
   upload() {
-    if(this.form.get("image").valid){
+    if (this.form.get("image").valid) {
       this.imageUploading = true;
       this.uploader.uploadAll();
     }

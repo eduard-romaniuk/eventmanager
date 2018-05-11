@@ -7,6 +7,8 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { AgmCoreModule } from '@agm/core';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 import { environment }           from '../environments/environment';
 import { AppRoutingModule }      from './modules/app-routing.module';
@@ -41,7 +43,6 @@ import { ExportEventsPlanComponent } from './components/export-events-plan/expor
 import { UserEditPasswordComponent } from './components/user/user-edit-password/user-edit-password.component';
 import { PersonalPlanSettingComponent } from './components/personal-plan-setting/personal-plan-setting.component';
 import { PersonalPanSettingService } from "./services/personal-pan-setting.service";
-import { EventEditImageComponent } from './components/event-edit-image/event-edit-image.component';
 import { RecoverPasswordComponent } from './components/recover-password/recover-password.component';
 import { RecoverLoginComponent } from './components/recover-login/recover-login.component';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
@@ -54,6 +55,8 @@ import { FolderService } from "./services/folder.service";
 import { RootFolderComponent } from './components/folders/rootFolder/rootFolder.component';
 import { FolderComponent } from './components/folders/folder/folder.component';
 import { CreateNoteComponent } from './components/notes/createNote/createNote.component';
+import {ChecklistModule} from "angular-checklist";
+import { UserSettingsComponent } from './components/user/user-settings/user-settings.component';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -104,7 +107,6 @@ export class AddressInterceptor implements HttpInterceptor {
     FolderComponent,
     CreateNoteComponent,
     PersonalPlanSettingComponent,
-    EventEditImageComponent,
     RecoverLoginComponent,
     RecoverPasswordComponent,
     ChangePasswordComponent,
@@ -112,7 +114,8 @@ export class AddressInterceptor implements HttpInterceptor {
     PartialUserListComponent,
     PartialUserImageComponent,
     PartialUserFriendshipButtonComponent,
-    EditItemComponent
+    EditItemComponent,
+    UserSettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -124,9 +127,15 @@ export class AddressInterceptor implements HttpInterceptor {
     FileUploadModule,
     CommonModule,
     BrowserAnimationsModule,
+    ChecklistModule,
     ToastrModule.forRoot({
       timeOut: 2000
     }),
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyAM7RXrVYjGXrOIM1NrlifgXf8pdmzVZf0'
+    }),
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule
   ],
   providers: [
     AuthService,

@@ -72,8 +72,8 @@ public class UserService {
         return userRepository.isUsernameExists(username);
     }
 
-    public List<User> searchByLogin(String login){
-        return userRepository.searchByLogin(login);
+    public List<User> searchByLoginOrByNameAndSurname(String queryString){
+        return userRepository.searchByLoginOrByNameAndSurname(queryString);
     }
 
     private String getCurrentUsername() {

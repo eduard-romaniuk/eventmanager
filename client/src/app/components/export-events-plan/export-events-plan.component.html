@@ -1,12 +1,73 @@
-<div class="md-form text-center">
-  <h4>Export Events Plan</h4>
 
-    <label class="col-md-2 control-label" for="fromDate">From</label>
-    <input id="fromDate" type="date" class="form-control input-md" [(ngModel)]="fromDate">
+<div class="bootstrap-iso ">
+  <div class="container-fluid ">
+    <div class="row">
+      <div class="col-md-8 col-sm-6 col-xs-12 centerDiv">
+        <h2 class="my-4 text-center">Export personal events plan</h2>
+        <form class="form-horizontal" [formGroup]="form">
+          <div class="form-group ">
+            <label class="control-label col-sm-2 requiredField" for="timeLineStart">
+              From
+              <span class="asteriskField">*</span>
+            </label>
+            <div class="col-sm-8">
+              <div class="input-group">
+                <input class="form-control" id="timeLineStart" name="timeLineStart"  type="date"
+                       [(ngModel)]="fromDate" formControlName="timeLineStartControl"
+                       [ngClass]="{'is-invalid': form.get('timeLineStartControl').invalid &&
+                       (form.get('timeLineStartControl').dirty || form.get('timeLineStartControl').touched)} "/>
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar-check-o">
+                  </i>
+                </div>
+              </div>
+              <span class="help-block" id="hfrom">
+       The first date in the personal events plan
+       </span>
+              <div *ngIf="form.get('timeLineStartControl').invalid &&
+                (form.get('timeLineStartControl').dirty || form.get('timeLineStartControl').touched ||
+                      form.get('timeLineStartControl').touched)" class="text-danger">
+                <div *ngIf="form.get('timeLineStartControl')">
+                  Enter from date
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group ">
+            <label class="control-label col-sm-2 requiredField" for="timeLineFinish">
+              To
+              <span class="asteriskField">*</span>
+            </label>
+            <div class="col-sm-8">
+              <div class="input-group">
+                <input class="form-control" id="timeLineFinish" name="timeLineFinish" type="date"
+                       [(ngModel)]="toDate" formControlName="timeLineFinishControl"
+                       [ngClass]="{'is-invalid': form.get('timeLineFinishControl').invalid &&
+                       (form.get('timeLineFinishControl').dirty || form.get('timeLineFinishControl').touched)}">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar-check-o">
+                  </i>
+                </div>
+              </div>
+              <span class="help-block" id="hto">
+        The last date in the personal events plan
+       </span>
+              <div *ngIf="form.get('timeLineFinishControl').invalid &&
+                (form.get('timeLineFinishControl').dirty || form.get('timeLineFinishControl').touched ||
+                      form.get('timeLineFinishControl').touched)" class="text-danger">
+                <div *ngIf="form.get('timeLineFinishControl').errors.dateLessThan">
+                  From date can't before To date
+                </div>
+              </div>
+            </div>
+          </div>
 
-    <label class="col-md-2 control-label" for="toDate">To</label>
-    <input id="toDate" type="date" class="form-control input-md" [(ngModel)]="toDate">
-
-  <button class="btn btn-success" (click)="download()">Download</button>
-  <button class="btn btn-success" (click)="send()">Send</button>
+            <div class="col-sm-8 col-sm-offset-4">
+              <button class="btn btn-primary" (click)="download()" [disabled]="!form.valid">Download</button>
+              <button class="btn btn-primary" (click)="send()" [disabled]="!form.valid">Send email</button>
+            </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>

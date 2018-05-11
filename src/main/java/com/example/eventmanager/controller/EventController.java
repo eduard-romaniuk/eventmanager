@@ -52,7 +52,6 @@ public class EventController {
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public ResponseEntity<Long> createEvent(@RequestBody Event event, UriComponentsBuilder ucBuilder) {
         logger.info("POST /");
-
         eventService.createEvent(event);
         return new ResponseEntity<>(event.getId(), HttpStatus.CREATED);
     }
@@ -94,7 +93,7 @@ public class EventController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Event> deleteEvent(@PathVariable("id") Long id) {
+    public ResponseEntity<String> deleteEvent(@PathVariable("id") Long id) {
         logger.info("DELETE /" + id);
 
         Event event = eventService.getEvent(id);
@@ -112,14 +111,6 @@ public class EventController {
 
         List<User> userList = eventService.getParticipants(id);
         return new ResponseEntity<>(userList, HttpStatus.OK);
-    }
-
-    //    TODO: Refactor methods which below
-    @RequestMapping(value = "/publish", method = RequestMethod.POST)
-    public void publishEvent(@RequestBody Event event) {
-        logger.info("POST /publish");
-
-        eventService.publishEvent(event);
     }
 
     @RequestMapping(value = "/{id}/join", method = RequestMethod.GET)
@@ -167,7 +158,7 @@ public class EventController {
 
     @RequestMapping(value = "{id}/priority/change", method = RequestMethod.GET)
     public void getPriority(@PathVariable Long id, @RequestParam Long priority_id) {
-        logger.info("GET /EventPriority");
+        logger.info("GET /ChangePriority");
         eventService.changePriority(id, priority_id);
     }
 
@@ -175,6 +166,12 @@ public class EventController {
     public boolean isParticipant(@PathVariable Long id) {
         logger.info("GET /isParticipant");
         return eventService.isParticipant(id);
+    }
+
+    @RequestMapping(value = "{id}/leave", method = RequestMethod.GET)
+    public void leave(@PathVariable Long id) {
+        logger.info("GET /leave");
+         eventService.leaveEvent(id);
     }
 
 }
