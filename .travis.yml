@@ -1,18 +1,22 @@
 language: java
 jdk:
 - oraclejdk8
-node_js: "4.0"
+
 install:
   - mvn -N io.takari:maven:wrapper
   - "./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V"
+  
+before_script:
   - cd client
   - npm install
-  - npm install -g firebase-tools
-after_success:
-  - firebase deploy --token $FIREBASE_TOKEN
-  - echo $PWD
+  - npm install -g --silent firebase-tools
+  - npm install -g --silent @angular/cli
+
+script:
+  - ng build
+  - firebase deploy --token $FIREBASE_TOKEN --project web-event-manager
   - cd ../
-  - echo $PWD
+
 branches:
   only:
   - master
