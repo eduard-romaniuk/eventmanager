@@ -71,9 +71,17 @@ export class UserService {
     return this.http.get<Event[]>(this.base_url + "/"+ id + "/events");
   }
 
-  updateUserPassword(newUser: User) {
-    console.log("user in updateUserPassword - " + newUser);
-    return this.http.put(this.base_url + "/changePassword", newUser)
+  // updateUserPassword(newUser: User) {
+  //   console.log("user in updateUserPassword - " + newUser);
+  //   return this.http.put(this.base_url + "/changePassword", newUser)
+  // }
+
+  updateUserPassword(id, oldPassword, newPassword) {
+    console.log("user id in updateUserPassword - " + id);
+    const params = new HttpParams()
+      .set('oldPassword', oldPassword)
+      .set('newPassword', newPassword);
+    return this.http.put(this.base_url + "/" + id + "/changePassword", {}, {params: params});
   }
 
   // Friends functionality
