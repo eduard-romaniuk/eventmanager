@@ -64,13 +64,21 @@ export class CreateEventComponent implements OnInit {
 
   create() {
     this.event.isSent = false;
-    this.eventService.createEvent(this.event);
+    this.eventService.createEvent(this.event).subscribe (
+      (id: number) => {
+        this.router.navigate(['event/', id]);
+      }
+    );
   }
 
   publish() {
     this.event.isSent = true;
-    this.eventService.createEvent(this.event);
-    this.addUsers();
+    this.eventService.createEvent(this.event).subscribe (
+      (id: number) => {
+        this.addUsers(id);
+        this.router.navigate(['event/', id]);
+      }
+    );
   }
 
   private setCurrentPosition() {
@@ -93,9 +101,9 @@ export class CreateEventComponent implements OnInit {
     this.uploader.uploadAll();
   }
 
-  addUsers(){
+  addUsers(id){
     console.log(this.newParticipants);
-    this.eventService.addUsers(this.newParticipants,this.event.id).subscribe();
+    this.eventService.addUsers(this.newParticipants,id).subscribe();
   }
 
   getFriends() {
@@ -104,9 +112,5 @@ export class CreateEventComponent implements OnInit {
       .subscribe((friends: any) => {
         this.userFriends = friends;
       });
-  }
-
-  test(){
-    console.log(this.newParticipants);
   }
 }

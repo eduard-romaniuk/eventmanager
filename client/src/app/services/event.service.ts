@@ -21,11 +21,7 @@ export class EventService {
 
   public createEvent(event) {
 
-    this.http.post(this.base_url, event).subscribe(
-      (id: number) => {
-        this.router.navigate(['event/', id]);
-      }
-    );
+   return this.http.post(this.base_url, event);
 
   }
 
