@@ -19,7 +19,6 @@
         <button class="btn btn-info" data-toggle="modal" data-target="#priorityChange">Change</button>
       </div>
 
-
       <div class="my-2">
         <img class="img-fluid rounded" [src]="event.image" id="image" name="image">
       </div>
@@ -28,7 +27,7 @@
         Leave
       </button>
 
-      <button *ngIf="!this.isParticipant" class="btn btn-primary" (click)="join()"> Join</button>
+      <button *ngIf="!this.isParticipant && !this.event.isPrivate" class="btn btn-primary" (click)="join()"> Join</button>
 
       <button *ngIf="this.isCreator" class="btn btn-danger" data-toggle="modal" data-target="#deleteEvent">
         Delete
@@ -37,7 +36,10 @@
       <button *ngIf="this.isCreator" class="btn btn-primary" [routerLink]="['/event', event.id, 'edit']">
         Edit
       </button>
-      <button *ngIf="this.isParticipant" class="btn btn-primary" (click)="invite()" [disabled]="true">
+      <button *ngIf="!this.isCreator && this.isParticipant && !this.event.isPrivate" class="btn btn-primary" (click)="invite()" [disabled]="true">
+        Invite
+      </button>
+      <button *ngIf="this.isCreator" class="btn btn-primary" (click)="invite()" [disabled]="true">
         Invite
       </button>
 
