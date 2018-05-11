@@ -73,17 +73,9 @@ export class UserComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
-  goToEditUserPage(user: User): void {
-    this.router.navigate(['users', user.id, 'edit']);
+  goToSettingsPage(): void {
+    this.router.navigate(['users', this.currentUser.id, 'settings']);
   }
-
-  goToEditImagePage(user: User): void {
-    this.router.navigate(['users', user.id, 'updateImage']);
-  };
-
-  goToEditPasswordPage(): void {
-    this.router.navigate(['changePassword']);
-  };
 
   gotoList() {
     this.router.navigate(['/users/all']);
