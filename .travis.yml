@@ -5,6 +5,17 @@ jdk:
 install:
   - mvn -N io.takari:maven:wrapper
   - "./mvnw install -DskipTests=true -Dmaven.javadoc.skip=true -B -V"
+  
+before_script:
+  - cd client
+  - npm install
+  - npm install -g --silent firebase-tools
+  - npm install -g --silent @angular/cli
+
+script:
+  - ng build
+  - firebase deploy --token $FIREBASE_TOKEN --project web-event-manager
+  - cd ../
 
 branches:
   only:
