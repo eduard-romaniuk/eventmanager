@@ -15,15 +15,9 @@ before_script:
 script:
   - ng build
   - firebase deploy --token $FIREBASE_TOKEN --project web-event-manager
-  - echo $PWD
   - cd ../
-  - echo $PWD
-
-after_success:
-  - echo "SUCCESS!"
 
 branches:
   only:
   - master
   - dev
-  - travis-config
