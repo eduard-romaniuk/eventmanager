@@ -16,7 +16,7 @@ export class UserEditPasswordComponent implements OnInit {
 
   form: FormGroup;
   user: User = new User();
-  formContent = {currentPassword: '', password: '', confirmPassword: ''};
+  formContent = {currentPassword: '', newPassword: '', confirmNewPassword: ''};
 
   savingChanges = false;
   wrongPasswordError = false;
@@ -35,10 +35,10 @@ export class UserEditPasswordComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      currentPassword: ['', [ Validators.required, Validators.pattern('^[a-zA-Z0-9]*$') ]],
-      password: ['', [ Validators.required, Validators.pattern('^[a-zA-Z0-9]*$') ]],
-      confirmPassword: ['', [ Validators.required ]]},
-      {validator: passConfirm})
+        currentPassword: ['', [ Validators.required, Validators.pattern('^[a-zA-Z0-9]*$') ]],
+        newPassword: ['', [ Validators.required, Validators.pattern('^[a-zA-Z0-9]*$') ]],
+        confirmNewPassword: ['', [ Validators.required ]]},
+      {validator: passConfirm('newPassword', 'confirmNewPassword')});
   }
 
   save() {
@@ -46,11 +46,11 @@ export class UserEditPasswordComponent implements OnInit {
     this.error = false;
     this.savingChanges = true;
 
-    this.userService.updateUserPassword(this.user.id, this.formContent.currentPassword, this.formContent.password)
+    this.userService.updateUserPassword(this.user.id, this.formContent.currentPassword, this.formContent.newPassword)
       .subscribe(response => {
           this.auth.authenticate({
             login: this.user.login,
-            password: this.formContent.password
+            password: this.formContent.newPassword
           }, () => {
             this.savingChanges = false;
             this.auth.current_user.subscribe(
