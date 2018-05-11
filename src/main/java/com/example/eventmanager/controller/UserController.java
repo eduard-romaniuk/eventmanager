@@ -147,11 +147,11 @@ public class UserController {
     }
 
     @JsonView(UserView.ShortView.class)
-    @RequestMapping(value = "/search", params = "login", method = RequestMethod.GET)
-    public ResponseEntity<List<User>> searchByLogin(@RequestParam("login") String login) {
-        logger.info("GET /users/search?login=" + login);
+    @RequestMapping(value = "/search", params = "query", method = RequestMethod.GET)
+    public ResponseEntity<List<User>> searchByLoginOrByNameAndSurname(@RequestParam("query") String queryString) {
+        logger.info("GET /users/search?query=" + queryString);
 
-        List<User> users = userService.searchByLogin(login);
+        List<User> users = userService.searchByLoginOrByNameAndSurname(queryString);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 

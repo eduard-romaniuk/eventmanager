@@ -62,10 +62,10 @@ export class UserService {
     return this.http.get<User>(this.base_url + '/by-username/' + username);
   }
 
-  searchUserByLogin(login) {
-    const params = new HttpParams().set('login', login);
-    console.log("Login in searchUserByLogin - " + login);
-    return this.http.get(this.base_url + "/search", {params: params});
+  searchByLoginOrByNameAndSurname(queryString) {
+    const params = new HttpParams().set('query', queryString);
+    console.log("Search query - " + queryString);
+    return this.http.get(this.base_url + "/search",{params: params});
   }
 
   public getEventsByUserId(id, isPrivate, isSent): Observable<Event[]> {
