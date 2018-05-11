@@ -8,8 +8,6 @@ import { AuthService } 			  from '../services/auth.service';
 
 import { EmailVerificationComponent } from '../components/email-verification/email-verification.component';
 import { UserComponent } from '../components/user/user.component';
-import { LoginComponent } from '../components/login/login.component';
-import { RegistrationComponent } from '../components/registration/registration.component';
 import { UserListComponent } from '../components/user/user-list.component';
 import { UserEditComponent } from '../components/user/user-edit.component';
 import { EventEditComponent } from '../components/event-edit/event-edit.component';
@@ -47,10 +45,6 @@ const routes: Routes = [
   	component: HelloComponent },
   { path: 'email-verification/:token',
     component: EmailVerificationComponent },
-  { path: 'login',
-    component: LoginComponent },
-  { path: 'registration',
-    component: RegistrationComponent },
   { path: 'recover/password',
     component: RecoverPasswordComponent },
   { path: 'recover/login',
