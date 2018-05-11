@@ -9,6 +9,7 @@ import {AuthService} from "../../services/auth.service";
 import {Subscription} from "rxjs/Subscription";
 import {FormGroup} from "@angular/forms";
 import {ToastService} from "../../services/toast.service";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-createEvent',
@@ -26,6 +27,10 @@ export class ViewEventComponent {
   participationStr: String;
   participants: User[];
 
+  userFriends: User[];
+
+  newParticipants: User[];
+
   latitude: Number;
   longitude: Number;
 
@@ -36,7 +41,8 @@ export class ViewEventComponent {
               private route: ActivatedRoute,
               private router: Router,
               private eventService: EventService,
-              private toast: ToastService) {
+              private toast: ToastService,
+              private userService: UserService) {
   }
 
   ngOnInit() {
@@ -111,9 +117,20 @@ export class ViewEventComponent {
     }, error => console.error(error));
   }
 
-  invite(){
+  inviteUsers(){
 
+    this.eventService.addUsers(this.newParticipants,this.event.id).subscribe();
   }
+
+  getFriends() {
+    this.userService.getFriends(this.userId)
+      .subscribe((friends: any) => {
+        this.userFriends = friends;
+      });
+  }
+
+
+
   public isCreatorTest(): boolean {
     return this.userId === this.event.creator.id;
   }

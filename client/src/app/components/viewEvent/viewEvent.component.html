@@ -39,7 +39,7 @@
       <button *ngIf="!this.isCreator && this.isParticipant && !this.event.isPrivate" class="btn btn-primary" (click)="invite()" [disabled]="true">
         Invite
       </button>
-      <button *ngIf="this.isCreator" class="btn btn-primary" (click)="invite()" [disabled]="true">
+      <button *ngIf="this.isCreator" class="btn btn-primary" (click)="getFriends()" data-toggle="modal" data-target="#addFriend">
         Invite
       </button>
 
@@ -142,3 +142,48 @@
     </div>
   </div>
 </div>
+
+
+<div id="addFriend" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h3> Select friends</h3>
+        <button class="close" type="button" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body">
+
+
+        <div *ngIf="userFriends">
+          <div id="teamCheckboxList" class="checkboxList">
+          <div *ngFor="let friend of userFriends">
+
+            <label>
+              <input type="checkbox"
+                     [(checklist)]="newParticipants"
+                     [checklistValue]="friend" />
+              <span><strong>{{friend.name}} {{friend.surName}}</strong></span>
+            </label>
+
+
+          </div>
+        </div>
+        </div>
+        <div *ngIf="userFriends?.length < 1">
+          <p>No friends </p>
+        </div>
+
+
+        <div class="modal-footer ">
+          <button class="btn btn-warning centerDiv" [routerLink]="['/event', event.id]" data-dismiss="modal">Cancel
+          </button>
+          <button class="btn btn-success centerDiv" (click)="inviteUsers()" data-dismiss="modal">Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
