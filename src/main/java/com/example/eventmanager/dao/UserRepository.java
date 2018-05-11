@@ -161,11 +161,14 @@ public class UserRepository implements CrudRepository<User> {
         }
     }
 
-    public List<User> searchByLogin(String login) {
+    public List<User> searchByLoginOrByNameAndSurname(String queryString) {
         try {
+            String fixaedQueryString = ("%" + queryString.toLowerCase().trim() + "%").replace(" ", "%");
+
             Map<String, Object> namedParams = new HashMap<>();
-            namedParams.put("login", "%" + login.toLowerCase().trim() + "%");
-            return namedJdbcTemplate.query(env.getProperty("searchUserByLogin"), namedParams, new UserMapper());
+            namedParams.put("queryString", fixaedQueryString);
+            return namedJdbcTemplate.query(env.getProperty("searchUserByLoginOrByNameAndSurname"),
+                    namedParams, new UserMapper());
         } catch (EmptyResultDataAccessException e) {
             logger.info("User not found");
             return null;

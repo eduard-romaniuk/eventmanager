@@ -16,7 +16,7 @@ export class UserSearchComponent implements OnInit {
 
   currentUser: User = new User();
   users: User[];
-  loginToSearch = new Subject<string>();
+  queryToSearch = new Subject<string>();
 
   constructor(private userService: UserService,
               private auth: AuthService) {
@@ -27,14 +27,14 @@ export class UserSearchComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.searchUser(this.loginToSearch).subscribe( (users : any) => {
+    this.searchUser(this.queryToSearch).subscribe( (users : any) => {
       this.users = users;
     });
   }
 
   searchUser(terms: Observable<string>) {
     return terms.distinctUntilChanged()
-      .switchMap(term => this.userService.searchUserByLogin(term));
+      .switchMap(term => this.userService.searchByLoginOrByNameAndSurname(term));
   }
 
 }
