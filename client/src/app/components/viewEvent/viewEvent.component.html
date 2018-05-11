@@ -36,7 +36,8 @@
       <button *ngIf="this.isCreator" class="btn btn-primary" [routerLink]="['/event', event.id, 'edit']">
         Edit
       </button>
-      <button *ngIf="!this.isCreator && this.isParticipant && !this.event.isPrivate" (click)="getFriends()" data-toggle="modal" data-target="#addFriend">
+      <button *ngIf="!this.isCreator && this.isParticipant && !this.event.isPrivate"
+              class="btn btn-primary" (click)="getFriends()" data-toggle="modal" data-target="#addFriend">
         Add Friends
       </button>
       <button *ngIf="this.isCreator" class="btn btn-primary" (click)="getFriends()" data-toggle="modal" data-target="#addFriend">
