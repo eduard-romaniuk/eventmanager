@@ -1,63 +1,142 @@
-<div class="container">
-
-  <h1 class="my-4">{{event.name}}
-    <small *ngIf="!this.isCreator">{{event.creator.name}} {{event.creator.surName}}</small>
-  </h1>
-
+<div class="container-fluid">
   <div class="row">
+    <div class="col-md-6">
+      <h1>{{event.name}}</h1>
+      <h3>
+        <small *ngIf="!this.isCreator"> Creator: {{event.creator.name}} {{event.creator.surName}}</small>
+      </h3>
 
-    <div class="col-md-4" *ngIf="event.image">
-      <img class="img-fluid" [src]="event.image" id="image1" name="image">
-    </div>
-
-    <div class="col-md-8">
-      <h3 class="my-3">Event Description</h3>
-      <p>{{event.description}}</p>
-      <h3 class="my-3">Event Details</h3>
-      <ul>
-        <li>Place {{event.place}} </li>
-        <li>Start {{event.timeLineStart|date: "MMM d, y HH:mm"}}</li>
-        <li>Finish {{event.timeLineFinish|date: "MMM d, y HH:mm"}}</li>
-        <li *ngIf="this.isParticipant"> Priority {{this.priority}}
-          <button *ngIf="this.isParticipant" type="button" class="btn btn-info btn-xs"  data-toggle="modal" data-target="#priorityChange">Change</button>
-        </li>
-      </ul>
-        <button class="btn btn-info mt-2" data-toggle="collapse" (click)="showParticipants()" data-target="#hide-me">Show Participants</button>
-        <div id= "hide-me" class="collapse in">
-          <div class="md-form text-center" *ngFor="let user of participants">
-            <a [routerLink]="['/users', user.id]"> {{ user.login }} </a>
-          </div>
+      <div *ngIf="this.isParticipant" class="container-fluid ">
+        <div *ngIf="low()">
+          <h4> Event priority: <strong class="text-success">Low </strong></h4>
         </div>
+        <div *ngIf="normal()">
+          <h4>Event priority:<strong class="text-warning">Normal </strong></h4>
+        </div>
+        <div *ngIf="urgent()">
+          <h4>Event priority: <strong class="text-danger">Urgent </strong></h4>
+        </div>
+        <button class="btn btn-info" data-toggle="modal" data-target="#priorityChange">Change</button>
+      </div>
+
+
+      <div class="my-2">
+        <img class="rounded " [src]="event.image" id="image" name="image">
+      </div>
+
+      <button *ngIf="!this.isCreator && this.isParticipant" class="btn btn-warning " (click)="leave()">
+        Leave
+      </button>
+
+      <button *ngIf="!this.isParticipant" class="btn btn-primary" (click)="join()"> Join</button>
+
+      <button *ngIf="this.isCreator" class="btn btn-danger" data-toggle="modal" data-target="#deleteEvent">
+        Delete
+      </button>
+
+      <button *ngIf="this.isCreator" class="btn btn-primary" [routerLink]="['/event', event.id, 'edit']">
+        Edit
+      </button>
+      <button *ngIf="this.isParticipant" class="btn btn-primary" (click)="invite()" [disabled]="true">
+        Invite
+      </button>
+
+      <button class="btn btn-info left-button" data-toggle="collapse" (click)="showParticipants()"
+              data-target="#hide-me">
+        Participants
+      </button>
+      <div id="hide-me" class="collapse in">
+        <div class="md-form text-center" *ngFor="let user of participants">
+          <a [routerLink]="['/users', user.id]"> {{ user.login }} </a>
+        </div>
+      </div>
+
     </div>
 
-</div>
+    <div class="col-md-6">
+      <h3 class="my-2">
+        Description
+      </h3>
+      <p>
+        {{this.event.description}}
+      </p>
+      <h3 class="my-2">
+        Place
+      </h3>
+      <agm-map [mapTypeControl]="true" [fullscreenControl]="true"
+               [latitude]="latitude" [longitude]="longitude">
+        <agm-marker [latitude]="latitude" [longitude]="longitude" [title]=this.event.name></agm-marker>
+      </agm-map>
+      <h3 class="my-2">Time</h3>
+      <ul>
+        <li><strong>Start:</strong> {{event.timeLineStart|date: "MMM d, y HH:mm"}}</li>
+        <li><strong>End:</strong> {{event.timeLineFinish|date: "MMM d, y HH:mm"}}</li>
+      </ul>
 
-</div>
+      <div *ngIf="this.isParticipant" class="btn-group" role="group">
+        <button class="btn btn-secondary" type="button" (click)="goToChatWithCreator()">
+          Chat
+        </button>
+        <button *ngIf="!this.isCreator" class="btn btn-secondary" type="button" (click)="goToChatWithoutCreator()">
+          Chat without Creator
+        </button>
+      </div>
 
-<div class="container my-4 ">
-  <button class="btn btn-default mt-2" [routerLink]="['/event', event.id, 'edit']"> <!--*ngIf="isCreator()"-->Edit</button>
-  <button class="btn btn-default mt-2" (click)="publish()" [disabled]="true">Invite members</button>
-  <button *ngIf="this.isParticipant" class="btn btn-default mt-2" (click)="goToChatWithCreator()"> Chat With Creator</button>
-  <button *ngIf="!this.isCreator" class="btn btn-default mt-2" (click)="goToChatWithoutCreator()"> Chat Without Creator</button>
-  <button *ngIf="!this.isParticipant" class="btn btn-default mt-2" (click)="join()"> Join</button>
+    </div>
+  </div>
 </div>
 
 <div id="priorityChange" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header"> <h4> Select priority</h4>
-        <button class="close" type="button" data-dismiss="modal">×</button></div>
-      <div class="modal-body">
+      <div class="modal-header"><h3> Select priority</h3>
+        <button class="close" type="button" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body centerDiv">
         <div class="form-group">
-          <select name="priority" id="priority" class="custom-select" [(ngModel)]="priority_id">
-            <option selected></option>
-            <option value="0">Low</option>
-            <option value="1">Normal</option>
-            <option value="2">Urgent</option>
-          </select>
+          <div class="form-check form-check-inline radio radio-success  ">
+            <input type="radio" name="prioritynew" id="low" [value]="0" [(ngModel)]="priority">
+            <label for="low">
+              Low
+            </label>
+          </div>
+          <div class="form-check form-check-inline radio radio-warning  ">
+            <input type="radio" name="prioritynew" id="normal" [value]="1" [(ngModel)]="priority">
+            <label for="normal">
+              Normal
+            </label>
+          </div>
+          <div class="form-check form-check-inline radio radio-danger ">
+            <input type="radio" name="prioritynew" id="urgent" [value]="2" [(ngModel)]="priority">
+            <label for="urgent">
+              Urgent
+            </label>
+          </div>
         </div>
       </div>
-      <div class="modal-footer"><button class="btn btn-default" type="button" (click)="submitPriority()" data-dismiss="modal">Submit</button></div>
+      <div class="modal-footer ">
+        <button class="btn btn-primary centerDiv" type="button" (click)="submitPriority()" data-dismiss="modal">Submit
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="deleteEvent" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h3> Delete Event</h3>
+        <button class="close" type="button" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body">
+        <h4 class="text-center">Are you sure?</h4>
+        <div class="modal-footer ">
+          <button class="btn btn-warning centerDiv" [routerLink]="['/event', event.id]" data-dismiss="modal">Cancel
+          </button>
+          <button class="btn btn-success centerDiv" (click)="delete()" data-dismiss="modal">Submit
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

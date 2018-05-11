@@ -4,8 +4,11 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { Event } from '../../model/event';
 import { EventService } from '../../services/event.service';
-import {User} from "../../model/user";
-import {ToastService} from "../../services/toast.service";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {CloudinaryUploader} from "ng2-cloudinary";
+import {ImageUploaderService} from "../../services/image-uploader.service";
+import {AuthService} from "../../services/auth.service";
+import {dateLessThan, dateValidator} from "../../utils/validation-tools";
 
 @Component({
   selector: 'app-event-edit',
@@ -16,12 +19,28 @@ export class EventEditComponent implements OnInit, OnDestroy {
 
   event: Event = new Event();
 
+  uploader: CloudinaryUploader = ImageUploaderService.getUploader();
+
+  latitude: Number;
+  longitude: Number;
+
+  form: FormGroup;
+
   sub: Subscription;
 
-  constructor(private route: ActivatedRoute,
-              private router: Router,
+  constructor(private auth: AuthService,
               private eventService: EventService,
-              private toast: ToastService) { }
+              private formBuilder: FormBuilder,
+              private route: ActivatedRoute,
+              private router: Router) {
+
+    this.uploader.onSuccessItem = (item: any, response: string, status: number, headers: any): any => {
+      let res: any = JSON.parse(response);
+      this.event.image = res.url;
+      console.log(`res - ` + JSON.stringify(res) );
+      return { item, response, status, headers };
+    };
+  }
 
   ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
@@ -30,30 +49,60 @@ export class EventEditComponent implements OnInit, OnDestroy {
         this.eventService.getEvent(id).subscribe((event: any) => {
           if (event) {
             this.event = event;
+            this.Position();
           } else {
             console.log(`Event with id '${id}' not found!`);
           }
         });
       }
     });
+    this.form = this.formBuilder.group({
+      eventNameControl: ['', [Validators.required]],
+      descriptionControl: ['', [Validators.required]],
+      timeLineStartControl: ['', [Validators.required, dateValidator()]],
+      timeLineFinishControl: ['', [Validators.required]],
+      periodControl: ['', [Validators.required, Validators.min(0)]],
+    }, {validator: dateLessThan('timeLineStartControl', 'timeLineFinishControl'),});
+
+
   }
 
   ngOnDestroy() {
     this.sub.unsubscribe();
   }
 
+  private Position() {
+
+    let coords = this.event.place.split("/");
+        this.latitude =Number(coords[0]);
+        this.longitude =Number(coords[1]);
+        console.log(this.latitude);
+        console.log(this.longitude);
+
+  }
+  onChoseLocation(event) {
+    this.latitude = event.coords.lat;
+    this.longitude = event.coords.lng;
+    this.event.place = this.latitude + "/" + this.longitude;
+    console.log(this.event.place)
+  }
+
+  upload() {
+    this.uploader.uploadAll();
+  }
   publish() {
     this.event.isSent = true;
-    this.save();
+    console.log(this.event);
+    this.eventService.updateEvent(this.event).subscribe((user: any) => {
+      this.router.navigate(['event/', this.event.id]);
+    }, error => console.error(error));
   }
 
   save() {
-    this.eventService.updateEvent(this.event).subscribe(response => {
-      this.router.navigate(['home']);
-      this.toast.success('Event successfully updated');
+    this.event.isSent = false;
+    console.log(this.event);
+    this.eventService.updateEvent(this.event).subscribe((user: any) => {
+      this.router.navigate(['event', this.event.id]);
     }, error => console.error(error));
   }
-  goToEditImagePage(event: Event): void {
-    this.router.navigate(['event', event.id, 'updateImage']);
-  };
 }

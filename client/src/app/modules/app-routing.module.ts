@@ -21,7 +21,6 @@ import { ChatComponent } from "../components/chat/chat.component";
 import { ExportEventsPlanComponent } from "../components/export-events-plan/export-events-plan.component";
 import { UserEditPasswordComponent } from "../components/user/user-edit-password/user-edit-password.component";
 import { PersonalPlanSettingComponent } from "../components/personal-plan-setting/personal-plan-setting.component";
-import { EventEditImageComponent } from "../components/event-edit-image/event-edit-image.component";
 import { RecoverPasswordComponent } from '../components/recover-password/recover-password.component';
 import { RecoverLoginComponent } from '../components/recover-login/recover-login.component';
 import { ChangePasswordComponent } from '../components/change-password/change-password.component';
@@ -108,9 +107,6 @@ const routes: Routes = [
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'users/setting/plan',
     component: PersonalPlanSettingComponent,
-    canActivate: [ OnlyLoggedInUsersGuard ] },
-  { path: 'event/:id/updateImage',
-    component: EventEditImageComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'folders/rootFolder',
     component: RootFolderComponent,

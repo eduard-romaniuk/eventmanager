@@ -1,8 +1,10 @@
 import {Component} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {AuthService} from "../../services/auth.service";
-import {User} from "../../model/user";
+
 import {saveAs} from 'file-saver/FileSaver';
+import {dateLessThan } from "../../utils/validation-tools";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-export-events-plan',
@@ -14,8 +16,25 @@ export class ExportEventsPlanComponent {
   private url = '/event';
   public toDate: string;
   public fromDate: string;
-  constructor(private auth: AuthService, private http: HttpClient) {
+  form: FormGroup;
+
+  constructor(private auth: AuthService,
+              private http: HttpClient,
+              private formBuilder: FormBuilder) {
   }
+
+  ngOnInit() {
+
+    this.form = this.formBuilder.group({
+
+      timeLineStartControl:['', [ Validators.required]],
+      timeLineFinishControl: ['', [ Validators.required]],
+
+    },{ validator:dateLessThan('timeLineStartControl', 'timeLineFinishControl'), });
+
+  }
+
+
 
   download() {
     console.log("GET");
@@ -31,7 +50,7 @@ export class ExportEventsPlanComponent {
         saveAs(blob, filename);
       });
 
-    console.log(this.url, this.fromDate, this.toDate);
+    console.log(this.url, this.fromDate, this.toDate,this);
 
   }
 

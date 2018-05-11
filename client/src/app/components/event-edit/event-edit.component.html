@@ -1,30 +1,182 @@
-<div class="md-form text-center">
-  <input type="text" id="eventName" class="form-control mt-2" placeholder="Name of event"
-         [(ngModel)]="event.name">
-  <input type="text" id="description" class="form-control mt-2" placeholder="Description"
-         [(ngModel)]="event.description">
-  <input type="text" id="place" class="form-control mt-2" placeholder="Venue"
-         [(ngModel)]="event.place">
-  <div class="md-form text-left">
-    Start time:
+<div class="bootstrap-iso my-4">
+  <div class="container-fluid ">
+    <div class="row">
+      <div class="col-md-10 col-sm-6 col-xs-12 centerDiv">
+        <form class="form-horizontal" [formGroup]="form">
+          <div class="form-group ">
+            <label class="control-label col-sm-2 requiredField" for="name">
+              Name
+              <span class="asteriskField">*</span>
+            </label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <input class="form-control" id="name" name="name" placeholder="Event name" type="text"
+                       [(ngModel)]="event.name" formControlName="eventNameControl"
+                       [ngClass]="{'is-invalid': form.get('eventNameControl').invalid &&
+                       (form.get('eventNameControl').dirty || form.get('eventNameControl').touched)}"/>
+                <div class="input-group-addon">
+                  <i class="fa fa-file-text-o">
+                  </i>
+                </div>
+              </div>
+              <div *ngIf="form.get('eventNameControl').invalid &&
+                (form.get('eventNameControl').dirty || form.get('eventNameControl').touched)" class="text-danger">
+                Name of event can't be blank</div>
+            </div>
+          </div>
+          <div class="form-group ">
+            <label class="control-label col-sm-2 requiredField" for="description">
+              Description
+              <span class="asteriskField">*</span>
+            </label>
+            <div class="col-sm-10">
+              <textarea class="form-control" cols="40" id="description" name="description" placeholder="Description"
+                        rows="10"
+                        [(ngModel)]="event.description" formControlName="descriptionControl"
+                        [ngClass]="{ 'is-invalid': form.get('descriptionControl').invalid &&
+          (form.get('descriptionControl').dirty || form.get('descriptionControl').touched)}"></textarea>
+              <span class="help-block" id="hint_description">
+        Enter additional information about the event
+       </span>
+              <div
+                *ngIf="form.get('descriptionControl').invalid && (form.get('descriptionControl').dirty || form.get('descriptionControl').touched)"
+                class="text-danger"> Description can't be blank </div>
+            </div>
+          </div>
+
+          <div class="form-group ">
+            <label class="control-label col-sm-2 requiredField">
+              Place
+              <span class="asteriskField">*</span>
+            </label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <agm-map [mapTypeControl]="true" [fullscreenControl]="true"
+                         [latitude]="latitude" [longitude]="longitude"
+                         (mapClick)="onChoseLocation($event)">
+                  <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
+                </agm-map>
+              </div>
+              <span class="help-block" id="hint_name1">
+        Mark the place of the event on the map
+       </span>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label class="control-label col-sm-2 requiredField">
+              Image </label>
+            <div class="col-sm-10">
+              <div *ngIf="event.image">
+                <img [src]="event.image" id="image" name="image"> <br/>
+              </div>
+              <input
+                style="display: none"
+                type="file" accept="image/*" ng2FileSelect [uploader]="uploader" (change)="upload()"
+                #fileInput>
+              <button class="btn btn-info button my-4" (click)="fileInput.click()">Select File</button>
+            </div>
+          </div>
+
+
+          <div class="form-group ">
+            <label class="control-label col-sm-2 requiredField" for="timeLineStart">
+              Start time
+              <span class="asteriskField">*</span>
+            </label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <input class="form-control" id="timeLineStart" name="timeLineStart"  type="datetime-local"
+                       [(ngModel)]="event.timeLineStart" formControlName="timeLineStartControl"
+                       [ngClass]="{'is-invalid': form.get('timeLineStartControl').invalid &&
+                       (form.get('timeLineStartControl').dirty || form.get('timeLineStartControl').touched)} "/>
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar-check-o">
+                  </i>
+                </div>
+              </div>
+              <div *ngIf="form.get('timeLineStartControl').invalid &&
+                (form.get('timeLineStartControl').dirty || form.get('timeLineStartControl').touched ||
+                      form.get('timeLineStartControl').touched)" class="text-danger">
+                <div *ngIf="form.get('timeLineStartControl')">
+                  Start time can't before current time
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group ">
+            <label class="control-label col-sm-2 requiredField" for="timeLineFinish">
+              End time
+              <span class="asteriskField">*</span>
+            </label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <input class="form-control" id="timeLineFinish" name="timeLineFinish" type="datetime-local"
+                       [(ngModel)]="event.timeLineFinish" formControlName="timeLineFinishControl"
+                       [ngClass]="{'is-invalid': form.get('timeLineFinishControl').invalid &&
+                       (form.get('timeLineFinishControl').dirty || form.get('timeLineFinishControl').touched)}">
+                <div class="input-group-addon">
+                  <i class="fa fa-calendar-check-o">
+                  </i>
+                </div>
+              </div>
+              <div *ngIf="form.get('timeLineFinishControl').invalid &&
+                (form.get('timeLineFinishControl').dirty || form.get('timeLineFinishControl').touched ||
+                      form.get('timeLineFinishControl').touched)" class="text-danger">
+                <div *ngIf="form.get('timeLineFinishControl').errors.dateLessThan">
+                  End time can't before start time
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group ">
+            <label class="control-label col-sm-2 requiredField" for="number">
+              Repetition period
+              <span class="asteriskField">*</span>
+            </label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <input class="form-control" id="number" name="number" type="number"
+                       [(ngModel)]="event.period" formControlName="periodControl"
+                       [ngClass]="{'is-invalid': form.get('periodControl').invalid &&
+                       (form.get('periodControl').dirty || form.get('periodControl').touched)}"/>
+                <div class="input-group-addon">
+                  <i class="fa fa-repeat">
+                  </i>
+                </div>
+              </div>
+              <span class="help-block" id="hint_number">
+        Every n days
+       </span>
+              <div
+                *ngIf="form.get('periodControl').invalid && (form.get('periodControl').dirty || form.get('periodControl').touched)"
+                class="text-danger">
+                <div *ngIf="form.get('periodControl').errors.required">
+                  Period can't be blank
+                </div>
+                <div *ngIf="form.get('periodControl').errors.min">
+                  Period can't < 0
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="form-group ">
+          <h4 class="text-center">
+            <strong>Is event private?</strong>
+            <span class="asteriskField">*</span>
+            <input name="checkbox" type="checkbox" [(ngModel)]="event.isPrivate">
+          </h4>
+        </div>
+        <div class="form-group my-4">
+          <div class="col-sm-8 col-sm-offset-4">
+            <button class="btn btn-primary" (click)="save()" [disabled]="!form.valid">Save</button>
+            <button class="btn btn-primary " (click)="publish()" [disabled]="!form.valid">Publish</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
-  <input type="datetime-local" id="timeLineStart" class="form-control mt-2"
-         [(ngModel)]="event.timeLineStart">
-  <div class="md-form text-left">
-    End time:
-  </div>
-  <input type="datetime-local" id="timeLineFinish" class="form-control mt-2"
-         [(ngModel)]="event.timeLineFinish">
-  <input type="number" id="period" class="form-control mt-2" placeholder="Repetition period in days"
-         [(ngModel)]="event.period">
-  <div class="form-control mt-2">
-    Event is private?
-    <input type="checkbox" id="isPrivate"
-           [(ngModel)]="event.isPrivate">
-  </div>
-  <p>
-    <button class="btn btn-info" (click)="goToEditImagePage(event)"> Edit image </button>
-  </p>
-  <button class="btn btn-default mt-2" (click)="save()">Save</button>
-  <button class="btn btn-default mt-2" (click)="publish()">Publish</button>
 </div>
+
