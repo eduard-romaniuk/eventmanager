@@ -14,7 +14,7 @@ before_script:
 
 script:
   - ng build
-  - firebase deploy --token $FIREBASE_TOKEN
+  - firebase deploy --token $FIREBASE_TOKEN --project web-event-manager
   - echo $PWD
   - cd ../
   - echo $PWD
