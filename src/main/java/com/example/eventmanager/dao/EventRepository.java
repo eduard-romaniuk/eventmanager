@@ -2,7 +2,6 @@ package com.example.eventmanager.dao;
 
 
 import com.example.eventmanager.domain.Event;
-import com.example.eventmanager.domain.Folder;
 import com.example.eventmanager.domain.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -70,7 +69,6 @@ public class EventRepository implements CrudRepository<Event> {
         namedParams.addValue("is_sent", event.isSent());
         namedParams.addValue("is_private", event.isPrivate());
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        namedJdbcTemplate.update(env.getProperty("saveEvent"), namedParams, keyHolder);
         namedJdbcTemplate.update(env.getProperty("event.save"), namedParams, keyHolder);
         return (Integer)keyHolder.getKeys().get("id");
     }

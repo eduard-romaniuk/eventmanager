@@ -1,5 +1,4 @@
-import { AbstractControl } from '@angular/forms';
-import { AuthService } from '../services/auth.service';
+import {AbstractControl, FormGroup, ValidatorFn} from '@angular/forms';
 
 
 export function passConfirm(form: AbstractControl) {
