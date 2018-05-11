@@ -1,23 +1,29 @@
 import {AbstractControl, FormGroup, ValidatorFn} from '@angular/forms';
 
+export function passConfirm(password: string, passwordConfirmation: string) {
+  return (group: FormGroup): { [key: string]: any } => {
+    let pass = group.controls[password];
+    let passConf = group.controls[passwordConfirmation];
 
-export function passConfirm(form: AbstractControl) {
-  if (form.get('password').value !== form.get('confirmPassword').value) {
-    form.get('confirmPassword').setErrors({ passconfirm: true });
-  } else {
-    return null;
+    if (pass.value !== passConf.value) {
+      group.get(passwordConfirmation).setErrors({passconfirm: true});
+    } else {
+      return null;
+    }
   }
 }
 
-export function imageExtension(form: AbstractControl) {
-  var validExtensionsForImage = ["jpg", "jpeg", "png", "gif"];
-  var imageName = form.get('image').value;
-  var extension = imageName.split(".").pop();
+export function imageExtension(image: string) {
+  let validExtensionsForImage = ["jpg", "jpeg", "png", "gif"];
+  return (group: FormGroup): { [key: string]: any } => {
+    let img = group.controls[image];
+    let extension = img.value.split(".").pop();
 
-  if (validExtensionsForImage.indexOf(extension) < 0) {
-    form.get('image').setErrors({ imageExtension: true });
-  } else {
-    return null;
+    if (validExtensionsForImage.indexOf(extension) < 0) {
+      group.get(image).setErrors({imageExtension: true});
+    } else {
+      return null;
+    }
   }
 }
 

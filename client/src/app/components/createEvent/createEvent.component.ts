@@ -9,6 +9,8 @@ import {dateLessThan, dateValidator} from "../../utils/validation-tools";
 import {Router} from "@angular/router";
 import {CloudinaryUploader} from "ng2-cloudinary";
 import {ImageUploaderService} from "../../services/image-uploader.service";
+import {User} from "../../model/user";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-createEvent',
@@ -18,6 +20,10 @@ import {ImageUploaderService} from "../../services/image-uploader.service";
 export class CreateEventComponent implements OnInit {
 
   event: Event = new Event();
+
+  userFriends: User[];
+
+  newParticipants: User[];
 
   uploader: CloudinaryUploader = ImageUploaderService.getUploader();
 
@@ -29,7 +35,8 @@ export class CreateEventComponent implements OnInit {
   constructor(private auth: AuthService,
               private eventService: EventService,
               private formBuilder: FormBuilder,
-              private router: Router) {
+              private router: Router,
+              private userService:UserService) {
 
     this.uploader.onSuccessItem = (item: any, response: string, status: number, headers: any): any => {
       let res: any = JSON.parse(response);
@@ -56,15 +63,22 @@ export class CreateEventComponent implements OnInit {
 
 
   create() {
-    // TODO: Handle create error
     this.event.isSent = false;
-    this.eventService.createEvent(this.event);
+    this.eventService.createEvent(this.event).subscribe (
+      (id: number) => {
+        this.router.navigate(['event/', id]);
+      }
+    );
   }
 
   publish() {
-    // TODO: Handle create error
     this.event.isSent = true;
-    this.eventService.createEvent(this.event);
+    this.eventService.createEvent(this.event).subscribe (
+      (id: number) => {
+        this.addUsers(id);
+        this.router.navigate(['event/', id]);
+      }
+    );
   }
 
   private setCurrentPosition() {
@@ -87,4 +101,16 @@ export class CreateEventComponent implements OnInit {
     this.uploader.uploadAll();
   }
 
+  addUsers(id){
+    console.log(this.newParticipants);
+    this.eventService.addUsers(this.newParticipants,id).subscribe();
+  }
+
+  getFriends() {
+    console.log(this.event.creator);
+    this.userService.getFriends(this.event.creator.id)
+      .subscribe((friends: any) => {
+        this.userFriends = friends;
+      });
+  }
 }

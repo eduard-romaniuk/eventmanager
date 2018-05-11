@@ -44,7 +44,7 @@ export class UserEditImageComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.form = this.formBuilder.group({
         image: ['', [ Validators.required ]]},
-      {validator: imageExtension}
+      {validator: imageExtension('image')}
     );
 
     this.sub = this.route.params.subscribe(params => {

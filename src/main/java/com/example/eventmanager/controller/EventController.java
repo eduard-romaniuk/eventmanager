@@ -158,7 +158,7 @@ public class EventController {
 
     @RequestMapping(value = "{id}/priority/change", method = RequestMethod.GET)
     public void getPriority(@PathVariable Long id, @RequestParam Long priority_id) {
-        logger.info("GET /EventPriority");
+        logger.info("GET /ChangePriority");
         eventService.changePriority(id, priority_id);
     }
 

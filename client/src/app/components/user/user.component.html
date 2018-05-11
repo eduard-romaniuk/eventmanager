@@ -46,7 +46,8 @@
       <div *ngIf="userEvents">
         <div *ngFor="let event of userEvents">
           <div class="row border list">
-              <p><a [routerLink]="['/event', event.id]"> {{ event.name }} </a></p>
+              <p><a *ngIf="event.isSent" [routerLink]="['/event', event.id]"> {{ event.name }} </a></p>
+              <p><a class="text-danger" *ngIf="!event.isSent" [routerLink]="['/event', event.id]"> {{ event.name }} </a></p>
           </div>
         </div>
       </div>

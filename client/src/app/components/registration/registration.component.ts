@@ -42,7 +42,8 @@ export class RegistrationComponent implements OnInit {
         Validators.pattern('^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)*$'),
         Validators.minLength(6),
         Validators.maxLength(30) ]],
-      confirmPassword: ['', [ Validators.required ]]}, {validator: passConfirm});
+      confirmPassword: ['', [ Validators.required ]]},
+      {validator: passConfirm('password', 'confirmPassword')});
   }
 
   registration(){

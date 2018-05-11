@@ -46,12 +46,19 @@ export class UserComponent implements OnInit, OnDestroy {
                 this.currentUserPage = (this.currentUser.id == this.user.id);
                 console.log("this.currentUserPage - " + this.currentUserPage);
 
-                this.userService.getEventsByUserId(this.user.id)
-                  .subscribe((events: any) => {
-                    console.log("events - " + events);
-                    this.userEvents = events;
-                  });
-
+                if(this.currentUserPage) {
+                  this.userService.getCurrentUserEvents(this.user.id)
+                    .subscribe((events: any) => {
+                      console.log("events - " + events);
+                      this.userEvents = events;
+                    });
+                } else {
+                  this.userService.getEventsByUserId(this.user.id, false, true)
+                    .subscribe((events: any) => {
+                      console.log("events - " + events);
+                      this.userEvents = events;
+                    });
+                }
               } else {
                 console.log(`User with id '${id}' not found!`);
                 this.gotoList();

@@ -80,11 +80,28 @@ public class UserController {
         return new ResponseEntity<>(newUser, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/changePassword", method = RequestMethod.PUT)
-    public void changePass(@RequestBody User user) {
-        logger.info("PUT /changePassword");
+//    @RequestMapping(value = "/changePassword", method = RequestMethod.PUT)
+//    public void changePass(@RequestBody User user) {
+//        logger.info("PUT /changePassword");
+//
+//        userService.changePass(securityService.encodePass(user));
+//    }
 
-        userService.changePass(securityService.encodePass(user));
+    @RequestMapping(value = "/{id}/changePassword", params = {"oldPassword", "newPassword"}, method = RequestMethod.PUT)
+    public ResponseEntity<Void> changePassword(@PathVariable Long id, @RequestParam String oldPassword, @RequestParam String newPassword) {
+        logger.info("PUT /{id}/changePassword", id);
+
+        User user = userService.getUser(id);
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else if(securityService.comparePass(user, oldPassword)){
+            user.setPassword(newPassword);
+            userService.changePass(securityService.encodePass(user));
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
     @RequestMapping(value = "/by-username/{username}", method = RequestMethod.GET)
@@ -131,19 +148,27 @@ public class UserController {
 
     @JsonView(EventView.FullView.class)
     @RequestMapping(value = "/{id}/events", method = RequestMethod.GET)
-    public ResponseEntity<List<Event>> getUserEvents(@PathVariable Long id) {
+    public ResponseEntity<List<Event>> getUserEvents(@PathVariable Long id,@RequestParam Boolean isPrivate,@RequestParam Boolean isSent) {
         logger.info("GET /" + id + "/events");
 
-        List<Event> eventList = eventService.getEventsWithUserParticipation(id);
+        List<Event> eventList = eventService.getEventsWithUserParticipation(id, isPrivate, isSent);
+        return new ResponseEntity<>(eventList, HttpStatus.OK);
+    }
+    @JsonView(EventView.FullView.class)
+    @RequestMapping(value = "/{id}/myevents", method = RequestMethod.GET)
+    public ResponseEntity<List<Event>> getCurrentUserEvents(@PathVariable Long id) {
+        logger.info("GET /" +id+ "/myevents");
+
+        List<Event> eventList = eventService.getUserEvents();
         return new ResponseEntity<>(eventList, HttpStatus.OK);
     }
 
     @JsonView(UserView.ShortView.class)
-    @RequestMapping(value = "/search", params = "login", method = RequestMethod.GET)
-    public ResponseEntity<List<User>> searchByLogin(@RequestParam("login") String login) {
-        logger.info("GET /users/search?login=" + login);
+    @RequestMapping(value = "/search", params = "query", method = RequestMethod.GET)
+    public ResponseEntity<List<User>> searchByLoginOrByNameAndSurname(@RequestParam("query") String queryString) {
+        logger.info("GET /users/search?query=" + queryString);
 
-        List<User> users = userService.searchByLogin(login);
+        List<User> users = userService.searchByLoginOrByNameAndSurname(queryString);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
