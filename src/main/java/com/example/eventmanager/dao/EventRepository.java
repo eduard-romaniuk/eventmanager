@@ -2,6 +2,7 @@ package com.example.eventmanager.dao;
 
 
 import com.example.eventmanager.domain.Event;
+import com.example.eventmanager.domain.Folder;
 import com.example.eventmanager.domain.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -55,7 +56,7 @@ public class EventRepository implements CrudRepository<Event> {
 
     @Override
     public int save(Event event) {
-        System.out.println(event);
+        logger.info("Saving event");
         MapSqlParameterSource namedParams = new MapSqlParameterSource();
         namedParams.addValue("creator_id", event.getCreator().getId());
         namedParams.addValue("name", event.getName());
@@ -68,9 +69,8 @@ public class EventRepository implements CrudRepository<Event> {
         namedParams.addValue("is_sent", event.isSent());
         namedParams.addValue("is_private", event.isPrivate());
         KeyHolder keyHolder = new GeneratedKeyHolder();
+        namedJdbcTemplate.update(env.getProperty("saveEvent"), namedParams, keyHolder);
         namedJdbcTemplate.update(env.getProperty("event.save"), namedParams, keyHolder);
-        //return keyHolder.getKey().intValue();
-        System.out.println("newEvent = " + keyHolder.getKeys());
         return (Integer)keyHolder.getKeys().get("id");
     }
 

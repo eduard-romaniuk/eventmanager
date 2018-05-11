@@ -48,8 +48,12 @@ import { ChangePasswordComponent } from './components/change-password/change-pas
 import { PartialUserListComponent } from './components/user/partial/partial-user-list/partial-user-list.component';
 import { PartialUserImageComponent } from './components/user/partial/partial-user-image/partial-user-image.component';
 import { PartialUserFriendshipButtonComponent } from './components/user/partial/partial-user-friendship-button/partial-user-friendship-button.component';
-import {LikeService} from "./services/like.service";
+import { LikeService } from "./services/like.service";
 import { EditItemComponent } from './components/wishlist/item/edit-item/edit-item.component';
+import { FolderService } from "./services/folder.service";
+import { RootFolderComponent } from './components/folders/rootFolder/rootFolder.component';
+import { FolderComponent } from './components/folders/folder/folder.component';
+import { CreateNoteComponent } from './components/notes/createNote/createNote.component';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -96,6 +100,9 @@ export class AddressInterceptor implements HttpInterceptor {
     ViewItemComponent,
     ChatComponent,
     ExportEventsPlanComponent,
+    RootFolderComponent,
+    FolderComponent,
+    CreateNoteComponent,
     PersonalPlanSettingComponent,
     EventEditImageComponent,
     RecoverLoginComponent,
@@ -127,6 +134,7 @@ export class AddressInterceptor implements HttpInterceptor {
     UserService,
     LoggerService,
     ToastService,
+    FolderService,
     ImageUploaderService,
     WishListService,
     ItemService,

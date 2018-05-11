@@ -25,6 +25,9 @@ import { EventEditImageComponent } from "../components/event-edit-image/event-ed
 import { RecoverPasswordComponent } from '../components/recover-password/recover-password.component';
 import { RecoverLoginComponent } from '../components/recover-login/recover-login.component';
 import { ChangePasswordComponent } from '../components/change-password/change-password.component';
+import { RootFolderComponent } from "../components/folders/rootFolder/rootFolder.component"
+import { CreateNoteComponent } from "../components/notes/createNote/createNote.component"
+import { FolderComponent } from "../components/folders/folder/folder.component"
 
 @Injectable()
 class OnlyLoggedInUsersGuard implements CanActivate {
@@ -108,6 +111,15 @@ const routes: Routes = [
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'event/:id/updateImage',
     component: EventEditImageComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'folders/rootFolder',
+    component: RootFolderComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'folders/rootFolder/folder/:id',
+    component: FolderComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'note/create',
+    component: CreateNoteComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: '**', redirectTo: '/hello', pathMatch: 'full'}
 ];

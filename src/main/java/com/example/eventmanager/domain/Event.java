@@ -23,7 +23,6 @@ public class Event {
     private LocalDateTime timeLineFinish;
     @JsonView(EventView.FullView.class)
     private User creator;
-    // private Folder folder;
     @JsonView(EventView.FullView.class)
     private Integer period;
     // private WishList wishList;

@@ -1,0 +1,51 @@
+<div class="md-form text-left">
+  <button type="button" class="btn btn-default mt-2" data-toggle="modal" data-target="#createFolder">Create folder
+  </button>
+  <button class="btn btn-default mt-2">Create note</button>
+  <tr *ngFor="let folder of folders">
+    <td *ngIf="hideElement">{{ folder.id }}</td>
+    <td>
+      <a [routerLink]="['folder', folder.id]"> {{ folder.name}}/ </a>
+    </td>
+  </tr>
+  <tr *ngFor="let note of notes">
+    <td *ngIf="hideElement">{{ note.id }}</td>
+    <td>
+      <a [routerLink]="['/note', folder.id]"> {{ note.name}} </a>
+    </td>
+  </tr>
+</div>
+
+
+<div id="createFolder" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h4> New folder name</h4>
+        <button class="close" type="button" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="md-form text-center">
+          <form class="md-form text-center" [formGroup]="form">
+            <div class="form-group">
+              <input type="text" id="newFolderName" class="form-control mt-2" placeholder="Name of new folder"
+                     [(ngModel)]="folder.name" formControlName="folderNameControl"
+                     [ngClass]="{
+                'is-invalid': form.get('folderNameControl').invalid && (form.get('folderNameControl').dirty || form.get('folderNameControl').touched)
+            }">
+              <div
+                *ngIf="form.get('folderNameControl').invalid && (form.get('folderNameControl').dirty || form.get('folderNameControl').touched)"
+                class="text-danger">
+                <div *ngIf="form.get('folderNameControl').errors.required">
+                  Field can't be blank
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" type="button" (click)="createFolder()" data-dismiss="modal" [disabled]="!form.valid">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>

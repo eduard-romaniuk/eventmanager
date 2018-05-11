@@ -1,23 +1,16 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Event} from '../model/event';
-import {User} from '../model/user';
-//import { AuthService } from 'auth.service';
 import {Observable} from "rxjs/Observable";
-import {ActivatedRoute, Router} from '@angular/router';
-
-const httpOptions = {
-  headers: new HttpHeaders({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'})
-};
+import {Router} from '@angular/router';
 
 @Injectable()
 export class EventService {
 
   private base_url = '/event/';
-  private response: Response;
 
 
-  constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {
+  constructor(private http: HttpClient, private router: Router) {
 
   }
 
@@ -26,13 +19,9 @@ export class EventService {
   }
 
   public createEvent(event) {
-    //this.currentUser = this.authService.getUser();
-    console.log('Create event');
-    console.log(event);
 
     this.http.post(this.base_url, event).subscribe(
       (id: number) => {
-        console.log("Id: " + id)
         this.router.navigate(['event/', id]);
       }
     );
@@ -51,7 +40,7 @@ export class EventService {
     return this.http.get<Event[]>(this.base_url);
   }
 
- public getPriority(id) {
+  public getPriority(id) {
 
     return this.http.get(this.base_url + id + "/priority", {responseType: 'text'});
   }
