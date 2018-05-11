@@ -1,10 +1,24 @@
 <div class="container">
   <div class="row justify-content-center">
-    <div class="col-md-10">
-      <br>
-      <h2 class="text-center"> List of public events </h2>
+    <div class="col-md-6 input-group mt-3 mb-3">
+      <input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username" [(ngModel)]="pattern">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" (click)="search()">Find</button>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-md-3">
 
-      <table class="table table-striped">
+      <label>
+          Date range:
+          <input [owlDateTimeTrigger]="dt" [owlDateTime]="dt" [selectMode]="'range'">
+          <owl-date-time #dt></owl-date-time>
+      </label>
+
+    </div>
+    <div class="col-md-9">
+      <table class="table table-striped" *ngIf="events.length !== 0">
         <thead>
         <tr>
           <th *ngIf="hideElement">Id</th>
@@ -17,13 +31,24 @@
         <tbody>
         <tr *ngFor="let event of events">
           <td *ngIf="hideElement">{{ event.id }}</td>
-          <td><a [routerLink]="['/event', event.id]">{{ event.name }}</a></td>
-          <td>{{(event.description.length>100) ? (event.description | slice:0:100)+'..' : (event.description)}}</td>
-          <td>{{ event.timeLineStart |  date : "dd/MM/yyyy HH:mm" }}</td>
-          <td>{{ event.timeLineFinish |  date : "dd/MM/yyyy HH:mm" }}</td>
+          <td class="col-md-2"><a [routerLink]="['/event', event.id]">{{ event.name }}</a></td>
+          <td class="col-md-6">
+            {{(event.description.length>100) ? (event.description | slice:0:100)+'..' : (event.description)}}
+          </td>
+          <td class="col-md-2">{{ event.timeLineStart |  date : "dd/MM/yyyy HH:mm" }}</td>
+          <td class="col-md-2">{{ event.timeLineFinish |  date : "dd/MM/yyyy HH:mm" }}</td>
         </tr>
         </tbody>
       </table>
+      <div class="text-center">
+        <button class="btn btn-default mb-2" (click)="loadMore(10)" [hidden]="!canLoadMore()">
+          Load more
+        </button>
+      </div>
+
+      <div *ngIf="events.length === 0">
+        No results
+      </div>
     </div>
   </div>
 </div>

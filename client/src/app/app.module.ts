@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { AgmCoreModule } from '@agm/core';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 import { environment }           from '../environments/environment';
 import { AppRoutingModule }      from './modules/app-routing.module';
@@ -128,7 +129,9 @@ export class AddressInterceptor implements HttpInterceptor {
     }),
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAM7RXrVYjGXrOIM1NrlifgXf8pdmzVZf0'
-    })
+    }), 
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule
   ],
   providers: [
     AuthService,
