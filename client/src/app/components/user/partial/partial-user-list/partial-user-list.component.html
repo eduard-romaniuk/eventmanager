@@ -1,10 +1,10 @@
 <div class="row border list">
-  <div class="col-sm-2">
+  <div class="col-sm-3">
     <div class="mediumImage">
       <app-partial-user-image [user]="user"></app-partial-user-image>
     </div>
   </div>
-  <div class="col-sm-4">
+  <div class="col-sm-9">
     <div><a [routerLink]="['/users', user.id]" data-dismiss="modal"> {{ user.name }} {{ user.surName}} </a></div>
     <div> {{ user.login }} </div>
     <div>
