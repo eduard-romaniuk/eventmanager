@@ -30,4 +30,8 @@ export class FolderService {
     return this.http.get(this.base_url + folderId + '/checkUser');
   }
 
+  public getFolderNotes(folderId: number) {
+    return this.http.get(this.base_url + '/folder/' + folderId);
+  }
+
 }

@@ -30,6 +30,8 @@ export class CreateNoteComponent implements OnInit {
 
   form:FormGroup;
 
+  rootFolderId:number = 0;
+
   constructor(private route:ActivatedRoute,
               private auth:AuthService,
               private formBuilder:FormBuilder,
@@ -52,7 +54,7 @@ export class CreateNoteComponent implements OnInit {
     });
     this.route.params.subscribe(params => {
         const folderId = params['folderId'];
-        if (folderId != 0) {
+        if (folderId != this.rootFolderId) {
           this.folderService.getFolderWithCheck(folderId).subscribe((folder:Folder) => {
             if (folder) {
               this.note.folder = folder;
@@ -78,9 +80,11 @@ export class CreateNoteComponent implements OnInit {
 
   create() {
     this.note.isSent = false;
+    console.log('Creating note: ' + this.note);
     this.noteService.createNote(this.note).subscribe(
-      (id:number) => {
-        this.router.navigate(['note/', id]);
+      (note:Note) => {
+        console.log('created note: ' + note);
+        this.router.navigate(['../']);
       }
     );
   }

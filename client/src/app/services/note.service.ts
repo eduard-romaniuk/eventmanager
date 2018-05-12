@@ -5,6 +5,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Router} from '@angular/router';
+import {Note} from "../model/note";
 
 @Injectable()
 export class NoteService {
@@ -16,8 +17,8 @@ export class NoteService {
 
   }
 
-  public createNote(note) {
-
+  public createNote(note:Note) {
+    console.log('note.service.createNote: ' + note);
     return this.http.post(this.base_url, note);
 
   }

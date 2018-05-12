@@ -19,6 +19,7 @@ export class RootFolderComponent {
   notes: Note[];
   currentUser: User;
   form: FormGroup;
+  rootFolderId:number = 0;
 
   constructor(private auth : AuthService,
               private folderService: FolderService,
@@ -37,6 +38,11 @@ export class RootFolderComponent {
     this.form = this.formBuilder.group({
       folderNameControl: ['', [ Validators.required]]
     });
+    this.folderService.getFolderNotes(this.rootFolderId).subscribe(
+      (notes: any) => {
+        this.notes = notes;
+      }
+    );
   }
 
   createFolder() {

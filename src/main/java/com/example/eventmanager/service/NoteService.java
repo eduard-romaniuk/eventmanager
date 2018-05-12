@@ -3,11 +3,9 @@ package com.example.eventmanager.service;
 
 import com.example.eventmanager.dao.NoteRepository;
 import com.example.eventmanager.domain.Note;
-import com.example.eventmanager.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -36,9 +34,9 @@ public class NoteService {
         return noteRepository.findOne(id);
     }
 
-    public List<Note> getRootFolderEvents(){
+    public List<Note> getAllFolderNotes(Long folderId, Long currentUserId){
 
-       return noteRepository.findAllRootFolderEvents(userService.getCurrentUser().getId());
+       return noteRepository.findAllFolderNotes(folderId, currentUserId);
     }
 
     public void deleteNote(Note note){

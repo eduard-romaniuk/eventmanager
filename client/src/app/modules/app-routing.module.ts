@@ -24,7 +24,6 @@ import { RecoverLoginComponent } from '../components/recover-login/recover-login
 import { ChangePasswordComponent } from '../components/change-password/change-password.component';
 import { RootFolderComponent } from "../components/folders/rootFolder/rootFolder.component"
 import { CreateNoteComponent } from "../components/note/createNote/createNote.component"
-import { CreateEventComponent } from "../components/createEvent/createEvent.component"
 import { FolderComponent } from "../components/folders/folder/folder.component"
 import { UserSettingsComponent } from "../components/user/user-settings/user-settings.component";
 

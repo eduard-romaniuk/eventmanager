@@ -1,7 +1,7 @@
 <div class="md-form text-left">
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createFolder">Create folder
   </button>
-  <button class="btn btn-primary" [routerLink]="['/note/create', 0]">Create note</button>
+  <button class="btn btn-primary" [routerLink]="['/note/create', rootFolderId]">Create note</button>
   <tr *ngFor="let folder of folders">
     <td *ngIf="hideElement">{{ folder.id }}</td>
     <td>
@@ -11,7 +11,7 @@
   <tr *ngFor="let note of notes">
     <td *ngIf="hideElement">{{ note.id }}</td>
     <td>
-      <a [routerLink]="['/note', folder.id]"> {{ note.name}} </a>
+      <a [routerLink]="['/note', note.id]"> {{ note.name}} </a>
     </td>
   </tr>
 </div>

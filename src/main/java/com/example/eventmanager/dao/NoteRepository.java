@@ -122,11 +122,12 @@ public class NoteRepository implements CrudRepository<Note> {
         namedJdbcTemplate.update(env.getProperty("note.delete.note"), namedParams);
     }
 
-    public List<Note> findAllRootFolderEvents(Long userId) {
+    public List<Note> findAllFolderNotes(Long folderId, Long currentUserId) {
         Map<String, Object> namedParams = new HashMap<>();
-        namedParams.put("userId", userId);
+        namedParams.put("folderId", folderId);
+        namedParams.put("userId", currentUserId);
         try {
-            return namedJdbcTemplate.query(env.getProperty("event.findAllRootFolderEvents"), namedParams,new NoteMapper());
+            return namedJdbcTemplate.query(env.getProperty("note.findAllFolderNotes"), namedParams,new NoteMapper());
         } catch (EmptyResultDataAccessException e) {
             logger.info("Notes not found");
             return Collections.emptyList();
