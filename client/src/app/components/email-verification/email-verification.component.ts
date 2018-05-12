@@ -73,7 +73,7 @@ export class EmailVerificationComponent implements OnInit {
 	  			this.toast.error('Put error');
 	  		});
 	  	} else {
-        if (!isActive && !isVerified) {
+        if (!isActive) {
           this.userService.deleteUser(user.id);
         }
 	  		this.router.navigate(['home']);
