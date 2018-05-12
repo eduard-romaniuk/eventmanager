@@ -25,6 +25,7 @@ import { ChangePasswordComponent } from '../components/change-password/change-pa
 import { RootFolderComponent } from "../components/folders/rootFolder/rootFolder.component"
 import { CreateNoteComponent } from "../components/notes/createNote/createNote.component"
 import { FolderComponent } from "../components/folders/folder/folder.component"
+import {UserSettingsComponent} from "../components/user/user-settings/user-settings.component";
 
 @Injectable()
 class OnlyLoggedInUsersGuard implements CanActivate {
@@ -77,6 +78,9 @@ const routes: Routes = [
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'users/:id/edit',
     component: UserEditComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'users/:id/settings',
+    component: UserSettingsComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'event/:id/edit',
     component: EventEditComponent,

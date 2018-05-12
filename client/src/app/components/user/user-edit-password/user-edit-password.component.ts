@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {User} from "../../../model/user";
 import {AuthService} from "../../../services/auth.service";
@@ -15,7 +15,7 @@ import {passConfirm} from "../../../utils/validation-tools";
 export class UserEditPasswordComponent implements OnInit {
 
   form: FormGroup;
-  user: User = new User();
+  @Input() user: User = new User();
   formContent = {currentPassword: '', newPassword: '', confirmNewPassword: ''};
 
   savingChanges = false;
@@ -27,10 +27,6 @@ export class UserEditPasswordComponent implements OnInit {
               private router: Router,
               private formBuilder: FormBuilder,
               private toast: ToastService) {
-      this.auth.current_user.subscribe(
-        current_user => {
-          this.user = current_user;
-        });
   }
 
   ngOnInit() {

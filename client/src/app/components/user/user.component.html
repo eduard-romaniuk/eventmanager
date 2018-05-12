@@ -12,19 +12,14 @@
 
         <div *ngIf="currentUserPage">
           <p>
-            <button class="btn btn-info" data-toggle="modal"
-                    data-target="#requests" (click)="getIncomingRequests()">Requests</button>
-          </p>
-          <p>
-            <button class="btn btn-info" (click)="goToEditUserPage(user)"> Edit info </button>
-          </p>
-          <p>
-            <button class="btn btn-info" (click)="goToEditImagePage(user)"> Edit image </button>
-          </p>
-          <p>
-            <button class="btn btn-info" (click)="goToEditPasswordPage()"> Edit password </button>
+            <button class="btn btn-info" data-toggle="modal" data-target="#requests" (click)="getIncomingRequests()">
+              Requests <span class="badge badge-light" *ngIf="incomeRequests.length > 0"> {{ incomeRequests.length }} </span>
+            </button>
           </p>
 
+          <p>
+            <button class="btn btn-info" (click)="goToSettingsPage()"> Settings </button>
+          </p>
         </div>
 
       <div *ngIf="!currentUserPage">
@@ -37,7 +32,9 @@
               data-target="#friendsList" (click)="getFriends()">Friends</button>
 
       <button type="button" class="btn btn-info" data-toggle="modal"
-              data-target="#friendsList" (click)="goToUserWishList(user)"> View user Wish Board </button>
+              data-target="#friendsList" (click)="goToUserWishList(user)" *ngIf="!currentUserPage">
+            View user Wish Board
+      </button>
 
     </div>
 

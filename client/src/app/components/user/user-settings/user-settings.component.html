@@ -1,0 +1,42 @@
+<div class="container">
+  <div class="row">
+
+    <div class="col-sm-3 border userProfileBlock" align="center">
+      <h2> Settings </h2>
+
+      <p>
+        <button class="btn btn-info" (click)="showEditInfo()"> Edit info</button>
+      </p>
+      <p>
+        <button class="btn btn-info" (click)="showEditImage()"> Edit image</button>
+      </p>
+      <p>
+        <button class="btn btn-info" (click)="showEditPassword()"> Edit password</button>
+      </p>
+      <p>
+        <button class="btn btn-info" (click)="goBack()"> Back </button>
+      </p>
+
+    </div>
+
+    <div class="col-sm-9">
+
+      <div *ngIf="selectedEditInfo">
+        <app-user-edit *ngIf="user" [user]="user">
+        </app-user-edit>
+      </div>
+
+      <div *ngIf="selectedEditImage">
+        <app-user-edit-image *ngIf="user" [user]="user">
+        </app-user-edit-image>
+      </div>
+
+      <div *ngIf="selectedEditPassword">
+        <app-user-edit-password *ngIf="user" [user]="user">
+        </app-user-edit-password>
+      </div>
+
+    </div>
+
+  </div>
+</div>

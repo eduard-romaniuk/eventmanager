@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {User} from '../model/user';
 import {UserService} from './user.service';
+import {ToastService} from './toast.service';
 import {Observable} from 'rxjs/Observable';
 
 @Injectable()
@@ -12,7 +13,7 @@ export class AuthService {
   base_url = '/auth';
   current_user: Observable<User>;
 
-  constructor(private http: HttpClient, private users: UserService) {
+  constructor(private http: HttpClient, private users: UserService, private toast: ToastService) {
     const authToken = sessionStorage.getItem('authToken');
     if (authToken === null || authToken === '') {
       this.authenticated = false;
@@ -31,6 +32,19 @@ export class AuthService {
           this.authenticated = true;
           this.setSessionLogin(credentials.login);
           this.current_user = this.users.getUser(credentials.login);
+
+          // const user = this.users.getUser(credentials.login);
+          // user.subscribe(response => {
+          //   if(!response.verified) {
+          //     this.logout();
+          //     this.toast.error('Your account not verified!');
+          //   } else {
+          //     this.authenticated = true;
+          //     this.setSessionLogin(credentials.login);
+          //     this.current_user = user;
+          //   }
+          // })
+
         } else {
           this.logout();
         }

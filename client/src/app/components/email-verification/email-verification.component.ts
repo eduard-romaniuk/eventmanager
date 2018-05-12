@@ -30,16 +30,10 @@ export class EmailVerificationComponent implements OnInit {
   	this.route.params.subscribe(params => {
   		this.token = params['token'];
   		if(this.token) {
-  			if (this.auth.authenticated) {
-  				this.auth.current_user.subscribe(user => {
-  					this.verify(user, this.token);
-  				});
-  			} else {
-			    this.form = this.formBuilder.group({
-			      login: ['', [ Validators.required, Validators.pattern('^[a-zA-Z0-9_]*$') ]],
-			      password: ['', [ Validators.required, Validators.pattern('^[a-zA-Z0-9]*$') ]]
-			    });
-  			}
+			  this.form = this.formBuilder.group({
+			    login: ['', [ Validators.required, Validators.pattern('^[a-zA-Z0-9_]*$') ]],
+			    password: ['', [ Validators.required, Validators.pattern('^[a-zA-Z0-9]*$') ]]
+			  });
   		} else {
   			this.router.navigate(['home']);
   			this.toast.error('Invalid verification link');
@@ -65,11 +59,12 @@ export class EmailVerificationComponent implements OnInit {
 
   public verify(user: User, token: string) {
   	if(user.verified) {
-		this.router.navigate(['home']);
+		  this.router.navigate(['home']);
   		this.toast.info('Already verified');
-	} else {
+	  } else {
   		const isVerified = this.token === user.token;
-	  	if(isVerified){
+      const isActive = this.diffDays(new Date(), user.regDate) < 1;
+	  	if(isVerified && isActive) {
 	  		user.verified = isVerified;
 	  		this.userService.updateUser(user).subscribe(response =>{
 		  		this.router.navigate(['home']);
@@ -78,10 +73,17 @@ export class EmailVerificationComponent implements OnInit {
 	  			this.toast.error('Put error');
 	  		});
 	  	} else {
+        if (!isActive) {
+          this.userService.deleteUser(user.id);
+        }
 	  		this.router.navigate(['home']);
 	  		this.toast.error('Invalid verification link');
 	  	}
-	}
+	  }
+  }
+
+  private diffDays(date1: Date, date2: Date) {
+    return Math.abs(date2.getTime() - date1.getTime()) / (1000 * 3600 * 24);
   }
 
 }
