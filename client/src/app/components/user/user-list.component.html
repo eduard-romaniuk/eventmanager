@@ -4,13 +4,13 @@
   <table class="table table-striped">
     <thead>
     <tr>
-      <th *ngIf="hideElement">Id</th>
+      <th [hidden]="true">Id</th>
       <th>Login</th>
     </tr>
     </thead>
     <tbody>
     <tr *ngFor="let user of users">
-      <td *ngIf="hideElement">{{ user.id }}</td>
+      <td [hidden]="true">{{ user.id }}</td>
       <td>
         <a [routerLink]="['/users', user.id]"> {{ user.login }} </a>
       </td>

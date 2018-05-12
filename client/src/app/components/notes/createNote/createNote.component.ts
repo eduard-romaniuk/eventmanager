@@ -15,7 +15,7 @@ import {Note} from "../../../model/note";
 })
 export class CreateNoteComponent {
 
-  private note : Note = new Note();
+  note : Note = new Note();
 
   form: FormGroup;
   folder: Folder;

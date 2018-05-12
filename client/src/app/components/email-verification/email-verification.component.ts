@@ -8,16 +8,16 @@ import { User } from '../../model/user';
 
 @Component({
   selector: 'app-email-verification',
-  templateUrl: '../login/login.component.html',
+  templateUrl: './email-verification.component.html',
   styleUrls: ['./email-verification.component.css']
 })
 export class EmailVerificationComponent implements OnInit {
 
-  private token: string;
-  private form: FormGroup;
-  private credentials = {login: '', password: ''};
-  private loading = false;
-  private error = false;
+  public token: string;
+  public form: FormGroup;
+  public credentials = {login: '', password: ''};
+  public loading = false;
+  public error = false;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
