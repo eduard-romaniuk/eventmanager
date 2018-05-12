@@ -56,6 +56,7 @@ import { RootFolderComponent } from './components/folders/rootFolder/rootFolder.
 import { FolderComponent } from './components/folders/folder/folder.component';
 import { CreateNoteComponent } from './components/notes/createNote/createNote.component';
 import {ChecklistModule} from "angular-checklist";
+import { UserSettingsComponent } from './components/user/user-settings/user-settings.component';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -113,7 +114,8 @@ export class AddressInterceptor implements HttpInterceptor {
     PartialUserListComponent,
     PartialUserImageComponent,
     PartialUserFriendshipButtonComponent,
-    EditItemComponent
+    EditItemComponent,
+    UserSettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -131,7 +133,7 @@ export class AddressInterceptor implements HttpInterceptor {
     }),
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAM7RXrVYjGXrOIM1NrlifgXf8pdmzVZf0'
-    }), 
+    }),
     OwlDateTimeModule,
     OwlNativeDateTimeModule
   ],

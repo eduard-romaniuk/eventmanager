@@ -16,16 +16,10 @@
               Requests <span class="badge badge-light" *ngIf="incomeRequests.length > 0"> {{ incomeRequests.length }} </span>
             </button>
           </p>
-          <p>
-            <button class="btn btn-info" (click)="goToEditUserPage(user)"> Edit info </button>
-          </p>
-          <p>
-            <button class="btn btn-info" (click)="goToEditImagePage(user)"> Edit image </button>
-          </p>
-          <p>
-            <button class="btn btn-info" (click)="goToEditPasswordPage()"> Edit password </button>
-          </p>
 
+          <p>
+            <button class="btn btn-info" (click)="goToSettingsPage()"> Settings </button>
+          </p>
         </div>
 
       <div *ngIf="!currentUserPage">
