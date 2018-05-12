@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpResponse} from '@angular/common/http';
 import {Event} from '../model/event';
 import {Observable} from "rxjs/Observable";
 import {Router} from '@angular/router';
@@ -73,8 +73,11 @@ export class EventService {
   }
 
   public addUsers(users:User[],id){
-
     return this.http.post(this.base_url+id+"/participants",users)
+  }
 
+  public getFilteredEvents(pattern: string, start: Date, finish: Date, limit: number, offset: number):Observable<HttpResponse<Event[]>> {
+    return this.http.get<Event[]>(this.base_url + 'filter' +
+      `?pattern=${pattern.toLowerCase()}&start=${start.toISOString()}&finish=${finish.toISOString()}&limit=${limit}&offset=${offset}`, {observe: 'response'});
   }
 }

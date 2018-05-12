@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { User } from '../../model/user';
+import { Event } from '../../model/event';
 import { EventService } from '../../services/event.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-event-list',
@@ -11,41 +13,64 @@ import { EventService } from '../../services/event.service';
 })
 export class EventListComponent implements OnInit {
 
-  loadedEvents: Event[] = [];
-  index = 0;
+  index = 10;
+  count = 0;
   events: Event[] = [];
+
   pattern: string = '';
-  last_pattern: string = '';
+  last_pattern: string = this.pattern;
+
   today: Date = new Date();
   date_range = [
-        new Date(this.today.getFullYear(), this.today.getMonth(), 1, 0, 0),
-        new Date(this.today.getFullYear(), this.today.getMonth(), 28, 23, 59)
+      new Date(this.today.getFullYear(), this.today.getMonth(), 1, 0, 1),
+      new Date(this.today.getFullYear(), this.today.getMonth() + 1, 0, 23, 59)
   ];
+  last_date_range: Date[] = this.date_range;
 
-  constructor(private router: Router, private eventService: EventService) { }
+  constructor(private router: Router, private eventService: EventService, private toast: ToastService) { }
 
   ngOnInit() {
-    this.eventService.getPublicEvents()
-      .subscribe( (events : any) => {
-        this.loadedEvents = events;
-        this.loadMore(10);
-      });
+    this.reload();
   }
 
-  loadMore(step: number) {
-    this.events = this.events.concat(this.loadedEvents.slice(this.index, this.index + step));
-    this.index += step;
+
+  reload() {
+    console.log(`${this.last_date_range[0].toISOString()}`);
+    this.eventService.getFilteredEvents(this.last_pattern, this.last_date_range[0], this.last_date_range[1], 10, 0).subscribe(
+      response => {
+        this.count = +response.headers.get('count');
+        console.log(response.headers.get('count'));
+        this.events = response.body;
+      }, error => {
+        this.toast.error('Some errors occurred while trying to load data');
+      })
+  }
+
+  loadMore() {
+    this.eventService.getFilteredEvents(this.last_pattern, this.last_date_range[0], this.last_date_range[1], 10, this.index).subscribe(
+      response => {
+        this.index += 10;
+        this.events = this.events.concat(response.body);
+      }, error => {
+        this.toast.error('Some errors occurred while trying to load more data');
+      })
   }
 
   canLoadMore() {
-    return this.index < this.loadedEvents.length;
+    return this.index < this.count;
   }
 
   search() {
     if(this.pattern !== this.last_pattern){
       this.last_pattern = this.pattern;
-      console.log(this.pattern);
+      this.reload();
+    }
+  }
 
+  filter() {
+    if(this.date_range !== this.last_date_range){
+      this.last_date_range = this.date_range;
+      this.reload();
     }
   }
 

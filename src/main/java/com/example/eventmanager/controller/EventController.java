@@ -14,6 +14,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -90,6 +92,17 @@ public class EventController {
         newEvent.setCreator(oldEvent.getCreator());
         eventService.updateEvent(newEvent);
         return new ResponseEntity<>(newEvent, HttpStatus.OK);
+    }
+
+    @JsonView(EventView.FullView.class)
+    @RequestMapping(value = "/filter", method = RequestMethod.GET)
+    public List<Event> filter(@RequestParam String pattern,
+                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime finish,
+                              @RequestParam Long limit, @RequestParam Long offset,
+                              HttpServletResponse response){
+        response.addHeader("count", eventService.countSearchResults(pattern, start, finish).toString());
+        return eventService.searchWithFiltersPagination(pattern, start, finish, limit, offset);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

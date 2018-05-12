@@ -11,10 +11,21 @@
     <div class="col-md-3">
 
       <label>
-          Date range:
-          <input [owlDateTimeTrigger]="dt" [owlDateTime]="dt" [selectMode]="'range'">
-          <owl-date-time #dt></owl-date-time>
+          Date range:<br>
+          <input [owlDateTimeTrigger]="dt" [owlDateTime]="dt" [selectMode]="'range'" [(ngModel)]="date_range">
+          <owl-date-time [pickerMode]="'dialog'" #dt></owl-date-time>
       </label>
+      <label>
+          Category:<br>
+          <select>
+          	<option selected hidden></option>
+          	<option>category 1</option>
+          	<option>category 2</option>
+          	<option>category 3</option>
+          </select>
+      </label>
+      <br>
+      <button class="btn btn-small btn-default" (click)="filter()">Filter</button>
 
     </div>
     <div class="col-md-9">
@@ -41,7 +52,7 @@
         </tbody>
       </table>
       <div class="text-center">
-        <button class="btn btn-default mb-2" (click)="loadMore(10)" [hidden]="!canLoadMore()">
+        <button class="btn btn-default mb-2" (click)="loadMore()" [hidden]="!canLoadMore()">
           Load more
         </button>
       </div>
