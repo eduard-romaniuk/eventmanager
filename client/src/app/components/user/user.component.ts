@@ -52,6 +52,7 @@ export class UserComponent implements OnInit, OnDestroy {
                       console.log("events - " + events);
                       this.userEvents = events;
                     });
+                    this.getIncomingRequests();
                 } else {
                   this.userService.getEventsByUserId(this.user.id, false, true)
                     .subscribe((events: any) => {
