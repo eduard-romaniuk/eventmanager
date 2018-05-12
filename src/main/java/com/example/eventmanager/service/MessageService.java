@@ -23,8 +23,8 @@ public class MessageService {
 		msgRepository.save(msg);
 	}
 
-	public List<Message> getAllMessages() {
-		Iterator<Message> iter = msgRepository.findAll().iterator();
+	public List<Message> getAllMessagesFromChat(Long chatId) {
+		Iterator<Message> iter = msgRepository.findAllFromChat(chatId).iterator();
 		List<Message> copy = new ArrayList<>();
 		while (iter.hasNext())
 			copy.add(iter.next());
@@ -32,6 +32,9 @@ public class MessageService {
 	}
 	public Long findParticipantId(Long userId, Long eventId){
 		return msgRepository.findParticipantId(userId, eventId);
+	}
+	public Long findUserIdFromParticipant(Long participantId){
+		return msgRepository.findUserIdFromParticipant(participantId);
 	}
 }
 

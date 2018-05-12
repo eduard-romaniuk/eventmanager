@@ -14,6 +14,7 @@ import com.example.eventmanager.service.UserService;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/chats")
@@ -31,31 +32,57 @@ public class WebSocketController {
 		this.msgService = msgService;
 		this.chatService = chatService;
 	}
-	
+
+	@MessageMapping("/send/event/{eventId}/chats/{creator}/load")
+	private void loadMessages(@DestinationVariable Long eventId, @DestinationVariable String creator) {
+		Long chatId = getChatId(eventId,creator);
+		List<Message> messages = msgService.getAllMessagesFromChat(chatId);
+		StringBuilder str = new StringBuilder();
+		for (Message msg : messages) {
+			Long userId = msgService.findUserIdFromParticipant(msg.getParticipantId());
+			String login = userService.getUser(userId).getLogin();
+			str.append(login + " : " + msg.getText() + " --- " + msg.getDate().toString());
+			str.append("<br>");
+//			sendMessage("/event/" + eventId + "/chats/" + creator, login + " : " + msg.getText()
+//					+ " --- " + msg.getDate().toString());
+		}
+		sendMessage("/event/" + eventId + "/chats/" + creator, str.toString());
+	}
+
 	@MessageMapping("/send/event/{eventId}/chats/{creator}")
-	private void sendAndSaveMessage(@DestinationVariable Long eventId, @DestinationVariable String creator, String message) {
+	private void sendAndSaveMessage(@DestinationVariable Long eventId, @DestinationVariable String creator,
+			String message) {
+
 		Long userId = Long.parseLong(message.substring(0, message.indexOf(";")));
-		String messageToSend = message.substring(message.indexOf(";")+1);
+		String messageToSend = message.substring(message.indexOf(";") + 1);
 		Date date = new Date();
 		String login = userService.getUser(userId).getLogin();
-		
-		template.convertAndSend("/event/" + eventId + "/chats/" + creator,
+
+		sendMessage("/event/" + eventId + "/chats/" + creator,
 				login + ": " + messageToSend + " --- " + new SimpleDateFormat("HH:mm:ss").format(date));
-		
+
 		saveMessage(messageToSend, creator, eventId, userId, date);
 	}
-	
-	private void saveMessage(String text,String creator, Long eventId, Long userId, Date date){
+
+	private void sendMessage(String url, String message) {
+		template.convertAndSend(url, message);
+	}
+
+	private void saveMessage(String text, String creator, Long eventId, Long userId, Date date) {
 		Message msg = new Message();
-		if(creator.equals("withCreator")){
-			msg.setChatId(chatService.findChatId(eventId,true));
-		}else{
-			msg.setChatId(chatService.findChatId(eventId,false));
-		}
+		msg.setChatId(getChatId(eventId,creator));
 		msg.setDate(date);
 		msg.setParticipantId(msgService.findParticipantId(userId, eventId));
 		msg.setText(text);
 		msgService.saveMessage(msg);
 	}
 	
+	private Long getChatId(Long eventId, String creator){
+		if (creator.equals("withCreator")) {
+			return chatService.findChatId(eventId, true);
+		} else {
+			return chatService.findChatId(eventId, false);
+		}
+	}
+
 }
