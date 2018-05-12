@@ -54,7 +54,7 @@ import { EditItemComponent } from './components/wishlist/item/edit-item/edit-ite
 import { FolderService } from "./services/folder.service";
 import { RootFolderComponent } from './components/folders/rootFolder/rootFolder.component';
 import { FolderComponent } from './components/folders/folder/folder.component';
-import { CreateNoteComponent } from './components/notes/createNote/createNote.component';
+import { CreateNoteComponent } from './components/note/createNote/createNote.component';
 import {ChecklistModule} from "angular-checklist";
 import { UserSettingsComponent } from './components/user/user-settings/user-settings.component';
 

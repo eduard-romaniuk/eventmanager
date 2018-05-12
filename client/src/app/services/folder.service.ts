@@ -26,4 +26,8 @@ export class FolderService {
     return this.http.get(this.base_url + userId + '/all');
   }
 
+  public getFolderWithCheck(folderId: number) {
+    return this.http.get(this.base_url + folderId + '/checkUser');
+  }
+
 }

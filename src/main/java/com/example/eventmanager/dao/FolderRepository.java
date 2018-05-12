@@ -62,7 +62,7 @@ public class FolderRepository implements CrudRepository<Folder> {
     public List<Folder> findByUser(Long userId) {
         try {
             Map<String, Object> namedParams = new HashMap<>();
-            namedParams.put("user_id", userId);
+            namedParams.put("userId", userId);
             return namedJdbcTemplate.query(env.getProperty("findAllFoldersByUser"), namedParams, new FolderMapper());
         } catch (EmptyResultDataAccessException e) {
             logger.info("Events not found");
@@ -73,14 +73,14 @@ public class FolderRepository implements CrudRepository<Folder> {
     @Override
     public void update(Folder folder) {
         Map<String, Object> namedParams = new HashMap<>();
-        namedParams.put("folder_name", folder.getName());
+        namedParams.put("folderName", folder.getName());
         namedJdbcTemplate.update(env.getProperty("updateFolder"), namedParams);
     }
 
     @Override
     public void delete(Folder folder) {
         Map<String, Object> namedParams = new HashMap<>();
-        namedParams.put("eventId", folder.getId());
+        namedParams.put("folderId", folder.getId());
         namedJdbcTemplate.update(env.getProperty("deleteFolder"), namedParams);
     }
 
@@ -106,12 +106,30 @@ public class FolderRepository implements CrudRepository<Folder> {
         }
     }
 
+    public Folder findByIdAndUserId(Long folderId, Long userId) {
+        try {
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("folderId", folderId);
+            namedParams.put("userId", userId);
+            return namedJdbcTemplate.query(env.getProperty("findFolderByIdAndUser"), namedParams, new FolderMapper()).get(FIRST_ELEMENT);
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("Folder not found");
+            return null;
+        } catch (IndexOutOfBoundsException e) {
+            logger.info("Folder not found");
+            return null;
+        }
+    }
+
     private static final class FolderMapper implements RowMapper<Folder> {
+        private final Logger logger = LogManager.getLogger(FolderMapper.class);
+
         @Override
         public Folder mapRow(ResultSet rs, int rowNum) throws SQLException {
             Folder folder = new Folder();
             folder.setId(rs.getLong("id"));
             folder.setName(rs.getString("folder_name"));
+            logger.info("Loaded Folder:" + folder);
             return folder;
         }
     }

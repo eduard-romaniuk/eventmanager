@@ -1,11 +1,9 @@
 package com.example.eventmanager.controller;
 
-import com.example.eventmanager.domain.Event;
-import com.example.eventmanager.domain.EventView;
+import com.example.eventmanager.domain.Note;
+import com.example.eventmanager.domain.NoteView;
 import com.example.eventmanager.domain.User;
-import com.example.eventmanager.service.EmailService;
-import com.example.eventmanager.service.EventService;
-import com.example.eventmanager.service.ExportEventService;
+import com.example.eventmanager.service.NoteService;
 import com.example.eventmanager.service.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
 import net.sf.jasperreports.engine.JRException;
@@ -26,41 +24,31 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/event")
-public class EventController {
+@RequestMapping(value = "/note")
+public class NoteController {
 
-    private final EventService eventService;
-    private final ExportEventService exportService;
+    private final NoteService noteService;
     private final UserService userService;
-    private final Logger logger = LogManager.getLogger(EventController.class);
+    private final Logger logger = LogManager.getLogger(NoteController.class);
 
     @Autowired
-    public EventController(EventService eventService, ExportEventService exportService, UserService userService) {
+    public NoteController(NoteService noteService, UserService userService) {
         logger.info("Class initialized");
 
         this.userService = userService;
 
-        this.exportService = exportService;
-        this.eventService = eventService;
+        this.noteService = noteService;
     }
 
+    @JsonView(NoteView.ShortView.class)
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public ResponseEntity<Long> createEvent(@RequestBody Event event, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Note> createNote(@RequestBody Note note, UriComponentsBuilder ucBuilder) {
         logger.info("POST /");
-        eventService.createEvent(event);
-        return new ResponseEntity<>(event.getId(), HttpStatus.CREATED);
+        noteService.createNote(note);
+        return new ResponseEntity<>(note, HttpStatus.CREATED);
     }
 
-    @JsonView(EventView.ShortView.class)
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ResponseEntity<List<Event>> listAllPublicEvent() {
-        logger.info("GET /");
-
-        List<Event> events = eventService.getAllPublicEvents();
-        return new ResponseEntity<>(events, HttpStatus.OK);
-    }
-
-    @JsonView(EventView.FullView.class)
+    @JsonView(NoteView.FullView.class)
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<Event> getEvent(@PathVariable("id") Long id) {
         logger.info("GET /" + id);

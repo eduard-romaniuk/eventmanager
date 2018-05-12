@@ -16,4 +16,10 @@ export class NoteService {
 
   }
 
+  public createNote(note) {
+
+    return this.http.post(this.base_url, note);
+
+  }
+
 }
