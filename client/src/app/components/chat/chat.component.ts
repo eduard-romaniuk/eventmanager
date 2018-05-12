@@ -14,13 +14,16 @@ import * as $ from 'jquery';
 })
 export class ChatComponent {
   currentUser: User = new User();
-  private serverUrl = 'https://web-event-manager.herokuapp.com/socket'//https://web-event-manager.herokuapp.com/socket
+  private serverUrl = 'http://localhost:8080/socket'//https://web-event-manager.herokuapp.com/socket
   private title = 'Chat';
   private stompClient;
   private id;
       
   constructor(private router: Router,private auth: AuthService){
     this.initializeWebSocketConnection();
+    setTimeout(() => {
+      this.loadMessages();
+    }, 3000);
   }
   
   ngOnInit() {
@@ -48,5 +51,8 @@ export class ChatComponent {
   sendMessage(message){
     this.stompClient.send("/app/send"+this.router.url, {}, this.id+";"+message);
     $('#input').val('');
+  }
+  private loadMessages(){
+     this.stompClient.send("/app/send"+this.router.url+"/load");
   }
 }
