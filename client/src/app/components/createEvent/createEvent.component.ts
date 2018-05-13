@@ -5,7 +5,7 @@ import {JQueryStatic} from 'jquery'
 import {Event} from '../../model/event'
 import {AuthService} from "../../services/auth.service";
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {dateLessThan, dateValidator} from "../../utils/validation-tools";
+import {dateLessThan, dateValidator, imageExtension} from "../../utils/validation-tools";
 import {Router} from "@angular/router";
 import {CloudinaryUploader} from "ng2-cloudinary";
 import {ImageUploaderService} from "../../services/image-uploader.service";
@@ -34,6 +34,23 @@ export class CreateEventComponent implements OnInit {
   form: FormGroup;
 
   categories:Category[] =[];
+
+  editorConfig = {
+    editable: true,
+    spellcheck: false,
+    height: '10rem',
+    minHeight: '5rem',
+    placeholder: 'Event description...',
+    translate: 'no',
+    "toolbar": [
+      ["bold", "italic", "underline", "strikeThrough"],
+      ["fontSize", "color"],
+      ["justifyLeft", "justifyCenter", "justifyRight", "justifyFull"],
+      ["undo", "redo"],
+      ["horizontalLine", "orderedList", "unorderedList"],
+    ]
+  };
+
 
   constructor(private auth: AuthService,
               private eventService: EventService,
@@ -66,7 +83,7 @@ export class CreateEventComponent implements OnInit {
   }
 
 
-  create() {
+  draft() {
     this.event.isSent = false;
     this.eventService.createEvent(this.event).subscribe (
       (id: number) => {
@@ -75,7 +92,7 @@ export class CreateEventComponent implements OnInit {
     );
   }
 
-  publish() {
+  create() {
     this.event.isSent = true;
     console.log(this.event.category.id);
     console.log(this.event);

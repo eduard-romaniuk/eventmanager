@@ -58,6 +58,7 @@ import { CreateNoteComponent } from './components/notes/createNote/createNote.co
 import {ChecklistModule} from "angular-checklist";
 import { NgSelectModule } from '@ng-select/ng-select';
 import { UserSettingsComponent } from './components/user/user-settings/user-settings.component';
+import {NgxEditorModule} from "ngx-editor";
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -137,7 +138,8 @@ export class AddressInterceptor implements HttpInterceptor {
       apiKey: 'AIzaSyAM7RXrVYjGXrOIM1NrlifgXf8pdmzVZf0'
     }),
     OwlDateTimeModule,
-    OwlNativeDateTimeModule
+    OwlNativeDateTimeModule,
+    NgxEditorModule
   ],
   providers: [
     AuthService,

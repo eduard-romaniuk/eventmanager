@@ -7,7 +7,8 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-6">
-      <h1>{{event.name}}</h1>
+      <div *ngIf="!event.isSent" > <h1 class="text-warning">{{event.name}}(draft) </h1> </div>
+      <div *ngIf="event.isSent" > <h1>{{event.name}}</h1> </div>
       <h3>
         <small *ngIf="!this.isCreator"> Creator: {{event.creator.name}} {{event.creator.surName}}</small>
       </h3>
@@ -45,6 +46,11 @@
       <button *ngIf="this.isCreator" class="btn btn-primary" [routerLink]="['/event', event.id, 'edit']">
         Edit
       </button>
+
+      <button *ngIf="!event.isSent&&this.isCreator" class="btn btn-success" (click)="publish()" >
+        Publish
+      </button>
+
       <button *ngIf="!this.isCreator && this.isParticipant && !this.event.isPrivate"
               class="btn btn-primary" (click)="getFriends()" data-toggle="modal" data-target="#addFriend">
         Add Friends
@@ -69,9 +75,9 @@
       <h3 class="my-2">
         Description
       </h3>
-      <p>
-        {{this.event.description}}
-      </p>
+
+      <div [innerHTML]="this.event.description"></div>
+
       <h3 class="my-2">
         Place
       </h3>
@@ -85,7 +91,7 @@
         <li><strong>End:</strong> {{event.timeLineFinish|date: "MMM d, y HH:mm"}}</li>
       </ul>
 
-      <div *ngIf="this.isParticipant" class="btn-group" role="group">
+      <div *ngIf="this.isParticipant && event.isSent" class="btn-group" role="group">
         <button class="btn btn-secondary" type="button" (click)="goToChatWithCreator()">
           Chat
         </button>

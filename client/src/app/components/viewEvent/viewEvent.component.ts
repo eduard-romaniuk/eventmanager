@@ -120,6 +120,12 @@ export class ViewEventComponent {
     }, error => console.error(error));
   }
 
+  publish(){
+    this.event.isSent=true;
+    this.eventService.updateEvent(this.event).subscribe((user: any) => {
+      this.router.navigate(['event/', this.event.id]);
+    }, error => console.error(error));
+  }
   addUsers(){
 
     this.eventService.addUsers(this.newParticipants,this.event.id).subscribe();
