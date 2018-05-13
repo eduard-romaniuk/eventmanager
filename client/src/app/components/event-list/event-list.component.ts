@@ -49,7 +49,6 @@ export class EventListComponent implements OnInit {
       response => {
         this.count = +response.headers.get('count');
         this.events = response.body;
-        this.removeHtmlFromEvents();
       }, error => {
         console.log(error);
         this.toast.error('Some errors occurred while trying to load data');
@@ -61,7 +60,6 @@ export class EventListComponent implements OnInit {
       response => {
         this.index += 10;
         this.events = this.events.concat(response.body);
-        this.removeHtmlFromEvents();
       }, error => {
         this.toast.error('Some errors occurred while trying to load more data');
       })
@@ -86,12 +84,6 @@ export class EventListComponent implements OnInit {
     if(this.category !== this.last_category){
       this.last_category = this.category;
       this.reload();
-    }
-  }
-
-  removeHtmlFromEvents() {
-    for (var i = 0; i < this.events.length; i++) {
-      this.events[i].description = this.events[i].description.replace(/<(.|\n)*?>/g, '').replace(/&nbsp;/gi, ' ');
     }
   }
 
