@@ -118,5 +118,6 @@ declare var $:JQueryStatic;
     return result;
   }
 
+  get formData() { return <FormArray>this.form.get('tags'); }
 
 }

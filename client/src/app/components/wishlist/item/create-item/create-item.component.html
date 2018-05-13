@@ -39,7 +39,7 @@
   <div class="form-group">
 
     <div class="d-inline" formArrayName="tags"
-         *ngFor="let tag of form.get('tags').controls; let i = index; let last = last" >
+         *ngFor="let tag of formData.controls; let i = index; let last = last" >
 
       <div class="d-inline" [formGroupName]="i">
 
