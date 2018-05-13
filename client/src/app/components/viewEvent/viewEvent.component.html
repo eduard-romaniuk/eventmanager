@@ -5,6 +5,9 @@
       <h3>
         <small *ngIf="!this.isCreator"> Creator: {{event.creator.name}} {{event.creator.surName}}</small>
       </h3>
+      <h3>
+        <small> Category: {{event.category.name}}</small>
+      </h3>
 
       <div *ngIf="this.isParticipant" class="container-fluid ">
         <div *ngIf="low()">

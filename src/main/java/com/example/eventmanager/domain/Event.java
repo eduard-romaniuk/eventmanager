@@ -34,7 +34,7 @@ public class Event {
     private boolean isPrivate;
     @JsonView(EventView.FullView.class)
     private List<User> participants;
-
+    @JsonView(EventView.FullView.class)
     private Category category;
     //  private List<Chat> chats;
 
