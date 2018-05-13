@@ -48,7 +48,7 @@
       </button>
 
       <button *ngIf="!event.isSent&&this.isCreator" class="btn btn-success" (click)="publish()" >
-        Publish
+       Create Event
       </button>
 
       <button *ngIf="!this.isCreator && this.isParticipant && !this.event.isPrivate"
