@@ -11,6 +11,7 @@ import {CloudinaryUploader} from "ng2-cloudinary";
 import {ImageUploaderService} from "../../services/image-uploader.service";
 import {User} from "../../model/user";
 import {UserService} from "../../services/user.service";
+import {Category} from "../../model/category";
 
 @Component({
   selector: 'app-createEvent',
@@ -31,6 +32,8 @@ export class CreateEventComponent implements OnInit {
   longitude: number;
 
   form: FormGroup;
+
+  categories:Category[] =[];
 
   constructor(private auth: AuthService,
               private eventService: EventService,
@@ -59,6 +62,7 @@ export class CreateEventComponent implements OnInit {
       periodControl: ['', [Validators.required, Validators.min(0)]],
     }, {validator: dateLessThan('timeLineStartControl', 'timeLineFinishControl'),});
     this.setCurrentPosition();
+    this.getCategories();
   }
 
 
@@ -73,12 +77,15 @@ export class CreateEventComponent implements OnInit {
 
   publish() {
     this.event.isSent = true;
+    console.log(this.event.category.id);
+    console.log(this.event);
     this.eventService.createEvent(this.event).subscribe (
       (id: number) => {
         this.addUsers(id);
         this.router.navigate(['event/', id]);
       }
     );
+
   }
 
   private setCurrentPosition() {
@@ -113,4 +120,12 @@ export class CreateEventComponent implements OnInit {
         this.userFriends = friends;
       });
   }
+
+  getCategories(){
+    this.eventService.getCategories().subscribe((categories: any) => {
+      this.categories = categories;
+    });
+
+  }
+
 }

@@ -80,4 +80,8 @@ export class EventService {
     return this.http.get<Event[]>(this.base_url + 'filter' +
       `?pattern=${pattern.toLowerCase()}&start=${start.toISOString()}&finish=${finish.toISOString()}&limit=${limit}&offset=${offset}`, {observe: 'response'});
   }
+
+  public getCategories(){
+    return this.http.get(this.base_url+"categories")
+  }
 }

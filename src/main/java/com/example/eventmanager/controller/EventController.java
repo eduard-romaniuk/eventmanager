@@ -1,5 +1,6 @@
 package com.example.eventmanager.controller;
 
+import com.example.eventmanager.domain.Category;
 import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.EventView;
 import com.example.eventmanager.domain.User;
@@ -187,6 +188,13 @@ public class EventController {
          eventService.leaveEvent(id);
     }
 
+    @JsonView(EventView.FullView.class)
+    @RequestMapping(value = "/categories", method = RequestMethod.GET)
+    public ResponseEntity<List<Category>> categoryList() {
+        logger.info("GET / categoryList");
+        List<Category> categories = eventService.getCategories();
+        return new ResponseEntity<>(categories, HttpStatus.OK);
+    }
 }
 
 

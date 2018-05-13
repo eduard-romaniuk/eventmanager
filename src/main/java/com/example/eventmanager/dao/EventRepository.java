@@ -1,6 +1,7 @@
 package com.example.eventmanager.dao;
 
 
+import com.example.eventmanager.domain.Category;
 import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.User;
 import org.apache.logging.log4j.LogManager;
@@ -69,6 +70,7 @@ public class EventRepository implements CrudRepository<Event> {
         namedParams.addValue("image", event.getImage());
         namedParams.addValue("is_sent", event.isSent());
         namedParams.addValue("is_private", event.isPrivate());
+        namedParams.addValue("categoryId", event.getCategory().getId());
         KeyHolder keyHolder = new GeneratedKeyHolder();
         namedJdbcTemplate.update(env.getProperty("event.save"), namedParams, keyHolder);
         return (Integer) keyHolder.getKeys().get("id");
@@ -79,7 +81,7 @@ public class EventRepository implements CrudRepository<Event> {
         try {
             Map<String, Object> namedParams = new HashMap<>();
             namedParams.put("eventId", id);
-            return namedJdbcTemplate.query(env.getProperty("event.findById"), namedParams, new EventWithCreator()).get(FIRST_ELEMENT);
+            return namedJdbcTemplate.query(env.getProperty("event.findById"), namedParams, new EventExtractor()).get(FIRST_ELEMENT);
         } catch (EmptyResultDataAccessException e) {
             logger.info("Event not found");
             return null;
@@ -89,7 +91,7 @@ public class EventRepository implements CrudRepository<Event> {
     @Override
     public Iterable<Event> findAll() {
         try {
-            return namedJdbcTemplate.query(env.getProperty("event.findAllEvents"), new EventMapper());
+            return namedJdbcTemplate.query(env.getProperty("event.findAllEvents"), new EventExtractor());
         } catch (EmptyResultDataAccessException e) {
             logger.info("Events not found");
             return Collections.emptyList();
@@ -109,6 +111,7 @@ public class EventRepository implements CrudRepository<Event> {
         namedParams.put("is_sent", event.isSent());
         namedParams.put("is_private", event.isPrivate());
         namedParams.put("eventId", event.getId());
+        namedParams.put("categoryId", event.getCategory().getId());
         namedJdbcTemplate.update(env.getProperty("event.updateEvent"), namedParams);
     }
 
@@ -143,7 +146,7 @@ public class EventRepository implements CrudRepository<Event> {
                     .append(" OFFSET ")
                     .append(offset)
                     .toString();
-            return namedJdbcTemplate.query(query, namedParams, new EventMapper());
+            return namedJdbcTemplate.query(query, namedParams, new EventExtractor());
         } catch (EmptyResultDataAccessException e) {
             logger.info("searchWithFilters | Events not found");
             return Collections.emptyList();
@@ -156,7 +159,7 @@ public class EventRepository implements CrudRepository<Event> {
             namedParams.put("name", '%' + pattern.toLowerCase().trim().replace(' ', '%') + '%');
             namedParams.put("timeline_start", start);
             namedParams.put("timeline_finish", finish);
-            return namedJdbcTemplate.query(env.getProperty("event.search"), namedParams, new EventMapper());
+            return namedJdbcTemplate.query(env.getProperty("event.search"), namedParams, new EventExtractor());
         } catch (EmptyResultDataAccessException e) {
             logger.info("searchWithFilters | Events not found");
             return Collections.emptyList();
@@ -170,7 +173,7 @@ public class EventRepository implements CrudRepository<Event> {
             namedParams.put("user_id", userId);
             namedParams.put("private", isPrivate);
             namedParams.put("sent", isSent);
-            return namedJdbcTemplate.query(env.getProperty("event.findWithUserParticipation"), namedParams, new EventMapper());
+            return namedJdbcTemplate.query(env.getProperty("event.findWithUserParticipation"), namedParams, new EventExtractor());
         } catch (EmptyResultDataAccessException e) {
             logger.info("Events not found");
             return Collections.emptyList();
@@ -179,7 +182,7 @@ public class EventRepository implements CrudRepository<Event> {
 
     public List<Event> findAllPublicEvents() {
         try {
-            return namedJdbcTemplate.query(env.getProperty("event.findAllPublic"), new EventMapper());
+            return namedJdbcTemplate.query(env.getProperty("event.findAllPublic"), new EventExtractor());
         } catch (EmptyResultDataAccessException e) {
             logger.info("Events not found");
             return Collections.emptyList();
@@ -190,7 +193,7 @@ public class EventRepository implements CrudRepository<Event> {
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("userId", userId);
         try {
-            return namedJdbcTemplate.query(env.getProperty("event.findAllUserEvents"), namedParams, new EventMapper());
+            return namedJdbcTemplate.query(env.getProperty("event.findAllUserEvents"), namedParams, new EventExtractor());
         } catch (EmptyResultDataAccessException e) {
             logger.info("Events not found");
             return Collections.emptyList();
@@ -222,7 +225,7 @@ public class EventRepository implements CrudRepository<Event> {
             namedParams.put("user_id", id);
             namedParams.put("fromDate", fromDate);
             namedParams.put("toDate", toDate);
-            return namedJdbcTemplate.query(env.getProperty("event.forPeriod"), namedParams, new EventWithCreator());
+            return namedJdbcTemplate.query(env.getProperty("event.forPeriod"), namedParams, new EventExtractor());
         } catch (EmptyResultDataAccessException e) {
             logger.info("Events not found");
             return Collections.emptyList();
@@ -273,6 +276,16 @@ public class EventRepository implements CrudRepository<Event> {
         namedJdbcTemplate.update(env.getProperty("event.leave"), namedParams);
     }
 
+    public List<Category> getCategories() {
+        try {
+            return namedJdbcTemplate.query(env.getProperty("event.categories"), new CategoryMapper());
+        } catch (EmptyResultDataAccessException e) {
+            logger.warn("Categories not found");
+            return Collections.emptyList();
+        }
+
+    }
+
 
     public static final class EventMapper implements RowMapper<Event> {
         @Override
@@ -296,7 +309,7 @@ public class EventRepository implements CrudRepository<Event> {
         }
     }
 
-    private static final class EventWithCreator implements ResultSetExtractor<List<Event>> {
+    private static final class EventExtractor implements ResultSetExtractor<List<Event>> {
 
         @Override
         public List<Event> extractData(ResultSet rs) throws SQLException {
@@ -304,6 +317,7 @@ public class EventRepository implements CrudRepository<Event> {
             List<Event> events = new ArrayList<>();
             while (rs.next()) {
                 Event event = new Event();
+                Category category = new Category();
                 User creator = new User();
                 event.setId(rs.getLong("id"));
                 event.setName(rs.getString("name"));
@@ -319,11 +333,14 @@ public class EventRepository implements CrudRepository<Event> {
                 event.setImage(rs.getString("image"));
                 event.setSent(rs.getBoolean("is_sent"));
                 event.setPrivate(rs.getBoolean("is_private"));
+                category.setId(rs.getLong("category_id"));
+                category.setName(rs.getString("category_name"));
                 creator.setId(rs.getLong("creator_id"));
                 creator.setLogin(rs.getString("login"));
                 creator.setName(rs.getString("creator_name"));
                 creator.setSurName(rs.getString("surname"));
                 event.setCreator(creator);
+                event.setCategory(category);
                 events.add(event);
             }
 
@@ -338,6 +355,16 @@ public class EventRepository implements CrudRepository<Event> {
             participant.setId(rs.getLong("id"));
             participant.setLogin(rs.getString("login"));
             return participant;
+        }
+    }
+
+    private static final class CategoryMapper implements RowMapper<Category> {
+        @Override
+        public Category mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Category category = new Category();
+            category.setId(rs.getLong("id"));
+            category.setName(rs.getString("name"));
+            return category;
         }
     }
 }

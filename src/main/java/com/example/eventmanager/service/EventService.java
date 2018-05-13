@@ -2,6 +2,7 @@ package com.example.eventmanager.service;
 
 
 import com.example.eventmanager.dao.EventRepository;
+import com.example.eventmanager.domain.Category;
 import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,5 +113,10 @@ public class EventService {
 
     public List<Event> searchWithFilters(String pattern, LocalDateTime start, LocalDateTime finish) {
         return eventRepository.searchWithFilters(pattern, start, finish);
+    }
+
+    public List<Category> getCategories(){
+
+       return eventRepository.getCategories();
     }
 }
