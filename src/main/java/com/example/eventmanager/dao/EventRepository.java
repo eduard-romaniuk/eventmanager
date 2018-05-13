@@ -158,7 +158,7 @@ public class EventRepository implements CrudRepository<Event> {
     public List<Event> findEventsWithUserParticipation(Long userId, Boolean isPrivate, Boolean isSent) {
         try {
             Map<String, Object> namedParams = new HashMap<>();
-            namedParams.put("user_id", userId);
+            namedParams.put("userId", userId);
             namedParams.put("private", isPrivate);
             namedParams.put("sent", isSent);
             return namedJdbcTemplate.query(env.getProperty("event.findWithUserParticipation"), namedParams, new EventExtractor());
