@@ -102,17 +102,13 @@ public class EventService {
         eventRepository.deleteParticipant(userService.getCurrentUser().getId(),event_id);
     }
 
-    public Long countSearchResults(String pattern, LocalDateTime start, LocalDateTime finish) {
-        return eventRepository.countSearchResults(pattern, start, finish);
+    public Long countSearchResults(String pattern, String category, LocalDateTime start, LocalDateTime finish) {
+        return eventRepository.countSearchResults(pattern, start, finish, category);
     }
 
-    public List<Event> searchWithFiltersPagination(String pattern, LocalDateTime start, LocalDateTime finish,
+    public List<Event> searchWithFiltersPagination(String pattern, String category, LocalDateTime start, LocalDateTime finish,
                                                    Long limit, Long offset) {
-        return eventRepository.searchWithFiltersPagination(pattern, start, finish, limit, offset);
-    }
-
-    public List<Event> searchWithFilters(String pattern, LocalDateTime start, LocalDateTime finish) {
-        return eventRepository.searchWithFilters(pattern, start, finish);
+        return eventRepository.searchWithFiltersPagination(pattern, start, finish, category, limit, offset);
     }
 
     public List<Category> getCategories(){

@@ -4,6 +4,7 @@ import {Event} from '../model/event';
 import {Observable} from "rxjs/Observable";
 import {Router} from '@angular/router';
 import {User} from "../model/user";
+import {Category} from "../model/category";
 
 @Injectable()
 export class EventService {
@@ -76,12 +77,12 @@ export class EventService {
     return this.http.post(this.base_url+id+"/participants",users)
   }
 
-  public getFilteredEvents(pattern: string, start: Date, finish: Date, limit: number, offset: number):Observable<HttpResponse<Event[]>> {
+  public getFilteredEvents(pattern: string, category: string, start: Date, finish: Date, limit: number, offset: number):Observable<HttpResponse<Event[]>> {
     return this.http.get<Event[]>(this.base_url + 'filter' +
-      `?pattern=${pattern.toLowerCase()}&start=${start.toISOString()}&finish=${finish.toISOString()}&limit=${limit}&offset=${offset}`, {observe: 'response'});
+      `?pattern=${pattern.toLowerCase()}&category=${category}&start=${start.toISOString()}&finish=${finish.toISOString()}&limit=${limit}&offset=${offset}`, {observe: 'response'});
   }
 
-  public getCategories(){
-    return this.http.get(this.base_url+"categories")
+  public getCategories(): Observable<Category[]>{
+    return this.http.get<Category[]>(this.base_url+"categories")
   }
 }

@@ -124,21 +124,23 @@ public class EventRepository implements CrudRepository<Event> {
         namedJdbcTemplate.update(env.getProperty("event.delete.event"), namedParams);
     }
 
-    public Long countSearchResults(String pattern, LocalDateTime start, LocalDateTime finish) {
+    public Long countSearchResults(String pattern, LocalDateTime start, LocalDateTime finish, String category) {
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("name", '%' + pattern.toLowerCase().trim().replace(' ', '%') + '%');
         namedParams.put("timeline_start", start);
         namedParams.put("timeline_finish", finish);
+        namedParams.put("category", category.equals("") ? "%" : category);
         return namedJdbcTemplate.queryForObject(env.getProperty("event.countSearchResults"), namedParams, Long.class);
     }
 
     public List<Event> searchWithFiltersPagination(String pattern, LocalDateTime start, LocalDateTime finish,
-                                         Long limit, Long offset) {
+                                         String category, Long limit, Long offset) {
         try {
             Map<String, Object> namedParams = new HashMap<>();
             namedParams.put("name", '%' + pattern.toLowerCase().trim().replace(' ', '%') + '%');
             namedParams.put("timeline_start", start);
             namedParams.put("timeline_finish", finish);
+            namedParams.put("category", category.equals("") ? "%" : category);
             String query = new StringBuilder()
                     .append(env.getProperty("event.search"))
                     .append(" LIMIT ")
@@ -152,20 +154,6 @@ public class EventRepository implements CrudRepository<Event> {
             return Collections.emptyList();
         }
     }
-
-    public List<Event> searchWithFilters(String pattern, LocalDateTime start, LocalDateTime finish) {
-        try {
-            Map<String, Object> namedParams = new HashMap<>();
-            namedParams.put("name", '%' + pattern.toLowerCase().trim().replace(' ', '%') + '%');
-            namedParams.put("timeline_start", start);
-            namedParams.put("timeline_finish", finish);
-            return namedJdbcTemplate.query(env.getProperty("event.search"), namedParams, new EventExtractor());
-        } catch (EmptyResultDataAccessException e) {
-            logger.info("searchWithFilters | Events not found");
-            return Collections.emptyList();
-        }
-    }
-
 
     public List<Event> findEventsWithUserParticipation(Long userId, Boolean isPrivate, Boolean isSent) {
         try {

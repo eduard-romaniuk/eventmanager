@@ -17,11 +17,8 @@
       </label>
       <label>
           Category:<br>
-          <select>
-          	<option selected hidden></option>
-          	<option>category 1</option>
-          	<option>category 2</option>
-          	<option>category 3</option>
+          <select [(ngModel)]="category">
+          	<option *ngFor="let cat of categories" [value]="cat.name">{{cat.name}}</option>
           </select>
       </label>
       <br>
