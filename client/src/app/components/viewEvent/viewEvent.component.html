@@ -156,9 +156,9 @@
       <div class="modal-body">
         <div *ngIf="userFriends">
           <div id="teamCheckboxList" class="checkboxList">
-          <div *ngFor="let friend of userFriends">
+          <div *ngFor="let friend of userFriends ">
 
-            <label>
+            <label *ngIf="!isParticipant">
               <input type="checkbox"
                      [(checklist)]="newParticipants"
                      [checklistValue]="friend" />
