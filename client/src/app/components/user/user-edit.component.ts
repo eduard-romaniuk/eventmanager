@@ -43,6 +43,7 @@ export class UserEditComponent implements OnInit {
         ],
         editUserName: [this.user.name, [Validators.required]],
         editUserSurName: [this.user.surName, [Validators.required]],
+        editUserSex: [this.user.sex, [Validators.required]],
         editUserPhone: [this.user.phone, [
           Validators.pattern('^[0-9-+ ()]*$')]]
       }, {validator: phoneLength('editUserPhone')}

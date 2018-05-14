@@ -55,8 +55,29 @@
             }">
           <div *ngIf="form.get('editUserSurName').invalid && (form.get('editUserSurName').dirty || form.get('editUserSurName').touched)"
                class="text-danger">
-            <div *ngIf = "form.get('editUserSurName').errors.pattern">
+            <div *ngIf = "form.get('editUserSurName').errors.required">
               Surname field can't be blank
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="editUserSex">Gender</label>
+          <select id="editUserSex" class="custom-select"
+                  formControlName="editUserSex" [(ngModel)]="user.sex"
+                  [ngClass]="{
+                            'is-invalid': form.get('editUserSex').invalid && (form.get('editUserSex').dirty || form.get('editUserSex').touched)
+                        }" >
+            <option value="true">
+              Male
+            </option>
+            <option value="false">
+              Female
+            </option>
+          </select>
+          <div *ngIf="form.get('editUserSex').invalid && (form.get('editUserSex').dirty || form.get('editUserSex').touched)" class="text-danger">
+            <div *ngIf="form.get('editUserSex').errors.required">
+              Choose your gender
             </div>
           </div>
         </div>
