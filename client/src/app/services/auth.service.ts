@@ -12,6 +12,7 @@ export class AuthService {
   login: string;
   base_url = '/auth';
   current_user: Observable<User>;
+  SESSION_STORAGE_PREFIX = 'Basic ';
 
   constructor(private http: HttpClient, private users: UserService, private toast: ToastService) {
     const authToken = sessionStorage.getItem('authToken');
@@ -72,11 +73,29 @@ export class AuthService {
   }
 
   setSessionAuthToken(login: String, password: String){
-    sessionStorage.setItem('authToken', 'Basic ' + btoa(login + ':' + password));
+    sessionStorage.setItem('authToken', this.SESSION_STORAGE_PREFIX + btoa(login + ':' + password));
   }
 
   setSessionLogin(login: String){
     sessionStorage.setItem('login', login.toString());
+  }
+
+  getEncodedLoginAndPassword(){
+    const authToken = sessionStorage.getItem('authToken');
+    return authToken.split(this.SESSION_STORAGE_PREFIX).pop();
+  }
+
+  getDecodedLoginAndPassword(){
+    return atob(this.getEncodedLoginAndPassword());
+  }
+
+  getSessionLogin(){
+    const loginAndPassword = this.getDecodedLoginAndPassword();
+    return loginAndPassword.substr(0, loginAndPassword.indexOf(":"));
+  }
+
+  getSessionPassword(){
+    return this.getDecodedLoginAndPassword().split(":").pop();
   }
 
   recoverPassword(login: string) {
