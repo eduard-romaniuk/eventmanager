@@ -41,7 +41,6 @@ export class UserEditComponent implements OnInit {
           Validators.maxLength(30)],
           usernameExists(this.userService, this.oldLogin)
         ],
-        editUserEmail: [this.user.email, [Validators.required, Validators.email]],
         editUserName: [this.user.name, [Validators.required]],
         editUserSurName: [this.user.surName, [Validators.required]],
         editUserPhone: [this.user.phone, [

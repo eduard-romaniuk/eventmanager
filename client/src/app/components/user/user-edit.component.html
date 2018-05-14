@@ -32,27 +32,6 @@
         </div>
 
         <div class="form-group">
-          <label for="editUserEmail">Email</label>
-          <input type="email" id="editUserEmail" class="form-control mt-2"
-                 formControlName="editUserEmail" [(ngModel)]="user.email"
-                 [ngClass]="{
-                'is-invalid': form.get('editUserEmail').invalid && (form.get('editUserEmail').dirty || form.get('editUserEmail').touched)
-            }">
-          <div *ngIf="form.get('editUserEmail').invalid && (form.get('editUserEmail').dirty || form.get('editUserEmail').touched)"
-               class="text-danger">
-            <div *ngIf = "form.get('editUserEmail').errors.required">
-              Email field can't be blank
-            </div>
-            <div *ngIf = "form.get('editUserEmail').errors.email">
-              Enter valid email
-            </div>
-            <!--<div *ngIf = "form.get('editUserEmail').errors.exists">-->
-              <!--Email already used-->
-            <!--</div>-->
-          </div>
-        </div>
-
-        <div class="form-group">
           <label for="editUserName">Name</label>
           <input type="text" id="editUserName" class="form-control mt-2"
                  formControlName="editUserName" [(ngModel)]="user.name"
