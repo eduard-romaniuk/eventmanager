@@ -33,38 +33,60 @@ public class WebSocketController {
 		this.chatService = chatService;
 	}
 
+	private final class MessageTransformer{
+		private String login;
+		private String image;
+		private String text;
+		private String date;
+		
+		public String getLogin() {
+			return login;
+		}
+		public String getImage() {
+			return image;
+		}
+		public String getText() {
+			return text;
+		}
+		public String getDate() {
+			return date;
+		}
+		public void setLogin(String login) {
+			this.login = login;
+		}
+		public void setImage(String image) {
+			this.image = image;
+		}
+		public void setText(String text) {
+			this.text = text;
+		}
+		public void setDate(String date) {
+			this.date = date;
+		}	
+	}
+	
 	@MessageMapping("/send/event/{eventId}/chats/{creator}/load")
 	private void loadMessages(@DestinationVariable Long eventId, @DestinationVariable String creator) {
 		Long chatId = getChatId(eventId,creator);
 		List<Message> messages = msgService.getAllMessagesFromChat(chatId);
-		StringBuilder str = new StringBuilder();
 		for (Message msg : messages) {
 			Long userId = msgService.findUserIdFromParticipant(msg.getParticipantId());
-			String login = userService.getUser(userId).getLogin();
-			str.append(login + " : " + msg.getText() + " --- " + msg.getDate().toString());
-			str.append("<br>");
-//			sendMessage("/event/" + eventId + "/chats/" + creator, login + " : " + msg.getText()
-//					+ " --- " + msg.getDate().toString());
+			sendMessage("/event/" + eventId + "/chats/" + creator, prepareMessage(userId, msg.getText(), msg.getDate()));
 		}
-		sendMessage("/event/" + eventId + "/chats/" + creator, str.toString());
 	}
 
 	@MessageMapping("/send/event/{eventId}/chats/{creator}")
-	private void sendAndSaveMessage(@DestinationVariable Long eventId, @DestinationVariable String creator,
-			String message) {
-
+	private void sendAndSaveMessage(@DestinationVariable Long eventId, @DestinationVariable String creator, String message) {
+		
 		Long userId = Long.parseLong(message.substring(0, message.indexOf(";")));
 		String messageToSend = message.substring(message.indexOf(";") + 1);
 		Date date = new Date();
-		String login = userService.getUser(userId).getLogin();
 
-		sendMessage("/event/" + eventId + "/chats/" + creator,
-				login + ": " + messageToSend + " --- " + new SimpleDateFormat("HH:mm:ss").format(date));
-
+		sendMessage("/event/" + eventId + "/chats/" + creator, prepareMessage(userId,messageToSend, date));
 		saveMessage(messageToSend, creator, eventId, userId, date);
 	}
 
-	private void sendMessage(String url, String message) {
+	private void sendMessage(String url, MessageTransformer message) {
 		template.convertAndSend(url, message);
 	}
 
@@ -83,6 +105,25 @@ public class WebSocketController {
 		} else {
 			return chatService.findChatId(eventId, false);
 		}
+	}
+	
+	private MessageTransformer prepareMessage(Long userId,String messageToSend, Date date){
+		String login = userService.getUser(userId).getLogin();
+		String image = userService.getUser(userId).getImage();
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		if(image==null) {
+			if(userService.getUser(userId).getSex()){
+				image = "../../../assets/images/default_user_male.png";
+			}else{
+				image = "../../../assets/images/default_user_female.png";
+			}
+		}
+		MessageTransformer msg = new MessageTransformer();
+		msg.setLogin(login);
+		msg.setImage(image);
+		msg.setText(messageToSend);
+		msg.setDate(dt.format(date));
+		return msg;
 	}
 
 }
