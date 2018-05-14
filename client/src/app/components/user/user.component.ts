@@ -18,8 +18,8 @@ export class UserComponent implements OnInit, OnDestroy {
 
   userEvents: Event[];
   userFriends: User[];
-  incomeRequests: User[];
-  outcomeRequests: User[];
+  incomeRequests: User[] = [];
+  outcomeRequests: User[] = [];
   sub: Subscription;
 
   currentUserPage: boolean;
