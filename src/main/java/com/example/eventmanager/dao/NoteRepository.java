@@ -67,6 +67,7 @@ public class NoteRepository implements CrudRepository<Note> {
         namedParams.addValue("image", note.getImage());
         namedParams.addValue("is_sent", note.isSent());
         namedParams.addValue("is_private", note.isPrivate());
+        namedParams.addValue("folder_id", note.getFolder() == null? null: note.getFolder().getId());
         KeyHolder keyHolder = new GeneratedKeyHolder();
         namedJdbcTemplate.update(env.getProperty("note.save"), namedParams, keyHolder);
         return (Integer)keyHolder.getKeys().get("id");

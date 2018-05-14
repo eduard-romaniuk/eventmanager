@@ -33,4 +33,8 @@ public class FolderService {
     public Folder getFolderByIdAndUserId(Long id, Long userId) {
         return folderRepository.findByIdAndUserId(id, userId);
     }
+
+    public void deleteFolder(Folder folder){
+        folderRepository.delete(folder);
+    }
 }

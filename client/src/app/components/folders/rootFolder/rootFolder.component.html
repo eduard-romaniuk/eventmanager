@@ -1,19 +1,19 @@
-<div class="md-form text-left">
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createFolder">Create folder
-  </button>
-  <button class="btn btn-primary" [routerLink]="['/note/create', rootFolderId]">Create note</button>
-  <tr *ngFor="let folder of folders">
-    <td *ngIf="hideElement">{{ folder.id }}</td>
-    <td>
-      <a [routerLink]="['folder', folder.id]"> {{ folder.name}}/ </a>
-    </td>
-  </tr>
-  <tr *ngFor="let note of notes">
-    <td *ngIf="hideElement">{{ note.id }}</td>
-    <td>
-      <a [routerLink]="['/note', note.id]"> {{ note.name}} </a>
-    </td>
-  </tr>
+<div class="col-md-6">
+  <div class="md-form text-left">
+    <h2> Root folder </h2>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createFolder">Create folder</button>
+    <button class="btn btn-primary" [routerLink]="['/note/create', rootFolderId]">Create note</button>
+    <tr *ngFor="let folder of folders">
+      <td>
+        <a [routerLink]="['folder', folder.id]"> {{ folder.name}}/ </a>
+      </td>
+    </tr>
+    <tr *ngFor="let note of notes">
+      <td>
+        <a [routerLink]="['/note', note.id]"> {{ note.name}} </a>
+      </td>
+    </tr>
+  </div>
 </div>
 
 
@@ -44,7 +44,9 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-default" type="button" (click)="createFolder()" data-dismiss="modal" [disabled]="!form.valid">Submit</button>
+        <button class="btn btn-default" type="button" (click)="createFolder()" data-dismiss="modal"
+                [disabled]="!form.valid">Submit
+        </button>
       </div>
     </div>
   </div>

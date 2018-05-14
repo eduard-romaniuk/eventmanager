@@ -1,5 +1,6 @@
 package com.example.eventmanager.controller;
 
+import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.Folder;
 import com.example.eventmanager.domain.FolderView;
 import com.example.eventmanager.service.FolderService;
@@ -54,7 +55,20 @@ public class FolderController {
         Long currentUserId = userService.getCurrentUser().getId();
         logger.info("currentUserId = " + currentUserId);
         Folder folder = folderService.getFolderByIdAndUserId(id, currentUserId);
+        logger.info("Loaded folder: " + folder);
         return new ResponseEntity<>(folder, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{folderId}", method = RequestMethod.DELETE)
+    public ResponseEntity<String> deleteFolder(@PathVariable("folderId") Long id) {
+        logger.info("DELETE /" + id);
+
+        Folder folder = folderService.getFolderByIdAndUserId(id, userService.getCurrentUser().getId());
+        if (folder == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        folderService.deleteFolder(folder);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

@@ -30,4 +30,8 @@ export class FolderService {
     return this.http.get(this.base_url + folderId + '/checkUser');
   }
 
+  public delete(folder: Folder) {
+    return this.http.delete(this.base_url + folder.id);
+  }
+
 }

@@ -29,6 +29,7 @@ export class CreateNoteComponent implements OnInit {
 
   form:FormGroup;
 
+  folderId:number = 0;
   rootFolderId:number = 0;
 
   constructor(private route:ActivatedRoute,
@@ -54,11 +55,12 @@ export class CreateNoteComponent implements OnInit {
     });
     this.route.params.subscribe(params => {
         const folderId = params['folderId'];
-        if (folderId != this.rootFolderId) {
+        if (folderId != this.folderId) {
+          this.folderId = folderId;
           this.folderService.getFolderWithCheck(folderId).subscribe((folder:Folder) => {
             if (folder) {
               this.note.folder = folder;
-              console.log('loaded folder - ' + this.note.folder);
+              console.log('loaded folder id - ' + this.note.folder.id);
             } else {
               console.log('The folder does not exist or the user does not have permission');
               this.access = false;
@@ -84,7 +86,12 @@ export class CreateNoteComponent implements OnInit {
     this.noteService.createNote(this.note).subscribe(
       (note:Note) => {
         console.log('created note: ' + note);
-        this.router.navigate(['/folders/rootFolder']);
+        if(this.folderId == this.rootFolderId) {
+          this.router.navigate(['/folders/rootFolder']);
+        }
+        else {
+          this.router.navigate(['/folders/rootFolder/folder/', this.folderId]);
+        }
       }
     );
   }
