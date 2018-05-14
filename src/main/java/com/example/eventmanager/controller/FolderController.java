@@ -38,11 +38,11 @@ public class FolderController {
     }
 
     @JsonView(FolderView.FullView.class)
-    @RequestMapping(value = "/{id}/all", method = RequestMethod.GET)
-    public ResponseEntity<List<Folder>> getFolderByUser(@PathVariable Long id) {
-        logger.info("GET /{id}/all");
+    @RequestMapping(value = "/{userId}/all", method = RequestMethod.GET)
+    public ResponseEntity<List<Folder>> getFolderByUser(@PathVariable Long userId) {
+        logger.info("GET /{userId}/all");
 
-        List<Folder> folderList = folderService.getUserFolders(id);
+        List<Folder> folderList = folderService.getUserFolders(userId);
         return new ResponseEntity<>(folderList, HttpStatus.OK);
     }
 

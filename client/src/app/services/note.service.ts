@@ -23,4 +23,8 @@ export class NoteService {
 
   }
 
+  public getFolderNotes(folderId: number) {
+    return this.http.get(this.base_url + 'folder/' + folderId);
+  }
+
 }

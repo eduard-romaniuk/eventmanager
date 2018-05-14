@@ -6,8 +6,8 @@ import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {Router, ActivatedRoute} from "@angular/router";
 import {CloudinaryUploader} from "ng2-cloudinary";
 import {ImageUploaderService} from "../../../services/image-uploader.service";
-import {Note} from "../../../model/note";
 import {NoteService} from "../../../services/note.service";
+import {Note} from "../../../model/note";
 import {FolderService} from "../../../services/folder.service";
 import {Folder} from "../../../model/folder";
 
@@ -26,7 +26,6 @@ export class CreateNoteComponent implements OnInit {
 
   latitude:number;
   longitude:number;
-  noteService:NoteService;
 
   form:FormGroup;
 
@@ -36,6 +35,7 @@ export class CreateNoteComponent implements OnInit {
               private auth:AuthService,
               private formBuilder:FormBuilder,
               private folderService:FolderService,
+              private noteService:NoteService,
               private router:Router) {
 
     this.uploader.onSuccessItem = (item:any, response:string, status:number, headers:any):any => {
@@ -84,7 +84,7 @@ export class CreateNoteComponent implements OnInit {
     this.noteService.createNote(this.note).subscribe(
       (note:Note) => {
         console.log('created note: ' + note);
-        this.router.navigate(['../']);
+        this.router.navigate(['/folders/rootFolder']);
       }
     );
   }

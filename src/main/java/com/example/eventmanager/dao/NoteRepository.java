@@ -77,7 +77,7 @@ public class NoteRepository implements CrudRepository<Note> {
         try {
             Map<String, Object> namedParams = new HashMap<>();
             namedParams.put("noteId", id);
-            return namedJdbcTemplate.query(env.getProperty("note.findById"), namedParams, new NoteWithCreator()).get(FIRST_ELEMENT);
+            return namedJdbcTemplate.query(env.getProperty("note.findById"), namedParams, new NoteMapper()).get(FIRST_ELEMENT);
         } catch (EmptyResultDataAccessException e) {
             logger.info("Note not found");
             return null;
@@ -127,7 +127,12 @@ public class NoteRepository implements CrudRepository<Note> {
         namedParams.put("folderId", folderId);
         namedParams.put("userId", currentUserId);
         try {
-            return namedJdbcTemplate.query(env.getProperty("note.findAllFolderNotes"), namedParams,new NoteMapper());
+            if(folderId == 0) { //root folder
+                return namedJdbcTemplate.query(env.getProperty("note.findAllRootFolderNotes"), namedParams, new NoteMapper());
+            }
+            else {  //not root folder
+                return namedJdbcTemplate.query(env.getProperty("note.findAllFolderNotes"), namedParams, new NoteMapper());
+            }
         } catch (EmptyResultDataAccessException e) {
             logger.info("Notes not found");
             return Collections.emptyList();
@@ -138,6 +143,7 @@ public class NoteRepository implements CrudRepository<Note> {
     }
 
     public static final class NoteMapper implements RowMapper<Note> {
+        private final Logger logger = LogManager.getLogger(NoteMapper.class);
         @Override
         public Note mapRow(ResultSet rs, int rowNum) throws SQLException {
             Note note = new Note();
@@ -149,38 +155,8 @@ public class NoteRepository implements CrudRepository<Note> {
             note.setImage(rs.getString("image"));
             note.setSent(rs.getBoolean("is_sent"));
             note.setPrivate(rs.getBoolean("is_private"));
+            logger.info("Loaded Note: " + note);
             return note;
-        }
-    }
-
-    private static final class NoteWithCreator implements ResultSetExtractor<List<Note>> {
-
-        @Override
-        public List<Note> extractData(ResultSet rs) throws SQLException {
-
-            List<Note> notes = new ArrayList<>();
-            while (rs.next()) {
-                Note note = new Note();
-                User creator = new User();
-                note.setId(rs.getLong("id"));
-                note.setName(rs.getString("name"));
-                note.setDescription(rs.getString("description"));
-                note.setPlace(rs.getString("place"));
-                note.setPeriod(rs.getInt("period_in_days"));
-                note.setImage(rs.getString("image"));
-                note.setSent(rs.getBoolean("is_sent"));
-                note.setPrivate(rs.getBoolean("is_private"));
-
-                creator.setId(rs.getLong("creator_id"));
-                creator.setLogin(rs.getString("login"));
-                creator.setName(rs.getString("creator_name"));
-                creator.setSurName(rs.getString("surname"));
-
-                note.setCreator(creator);
-                notes.add(note);
-            }
-
-           return notes;
         }
     }
 }

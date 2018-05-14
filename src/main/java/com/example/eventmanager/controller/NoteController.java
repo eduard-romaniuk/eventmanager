@@ -80,9 +80,9 @@ public class NoteController {
     }
 
     @JsonView(NoteView.FullView.class)
-    @RequestMapping(value = "/folder/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/folder/{folderId}", method = RequestMethod.GET)
     public ResponseEntity<List<Note>> getAllFolderNotes(@PathVariable Long folderId) {
-        logger.info("GET /folder/{id}");
+        logger.info("GET /folder/{folderId}");
 
         List<Note> noteList = noteService.getAllFolderNotes(folderId, userService.getCurrentUser().getId());
         return new ResponseEntity<>(noteList, HttpStatus.OK);

@@ -56,7 +56,8 @@ import { RootFolderComponent } from './components/folders/rootFolder/rootFolder.
 import { FolderComponent } from './components/folders/folder/folder.component';
 import { CreateNoteComponent } from './components/note/createNote/createNote.component';
 import {ChecklistModule} from "angular-checklist";
-import { UserSettingsComponent } from './components/user/user-settings/user-settings.component';
+import { UserSettingsComponent } from './components/user/user-settings/user-settings.component';;
+import { NoteService } from "./services/note.service";
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -144,6 +145,7 @@ export class AddressInterceptor implements HttpInterceptor {
     LoggerService,
     ToastService,
     FolderService,
+    NoteService,
     ImageUploaderService,
     WishListService,
     ItemService,
