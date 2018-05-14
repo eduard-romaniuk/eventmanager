@@ -97,13 +97,13 @@ public class EventController {
 
     @JsonView(EventView.FullView.class)
     @RequestMapping(value = "/filter", method = RequestMethod.GET)
-    public List<Event> filter(@RequestParam String pattern,
+    public List<Event> filter(@RequestParam String pattern, @RequestParam String category,
                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime finish,
                               @RequestParam Long limit, @RequestParam Long offset,
                               HttpServletResponse response){
-        response.addHeader("count", eventService.countSearchResults(pattern, start, finish).toString());
-        return eventService.searchWithFiltersPagination(pattern, start, finish, limit, offset);
+        response.addHeader("count", eventService.countSearchResults(pattern, category, start, finish).toString());
+        return eventService.searchWithFiltersPagination(pattern, category, start, finish, limit, offset);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

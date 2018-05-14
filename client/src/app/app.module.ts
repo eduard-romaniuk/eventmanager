@@ -59,6 +59,7 @@ import {ChecklistModule} from "angular-checklist";
 import { NgSelectModule } from '@ng-select/ng-select';
 import { UserSettingsComponent } from './components/user/user-settings/user-settings.component';
 import {NgxEditorModule} from "ngx-editor";
+import { NoHtmlPipe } from "./pipes/nohtml.pipe";
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -117,7 +118,8 @@ export class AddressInterceptor implements HttpInterceptor {
     PartialUserImageComponent,
     PartialUserFriendshipButtonComponent,
     EditItemComponent,
-    UserSettingsComponent
+    UserSettingsComponent,
+    NoHtmlPipe
   ],
   imports: [
     BrowserModule,

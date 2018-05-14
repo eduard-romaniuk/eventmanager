@@ -17,11 +17,8 @@
       </label>
       <label>
           Category:<br>
-          <select>
-          	<option selected hidden></option>
-          	<option>category 1</option>
-          	<option>category 2</option>
-          	<option>category 3</option>
+          <select [(ngModel)]="category">
+          	<option *ngFor="let cat of categories" [value]="cat.name">{{cat.name}}</option>
           </select>
       </label>
       <br>
@@ -44,7 +41,7 @@
           <td *ngIf="hideElement">{{ event.id }}</td>
           <td class="col-md-2"><a [routerLink]="['/event', event.id]">{{ event.name }}</a></td>
           <td class="col-md-6">
-            {{(event.description.length>100) ? (event.description | slice:0:100)+'..' : (event.description)}}
+            {{((event.description|nohtml).length>100)?(event.description|nohtml|slice:0:100)+'..':(event.description|nohtml)}}
           </td>
           <td class="col-md-2">{{ event.timeLineStart |  date : "dd/MM/yyyy HH:mm" }}</td>
           <td class="col-md-2">{{ event.timeLineFinish |  date : "dd/MM/yyyy HH:mm" }}</td>
