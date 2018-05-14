@@ -23,6 +23,10 @@ export class UserEditComponent implements OnInit {
   savingChanges = false;
   error = false;
 
+  today: Date = new Date();
+  min = new Date(1900, 0, 1, 0, 1);
+  max = new Date(this.today.getFullYear() - 10, this.today.getMonth() + 1, this.today.getDay(), 0, 1);
+
   constructor(private auth: AuthService,
               private router: Router,
               private userService: UserService,
@@ -43,6 +47,7 @@ export class UserEditComponent implements OnInit {
         ],
         editUserName: [this.user.name, [Validators.required]],
         editUserSurName: [this.user.surName, [Validators.required]],
+        editUserBirthDay: [this.user.birth, []],
         editUserSex: [this.user.sex, [Validators.required]],
         editUserPhone: [this.user.phone, [
           Validators.pattern('^[0-9-+ ()]*$')]]
@@ -59,9 +64,15 @@ export class UserEditComponent implements OnInit {
       });
   }
 
+  fixBirthDate(){
+    this.user.birth = new Date( this.user.birth .getTime() + Math.abs(this.user.birth .getTimezoneOffset()*60000));
+  }
+
   save() {
     this.error = false;
     this.savingChanges = true;
+
+    this.fixBirthDate();
 
     let loginChanged = this.user.login != this.oldLogin;
     this.userService.updateUser(this.user)
