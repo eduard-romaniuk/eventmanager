@@ -72,7 +72,9 @@ export class UserEditComponent implements OnInit {
     this.error = false;
     this.savingChanges = true;
 
-    this.fixBirthDate();
+    if(this.form.get('editUserBirthDay').value){
+      this.fixBirthDate();
+    }
 
     let loginChanged = this.user.login != this.oldLogin;
     this.userService.updateUser(this.user)
