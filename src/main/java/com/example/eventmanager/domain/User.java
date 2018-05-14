@@ -37,7 +37,9 @@ public class User {
     //private WishList wishList;
     private List<Event> events;
     // private Settings settings;
+    @JsonView(UserView.FullView.class)
     private String token = "";
+    @JsonView(UserView.FullView.class)
     private Boolean verified = false;
 
     public Long getId() {
