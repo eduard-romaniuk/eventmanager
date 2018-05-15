@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -114,5 +115,18 @@ public class EventService {
     public List<Category> getCategories(){
 
        return eventRepository.getCategories();
+    }
+
+    public List<User> getFriendsNotParticipants(Long id){
+
+        List<User> candidates = new ArrayList<>();
+
+        for (User friends: userService.getFriendsByUserId(userService.getCurrentUser().getId())) {
+
+            if (!getParticipants(id).contains(friends)) candidates.add(friends);
+            System.out.println(getParticipants(id).contains(friends));
+        }
+        System.out.println(candidates);
+        return candidates;
     }
 }

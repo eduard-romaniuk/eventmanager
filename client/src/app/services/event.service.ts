@@ -85,4 +85,8 @@ export class EventService {
   public getCategories(): Observable<Category[]>{
     return this.http.get<Category[]>(this.base_url+"categories")
   }
+
+  public getFriendsNotParticipants(id) {
+    return this.http.get<User[]>(this.base_url + id + "/friendsNotParticipants");
+  }
 }

@@ -166,21 +166,20 @@
         <button class="close" type="button" data-dismiss="modal">×</button>
       </div>
       <div class="modal-body">
-        <div *ngIf="userFriends">
+        <div *ngIf="candidates">
           <div id="teamCheckboxList" class="checkboxList">
-          <div *ngFor="let friend of userFriends ">
-
-            <label *ngIf="!isParticipant">
+          <div *ngFor="let friend of candidates ">
+            <label>
               <input type="checkbox"
                      [(checklist)]="newParticipants"
                      [checklistValue]="friend" />
               <span><strong>{{friend.name}} {{friend.surName}}</strong></span>
             </label>
-          </div>
+            </div>
         </div>
         </div>
-        <div *ngIf="userFriends?.length < 1">
-          <p>No friends </p>
+        <div *ngIf="candidates?.length < 1">
+          <p>No candidates for add to event </p>
         </div>
         <div class="modal-footer ">
           <button class="btn btn-warning centerDiv" [routerLink]="['/event', event.id]" data-dismiss="modal">Cancel

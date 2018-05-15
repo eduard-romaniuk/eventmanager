@@ -27,7 +27,8 @@ export class ViewEventComponent {
   participationStr: String;
   participants: User[];
 
-  userFriends: User[];
+  candidates: User[];
+
 
   newParticipants: User[];
 
@@ -128,13 +129,16 @@ export class ViewEventComponent {
   }
   addUsers(){
 
+    console.log(this.newParticipants);
     this.eventService.addUsers(this.newParticipants,this.event.id).subscribe();
   }
 
   getFriends() {
-    this.userService.getFriends(this.userId)
+
+    this.eventService.getFriendsNotParticipants(this.event.id)
       .subscribe((friends: any) => {
-        this.userFriends = friends;
+        this.candidates = friends;
+        console.log(this.candidates)
       });
   }
 

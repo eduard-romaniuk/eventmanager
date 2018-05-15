@@ -195,6 +195,14 @@ public class EventController {
         List<Category> categories = eventService.getCategories();
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "{id}/friendsNotParticipants", method = RequestMethod.GET)
+    public ResponseEntity<List<User>> getFriendsNotParticipants(@PathVariable Long id) {
+        logger.info("GET /" + id + "/friendsNotParticipants");
+
+        List<User> userList = eventService.getFriendsNotParticipants(id);
+        return new ResponseEntity<>(userList, HttpStatus.OK);
+    }
 }
 
 
