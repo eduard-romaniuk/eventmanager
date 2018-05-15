@@ -1,0 +1,60 @@
+    <!-- HEADER -->
+    <br>
+    <div class="row text-center">
+      <div class="col-md-4">
+          <div class="btn btn-primary"
+            mwlCalendarPreviousView
+            [view]="view"
+            [(viewDate)]="viewDate"
+            (viewDateChange)="prevMonth()">
+            Previous Month
+          </div>
+      </div>
+      <div class="col-md-4">
+        <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):locale }}</h3>
+        <h3 *ngIf="isCurrUser()">My calendar</h3>
+      </div>
+      <div class="col-md-4">
+          <div class="btn btn-primary"
+            mwlCalendarNextView
+            [view]="view"
+            [(viewDate)]="viewDate"
+            (viewDateChange)="nextMonth()">
+            Next Month
+          </div>
+      </div>
+    </div>
+    <br>
+
+    <!-- OTHER -->
+<ng-template #customCellTemplate let-day="day" let-locale="locale">
+  <div class="cal-cell-top">
+    <a class="cal-day-badge badge badge-pill badge-danger" *ngIf="day.public > 0 && isCurrUser()"
+      [routerLink]="day.public_link">
+      {{day.public}}
+    </a>
+    <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
+  </div>
+  <div class="cell-totals text-center">
+    <a class="badge badge-pill badge-success" *ngIf="day.low > 0" [routerLink]="day.low_link">{{day.low}}</a>
+    <a class="badge badge-pill badge-warning" *ngIf="day.normal > 0" [routerLink]="day.normal_link">{{day.normal}}</a>
+    <a class="badge badge-pill badge-danger"  *ngIf="day.urgent > 0" [routerLink]="day.urgent_link">{{day.urgent}}</a>
+  </div>
+</ng-template>
+
+<ng-template #loading>
+  <div class="text-center">
+    <i class="fa fa-spin fa-spinner fa-5x"></i>
+    <br>
+    Loading events...
+  </div>
+</ng-template>
+
+<mwl-calendar-month-view *ngIf="events$ | async; else loading; let events"
+    [viewDate]="viewDate"
+    [cellTemplate]="customCellTemplate"
+    [events]="events"
+    (beforeViewRender)="beforeMonthViewRender($event)">
+</mwl-calendar-month-view>
+
+<br>

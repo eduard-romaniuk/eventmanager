@@ -2,45 +2,44 @@
   <div class="row">
 
     <div class="col-sm-3 border userProfileBlock" align="center">
-        <h2> {{ user.login }} </h2>
+      <h2> {{ user.login }} </h2>
 
       <div class="bigImage">
         <app-partial-user-image [user]="user"></app-partial-user-image>
       </div>
 
-        <p>{{ user.name }} {{ user.surName }}</p>
+      <p>{{ user.name }} {{ user.surName }}</p>
 
-        <div *ngIf="currentUserPage">
-          <p>
-            <button class="btn btn-info" data-toggle="modal" data-target="#requests" (click)="getIncomingRequests()">
-              Requests <span class="badge badge-light" *ngIf="incomeRequests.length > 0"> {{ incomeRequests.length }} </span>
-            </button>
-          </p>
+      <div *ngIf="currentUserPage">
+        <p>
+          <button class="btn btn-info" data-toggle="modal" data-target="#requests" (click)="getIncomingRequests()">
+            Requests <span class="badge badge-light" *ngIf="incomeRequests.length > 0"> {{ incomeRequests.length }} </span>
+          </button>
+        </p>
 
-          <p>
-            <button class="btn btn-info" (click)="goToSettingsPage()"> Settings </button>
-          </p>
-        </div>
+        <p>
+          <button class="btn btn-info" (click)="goToSettingsPage()"> Settings </button>
+        </p>
+      </div>
 
-      <div *ngIf="!currentUserPage">
+      <div *ngIf="!currentUserPage" class="mb-2">
         <app-partial-user-friendship-button *ngIf="currentUser.id && user.id"
                                             [currentUser]="currentUser" [user]="user">
         </app-partial-user-friendship-button>
       </div>
-
-      <button type="button" class="btn btn-info" data-toggle="modal"
+      
+      <button type="button" class="btn btn-info mb-2" data-toggle="modal"
               data-target="#friendsList" (click)="getFriends()">Friends</button>
 
-      <button type="button" class="btn btn-info" data-toggle="modal"
+      <button type="button" class="btn btn-info mb-2" data-toggle="modal"
               data-target="#friendsList" (click)="goToUserWishList(user)" *ngIf="!currentUserPage">
             View user Wish Board
       </button>
-
     </div>
 
     <div class="col-sm-9">
 
-      <div *ngIf="userEvents">
+      <!--<div *ngIf="userEvents">
         <div *ngFor="let event of userEvents">
           <div class="row border list">
               <p><a *ngIf="event.isSent" [routerLink]="['/event', event.id]"> {{ event.name }} </a></p>
@@ -51,7 +50,10 @@
 
       <div *ngIf="userEvents?.length < 1">
         <p>No public events</p>
-      </div>
+      </div>-->
+
+      <app-user-calendar *ngIf="user.id && currentUser.id" [auth_user_id]="currentUser.id" [user_id]="user.id">
+      </app-user-calendar>
 
     </div>
 

@@ -1,6 +1,7 @@
 package com.example.eventmanager.dao;
 
 
+import com.example.eventmanager.domain.CalendarData;
 import com.example.eventmanager.domain.Category;
 import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.User;
@@ -155,6 +156,47 @@ public class EventRepository implements CrudRepository<Event> {
         }
     }
 
+    public Long countSearchUserEventsResults(String pattern, LocalDateTime start, LocalDateTime finish, String category,
+                                             Long userId, Long priority, Boolean byPriority, Boolean privat) {
+        Map<String, Object> namedParams = new HashMap<>();
+        namedParams.put("name", '%' + pattern.toLowerCase().trim().replace(' ', '%') + '%');
+        namedParams.put("timeline_start", start);
+        namedParams.put("timeline_finish", finish);
+        namedParams.put("category", category.equals("") ? "%" : category);
+        namedParams.put("user_id", userId);
+        namedParams.put("priority_id", priority);
+        namedParams.put("by_priority", byPriority);
+        namedParams.put("is_private", privat);
+        return namedJdbcTemplate.queryForObject(env.getProperty("event.countSearchUserEventsResults"), namedParams, Long.class);
+    }
+
+    public List<Event> searchUserEventsWithFiltersPagination(String pattern, LocalDateTime start, LocalDateTime finish,
+                                                   String category, Long userId, Long priority, Boolean byPriority,
+                                                   Boolean privat, Long limit, Long offset) {
+        try {
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("name", '%' + pattern.toLowerCase().trim().replace(' ', '%') + '%');
+            namedParams.put("timeline_start", start);
+            namedParams.put("timeline_finish", finish);
+            namedParams.put("category", category.equals("") ? "%" : category);
+            namedParams.put("user_id", userId);
+            namedParams.put("priority_id", priority);
+            namedParams.put("by_priority", byPriority);
+            namedParams.put("is_private", privat);
+            String query = new StringBuilder()
+                    .append(env.getProperty("event.searchUserEvents"))
+                    .append(" LIMIT ")
+                    .append(limit)
+                    .append(" OFFSET ")
+                    .append(offset)
+                    .toString();
+            return namedJdbcTemplate.query(query, namedParams, new EventExtractor());
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("searchUserEventsWithFilters | Events not found");
+            return Collections.emptyList();
+        }
+    }
+
     public List<Event> findEventsWithUserParticipation(Long userId, Boolean isPrivate, Boolean isSent) {
         try {
             Map<String, Object> namedParams = new HashMap<>();
@@ -271,9 +313,21 @@ public class EventRepository implements CrudRepository<Event> {
             logger.warn("Categories not found");
             return Collections.emptyList();
         }
-
     }
 
+    public List<CalendarData> getCalendarData(LocalDateTime start, LocalDateTime finish, Long user_id, Boolean privat) {
+        try {
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("user_id", user_id);
+            namedParams.put("timeline_start", start);
+            namedParams.put("timeline_finish", finish);
+            namedParams.put("is_private", privat);
+            return namedJdbcTemplate.query(env.getProperty("event.calendarData"), namedParams, new CalendarDataMapper());
+        } catch (EmptyResultDataAccessException e) {
+            logger.warn("CalendarData not found");
+            return Collections.emptyList();
+        }
+    }
 
     public static final class EventMapper implements RowMapper<Event> {
         @Override
@@ -353,6 +407,18 @@ public class EventRepository implements CrudRepository<Event> {
             category.setId(rs.getLong("id"));
             category.setName(rs.getString("name"));
             return category;
+        }
+    }
+
+    private static final class CalendarDataMapper implements RowMapper<CalendarData> {
+        @Override
+        public CalendarData mapRow(ResultSet rs, int rowNum) throws SQLException {
+            CalendarData data = new CalendarData();
+            data.setStart(rs.getTimestamp("timeline_start").toLocalDateTime());
+            data.setFinish(rs.getTimestamp("timeline_finish").toLocalDateTime());
+            data.setName(rs.getString("name"));
+            data.setPriority(rs.getLong("priority"));
+            return data;
         }
     }
 }
