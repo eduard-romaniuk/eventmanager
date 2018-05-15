@@ -14,7 +14,7 @@ import {Folder} from "../../../model/folder";
 @Component({
   selector: 'app-createNote',
   templateUrl: './createNote.component.html',
-  styleUrls: ['./createNote.component.css']
+  styleUrls: ['./createnote.component.css']
 })
 export class CreateNoteComponent implements OnInit {
 
