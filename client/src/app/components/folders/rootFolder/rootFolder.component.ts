@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {FolderService} from '../../../services/folder.service'
+import {NoteService} from '../../../services/note.service'
 import {Folder} from '../../../model/folder'
 import {AuthService} from "../../../services/auth.service";
 import {User} from "../../../model/user";
@@ -19,9 +20,11 @@ export class RootFolderComponent {
   notes: Note[];
   currentUser: User;
   form: FormGroup;
+  rootFolderId:number = 0;
 
   constructor(private auth : AuthService,
               private folderService: FolderService,
+              private noteService: NoteService,
               private formBuilder: FormBuilder) {
   }
 
@@ -37,6 +40,12 @@ export class RootFolderComponent {
     this.form = this.formBuilder.group({
       folderNameControl: ['', [ Validators.required]]
     });
+    this.noteService.getFolderNotes(this.rootFolderId).subscribe(
+      (notes: any) => {
+        this.notes = notes;
+        console.log('loaded notes: ' + this.notes);
+      }
+    );
   }
 
   createFolder() {

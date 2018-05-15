@@ -1,7 +1,6 @@
 package com.example.eventmanager.service;
 
 
-import com.example.eventmanager.dao.EventRepository;
 import com.example.eventmanager.dao.FolderRepository;
 import com.example.eventmanager.domain.Folder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,11 @@ public class FolderService {
         return folderRepository.findByUser(id);
     }
 
-    public Folder getFolder(Long id) {
-        return folderRepository.findOne(id);
+    public Folder getFolderByIdAndUserId(Long id, Long userId) {
+        return folderRepository.findByIdAndUserId(id, userId);
+    }
+
+    public void deleteFolder(Folder folder){
+        folderRepository.delete(folder);
     }
 }

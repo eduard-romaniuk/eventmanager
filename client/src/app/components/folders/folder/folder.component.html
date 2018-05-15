@@ -1,10 +1,23 @@
-<div class="md-form text-left">
-  <button type="button" class="btn btn-default mt-2" data-toggle="modal">Create note</button>
-  <button class="btn btn-default mt-2">Add existing note</button>
-  <tr *ngFor="let note of folder.notes">
-    <td *ngIf="hideElement">{{ note.id }}</td>
-    <td>
-      <a [routerLink]="['/note', note.id]"> {{ note.name}} </a>
-    </td>
-  </tr>
+<div class="col-md-6">
+  <div *ngIf="access">
+    <h2> {{folder.name}} </h2>
+    <div class="md-form text-left">
+      <div *ngIf="isCreator">
+        <button type="button" class="btn btn-primary" data-toggle="modal">Add existing note</button>
+        <button class="btn btn-primary" [routerLink]="['/note/create', folder.id]">Create note</button>
+        <button class="btn btn-primary" (click)="delete()">Delete folder</button>
+        <br>
+      </div>
+      <a [routerLink]="['../../']"> ../ </a>
+      <tr *ngFor="let note of folder.notes">
+        <td>
+          <a [routerLink]="['/note', note.id]"> {{ note.name}} </a>
+        </td>
+      </tr>
+    </div>
+  </div>
+
+  <div class="alert alert-danger" *ngIf="!access">
+    <strong>Error!</strong> The folder does not exist or the user does not have permission
+  </div>
 </div>

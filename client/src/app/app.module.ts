@@ -54,7 +54,8 @@ import { EditItemComponent } from './components/wishlist/item/edit-item/edit-ite
 import { FolderService } from "./services/folder.service";
 import { RootFolderComponent } from './components/folders/rootFolder/rootFolder.component';
 import { FolderComponent } from './components/folders/folder/folder.component';
-import { CreateNoteComponent } from './components/notes/createNote/createNote.component';
+import { CreateNoteComponent } from './components/note/createNote/createNote.component';
+import { NoteService } from "./services/note.service";
 import {ChecklistModule} from "angular-checklist";
 import { NgSelectModule } from '@ng-select/ng-select';
 import { UserSettingsComponent } from './components/user/user-settings/user-settings.component';
@@ -150,6 +151,7 @@ export class AddressInterceptor implements HttpInterceptor {
     LoggerService,
     ToastService,
     FolderService,
+    NoteService,
     ImageUploaderService,
     WishListService,
     ItemService,

@@ -1,8 +1,8 @@
 package com.example.eventmanager.dao;
 
 
-import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.Folder;
+import com.example.eventmanager.domain.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -46,7 +47,7 @@ public class FolderRepository implements CrudRepository<Folder> {
         MapSqlParameterSource namedParams = new MapSqlParameterSource();
         namedParams.addValue("folder_name", folder.getName());
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        namedJdbcTemplate.update(env.getProperty("saveFolder"), namedParams, keyHolder);
+        namedJdbcTemplate.update(env.getProperty("folder.saveFolder"), namedParams, keyHolder);
         logger.info("Created folder with id: " + keyHolder.getKeys().get("id"));
         folder.setId(new Long((int)keyHolder.getKeys().get("id")));
 
@@ -54,7 +55,7 @@ public class FolderRepository implements CrudRepository<Folder> {
         namedParams.addValue("folderId", folder.getId());
         namedParams.addValue("userId", folder.getCreator().getId());
         namedParams.addValue("isCreator", true);
-        namedJdbcTemplate.update(env.getProperty("connectFolderToUser"), namedParams, keyHolder);
+        namedJdbcTemplate.update(env.getProperty("folder.connectFolderToUser"), namedParams, keyHolder);
 
         return folder.getId().intValue();
     }
@@ -62,10 +63,10 @@ public class FolderRepository implements CrudRepository<Folder> {
     public List<Folder> findByUser(Long userId) {
         try {
             Map<String, Object> namedParams = new HashMap<>();
-            namedParams.put("user_id", userId);
-            return namedJdbcTemplate.query(env.getProperty("findAllFoldersByUser"), namedParams, new FolderMapper());
+            namedParams.put("userId", userId);
+            return namedJdbcTemplate.query(env.getProperty("folder.findAllFoldersByUser"), namedParams, new FolderMapper());
         } catch (EmptyResultDataAccessException e) {
-            logger.info("Events not found");
+            logger.info("Folders not found");
             return Collections.emptyList();
         }
     }
@@ -73,21 +74,24 @@ public class FolderRepository implements CrudRepository<Folder> {
     @Override
     public void update(Folder folder) {
         Map<String, Object> namedParams = new HashMap<>();
-        namedParams.put("folder_name", folder.getName());
-        namedJdbcTemplate.update(env.getProperty("updateFolder"), namedParams);
+        namedParams.put("folderName", folder.getName());
+        namedJdbcTemplate.update(env.getProperty("folder.updateFolder"), namedParams);
     }
 
     @Override
+    @Transactional
     public void delete(Folder folder) {
         Map<String, Object> namedParams = new HashMap<>();
-        namedParams.put("eventId", folder.getId());
-        namedJdbcTemplate.update(env.getProperty("deleteFolder"), namedParams);
+        namedParams.put("folderId", folder.getId());
+        namedJdbcTemplate.update(env.getProperty("note.moveNotesToRoot"),namedParams);
+        namedJdbcTemplate.update(env.getProperty("folder.delete.userConnection"), namedParams);
+        namedJdbcTemplate.update(env.getProperty("folder.delete"), namedParams);
     }
 
     @Override
     public Iterable<Folder> findAll() {
         try {
-            return namedJdbcTemplate.query(env.getProperty("findAllFolders"), new FolderMapper());
+            return namedJdbcTemplate.query(env.getProperty("folder.findAllFolders"), new FolderMapper());
         } catch (EmptyResultDataAccessException e) {
             logger.info("Folders not found");
             return Collections.emptyList();
@@ -99,20 +103,55 @@ public class FolderRepository implements CrudRepository<Folder> {
         try {
             Map<String, Object> namedParams = new HashMap<>();
             namedParams.put("id", id);
-            return namedJdbcTemplate.query(env.getProperty("findFolderById"), namedParams, new FolderMapper()).get(FIRST_ELEMENT);
+            return namedJdbcTemplate.query(env.getProperty("folder.findFolderById"), namedParams, new FolderMapper()).get(FIRST_ELEMENT);
         } catch (EmptyResultDataAccessException e) {
             logger.info("Folder not found");
             return null;
         }
     }
 
+    public Folder findByIdAndUserId(Long folderId, Long userId) {
+        try {
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("folderId", folderId);
+            namedParams.put("userId", userId);
+            Folder folder = namedJdbcTemplate.query(env.getProperty("folder.findFolderByIdAndUser"), namedParams, new FolderMapper()).get(FIRST_ELEMENT);
+            if(folder != null) {
+                folder.setCreator(namedJdbcTemplate.query(env.getProperty("folder.findFolderCreator"), namedParams, new UserMapper()).get(FIRST_ELEMENT));
+            }
+            logger.info("Loaded folder: " + folder);
+            return folder;
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("Folder not found");
+            return null;
+        } catch (IndexOutOfBoundsException e) {
+            logger.info("Folder not found");
+            return null;
+        }
+    }
+
     private static final class FolderMapper implements RowMapper<Folder> {
+        private final Logger logger = LogManager.getLogger(FolderMapper.class);
+
         @Override
         public Folder mapRow(ResultSet rs, int rowNum) throws SQLException {
             Folder folder = new Folder();
             folder.setId(rs.getLong("id"));
             folder.setName(rs.getString("folder_name"));
+            logger.info("Loaded Folder:" + folder);
             return folder;
+        }
+    }
+
+    private static final class UserMapper implements RowMapper<User> {
+        private final Logger logger = LogManager.getLogger(UserMapper.class);
+
+        @Override
+        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+            User user = new User();
+            user.setId(rs.getLong("id"));
+            logger.info("Loaded user:" + user);
+            return user;
         }
     }
 }
