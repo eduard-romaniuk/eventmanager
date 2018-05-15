@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { AgmCoreModule } from '@agm/core';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { CalendarModule } from 'angular-calendar';
 
 import { environment }           from '../environments/environment';
 import { AppRoutingModule }      from './modules/app-routing.module';
@@ -30,6 +31,7 @@ import { UserComponent } from './components/user/user.component';
 import { UserListComponent } from './components/user/user-list.component';
 import { UserEditComponent } from './components/user/user-edit.component';
 import { EventListComponent } from './components/event-list/event-list.component';
+import { UserEventListComponent } from './components/user-event-list/user-event-list.component';
 import { UserEditImageComponent } from './components/user/user-edit-image.component';
 import { UserSearchComponent } from './components/user/user-search.component';
 import { ImageUploaderService } from "./services/image-uploader.service";
@@ -58,6 +60,7 @@ import { CreateNoteComponent } from './components/notes/createNote/createNote.co
 import {ChecklistModule} from "angular-checklist";
 import { NgSelectModule } from '@ng-select/ng-select';
 import { UserSettingsComponent } from './components/user/user-settings/user-settings.component';
+import { UserCalendarComponent } from './components/user-calendar/user-calendar.component';
 import {NgxEditorModule} from "ngx-editor";
 import { NoHtmlPipe } from "./pipes/nohtml.pipe";
 
@@ -95,6 +98,7 @@ export class AddressInterceptor implements HttpInterceptor {
     ViewEventComponent,
     EventEditComponent,
     EventListComponent,
+    UserEventListComponent,
     UserComponent,
     UserListComponent,
     UserEditComponent,
@@ -119,6 +123,7 @@ export class AddressInterceptor implements HttpInterceptor {
     PartialUserFriendshipButtonComponent,
     EditItemComponent,
     UserSettingsComponent,
+    UserCalendarComponent,
     NoHtmlPipe
   ],
   imports: [
@@ -133,6 +138,7 @@ export class AddressInterceptor implements HttpInterceptor {
     BrowserAnimationsModule,
     ChecklistModule,
     NgSelectModule,
+    CalendarModule.forRoot(),
     ToastrModule.forRoot({
       timeOut: 2000
     }),

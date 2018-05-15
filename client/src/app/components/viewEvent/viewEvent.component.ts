@@ -104,9 +104,10 @@ export class ViewEventComponent {
   }
 
   public join() {
-    this.eventService.joinToEvent(this.event.id).subscribe();
-    window.location.reload();
-    this.toast.success('You become a participant in this event');
+    this.eventService.joinToEvent(this.event.id).subscribe(response => {
+      window.location.reload();
+      this.toast.success('You become a participant in this event');
+    });
   }
 
   public leave() {
