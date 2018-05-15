@@ -1,7 +1,6 @@
 package com.example.eventmanager.dao;
 
 
-import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.Folder;
 import com.example.eventmanager.domain.User;
 import org.apache.logging.log4j.LogManager;
