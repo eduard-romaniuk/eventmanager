@@ -21,17 +21,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.activation.DataSource;
-import javax.mail.MessagingException;
-import javax.mail.util.ByteArrayDataSource;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import static java.time.temporal.TemporalAdjusters.*;
 
 @RestController
 @RequestMapping(value = "/event")
@@ -93,17 +92,6 @@ public class EventController {
         newEvent.setCreator(oldEvent.getCreator());
         eventService.updateEvent(newEvent);
         return new ResponseEntity<>(newEvent, HttpStatus.OK);
-    }
-
-    @JsonView(EventView.FullView.class)
-    @RequestMapping(value = "/filter", method = RequestMethod.GET)
-    public List<Event> filter(@RequestParam String pattern, @RequestParam String category,
-                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
-                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime finish,
-                              @RequestParam Long limit, @RequestParam Long offset,
-                              HttpServletResponse response){
-        response.addHeader("count", eventService.countSearchResults(pattern, category, start, finish).toString());
-        return eventService.searchWithFiltersPagination(pattern, category, start, finish, limit, offset);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -194,6 +182,45 @@ public class EventController {
         logger.info("GET / categoryList");
         List<Category> categories = eventService.getCategories();
         return new ResponseEntity<>(categories, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "{id}/calendar/{year}/{month}", method = RequestMethod.GET)
+    public Map<Integer, List<Integer>> getCalendar(@PathVariable Long id, @PathVariable Integer year,
+                                                   @PathVariable Integer month,
+                                                   @RequestParam(required = false, defaultValue = "false") Boolean privat) {
+        logger.info("GET getCalendar");
+        LocalDateTime initial = LocalDateTime.parse(year+"-"+month+"-3 00:00", DateTimeFormatter.ofPattern("yyyy-M-d HH:mm"));
+        LocalDateTime start = initial.with(firstDayOfMonth());
+        LocalDateTime finish = initial.with(lastDayOfMonth()).plusHours(23).plusMinutes(59);
+        return eventService.getCalendarCounts(start, finish, id, privat);
+    }
+
+    @JsonView(EventView.FullView.class)
+    @RequestMapping(value = "/filter", method = RequestMethod.GET)
+    public List<Event> filter(@RequestParam String pattern, @RequestParam String category,
+                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime finish,
+                              @RequestParam Long limit, @RequestParam Long offset,
+                              HttpServletResponse response){
+        logger.info("GET filter");
+        response.addHeader("count", eventService.countSearchResults(pattern, category, start, finish).toString());
+        return eventService.searchWithFiltersPagination(pattern, category, start, finish, limit, offset);
+    }
+
+    @JsonView(EventView.FullView.class)
+    @RequestMapping(value = "/user/{id}/filter", method = RequestMethod.GET)
+    public List<Event> filterUserEvents(@RequestParam String pattern, @RequestParam String category,
+                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+                              @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime finish,
+                              @PathVariable Long id, @RequestParam Long priority,
+                              @RequestParam Boolean byPriority, @RequestParam Boolean privat,
+                              @RequestParam Long limit, @RequestParam Long offset,
+                              HttpServletResponse response){
+        logger.info("GET filterUserEvents");
+        response.addHeader("count", eventService.countSearchUserEventsResults(pattern, start.plusHours(3), finish.plusHours(3), category,
+                id, priority, byPriority, privat).toString());
+        return eventService.searchUserEventsWithFiltersPagination(pattern, start.plusHours(3), finish.plusHours(3), category, id,
+                priority, byPriority, privat, limit, offset);
     }
 
     @RequestMapping(value = "{id}/friendsNotParticipants", method = RequestMethod.GET)

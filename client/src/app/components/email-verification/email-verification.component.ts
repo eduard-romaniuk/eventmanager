@@ -63,7 +63,7 @@ export class EmailVerificationComponent implements OnInit {
   		this.toast.info('Already verified');
 	  } else {
   		const isVerified = this.token === user.token;
-      const isActive = this.diffDays(new Date(), user.regDate) < 1;
+      const isActive = this.diffDays(new Date(), new Date(user.regDate.toString())) < 1;
 	  	if(isVerified && isActive) {
 	  		user.verified = isVerified;
 	  		this.userService.updateUser(user).subscribe(response =>{

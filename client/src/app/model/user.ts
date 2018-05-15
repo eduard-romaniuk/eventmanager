@@ -11,7 +11,7 @@ export class User {
    phone: String;
    sex: boolean;
    image: String;
-   regDate: any; //TODO date
+   regDate: Date; //TODO date
    friends: User[];
    wishList: any; //TODO wishList
    events: any[]; //TODO events

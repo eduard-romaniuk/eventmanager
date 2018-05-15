@@ -2,6 +2,7 @@ package com.example.eventmanager.service;
 
 
 import com.example.eventmanager.dao.EventRepository;
+import com.example.eventmanager.domain.CalendarData;
 import com.example.eventmanager.domain.Category;
 import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.User;
@@ -12,7 +13,11 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class EventService {
@@ -112,6 +117,20 @@ public class EventService {
         return eventRepository.searchWithFiltersPagination(pattern, start, finish, category, limit, offset);
     }
 
+    public List<Event> searchUserEventsWithFiltersPagination(String pattern, LocalDateTime start, LocalDateTime finish,
+                                                             String category, Long userId, Long priority, Boolean byPriority,
+                                                             Boolean privat, Long limit, Long offset) {
+        return eventRepository.searchUserEventsWithFiltersPagination(pattern, start, finish, category,
+                userId, priority, byPriority, privat, limit, offset);
+    }
+
+    public Long countSearchUserEventsResults(String pattern, LocalDateTime start, LocalDateTime finish,
+                                                             String category, Long userId, Long priority, Boolean byPriority,
+                                                             Boolean privat) {
+        return eventRepository.countSearchUserEventsResults(pattern, start, finish, category,
+                userId, priority, byPriority, privat);
+    }
+
     public List<Category> getCategories(){
 
        return eventRepository.getCategories();
@@ -128,5 +147,26 @@ public class EventService {
         }
         System.out.println(candidates);
         return candidates;
+    }
+
+    public Map<Integer, List<Integer>> getCalendarCounts(LocalDateTime start, LocalDateTime finish,
+                                                         Long user_id, Boolean privat) {
+        List<CalendarData> dataList = eventRepository.getCalendarData(start, finish, user_id, privat);
+        Map<Integer, List<Integer>> result = new HashMap<>();
+        for (LocalDateTime current = start; current.isBefore(finish); current = current.plusDays(1)) {
+            LocalDateTime currentStart = current;
+            LocalDateTime currentFinish = current.plusDays(1);
+            List<CalendarData> dataByDay = dataList.stream()
+                    .filter(event -> event.getStart().isBefore(currentFinish))
+                    .filter(event -> event.getFinish().isAfter(currentStart))
+                    .collect(Collectors.toList());
+            result.put(current.getDayOfMonth(), Arrays.asList(
+                    (int) dataByDay.stream().filter(event -> event.getPriority() == 0L).count(),
+                    (int) dataByDay.stream().filter(event -> event.getPriority() == 1L).count(),
+                    (int) dataByDay.stream().filter(event -> event.getPriority() == 2L).count(),
+                    (int) dataByDay.stream().filter(event -> event.getPriority() == 3L).count()
+            ));
+        }
+        return result;
     }
 }
