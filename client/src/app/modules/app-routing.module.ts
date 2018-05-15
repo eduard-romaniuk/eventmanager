@@ -28,7 +28,7 @@ import { FolderComponent } from "../components/folders/folder/folder.component"
 import {UserSettingsComponent} from "../components/user/user-settings/user-settings.component";
 
 @Injectable()
-class OnlyLoggedInUsersGuard implements CanActivate {
+export class OnlyLoggedInUsersGuard implements CanActivate {
   constructor(private auth: AuthService, private router: Router) {};
 
   canActivate() {
@@ -121,6 +121,7 @@ const routes: Routes = [
 @NgModule({
   imports: [ RouterModule.forRoot(routes) ],
   exports: [ RouterModule ],
-  providers: [ OnlyLoggedInUsersGuard ]
+  providers: [ OnlyLoggedInUsersGuard,
+               AuthService ]
 })
 export class AppRoutingModule {}

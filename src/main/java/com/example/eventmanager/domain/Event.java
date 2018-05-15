@@ -34,6 +34,8 @@ public class Event {
     private boolean isPrivate;
     @JsonView(EventView.FullView.class)
     private List<User> participants;
+    @JsonView(EventView.ShortView.class)
+    private Category category;
     //  private List<Chat> chats;
 
     public Long getId() {
@@ -132,6 +134,14 @@ public class Event {
         this.participants = participants;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
     @Override
     public String toString() {
         return "Event{" +
@@ -147,6 +157,7 @@ public class Event {
                 ", isSent=" + isSent +
                 ", isPrivate=" + isPrivate +
                 ", participants=" + participants +
+                ", category=" + category +
                 '}';
     }
 }

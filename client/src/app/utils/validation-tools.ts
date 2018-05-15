@@ -1,4 +1,33 @@
 import {AbstractControl, FormGroup, ValidatorFn} from '@angular/forms';
+import {UserService} from "../services/user.service";
+
+export function usernameExists(userService: UserService, currentUsername: string) {
+  return (control: AbstractControl) => {
+    return userService.isUsernameExists(control.value).map(response => {
+      if(response){
+        return control.value !== currentUsername ? { usernameExists: true } : null;
+      } else {
+        return null;
+      }
+    });
+  };
+}
+
+export function phoneLength(phone: string) {
+  return (group: FormGroup): { [key: string]: any } => {
+    let phoneNumber = group.controls[phone];
+    console.log("phoneNumber - " + phoneNumber.value);
+    if(phoneNumber.value){
+      if (phoneNumber.value.length < 10 || phoneNumber.value.length > 18) {
+        group.get(phone).setErrors({phoneLength: true});
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+}
 
 export function passConfirm(password: string, passwordConfirmation: string) {
   return (group: FormGroup): { [key: string]: any } => {

@@ -11,10 +11,18 @@
     <div class="col-md-3">
 
       <label>
-          Date range:
-          <input [owlDateTimeTrigger]="dt" [owlDateTime]="dt" [selectMode]="'range'">
-          <owl-date-time #dt></owl-date-time>
+          Date range:<br>
+          <input [owlDateTimeTrigger]="dt" [owlDateTime]="dt" [selectMode]="'range'" [(ngModel)]="date_range">
+          <owl-date-time [pickerMode]="'dialog'" #dt></owl-date-time>
       </label>
+      <label>
+          Category:<br>
+          <select [(ngModel)]="category">
+          	<option *ngFor="let cat of categories" [value]="cat.name">{{cat.name}}</option>
+          </select>
+      </label>
+      <br>
+      <button class="btn btn-small btn-default" (click)="filter()">Filter</button>
 
     </div>
     <div class="col-md-9">
@@ -33,7 +41,7 @@
           <td *ngIf="hideElement">{{ event.id }}</td>
           <td class="col-md-2"><a [routerLink]="['/event', event.id]">{{ event.name }}</a></td>
           <td class="col-md-6">
-            {{(event.description.length>100) ? (event.description | slice:0:100)+'..' : (event.description)}}
+            {{((event.description|nohtml).length>100)?(event.description|nohtml|slice:0:100)+'..':(event.description|nohtml)}}
           </td>
           <td class="col-md-2">{{ event.timeLineStart |  date : "dd/MM/yyyy HH:mm" }}</td>
           <td class="col-md-2">{{ event.timeLineFinish |  date : "dd/MM/yyyy HH:mm" }}</td>
@@ -41,7 +49,7 @@
         </tbody>
       </table>
       <div class="text-center">
-        <button class="btn btn-default mb-2" (click)="loadMore(10)" [hidden]="!canLoadMore()">
+        <button class="btn btn-default mb-2" (click)="loadMore()" [hidden]="!canLoadMore()">
           Load more
         </button>
       </div>

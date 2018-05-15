@@ -13,10 +13,10 @@ declare var $:JQueryStatic;
 })
 export class LoginComponent implements OnInit {
 
-  form: FormGroup;
-  credentials = {login: '', password: ''};
-  loading = false;
-  error = false;
+  public form: FormGroup;
+  public credentials = {login: '', password: ''};
+  public loading = false;
+  public error = false;
 
   constructor(private auth: AuthService, private router: Router, private formBuilder: FormBuilder) {
   }

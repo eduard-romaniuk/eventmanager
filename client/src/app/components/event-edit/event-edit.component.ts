@@ -9,6 +9,7 @@ import {CloudinaryUploader} from "ng2-cloudinary";
 import {ImageUploaderService} from "../../services/image-uploader.service";
 import {AuthService} from "../../services/auth.service";
 import {dateLessThan, dateValidator} from "../../utils/validation-tools";
+import {Category} from "../../model/category";
 
 @Component({
   selector: 'app-event-edit',
@@ -27,6 +28,25 @@ export class EventEditComponent implements OnInit, OnDestroy {
   form: FormGroup;
 
   sub: Subscription;
+
+  categories:Category[] =[];
+
+
+  editorConfig = {
+    editable: true,
+    spellcheck: false,
+    height: '10rem',
+    minHeight: '5rem',
+    placeholder: 'Event description...',
+    translate: 'no',
+    "toolbar": [
+      ["bold", "italic", "underline", "strikeThrough"],
+      ["fontSize", "color"],
+      ["justifyLeft", "justifyCenter", "justifyRight", "justifyFull"],
+      ["undo", "redo"],
+      ["horizontalLine", "orderedList", "unorderedList"],
+    ]
+  };
 
   constructor(private auth: AuthService,
               private eventService: EventService,
@@ -63,7 +83,7 @@ export class EventEditComponent implements OnInit, OnDestroy {
       timeLineFinishControl: ['', [Validators.required]],
       periodControl: ['', [Validators.required, Validators.min(0)]],
     }, {validator: dateLessThan('timeLineStartControl', 'timeLineFinishControl'),});
-
+    this.getCategories();
 
   }
 
@@ -105,4 +125,12 @@ export class EventEditComponent implements OnInit, OnDestroy {
       this.router.navigate(['event', this.event.id]);
     }, error => console.error(error));
   }
+
+  getCategories(){
+    this.eventService.getCategories().subscribe((categories: any) => {
+      this.categories = categories;
+    });
+
+  }
+
 }

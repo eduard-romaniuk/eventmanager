@@ -14,7 +14,7 @@ import {Note} from "../../../model/note";
 })
 export class RootFolderComponent {
 
-  private folder: Folder = new Folder;
+  folder: Folder = new Folder;
   folders: Folder[];
   notes: Note[];
   currentUser: User;

@@ -21,6 +21,9 @@ export class ChatComponent {
       
   constructor(private router: Router,private auth: AuthService){
     this.initializeWebSocketConnection();
+    setTimeout(() => {
+      this.loadMessages();
+    }, 3000);
   }
   
   ngOnInit() {
@@ -36,10 +39,20 @@ export class ChatComponent {
     this.stompClient = Stomp.over(ws);
     let that = this;
     this.stompClient.connect({}, function(frame) {
-      that.stompClient.subscribe(that.router.url, (message) => {
+      that.stompClient.subscribe(that.router.url, (message:any) => {
         if(message.body) {
-          $(".chat").append("<div class='message'>"+message.body+"</div>")
-          console.log(message.body);
+          var q = JSON.parse(message.body);
+          $(".chat").append(
+            "<li class='left clearfix'> " +
+            "<span class='chat-img pull-left'> " +
+            "<img src='"+q.image+"' width='50' height='50' alt='User Avatar' class='img-circle' />" +
+            "</span> <div class='chat-body clearfix'> " +
+              "<div class='header'>" +
+              " <strong class='primary-font'>&nbsp"+q.login+"</strong> <small class='pull-right text-muted'>" +
+              "<span class='glyphicon glyphicon-time'></span>"+q.date+"</small> </div>" +
+              "<p>&nbsp"+q.text+"</p> </div> </li>" +
+              "<hr width='90%' size='2' color='grey' />"    
+          )
         }
       });
     });
@@ -48,5 +61,8 @@ export class ChatComponent {
   sendMessage(message){
     this.stompClient.send("/app/send"+this.router.url, {}, this.id+";"+message);
     $('#input').val('');
+  }
+  private loadMessages(){
+     this.stompClient.send("/app/send"+this.router.url+"/load");
   }
 }

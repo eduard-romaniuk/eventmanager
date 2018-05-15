@@ -56,7 +56,10 @@ import { RootFolderComponent } from './components/folders/rootFolder/rootFolder.
 import { FolderComponent } from './components/folders/folder/folder.component';
 import { CreateNoteComponent } from './components/notes/createNote/createNote.component';
 import {ChecklistModule} from "angular-checklist";
+import { NgSelectModule } from '@ng-select/ng-select';
 import { UserSettingsComponent } from './components/user/user-settings/user-settings.component';
+import {NgxEditorModule} from "ngx-editor";
+import { NoHtmlPipe } from "./pipes/nohtml.pipe";
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -115,7 +118,8 @@ export class AddressInterceptor implements HttpInterceptor {
     PartialUserImageComponent,
     PartialUserFriendshipButtonComponent,
     EditItemComponent,
-    UserSettingsComponent
+    UserSettingsComponent,
+    NoHtmlPipe
   ],
   imports: [
     BrowserModule,
@@ -128,6 +132,7 @@ export class AddressInterceptor implements HttpInterceptor {
     CommonModule,
     BrowserAnimationsModule,
     ChecklistModule,
+    NgSelectModule,
     ToastrModule.forRoot({
       timeOut: 2000
     }),
@@ -135,7 +140,8 @@ export class AddressInterceptor implements HttpInterceptor {
       apiKey: 'AIzaSyAM7RXrVYjGXrOIM1NrlifgXf8pdmzVZf0'
     }),
     OwlDateTimeModule,
-    OwlNativeDateTimeModule
+    OwlNativeDateTimeModule,
+    NgxEditorModule
   ],
   providers: [
     AuthService,

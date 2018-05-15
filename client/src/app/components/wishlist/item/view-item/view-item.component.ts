@@ -5,6 +5,10 @@ import {Subscription} from 'rxjs/Subscription';
 import {AuthService} from "../../../../services/auth.service";
 import {LikeService} from "../../../../services/like.service";
 import {ItemService} from "../../../../services/item.service";
+import { JQueryStatic } from 'jquery';
+import {Router} from "@angular/router";
+declare var $:JQueryStatic;
+
 
 @Component({
   selector: 'app-view-item',
@@ -15,16 +19,20 @@ export class ViewItemComponent implements OnInit {
   item: Item;
   subscription: Subscription;
   userId: number;
+  isOwn: boolean = false;
 
   constructor(
     private wishListService: WishListService,
     private auth : AuthService,
+    private router: Router,
     private likeService : LikeService,
     private itemService: ItemService
   ){
  }
 
   ngOnInit(): void {
+
+    if (this.router.url == '/wishlist') this.isOwn = true;
 
     this.subscription = this.wishListService.getViewingItem().subscribe(item => {
       this.item = item;
@@ -45,6 +53,7 @@ export class ViewItemComponent implements OnInit {
 
   clickOnLikeButt(): void {
     this.likeService.addLike(this.item);
+    this.wishListService.changeLikeFromArr(this.item);
   }
 
   public copyItem(): void {
@@ -52,7 +61,17 @@ export class ViewItemComponent implements OnInit {
   }
 
   public deleteItem(): void {
-    this.itemService.deleteItem(this.item)
+
+    this.itemService.deleteItem(
+      this.item,
+      () => {
+        $('#viewItem').modal('hide');
+      }
+    );
+  }
+
+  isOwnItem(): boolean {
+    return this.isOwn;
   }
 
 

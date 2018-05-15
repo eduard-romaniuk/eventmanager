@@ -37,6 +37,8 @@ export class ViewEventComponent {
 
   sub: Subscription;
 
+  public isLoading = true;
+
   constructor(private auth: AuthService,
               private route: ActivatedRoute,
               private router: Router,
@@ -48,42 +50,43 @@ export class ViewEventComponent {
   ngOnInit() {
     this.auth.getUser().subscribe((user: any) => {
       this.userId = user.id;
+
       console.log("currentUserId = " + user.id);
-    });
-    this.sub = this.route.params.subscribe(params => {
-      const id = params['id'];
-      if (id) {
-        this.eventService.isParticipantRequest(id).subscribe((participation: String) => {
-          if (participation) {
-            this.participationStr = participation;
-            this.isParticipant = (this.participationStr == "true");
-          } else {
-            console.log(`Participation not found!`);
-          }
-        });
-        this.eventService.getEventById(id).subscribe((event: any) => {
-          if (event) {
-            this.event = event;
-            this.isCreator = this.isCreatorTest();
-            this.Position();
-            console.log(`Event with id '${id}' was loaded!`);
-            console.log(event);
-          } else {
-            console.log(`Event with id '${id}' not found!`);
-          }
-        });
 
-        this.eventService.getPriority(id).subscribe((priority: String) => {
-          if (priority) {
-            this.priority = priority;
-          } else {
-            console.log(`Priority not found!`);
-          }
-        });
+      this.sub = this.route.params.subscribe(params => {
+        const id = params['id'];
+        if (id) {
+          this.eventService.isParticipantRequest(id).subscribe((participation: String) => {
+            if (participation) {
+              this.participationStr = participation;
+              this.isParticipant = (this.participationStr == "true");
+            } else {
+              console.log(`Participation not found!`);
+            }
+            this.eventService.getEventById(id).subscribe((event: any) => {
+              if (event) {
+                this.event = event;
+                this.isCreator = this.isCreatorTest();
+                this.Position();
+                this.eventService.getPriority(id).subscribe((priority: String) => {
+                  if (priority) {
+                    this.priority = priority;
+                  } else {
+                    console.log(`Priority not found!`);
+                  }
+                  this.isLoading = false;
+                });
+                console.log(`Event with id '${id}' was loaded!`);
+                console.log(event);
+              } else {
+                console.log(`Event with id '${id}' not found!`);
+              }
+            });
 
-      }
+          });
+        }
+      });
     });
-    console.log("loadedEventCreator = " + this.event.creator)
   }
 
   private Position() {
@@ -117,6 +120,12 @@ export class ViewEventComponent {
     }, error => console.error(error));
   }
 
+  publish(){
+    this.event.isSent=true;
+    this.eventService.updateEvent(this.event).subscribe((user: any) => {
+      this.router.navigate(['event/', this.event.id]);
+    }, error => console.error(error));
+  }
   addUsers(){
 
     this.eventService.addUsers(this.newParticipants,this.event.id).subscribe();

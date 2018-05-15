@@ -1,4 +1,5 @@
 import {User} from "./user";
+import {Category} from "./category";
 export class Event {
   id: number;
   creator: User;
@@ -12,4 +13,5 @@ export class Event {
   isSent: boolean;
   isPrivate: boolean;
   participants: any[]; //TODO User[]
+  category: Category;
 }

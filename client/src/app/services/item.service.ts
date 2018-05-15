@@ -5,6 +5,7 @@ import {Item} from '../model/item';
 import {WishListService} from "./wishlist.service";
 import {Observable} from "rxjs/Observable";
 import {Event} from "../model/event";
+import {ToastService} from "./toast.service";
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' })
@@ -16,7 +17,11 @@ export class ItemService {
   headers: HttpHeaders;
   private base_url = '/item';
 
-  constructor(private http: HttpClient, private wishListService: WishListService) {
+  constructor(
+    private http: HttpClient,
+    private wishListService: WishListService,
+    private toastService: ToastService
+    ) {
   }
 
   public createItem(item: Item, callback?, errorCallback?) {
@@ -41,6 +46,9 @@ export class ItemService {
     console.log(item);
     this.http.post(this.base_url + '/' + item.id, item).subscribe(
       (item: Item) => {
+        if (item != null){
+          this.wishListService.changeItemFromArr(item);
+        }
         return callback && callback();
       },
       error => {
@@ -52,12 +60,20 @@ export class ItemService {
     this.http.post(this.base_url + '/copy/' + item.id, this.wishListService.getCurrentWishListId()).subscribe(
       (itemId: number) => {console.log("copy item. Created new item with id: " + itemId)}
     );
+
+    this.toastService.success("The item has been copied to your wish board");
   }
 
-  public deleteItem (item: Item) {
+  public deleteItem (item: Item, callback?, errorCallback?) {
     this.http.delete(this.base_url + '/' + item.id ).subscribe(
-      //TODO:
-    )
+    );
+
+    this.wishListService.deleteItemFromArr(item.id);
+
+
+    this.toastService.info("Item removed");
+    return callback && callback();
+
   }
 
 

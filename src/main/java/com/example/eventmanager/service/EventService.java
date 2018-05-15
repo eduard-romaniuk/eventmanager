@@ -2,6 +2,7 @@ package com.example.eventmanager.service;
 
 
 import com.example.eventmanager.dao.EventRepository;
+import com.example.eventmanager.domain.Category;
 import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -98,5 +100,19 @@ public class EventService {
     public void leaveEvent(Long event_id){
 
         eventRepository.deleteParticipant(userService.getCurrentUser().getId(),event_id);
+    }
+
+    public Long countSearchResults(String pattern, String category, LocalDateTime start, LocalDateTime finish) {
+        return eventRepository.countSearchResults(pattern, start, finish, category);
+    }
+
+    public List<Event> searchWithFiltersPagination(String pattern, String category, LocalDateTime start, LocalDateTime finish,
+                                                   Long limit, Long offset) {
+        return eventRepository.searchWithFiltersPagination(pattern, start, finish, category, limit, offset);
+    }
+
+    public List<Category> getCategories(){
+
+       return eventRepository.getCategories();
     }
 }

@@ -98,6 +98,7 @@ public class UserRepository implements CrudRepository<User> {
                 null : user.getPhone());
         namedParams.put("sex", user.getSex());
         namedParams.put("image", user.getImage());
+        namedParams.put("is_active", user.getVerified());
         namedParams.put("id", user.getId());
 
         namedJdbcTemplate.update(env.getProperty("update"), namedParams);

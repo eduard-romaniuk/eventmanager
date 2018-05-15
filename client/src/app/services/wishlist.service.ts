@@ -8,6 +8,9 @@ import {BehaviorSubject} from "rxjs/BehaviorSubject";
 import {WishList} from "../model/wishlist";
 import {AuthService} from "./auth.service";
 import {User} from "../model/user";
+import { JQueryStatic } from 'jquery';
+import {ItemService} from "./item.service";
+declare var $:JQueryStatic;
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' })
@@ -63,6 +66,38 @@ export class WishListService {
   addItemIntoArr(item: Item) : void {
     this.items.push(item);
     this.subItemArr.next(this.items);
+  }
+
+  deleteItemFromArr ( itemId : number ) : void {
+
+
+    for (let item of this.items){
+      if (item.id == itemId) {
+        const index: number = this.items.indexOf(item);
+        if (index !== -1) {
+          this.items.splice(index, 1);
+          this.subItemArr.next(this.items);
+
+        }
+      }
+    }
+  }
+
+  changeItemFromArr (editItem: Item): void {
+    for (let item of this.items){
+      if (item.id == editItem.id) {
+        item.name = editItem.name;
+        item.priority = editItem.priority;
+      }
+    }
+  }
+
+  changeLikeFromArr (chanItem : Item) : void {
+    for (let item of this.items){
+      if (item.id == chanItem.id) {
+        item.likes = chanItem.likes;
+      }
+    }
   }
 
   getWishListByUser ( userId: number) : Observable<WishList> {

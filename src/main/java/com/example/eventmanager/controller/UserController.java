@@ -80,13 +80,6 @@ public class UserController {
         return new ResponseEntity<>(newUser, HttpStatus.OK);
     }
 
-//    @RequestMapping(value = "/changePassword", method = RequestMethod.PUT)
-//    public void changePass(@RequestBody User user) {
-//        logger.info("PUT /changePassword");
-//
-//        userService.changePass(securityService.encodePass(user));
-//    }
-
     @RequestMapping(value = "/{id}/changePassword", params = {"oldPassword", "newPassword"}, method = RequestMethod.PUT)
     public ResponseEntity<Void> changePassword(@PathVariable Long id, @RequestParam String oldPassword, @RequestParam String newPassword) {
         logger.info("PUT /{id}/changePassword", id);

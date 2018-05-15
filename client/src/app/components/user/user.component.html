@@ -12,8 +12,9 @@
 
         <div *ngIf="currentUserPage">
           <p>
-            <button class="btn btn-info" data-toggle="modal"
-                    data-target="#requests" (click)="getIncomingRequests()">Requests</button>
+            <button class="btn btn-info" data-toggle="modal" data-target="#requests" (click)="getIncomingRequests()">
+              Requests <span class="badge badge-light" *ngIf="incomeRequests.length > 0"> {{ incomeRequests.length }} </span>
+            </button>
           </p>
 
           <p>
@@ -31,7 +32,9 @@
               data-target="#friendsList" (click)="getFriends()">Friends</button>
 
       <button type="button" class="btn btn-info" data-toggle="modal"
-              data-target="#friendsList" (click)="goToUserWishList(user)"> View user Wish Board </button>
+              data-target="#friendsList" (click)="goToUserWishList(user)" *ngIf="!currentUserPage">
+            View user Wish Board
+      </button>
 
     </div>
 

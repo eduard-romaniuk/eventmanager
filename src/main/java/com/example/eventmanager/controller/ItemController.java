@@ -82,7 +82,7 @@ public class ItemController {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Item> deleteItem(@PathVariable("id") Long itemId) {
+    public ResponseEntity<String> deleteItem(@PathVariable("id") Long itemId) {
         logger.info("DELETE /" + itemId);
 
         Item item = itemService.getItem(itemId);
