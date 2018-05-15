@@ -77,12 +77,27 @@ export class EventService {
     return this.http.post(this.base_url+id+"/participants",users)
   }
 
+  public getCategories(): Observable<Category[]>{
+    return this.http.get<Category[]>(this.base_url+"categories")
+  }
+
+  public getCalendarData(year: number, month: number, id: number, privat: boolean) {
+    console.log(privat);
+    return this.http.get(this.base_url + `${id}/calendar/${year}/${month+1}?privat=${privat}`);
+  }
+
   public getFilteredEvents(pattern: string, category: string, start: Date, finish: Date, limit: number, offset: number):Observable<HttpResponse<Event[]>> {
     return this.http.get<Event[]>(this.base_url + 'filter' +
       `?pattern=${pattern.toLowerCase()}&category=${category}&start=${start.toISOString()}&finish=${finish.toISOString()}&limit=${limit}&offset=${offset}`, {observe: 'response'});
   }
 
-  public getCategories(): Observable<Category[]>{
-    return this.http.get<Category[]>(this.base_url+"categories")
+  public getFilteredUserEvents(pattern: string, category: string, start: Date, finish: Date,
+      user_id: number, priority: number, by_priority: boolean, privat: boolean,
+      limit: number, offset: number):Observable<HttpResponse<Event[]>> {
+    console.log(privat);
+    return this.http.get<Event[]>(this.base_url + `user/${user_id}/filter` +
+      `?pattern=${pattern.toLowerCase()}&category=${category}&start=${start.toISOString()}&finish=${finish.toISOString()}` +
+      `&priority=${priority}&byPriority=${by_priority}&privat=${privat}` +
+      `&limit=${limit}&offset=${offset}`, {observe: 'response'});
   }
 }

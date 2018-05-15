@@ -1,0 +1,72 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6 input-group mt-3 mb-3">
+      <input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username" [(ngModel)]="pattern">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" (click)="search()">Find</button>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-md-3">
+
+      <label>
+          Date range:<br>
+          <input [owlDateTimeTrigger]="dt" [owlDateTime]="dt" [selectMode]="'range'" [(ngModel)]="date_range">
+          <owl-date-time [pickerMode]="'dialog'" #dt></owl-date-time>
+      </label>
+      <br>
+      <label>
+          Category:<br>
+          <select [(ngModel)]="category">
+          	<option *ngFor="let cat of categories" [value]="cat.name">{{cat.name}}</option>
+          </select>
+      </label>
+      <br>
+      <label>
+          Priority:<br>
+          <select [(ngModel)]="priority">
+            <option *ngFor="let pr of priorities" [value]="pr.id">{{pr.value}}</option>
+          </select>
+      </label>
+      <br>
+      <button class="btn btn-small btn-default" (click)="filter()">Filter</button>
+
+    </div>
+    <div class="col-md-9">
+      <table class="table table-striped" *ngIf="events.length !== 0">
+        <thead>
+        <tr>
+          <th *ngIf="hideElement">Id</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Start</th>
+          <th>Finish</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let event of events">
+          <td *ngIf="hideElement">{{ event.id }}</td>
+          <td class="col-md-2"><a [routerLink]="['/event', event.id]">{{ event.name }}</a></td>
+          <td class="col-md-6">
+            {{((event.description|nohtml).length>100)?(event.description|nohtml|slice:0:100)+'..':(event.description|nohtml)}}
+          </td>
+          <td class="col-md-2">{{ event.timeLineStart |  date : "dd/MM/yyyy HH:mm" }}</td>
+          <td class="col-md-2">{{ event.timeLineFinish |  date : "dd/MM/yyyy HH:mm" }}</td>
+        </tr>
+        </tbody>
+      </table>
+      <div class="text-center">
+        <button class="btn btn-default mb-2" (click)="loadMore()" [hidden]="!canLoadMore()">
+          Load more
+        </button>
+      </div>
+
+      <div *ngIf="events.length === 0">
+        No results
+      </div>
+    </div>
+  </div>
+</div>
+
+
