@@ -13,6 +13,13 @@ export function usernameExists(userService: UserService, currentUsername: string
   };
 }
 
+export function emailExists(userService: UserService) {
+  return (control: AbstractControl) => {
+    return userService.isEmailExists(control.value).map(response =>
+    {return response ? { emailExists: true } : null;})
+  };
+}
+
 export function phoneLength(phone: string) {
   return (group: FormGroup): { [key: string]: any } => {
     let phoneNumber = group.controls[phone];

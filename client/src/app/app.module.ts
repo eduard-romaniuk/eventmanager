@@ -64,6 +64,7 @@ import { UserSettingsComponent } from './components/user/user-settings/user-sett
 import { UserCalendarComponent } from './components/user-calendar/user-calendar.component';
 import {NgxEditorModule} from "ngx-editor";
 import { NoHtmlPipe } from "./pipes/nohtml.pipe";
+import { UserEditEmailComponent } from './components/user/user-edit-email/user-edit-email.component';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -125,7 +126,8 @@ export class AddressInterceptor implements HttpInterceptor {
     EditItemComponent,
     UserSettingsComponent,
     UserCalendarComponent,
-    NoHtmlPipe
+    NoHtmlPipe,
+    UserEditEmailComponent
   ],
   imports: [
     BrowserModule,

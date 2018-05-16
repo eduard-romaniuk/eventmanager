@@ -1,0 +1,69 @@
+<div class="container">
+  <div class="row">
+
+    <div class="col-md-8 col-sm-6 col-xs-12 centerDiv">
+      <form class="md-form text-center" [formGroup]="form" (ngSubmit)="save()">
+        <header>
+          <h2 class="text-center">Edit Email</h2>
+        </header>
+
+        <div class="form-group">
+          <label for="currentEmail">
+            Current email
+            <span class="asteriskField">*</span>
+          </label>
+          <input type="email" id="currentEmail" class="form-control mt-2" placeholder="Current email"
+                 formControlName="currentEmail" [(ngModel)]="formContent.currentEmail"
+                 [ngClass]="{
+                'is-invalid': form.get('currentEmail').invalid && (form.get('currentEmail').dirty || form.get('currentEmail').touched)
+            }">
+          <div *ngIf="form.get('currentEmail').invalid && (form.get('currentEmail').dirty || form.get('currentEmail').touched)"
+               class="text-danger">
+            <div *ngIf = "form.get('currentEmail').errors.required">
+              Current email field can't be blank
+            </div>
+            <div *ngIf="form.get('currentEmail').errors.email">
+              Enter valid email
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="newEmail">
+            New email
+            <span class="asteriskField">*</span>
+          </label>
+          <input type="email" id="newEmail" class="form-control mt-2" placeholder="New email"
+                 formControlName="newEmail" [(ngModel)]="formContent.newEmail"
+                 [ngClass]="{
+                'is-invalid': form.get('newEmail').invalid && (form.get('newEmail').dirty || form.get('newEmail').touched)
+            }">
+          <div *ngIf="form.get('newEmail').invalid && (form.get('newEmail').dirty || form.get('newEmail').touched)"
+               class="text-danger">
+            <div *ngIf = "form.get('newEmail').errors.required">
+              New email field can't be blank
+            </div>
+            <div *ngIf="form.get('newEmail').errors.email">
+              Enter valid email
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-primary mt-2" [hidden]="!savingChanges">
+          Saving changes...
+        </div>
+
+        <div class="alert alert-danger mt-2" [hidden]="!wrongEmailError">
+          Wrong current email input, try again
+        </div>
+
+        <div class="alert alert-danger mt-2" [hidden]="!error">
+          Some errors occurred, try again
+        </div>
+
+        <button class="btn btn-info button" type="submit" [disabled]="!form.valid">Save</button>
+      </form>
+    </div>
+
+  </div>
+</div>

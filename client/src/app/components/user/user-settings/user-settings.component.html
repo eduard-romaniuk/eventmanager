@@ -11,6 +11,9 @@
         <button class="btn btn-info" (click)="showEditImage()"> Edit image </button>
       </p>
       <p>
+        <button class="btn btn-info" (click)="showEditEmail()"> Edit email </button>
+      </p>
+      <p>
         <button class="btn btn-info" (click)="showEditPassword()"> Edit password </button>
       </p>
       <p>
@@ -35,6 +38,11 @@
       <div *ngIf="selectedEditImage">
         <app-user-edit-image *ngIf="user" [user]="user">
         </app-user-edit-image>
+      </div>
+
+      <div *ngIf="selectedEditEmail">
+        <app-user-edit-email *ngIf="user" [user]="user">
+        </app-user-edit-email>
       </div>
 
       <div *ngIf="selectedEditPassword">

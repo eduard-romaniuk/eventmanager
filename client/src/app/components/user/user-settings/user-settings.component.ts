@@ -14,6 +14,7 @@ export class UserSettingsComponent implements OnInit {
 
   selectedEditInfo = true;
   selectedEditImage = false;
+  selectedEditEmail = false;
   selectedEditPassword = false;
   selectedEventPlan = false;
   selectedPersonalPlanSettings = false;
@@ -32,6 +33,7 @@ export class UserSettingsComponent implements OnInit {
   showEditInfo(): void {
     this.selectedEditInfo = true;
     this.selectedEditImage = false;
+    this.selectedEditEmail = false;
     this.selectedEditPassword = false;
     this.selectedEventPlan = false;
     this.selectedPersonalPlanSettings = false;
@@ -40,6 +42,16 @@ export class UserSettingsComponent implements OnInit {
   showEditImage(): void {
     this.selectedEditInfo = false;
     this.selectedEditImage = true;
+    this.selectedEditEmail = false;
+    this.selectedEditPassword = false;
+    this.selectedEventPlan = false;
+    this.selectedPersonalPlanSettings = false;
+  };
+
+  showEditEmail(): void {
+    this.selectedEditInfo = false;
+    this.selectedEditImage = false;
+    this.selectedEditEmail = true;
     this.selectedEditPassword = false;
     this.selectedEventPlan = false;
     this.selectedPersonalPlanSettings = false;
@@ -48,6 +60,7 @@ export class UserSettingsComponent implements OnInit {
   showEditPassword(): void {
     this.selectedEditInfo = false;
     this.selectedEditImage = false;
+    this.selectedEditEmail = false;
     this.selectedEditPassword = true;
     this.selectedEventPlan = false;
     this.selectedPersonalPlanSettings = false;
@@ -56,6 +69,7 @@ export class UserSettingsComponent implements OnInit {
   showExportEventPlan(): void {
     this.selectedEditInfo = false;
     this.selectedEditImage = false;
+    this.selectedEditEmail = false;
     this.selectedEditPassword = false;
     this.selectedEventPlan = true;
     this.selectedPersonalPlanSettings = false;
@@ -64,6 +78,7 @@ export class UserSettingsComponent implements OnInit {
   showPersonalPlanSettings(): void {
     this.selectedEditInfo = false;
     this.selectedEditImage = false;
+    this.selectedEditEmail = false;
     this.selectedEditPassword = false;
     this.selectedEventPlan = false;
     this.selectedPersonalPlanSettings = true;

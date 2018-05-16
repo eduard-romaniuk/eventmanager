@@ -56,6 +56,10 @@ public class UserService {
     	userRepository.changePass(user);
     }
 
+    public void changeEmail(User user){
+        userRepository.changeEmail(user);
+    }
+
     public User findUser(String username) {
         return userRepository.findByUsername(username);
     }

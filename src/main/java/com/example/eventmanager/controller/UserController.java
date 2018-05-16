@@ -97,6 +97,29 @@ public class UserController {
         }
     }
 
+    @RequestMapping(value = "/{id}/changeEmail", params = {"oldEmail", "newEmail"}, method = RequestMethod.PUT)
+    public ResponseEntity<Void> changeEmail(@PathVariable Long id, @RequestParam String oldEmail, @RequestParam String newEmail) {
+        logger.info("PUT /{id}/changeEmail", id);
+
+        User user = userService.getUser(id);
+
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else if(oldEmail.equals(user.getEmail())){
+            user.setEmail(newEmail);
+            userService.changeEmail(securityService.verificationToken(user));
+            emailService.sendTextMail(
+                    user.getEmail(),
+                    "Change email verification",
+                    "Please verify your new email:\n" +
+                            "https://web-event-manager.firebaseapp.com/email-verification/" +
+                            user.getToken());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
     @RequestMapping(value = "/by-username/{username}", method = RequestMethod.GET)
     public User get(@PathVariable String username) {
         logger.info("GET /" + username);

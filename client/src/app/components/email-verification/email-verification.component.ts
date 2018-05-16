@@ -60,7 +60,7 @@ export class EmailVerificationComponent implements OnInit {
   public verify(user: User, token: string) {
   	if(user.verified) {
 		  this.router.navigate(['home']);
-  		this.toast.info('Already verified');
+  		this.toast.info('Your new email verified');
 	  } else {
   		const isVerified = this.token === user.token;
       const isActive = this.diffDays(new Date(), new Date(user.regDate.toString())) < 1;

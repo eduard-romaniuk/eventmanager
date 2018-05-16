@@ -4,10 +4,6 @@ import {User} from '../model/user';
 import {Observable} from 'rxjs/Observable';
 import {Event} from "../model/event";
 
-const httpOptions = {
-  headers: new HttpHeaders({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'})
-};
-
 @Injectable()
 export class UserService {
   private base_url = '/users';
@@ -28,19 +24,6 @@ export class UserService {
   public createUser(user) {
     return this.http.post(this.base_url + "/", user);
   }
-
-  //TODO Do update without headers
-  // updateUser(newUser: User, callback?, errorCallback?) {
-  //   console.log("newUser in updateUser" + newUser);
-  //   const url = `${this.base_url}/${newUser.id}`;
-  //   this.http.patch(url, newUser).subscribe(
-  //     response => {
-  //       return callback && callback();
-  //     },
-  //     error => {
-  //       return errorCallback && errorCallback();
-  //     })
-  // }
 
   public updateUser(newUser: User): Observable<User> {
     return this.http.put<User>(`${this.base_url}/${newUser.id}`, newUser);
@@ -81,17 +64,20 @@ export class UserService {
     return this.http.get<Event[]>(this.base_url + "/" + id + "/myevents", );
   }
 
-  // updateUserPassword(newUser: User) {
-  //   console.log("user in updateUserPassword - " + newUser);
-  //   return this.http.put(this.base_url + "/changePassword", newUser)
-  // }
-
   updateUserPassword(id, oldPassword, newPassword) {
     console.log("user id in updateUserPassword - " + id);
     const params = new HttpParams()
       .set('oldPassword', oldPassword)
       .set('newPassword', newPassword);
     return this.http.put(this.base_url + "/" + id + "/changePassword", {}, {params: params});
+  }
+
+  updateUserEmail(id, oldEmail, newEmail) {
+    console.log("user id in updateUserEmail - " + id);
+    const params = new HttpParams()
+      .set('oldEmail', oldEmail)
+      .set('newEmail', newEmail);
+    return this.http.put(this.base_url + "/" + id + "/changeEmail", {}, {params: params});
   }
 
   // Friends functionality
