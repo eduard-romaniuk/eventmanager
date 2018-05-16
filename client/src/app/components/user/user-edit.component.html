@@ -1,14 +1,17 @@
 <div class="container">
   <div class="row">
 
-    <div class="col-md-12 text-center">
+    <div class="col-md-8 col-sm-6 col-xs-12 centerDiv">
       <form class="md-form text-center" [formGroup]="form" (ngSubmit)="save()">
         <header>
           <h2 class="text-center">Edit User</h2>
         </header>
 
         <div class="form-group">
-          <label for="editUserLogin">Username</label>
+          <label for="editUserLogin">
+            Username
+            <span class="asteriskField">*</span>
+          </label>
           <input type="text" id="editUserLogin" class="form-control mt-2"
                  formControlName="editUserLogin" [(ngModel)]="user.login"
                  [ngClass]="{
@@ -32,7 +35,10 @@
         </div>
 
         <div class="form-group">
-          <label for="editUserName">Name</label>
+          <label for="editUserName">
+            Name
+            <span class="asteriskField">*</span>
+          </label>
           <input type="text" id="editUserName" class="form-control mt-2"
                  formControlName="editUserName" [(ngModel)]="user.name"
                  [ngClass]="{
@@ -47,7 +53,10 @@
         </div>
 
         <div class="form-group">
-          <label for="editUserSurName">Surname</label>
+          <label for="editUserSurName">
+            Surname
+            <span class="asteriskField">*</span>
+          </label>
           <input type="text" id="editUserSurName" class="form-control mt-2"
                  formControlName="editUserSurName" [(ngModel)]="user.surName"
                  [ngClass]="{
@@ -73,7 +82,10 @@
         </div>
 
         <div class="form-group">
-          <label for="editUserSex">Gender</label>
+          <label for="editUserSex">
+            Gender
+            <span class="asteriskField">*</span>
+          </label>
           <select id="editUserSex" class="custom-select"
                   formControlName="editUserSex" [(ngModel)]="user.sex"
                   [ngClass]="{

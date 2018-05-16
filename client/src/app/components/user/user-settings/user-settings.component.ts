@@ -15,6 +15,8 @@ export class UserSettingsComponent implements OnInit {
   selectedEditInfo = true;
   selectedEditImage = false;
   selectedEditPassword = false;
+  selectedEventPlan = false;
+  selectedPersonalPlanSettings = false;
 
   constructor(private router: Router,
               private auth: AuthService) {
@@ -31,18 +33,40 @@ export class UserSettingsComponent implements OnInit {
     this.selectedEditInfo = true;
     this.selectedEditImage = false;
     this.selectedEditPassword = false;
+    this.selectedEventPlan = false;
+    this.selectedPersonalPlanSettings = false;
   }
 
   showEditImage(): void {
     this.selectedEditInfo = false;
     this.selectedEditImage = true;
     this.selectedEditPassword = false;
+    this.selectedEventPlan = false;
+    this.selectedPersonalPlanSettings = false;
   };
 
   showEditPassword(): void {
     this.selectedEditInfo = false;
     this.selectedEditImage = false;
     this.selectedEditPassword = true;
+    this.selectedEventPlan = false;
+    this.selectedPersonalPlanSettings = false;
+  };
+
+  showExportEventPlan(): void {
+    this.selectedEditInfo = false;
+    this.selectedEditImage = false;
+    this.selectedEditPassword = false;
+    this.selectedEventPlan = true;
+    this.selectedPersonalPlanSettings = false;
+  };
+
+  showPersonalPlanSettings(): void {
+    this.selectedEditInfo = false;
+    this.selectedEditImage = false;
+    this.selectedEditPassword = false;
+    this.selectedEventPlan = false;
+    this.selectedPersonalPlanSettings = true;
   };
 
   goBack(): void {

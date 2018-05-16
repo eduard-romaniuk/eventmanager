@@ -75,7 +75,7 @@ export class UserComponent implements OnInit, OnDestroy {
   }
 
   goToSettingsPage(): void {
-    this.router.navigate(['users', this.currentUser.id, 'settings']);
+    this.router.navigate(['settings']);
   }
 
   gotoList() {

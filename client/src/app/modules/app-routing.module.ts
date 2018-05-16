@@ -83,7 +83,7 @@ const routes: Routes = [
   { path: 'users/:id/edit',
     component: UserEditComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
-  { path: 'users/:id/settings',
+  { path: 'settings',
     component: UserSettingsComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'event/:id/edit',
