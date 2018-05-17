@@ -34,4 +34,8 @@ export class FolderService {
     return this.http.delete(this.base_url + folder.id);
   }
 
+  public getAllMembers(folderId: number) {
+    return this.http.get(this.base_url + folderId + '/members');
+  }
+
 }

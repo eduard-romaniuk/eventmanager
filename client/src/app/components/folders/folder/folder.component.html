@@ -6,7 +6,7 @@
         <button type="button" class="btn btn-primary" data-toggle="modal">Add existing note</button>
         <button class="btn btn-primary" [routerLink]="['/note/create', folder.id]">Create note</button>
         <button class="btn btn-primary" (click)="delete()">Delete folder</button>
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Members">Members</button>
+        <button type="button" class="btn btn-primary" (click)="getAllMembers()" data-toggle="modal" data-target="#Members">Members</button>
         <br>
       </div>
       <div [routerLink]="['../../']">
@@ -30,38 +30,30 @@
 <div id="Members" class="modal fade">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header"><h4> Members</h4>
+      <div class="modal-header"><h3> Select members</h3>
         <button class="close" type="button" data-dismiss="modal">×</button>
       </div>
       <div class="modal-body">
-        <div class="container">
+        <div *ngIf="folder.members">
+          <div id="teamCheckboxList" class="checkboxList">
+            <div *ngFor="let member of folder.members">
 
-          <div class="col-12 text-center">
-
-            <div class="row searchInput">
-              <div class="input-group">
-                <input type="text" class="form-control" (keyup)="queryToSearch.next($event.target.value)"/>
-              </div>
-            </div>
-            <div>You can search user by login or by name and username</div>
-          </div>
-
-          <div *ngIf="folder.users">
-            <div *ngFor="let user of folder.users">
-              <app-partial-user-list *ngIf="currentUser.id && user.id"
-                                     [currentUser]="currentUser" [user]="user">
-              </app-partial-user-list>
+              <label>
+                <input type="checkbox"
+                       [(checklist)]="folder.members"
+                       [checklistValue]="friend"/>
+                <span><strong>{{friend.name}} {{friend.surName}}</strong></span>
+              </label>
             </div>
           </div>
-
-          <div *ngIf="folder.users?.length < 1">
-            <p>No results</p>
-          </div>
-
         </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-default" type="button" (click)="updateMembers()" data-dismiss="modal">Submit</button>
+        <div *ngIf="userFriends?.length < 1">
+          <p>No friends </p>
+        </div>
+        <div class="modal-footer ">
+          <button class="btn btn-default" type="submit" data-dismiss="modal">Submit
+          </button>
+        </div>
       </div>
     </div>
   </div>

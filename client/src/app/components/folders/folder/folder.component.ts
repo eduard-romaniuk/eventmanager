@@ -64,9 +64,6 @@ export class FolderComponent {
         }
       );
     });
-    this.searchUser(this.queryToSearch).subscribe( (users : any) => {
-      this.folder.users = users;
-    });
   }
 
   delete() {
@@ -75,11 +72,16 @@ export class FolderComponent {
     });
   }
 
-  updateMembers() {}
+  // addUsers(){
+  //   console.log(this.newParticipants);
+  //   this.eventService.addUsers(this.newParticipants,id).subscribe();
+  // }
 
-  searchUser(terms: Observable<string>) {
-    return terms.distinctUntilChanged()
-      .switchMap(term => this.userService.searchByLoginOrByNameAndSurname(term));
+  getAllMembers() {
+    this.folderService.getAllMembers(this.folder.id)
+      .subscribe((members: any) => {
+        this.folder.members = members;
+        console.log('Members: ' + this.folder.members);
+      });
   }
-
 }

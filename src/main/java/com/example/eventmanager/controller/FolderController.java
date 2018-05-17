@@ -3,6 +3,7 @@ package com.example.eventmanager.controller;
 import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.Folder;
 import com.example.eventmanager.domain.FolderView;
+import com.example.eventmanager.domain.Member;
 import com.example.eventmanager.service.FolderService;
 import com.example.eventmanager.service.UserService;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -69,6 +70,14 @@ public class FolderController {
         }
         folderService.deleteFolder(folder);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(value = "/{folderId}/members", method = RequestMethod.GET)
+    public ResponseEntity<List<Member>> getAllMembers(@PathVariable Long folderId) {
+        logger.info("GET /" + folderId + "/members");
+
+        List<Member> userList = folderService.getAllMembers(folderId);
+        return new ResponseEntity<>(userList, HttpStatus.OK);
     }
 
 }

@@ -3,10 +3,11 @@
  */
 import {User} from "./user";
 import {Note} from "./note";
+import {Member} from "./member";
 export class Folder {
   id: number;
   name: string;
   creator: User;
-  users: User[];
+  members: Member[];
   notes: Note[];
 }

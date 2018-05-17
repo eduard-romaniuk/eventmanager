@@ -2,6 +2,7 @@ package com.example.eventmanager.dao;
 
 
 import com.example.eventmanager.domain.Folder;
+import com.example.eventmanager.domain.Member;
 import com.example.eventmanager.domain.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -68,6 +69,9 @@ public class FolderRepository implements CrudRepository<Folder> {
         } catch (EmptyResultDataAccessException e) {
             logger.info("Folders not found");
             return Collections.emptyList();
+        } catch (IndexOutOfBoundsException e) {
+            logger.info("Folder not found");
+            return null;
         }
     }
 
@@ -95,6 +99,9 @@ public class FolderRepository implements CrudRepository<Folder> {
         } catch (EmptyResultDataAccessException e) {
             logger.info("Folders not found");
             return Collections.emptyList();
+        } catch (IndexOutOfBoundsException e) {
+            logger.info("Folder not found");
+            return null;
         }
     }
 
@@ -105,6 +112,9 @@ public class FolderRepository implements CrudRepository<Folder> {
             namedParams.put("id", id);
             return namedJdbcTemplate.query(env.getProperty("folder.findFolderById"), namedParams, new FolderMapper()).get(FIRST_ELEMENT);
         } catch (EmptyResultDataAccessException e) {
+            logger.info("Folder not found");
+            return null;
+        } catch (IndexOutOfBoundsException e) {
             logger.info("Folder not found");
             return null;
         }
@@ -126,6 +136,20 @@ public class FolderRepository implements CrudRepository<Folder> {
             return null;
         } catch (IndexOutOfBoundsException e) {
             logger.info("Folder not found");
+            return null;
+        }
+    }
+
+    public List<Member> getAllMembers(Long folderId) {
+        try {
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("folderId", folderId);
+            return namedJdbcTemplate.query(env.getProperty("folder.findAllMembers"), namedParams, new MemberMapper());
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("Members not found");
+            return null;
+        } catch (IndexOutOfBoundsException e) {
+            logger.info("Members not found");
             return null;
         }
     }
@@ -152,6 +176,20 @@ public class FolderRepository implements CrudRepository<Folder> {
             user.setId(rs.getLong("id"));
             logger.info("Loaded user:" + user);
             return user;
+        }
+    }
+
+    private static final class MemberMapper implements RowMapper<Member> {
+        private final Logger logger = LogManager.getLogger(MemberMapper.class);
+
+        @Override
+        public Member mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Member member = new Member();
+            member.setId(rs.getLong("id"));
+            member.setLogin(rs.getString("login"));
+            member.setIsMember(rs.getBoolean("isMember"));
+            logger.info("Loaded member:" + member);
+            return member;
         }
     }
 }
