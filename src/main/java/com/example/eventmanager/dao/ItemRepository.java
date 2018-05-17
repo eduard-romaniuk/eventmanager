@@ -33,13 +33,15 @@ public class ItemRepository implements CrudRepository<Item>{
 
     private final TagRepository tagRepository;
     private final LikeRepository likeRepository;
+    private final ImageRepository imageRepository;
 
     @Autowired
     public ItemRepository(
             NamedParameterJdbcTemplate namedJdbcTemplate,
             Environment env,
             TagRepository tagRepository,
-            LikeRepository likeRepository
+            LikeRepository likeRepository,
+            ImageRepository imageRepository
     ) {
         logger.info("ItemRepository initialized");
 
@@ -47,6 +49,7 @@ public class ItemRepository implements CrudRepository<Item>{
         this.env = env;
         this.tagRepository = tagRepository;
         this.likeRepository = likeRepository;
+        this.imageRepository = imageRepository;
     }
 
     @Override
@@ -73,6 +76,8 @@ public class ItemRepository implements CrudRepository<Item>{
                         .longValue()
         );
 
+        imageRepository.saveImagesForItem(item.getImages(), item.getId());
+
         return  update;
     }
 
@@ -97,6 +102,7 @@ public class ItemRepository implements CrudRepository<Item>{
                         item.setWishListId(rs.getLong("wishlist_id"));
                         item.setLikes(likeRepository.getLikesCountForItem(item.getId()));
                         item.setTags(tagRepository.getTagsForItem(item.getId()));
+                        item.setImages(imageRepository.getImagesForItem(item.getId()));
 
                         logger.info("Item got! " + item.toString());
                         return item;
@@ -126,10 +132,14 @@ public class ItemRepository implements CrudRepository<Item>{
 
         namedJdbcTemplate.update(env.getProperty("updateItem"), namedParams);
 
+        imageRepository.updateImagesForItem(item.getImages(), item.getId());
+
     }
 
     @Override
     public void delete(Item item) {
+
+        imageRepository.deleteAllImagesForItem(item.getId());
 
         Map<String, Object> namedParams = new HashMap<>();
 
@@ -152,10 +162,10 @@ public class ItemRepository implements CrudRepository<Item>{
                         item.setId(rs.getLong("id"));
                         item.setName(rs.getString("name"));
                         item.setPriority(rs.getInt("priority_id"));
-                        item.setDescription(rs.getString("description"));
+//                        item.setDescription(rs.getString("description"));
                         item.setWishListId(wishListId);
                         item.setLikes(likeRepository.getLikesCountForItem(item.getId()));
-                        item.setTags(tagRepository.getTagsForItem(item.getId()));
+//                        item.setTags(tagRepository.getTagsForItem(item.getId()));
 
                         logger.info("Item got! " + item.toString());
                         return item;
@@ -181,10 +191,14 @@ public class ItemRepository implements CrudRepository<Item>{
         logger.info(update + " row was updated from table items...");
         logger.info("Item was copy = " + keyHolder.getKeys());
 
-        return ((Integer)keyHolder
+        Long newItemId = ((Integer)keyHolder
                 .getKeys()
                 .get("id"))
                 .longValue();
+
+        imageRepository.saveImagesForItem(imageRepository.getImagesForItem(itemId), newItemId);
+
+        return newItemId;
     }
 
 //    private static final class ItemMapper implements RowMapper<Item> {
