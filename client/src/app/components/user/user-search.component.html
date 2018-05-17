@@ -4,7 +4,10 @@
 
     <div class="row searchInput">
       <div class="input-group">
-        <input type="text" class="form-control" (keyup)="queryToSearch.next($event.target.value)"/>
+        <input type="text" class="form-control" placeholder="Search" aria-label="User" [(ngModel)]="queryString">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="button" (click)="search()">Find</button>
+        </div>
       </div>
     </div>
     <div>You can search user by login or by name and username</div>
@@ -21,5 +24,11 @@
     <div *ngIf="users?.length < 1">
       <p>No results</p>
     </div>
+
+  <div class="text-center">
+    <button class="btn btn-default mb-2" (click)="loadMore()" [hidden]="!canLoadMore()">
+      Load more
+    </button>
+  </div>
 
 </div>

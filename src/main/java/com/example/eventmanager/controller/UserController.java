@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -185,6 +186,17 @@ public class UserController {
         logger.info("GET /users/search?query=" + queryString);
 
         List<User> users = userService.searchByLoginOrByNameAndSurname(queryString);
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    @JsonView(UserView.ShortView.class)
+    @RequestMapping(value = "/search", params = {"query", "limit", "offset"}, method = RequestMethod.GET)
+    public ResponseEntity<List<User>> searchByLoginOrByNameAndSurnamePagination(
+            @RequestParam String query, @RequestParam int limit, @RequestParam int offset, HttpServletResponse response) {
+        logger.info("GET /users/search?query={}&limit={}&offset={}", query, limit, offset);
+
+        response.addHeader("count", userService.countSearchByLoginOrByNameAndSurname(query).toString());
+        List<User> users = userService.searchByLoginOrByNameAndSurnamePagination(query, limit, offset);
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 

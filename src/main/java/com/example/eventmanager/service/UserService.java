@@ -80,6 +80,14 @@ public class UserService {
         return userRepository.searchByLoginOrByNameAndSurname(queryString);
     }
 
+    public List<User> searchByLoginOrByNameAndSurnamePagination(String queryString, int limit, int offset){
+        return userRepository.searchByLoginOrByNameAndSurnamePagination(queryString, limit, offset);
+    }
+
+    public Long countSearchByLoginOrByNameAndSurname(String queryString){
+        return userRepository.countSearchByLoginOrByNameAndSurname(queryString);
+    }
+
     private String getCurrentUsername() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return auth.getName();

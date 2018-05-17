@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams, HttpResponse} from '@angular/common/http';
 import {User} from '../model/user';
 import {Observable} from 'rxjs/Observable';
 import {Event} from "../model/event";
@@ -49,6 +49,16 @@ export class UserService {
     const params = new HttpParams().set('query', queryString);
     console.log("Search query - " + queryString);
     return this.http.get(this.base_url + "/search",{params: params});
+  }
+
+  searchByLoginOrByNameAndSurnamePagination(queryString: string, limit: number, offset: number)
+  :Observable<HttpResponse<User[]>> {
+    const params = new HttpParams()
+      .set('query', queryString)
+      .set('limit', limit.toString())
+      .set('offset', offset.toString());
+    console.log("Search query in pag - " + queryString);
+    return this.http.get<User[]>(this.base_url + "/search",{params: params, observe: 'response'});
   }
 
   public getEventsByUserId(id, isPrivate, isSent): Observable<Event[]> {

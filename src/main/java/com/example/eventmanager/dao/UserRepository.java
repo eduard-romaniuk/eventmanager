@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -173,16 +174,45 @@ public class UserRepository implements CrudRepository<User> {
 
     public List<User> searchByLoginOrByNameAndSurname(String queryString) {
         try {
-            String fixaedQueryString = ("%" + queryString.toLowerCase().trim() + "%").replace(" ", "%");
+            String fixedQueryString = ("%" + queryString.toLowerCase().trim() + "%").replace(" ", "%");
 
             Map<String, Object> namedParams = new HashMap<>();
-            namedParams.put("queryString", fixaedQueryString);
+            namedParams.put("queryString", fixedQueryString);
             return namedJdbcTemplate.query(env.getProperty("searchUserByLoginOrByNameAndSurname"),
                     namedParams, new UserMapper());
         } catch (EmptyResultDataAccessException e) {
-            logger.info("User not found");
-            return null;
+            logger.info("Users not found");
+            return Collections.emptyList();
         }
+    }
+
+    public List<User> searchByLoginOrByNameAndSurnamePagination(String queryString, int limit, int offset) {
+        try {
+            String fixedQueryString = ("%" + queryString.toLowerCase().trim() + "%").replace(" ", "%");
+
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("queryString", fixedQueryString);
+
+            String query = new StringBuilder()
+                    .append(env.getProperty("searchUserByLoginOrByNameAndSurname"))
+                    .append(" LIMIT ")
+                    .append(limit)
+                    .append(" OFFSET ")
+                    .append(offset)
+                    .toString();
+            return namedJdbcTemplate.query(query, namedParams, new UserMapper());
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("Users not found");
+            return Collections.emptyList();
+        }
+    }
+
+    public Long countSearchByLoginOrByNameAndSurname(String queryString) {
+        String fixedQueryString = ("%" + queryString.toLowerCase().trim() + "%").replace(" ", "%");
+
+        Map<String, Object> namedParams = new HashMap<>();
+        namedParams.put("queryString", fixedQueryString);
+        return namedJdbcTemplate.queryForObject(env.getProperty("countSearchUserByLoginOrByNameAndSurname"), namedParams, Long.class);
     }
 
     public List<User> findAllActive() {
