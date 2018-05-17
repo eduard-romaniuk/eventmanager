@@ -30,10 +30,9 @@ public class UserController {
     private final EventService eventService;
     private final Logger logger = LogManager.getLogger(UserController.class);
 
+    private static final int NO_RELATIONSHIP = -1;
     private static final int PENDING = 0;
     private static final int ACCEPTED = 1;
-    private static final int DECLINED = 2;
-    private static final int BLOCKED = 3;
 
     @Autowired
     public UserController(UserService userService, SecurityService securityService, EmailService emailService,
@@ -206,7 +205,7 @@ public class UserController {
     public ResponseEntity<String> addFriendRequest(@RequestParam Long from, @RequestParam Long to) {
         logger.info("POST /addFriendRequest");
 
-        if(userService.getRelationshipStatus(from, to).equals("")){
+        if(userService.getRelationshipStatusId(from, to) == NO_RELATIONSHIP){
             userService.saveRelationship(from, to, PENDING, from);
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
@@ -221,8 +220,12 @@ public class UserController {
                                                       @RequestParam Boolean accept) {
         logger.info("PUT /answerFriendRequest");
 
-        if(userService.getRelationshipStatus(requester, accepter).matches("pending|declined")){
-            userService.updateRelationship(requester, accepter, accept ? ACCEPTED : DECLINED, accepter);
+        if(userService.getRelationshipStatusId(requester, accepter) == PENDING){
+            if (accept) {
+                userService.updateRelationship(requester, accepter, ACCEPTED, accepter);
+            } else {
+                userService.deleteRelationship(requester, accepter);
+            }
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             logger.info("There is no request for friendship from user {} or user {} or they have other relationship",
@@ -231,18 +234,12 @@ public class UserController {
         }
     }
 
-    //TODO What behavior?
-//    @RequestMapping(value = "/blockFriend", params = {"from", "to"}, method = RequestMethod.PUT)
-//    public void blockFriend(@RequestParam Long from, @RequestParam Long to) {
-//        logger.info("PUT /blockFriend");
-//        userService.updateRelationship(from, to, BLOCKED, from);
-//    }
-
     @RequestMapping(value = "/deleteRelationship", params = {"from", "to"}, method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteRelationship(@RequestParam Long from, @RequestParam Long to) {
         logger.info("DELETE /deleteRelationship");
 
-        if(userService.getRelationshipStatus(from, to).matches("accepted|pending")){
+        int usersRelationship = userService.getRelationshipStatusId(from, to);
+        if(usersRelationship == PENDING || usersRelationship == ACCEPTED){
             userService.deleteRelationship(from, to);
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
@@ -257,10 +254,22 @@ public class UserController {
         return userService.getRelationshipStatus(from, to);
     }
 
+    @RequestMapping(value = "/getRelationshipStatusId", params = {"from", "to"}, method = RequestMethod.GET)
+    public int getRelationshipStatusId(@RequestParam Long from, @RequestParam Long to) {
+        logger.info("GET /getRelationshipStatusId");
+        return userService.getRelationshipStatusId(from, to);
+    }
+
     @RequestMapping(value = "/getRelationshipStatusAndActiveUserId", params = {"from", "to"}, method = RequestMethod.GET)
     public Map<String, Object> getRelationshipStatusAndActiveUserId(@RequestParam Long from, @RequestParam Long to) {
         logger.info("GET /getRelationshipStatusAndActiveUserId");
         return userService.getRelationshipStatusAndActiveUserId(from, to);
+    }
+
+    @RequestMapping(value = "/getRelationshipStatusIdAndActiveUserId", params = {"from", "to"}, method = RequestMethod.GET)
+    public Map<String, Object> getRelationshipStatusIdAndActiveUserId(@RequestParam Long from, @RequestParam Long to) {
+        logger.info("GET /getRelationshipStatusIdAndActiveUserId");
+        return userService.getRelationshipStatusIdAndActiveUserId(from, to);
     }
 
     @RequestMapping(value = "/{id}/outcomingRequests", method = RequestMethod.GET)

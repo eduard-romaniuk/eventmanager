@@ -1,21 +1,15 @@
 <div *ngIf="isCurrentUser">
 </div>
-<div *ngIf="relationshipStatus==''">
+<div *ngIf="relationshipStatusId == -1">
   <button class="btn btn-info" (click)="addToFriends(user.id)"> Add to friends</button>
 </div>
-<div *ngIf="relationshipStatus=='pending' && currentUserIsActionUser">
+<div *ngIf="relationshipStatusId == 0 && currentUserIsActionUser">
   <button class="btn btn-danger" (click)="deleteRequest(user.id)"> Decline request</button>
 </div>
-<div *ngIf="relationshipStatus=='pending' && !currentUserIsActionUser">
+<div *ngIf="relationshipStatusId == 0 && !currentUserIsActionUser">
   <button class="btn btn-info" (click)="acceptRequest(user.id)"> Accept request</button>
   <button class="btn btn-danger" (click)="declineRequest(user.id)"> Decline request</button>
 </div>
-<div *ngIf="relationshipStatus=='accepted'">
+<div *ngIf="relationshipStatusId == 1">
   <button class="btn btn-danger" (click)="deleteFromFriends(user.id)"> Delete from friends</button>
-</div>
-<div *ngIf="relationshipStatus=='declined' && currentUserIsActionUser">
-  <button class="btn btn-info" (click)="acceptRequest(user.id)"> Accept request</button>
-</div>
-<div *ngIf="relationshipStatus=='declined' && !currentUserIsActionUser">
-  <p>Declined</p>
 </div>

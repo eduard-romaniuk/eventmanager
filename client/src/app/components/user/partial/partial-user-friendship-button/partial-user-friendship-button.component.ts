@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {User} from "../../../../model/user";
 import {UserService} from "../../../../services/user.service";
-import {isUndefined} from "util";
 
 @Component({
   selector: 'app-partial-user-friendship-button',
@@ -13,37 +12,24 @@ export class PartialUserFriendshipButtonComponent implements OnInit {
   @Input() currentUser: User = new User();
   @Input() user: User = new User();
 
-  relationshipStatus: String;
+  relationshipStatusId: number;
   currentUserIsActionUser: boolean;
-
   isCurrentUser: boolean = false;
 
   constructor(private userService: UserService) { }
 
   ngOnInit() {
-    console.log("this.currentUser.id - \'" + this.currentUser.id + "'");
-
     if(this.currentUser.id==this.user.id){
       this.isCurrentUser = true;
     } else {
-      this.userService.getRelationshipStatusAndActionUserId(this.currentUser.id, this.user.id)
+      this.userService.getRelationshipStatusIdAndActionUserId(this.currentUser.id, this.user.id)
         .subscribe((data: Map<string, any>) => {
-          const statusName = data['status_name'];
-
-          //TODO Fix
-          if(isUndefined(statusName)){
-            this.relationshipStatus = '';
-            this.currentUserIsActionUser = false;
-          } else {
-            this.relationshipStatus = data['status_name'];
-            this.currentUserIsActionUser = (data['action_user_id'] == this.currentUser.id);
-          }
-
-          console.log("this.relationshipStatus - \'" + this.relationshipStatus + "'");
+          this.relationshipStatusId = data['status_id'];
+          this.currentUserIsActionUser = (data['action_user_id'] == this.currentUser.id);
+          console.log("this.relationshipStatusId - " + this.relationshipStatusId);
           console.log("this.currentUserIsActionUser - " + this.currentUserIsActionUser);
         });
     }
-
   }
 
   addToFriends(userId: number) {
@@ -78,10 +64,10 @@ export class PartialUserFriendshipButtonComponent implements OnInit {
   }
 
   private updateRelationshipStatus(userOneId: number, userTwoId: number){
-    this.userService.getRelationshipStatus(userOneId, userTwoId)
-      .subscribe((relationshipStatus : String) => {
-        console.log("New relationship status - " + relationshipStatus);
-        this.relationshipStatus = relationshipStatus;
+    this.userService.getRelationshipStatusId(userOneId, userTwoId)
+      .subscribe((relationshipStatusId : string) => {
+        console.log("New relationship status id - " + relationshipStatusId);
+        this.relationshipStatusId = Number(relationshipStatusId);
       });
   }
 

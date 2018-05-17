@@ -294,6 +294,21 @@ public class UserRepository implements CrudRepository<User> {
         }
     }
 
+    public int getRelationshipStatusId(Long userOneId, Long userTwoId) {
+        try {
+            logger.info("Get relationship status id for user with id {} and user with id {}", userOneId, userTwoId);
+
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("user_one_id", userOneId);
+            namedParams.put("user_two_id", userTwoId);
+
+            return namedJdbcTemplate.queryForObject(env.getProperty("getRelationshipStatusId"), namedParams, int.class);
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("User with id {} and user with id {} are not friends", userOneId, userTwoId);
+            return -1;
+        }
+    }
+
     public Map<String, Object> getRelationshipStatusAndActiveUserId(Long userOneId, Long userTwoId) {
         try {
             logger.info("Get relationship status and active user id for user with id {} and user with id {}", userOneId, userTwoId);
@@ -308,7 +323,28 @@ public class UserRepository implements CrudRepository<User> {
             logger.info("User with id {} and user with id {} are not friends", userOneId, userTwoId);
 
             Map <String, Object> noRelationshipMap = new HashMap<>();
-            noRelationshipMap.put("", 0);
+            noRelationshipMap.put("status_id", "");
+            noRelationshipMap.put("action_user_id", 0);
+            return noRelationshipMap;
+        }
+    }
+
+    public Map<String, Object> getRelationshipStatusIdAndActiveUserId(Long userOneId, Long userTwoId) {
+        try {
+            logger.info("Get relationship status id and active user id for user with id {} and user with id {}", userOneId, userTwoId);
+
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("user_one_id", userOneId);
+            namedParams.put("user_two_id", userTwoId);
+
+            return namedJdbcTemplate.queryForMap(env.getProperty("getRelationshipStatusIdAndActiveUserId"),
+                    namedParams);
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("User with id {} and user with id {} are not friends", userOneId, userTwoId);
+
+            Map <String, Object> noRelationshipMap = new HashMap<>();
+            noRelationshipMap.put("status_id", -1);
+            noRelationshipMap.put("action_user_id", -1);
             return noRelationshipMap;
         }
     }

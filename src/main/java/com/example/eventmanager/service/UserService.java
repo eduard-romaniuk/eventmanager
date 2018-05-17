@@ -129,9 +129,19 @@ public class UserService {
         return userRepository.getRelationshipStatus(userOneId, userTwoId);
     }
 
+    public int getRelationshipStatusId(Long userOneId, Long userTwoId){
+        logger.info("Get relationship status id for user with id {} and user with id {}", userOneId, userTwoId);
+        return userRepository.getRelationshipStatusId(userOneId, userTwoId);
+    }
+
     public Map<String, Object> getRelationshipStatusAndActiveUserId(Long userOneId, Long userTwoId){
         logger.info("Get relationship status and active user id for user with id {} and user with id {}", userOneId, userTwoId);
         return userRepository.getRelationshipStatusAndActiveUserId(userOneId, userTwoId);
+    }
+
+    public Map<String, Object> getRelationshipStatusIdAndActiveUserId(Long userOneId, Long userTwoId){
+        logger.info("Get relationship status and active user id for user with id {} and user with id {}", userOneId, userTwoId);
+        return userRepository.getRelationshipStatusIdAndActiveUserId(userOneId, userTwoId);
     }
 
     public List<User> getOutcomingRequests(Long userId){

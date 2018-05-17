@@ -133,11 +133,27 @@ export class UserService {
       {params: params, responseType: 'text'});
   }
 
+  public getRelationshipStatusId(from, to) {
+    const params = new HttpParams()
+      .set('from', from)
+      .set('to', to);
+    return this.http.get(this.base_url + "/getRelationshipStatusId",
+      {params: params, responseType: 'text'});
+  }
+
   public getRelationshipStatusAndActionUserId(from, to) {
     const params = new HttpParams()
       .set('from', from)
       .set('to', to);
     return this.http.get<Map<string, any>>(this.base_url + "/getRelationshipStatusAndActiveUserId",
+      {params: params});
+  }
+
+  public getRelationshipStatusIdAndActionUserId(from, to) {
+    const params = new HttpParams()
+      .set('from', from)
+      .set('to', to);
+    return this.http.get<Map<string, any>>(this.base_url + "/getRelationshipStatusIdAndActiveUserId",
       {params: params});
   }
 
