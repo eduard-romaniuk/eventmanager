@@ -53,7 +53,6 @@ declare var $:JQueryStatic;
       // images: [null]
 
       tags: this.formBuilder.array([this.createTag()])
-      //TODO: item models
 
     });
   }

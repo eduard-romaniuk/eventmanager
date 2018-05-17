@@ -60,6 +60,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { UserSettingsComponent } from './components/user/user-settings/user-settings.component';
 import {NgxEditorModule} from "ngx-editor";
 import { NoHtmlPipe } from "./pipes/nohtml.pipe";
+import { AddItemImagesComponent } from './components/wishlist/item/add-item-images/add-item-images.component';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -119,7 +120,8 @@ export class AddressInterceptor implements HttpInterceptor {
     PartialUserFriendshipButtonComponent,
     EditItemComponent,
     UserSettingsComponent,
-    NoHtmlPipe
+    NoHtmlPipe,
+    AddItemImagesComponent
   ],
   imports: [
     BrowserModule,
