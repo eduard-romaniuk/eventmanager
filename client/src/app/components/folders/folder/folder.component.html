@@ -6,11 +6,16 @@
         <button type="button" class="btn btn-primary" data-toggle="modal">Add existing note</button>
         <button class="btn btn-primary" [routerLink]="['/note/create', folder.id]">Create note</button>
         <button class="btn btn-primary" (click)="delete()">Delete folder</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Members">Members</button>
         <br>
       </div>
-      <a [routerLink]="['../../']"> ../ </a>
+      <div [routerLink]="['../../']">
+        <img src="../../../../../assets/images/undo-right-arrow.png" alt="Smiley face" height="20">
+        <a [routerLink]="['../../']"> ../ </a>
+      </div>
       <tr *ngFor="let note of folder.notes">
-        <td>
+        <td [routerLink]="['/note', note.id]">
+          <img src="../../../../../assets/images/note.png" alt="Smiley face" height="20">
           <a [routerLink]="['/note', note.id]"> {{ note.name}} </a>
         </td>
       </tr>
@@ -19,5 +24,45 @@
 
   <div class="alert alert-danger" *ngIf="!access">
     <strong>Error!</strong> The folder does not exist or the user does not have permission
+  </div>
+</div>
+
+<div id="Members" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h4> Members</h4>
+        <button class="close" type="button" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+
+          <div class="col-12 text-center">
+
+            <div class="row searchInput">
+              <div class="input-group">
+                <input type="text" class="form-control" (keyup)="queryToSearch.next($event.target.value)"/>
+              </div>
+            </div>
+            <div>You can search user by login or by name and username</div>
+          </div>
+
+          <div *ngIf="folder.users">
+            <div *ngFor="let user of folder.users">
+              <app-partial-user-list *ngIf="currentUser.id && user.id"
+                                     [currentUser]="currentUser" [user]="user">
+              </app-partial-user-list>
+            </div>
+          </div>
+
+          <div *ngIf="folder.users?.length < 1">
+            <p>No results</p>
+          </div>
+
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default" type="button" (click)="updateMembers()" data-dismiss="modal">Submit</button>
+      </div>
+    </div>
   </div>
 </div>

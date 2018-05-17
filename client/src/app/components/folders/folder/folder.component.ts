@@ -3,10 +3,11 @@ import {FolderService} from '../../../services/folder.service'
 import {NoteService} from '../../../services/note.service'
 import {Folder} from '../../../model/folder'
 import {AuthService} from "../../../services/auth.service";
+import {UserService} from "../../../services/user.service";
 import {User} from "../../../model/user";
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {Note} from "../../../model/note";
 import {Router, ActivatedRoute} from "@angular/router";
+import {Subject} from "rxjs/Subject";
+import { Observable } from 'rxjs/Observable';
 
 
 @Component({
@@ -21,13 +22,14 @@ export class FolderComponent {
   currentUser:User;
   rootFolderId:number = 0;
   access:boolean = true;
+  queryToSearch = new Subject<string>();
 
 
   constructor(private route:ActivatedRoute,
               private auth:AuthService,
+              private userService:UserService,
               private folderService:FolderService,
               private noteService:NoteService,
-              private formBuilder:FormBuilder,
               private router:Router) {
   }
 
@@ -38,7 +40,6 @@ export class FolderComponent {
           this.folder.id = params['id'];
           if (this.folder.id != this.rootFolderId) {
             this.folderService.getFolderWithCheck(this.folder.id).subscribe((folder:Folder) => {
-              console.log('folder creator id = ' + folder.creator.id);
               if (folder) {
                 this.folder = folder;
                 console.log('loaded folder id - ' + this.folder.id);
@@ -63,12 +64,22 @@ export class FolderComponent {
         }
       );
     });
+    this.searchUser(this.queryToSearch).subscribe( (users : any) => {
+      this.folder.users = users;
+    });
   }
 
   delete() {
     this.folderService.delete(this.folder).subscribe(any => {
       this.router.navigate(['/folders/rootFolder']);
     });
+  }
+
+  updateMembers() {}
+
+  searchUser(terms: Observable<string>) {
+    return terms.distinctUntilChanged()
+      .switchMap(term => this.userService.searchByLoginOrByNameAndSurname(term));
   }
 
 }
