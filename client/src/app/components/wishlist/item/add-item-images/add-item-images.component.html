@@ -54,13 +54,6 @@
     Some errors occurred, try again
   </div>
 
-  <div>
-    <button class="btn btn-danger mt-2" (click)="clean()">Clear</button>
-    <button class="btn btn-primary mt-2" type="submit" (click)="uploadImage()" [disabled]="!formImg.valid">Save</button>
-  </div>
 
 </form>
 
-<div>
-  {{formImg.value | json}}
-</div>

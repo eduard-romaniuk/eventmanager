@@ -83,6 +83,11 @@ export class WishListComponent implements OnInit {
           this.wishListService.getItemsFromWishList(this.wishList.id)
             .subscribe((items: any) => {
               this.items = items;
+              for( let item of this.items) {
+                this.likeService.wasLiked(item.id).subscribe( (hasLike: boolean) => {
+                  item.hasLiked = hasLike;
+                });
+              }
             });
 
           for (let item of this.items) {
@@ -118,6 +123,10 @@ export class WishListComponent implements OnInit {
     this.likeService.addLike(item);
   }
 
+  removeItem (item: Item) {
+    this.itemService.deleteItem(item);
+  }
+
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
@@ -125,6 +134,8 @@ export class WishListComponent implements OnInit {
   isOwnBoard(): boolean {
     return this.isOwn;
   }
+
+
 
 
 }

@@ -1,6 +1,11 @@
 <div *ngIf="item">
 
-  <h4 class="text-uppercase">{{item.name}} <a class="fa fa-thumbs-up" (click)="clickOnLikeButt(item)">{{item.likes}}</a></h4>
+  <h4 class="text-uppercase">{{item.name}}
+
+</h4>
+  <i class="fa fa-heart-o" *ngIf="!item.hasLiked" (click)="clickOnLikeButt(item)">{{item.likes}}</i>
+  <i class="fa fa-heart" *ngIf="item.hasLiked" (click)="clickOnLikeButt(item)">{{item.likes}}</i>
+
   <button type="button" class="exbutt btn" *ngFor="let tag of item.tags">
       #{{tag.name}}
   </button>
