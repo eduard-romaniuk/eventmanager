@@ -39,6 +39,13 @@ public class FolderController {
         return new ResponseEntity<>(folderService.createFolder(folder), HttpStatus.CREATED);
     }
 
+    @RequestMapping(value = "/members", method = RequestMethod.POST)
+    public ResponseEntity <Integer> updateMembers(@RequestBody Folder folder) {
+        logger.info("POST /members");
+        folderService.updateMembers(folder);
+        return new ResponseEntity<>(folderService.updateMembers(folder), HttpStatus.OK);
+    }
+
     @JsonView(FolderView.FullView.class)
     @RequestMapping(value = "/{userId}/all", method = RequestMethod.GET)
     public ResponseEntity<List<Folder>> getFolderByUser(@PathVariable Long userId) {

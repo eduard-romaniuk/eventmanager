@@ -46,4 +46,8 @@ public class FolderService {
         logger.info("Get incoming requests for folder with id {}", folderId);
         return folderRepository.getAllMembers(folderId);
     }
+
+    public Integer updateMembers(Folder folder) {
+        return folderRepository.updateMembers(folder);
+    }
 }

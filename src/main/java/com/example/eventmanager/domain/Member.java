@@ -102,7 +102,7 @@ public class Member {       //member for folder
         this.sex = sex;
     }
 
-    public Boolean getIsMember() {
+    public Boolean isMember() {
         return isMember;
     }
 

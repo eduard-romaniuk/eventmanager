@@ -41,7 +41,6 @@ public class FolderRepository implements CrudRepository<Folder> {
     }
 
 
-
     @Override
     public int save(Folder folder) {
         logger.info("Saving folder");
@@ -50,7 +49,7 @@ public class FolderRepository implements CrudRepository<Folder> {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         namedJdbcTemplate.update(env.getProperty("folder.saveFolder"), namedParams, keyHolder);
         logger.info("Created folder with id: " + keyHolder.getKeys().get("id"));
-        folder.setId(new Long((int)keyHolder.getKeys().get("id")));
+        folder.setId(new Long((int) keyHolder.getKeys().get("id")));
 
         namedParams = new MapSqlParameterSource();
         namedParams.addValue("folderId", folder.getId());
@@ -87,7 +86,7 @@ public class FolderRepository implements CrudRepository<Folder> {
     public void delete(Folder folder) {
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("folderId", folder.getId());
-        namedJdbcTemplate.update(env.getProperty("note.moveNotesToRoot"),namedParams);
+        namedJdbcTemplate.update(env.getProperty("note.moveNotesToRoot"), namedParams);
         namedJdbcTemplate.update(env.getProperty("folder.delete.userConnection"), namedParams);
         namedJdbcTemplate.update(env.getProperty("folder.delete"), namedParams);
     }
@@ -126,7 +125,7 @@ public class FolderRepository implements CrudRepository<Folder> {
             namedParams.put("folderId", folderId);
             namedParams.put("userId", userId);
             Folder folder = namedJdbcTemplate.query(env.getProperty("folder.findFolderByIdAndUser"), namedParams, new FolderMapper()).get(FIRST_ELEMENT);
-            if(folder != null) {
+            if (folder != null) {
                 folder.setCreator(namedJdbcTemplate.query(env.getProperty("folder.findFolderCreator"), namedParams, new UserMapper()).get(FIRST_ELEMENT));
             }
             logger.info("Loaded folder: " + folder);
@@ -154,6 +153,33 @@ public class FolderRepository implements CrudRepository<Folder> {
         }
     }
 
+    public Integer updateMembers(Folder folder) {
+        for (Member member : folder.getMembers()) {
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("folderId", folder.getId());
+            namedParams.put("userId", member.getId());
+            try {
+                boolean connectionExist = namedJdbcTemplate.query(env.getProperty("folder.isConnection"), namedParams, new ConnectionMapper()).get(FIRST_ELEMENT);
+                logger.info("ConnectionExist = " + connectionExist);
+                if (member.isMember()) {
+                    if(!connectionExist) {
+                        logger.info("Add member: " + member.getId() + " to folder: " + folder.getId());
+                        namedJdbcTemplate.update(env.getProperty("folder.setConnection"), namedParams);
+                    }
+                } else {
+                    if(connectionExist) {
+                        namedJdbcTemplate.update(env.getProperty("folder.deleteConnection"), namedParams);
+                    }
+                }
+            } catch (IndexOutOfBoundsException e) {
+                logger.info("Some problem with updateMembers");
+                e.printStackTrace();
+                return 1;
+            }
+        }
+        return 0;
+    }
+
     private static final class FolderMapper implements RowMapper<Folder> {
         private final Logger logger = LogManager.getLogger(FolderMapper.class);
 
@@ -164,6 +190,14 @@ public class FolderRepository implements CrudRepository<Folder> {
             folder.setName(rs.getString("folder_name"));
             logger.info("Loaded Folder:" + folder);
             return folder;
+        }
+    }
+
+    private static final class ConnectionMapper implements RowMapper<Boolean> {
+
+        @Override
+        public Boolean mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return rs.getInt("connections") > 0;
         }
     }
 
@@ -187,7 +221,7 @@ public class FolderRepository implements CrudRepository<Folder> {
             Member member = new Member();
             member.setId(rs.getLong("id"));
             member.setLogin(rs.getString("login"));
-            member.setIsMember(rs.getBoolean("isMember"));
+            member.setIsMember(rs.getBoolean("is_member"));
             logger.info("Loaded member:" + member);
             return member;
         }

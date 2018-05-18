@@ -83,7 +83,7 @@ public class NoteController {
     @RequestMapping(value = "/folder/{folderId}", method = RequestMethod.GET)
     public ResponseEntity<List<Note>> getAllFolderNotes(@PathVariable Long folderId) {
         logger.info("GET /folder/{folderId}");
-
+        logger.info("Current user id = " + userService.getCurrentUser().getId());
         List<Note> noteList = noteService.getAllFolderNotes(folderId, userService.getCurrentUser().getId());
         return new ResponseEntity<>(noteList, HttpStatus.OK);
     }

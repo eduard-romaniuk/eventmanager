@@ -3,11 +3,10 @@ import {FolderService} from '../../../services/folder.service'
 import {NoteService} from '../../../services/note.service'
 import {Folder} from '../../../model/folder'
 import {AuthService} from "../../../services/auth.service";
-import {UserService} from "../../../services/user.service";
 import {User} from "../../../model/user";
 import {Router, ActivatedRoute} from "@angular/router";
-import {Subject} from "rxjs/Subject";
-import { Observable } from 'rxjs/Observable';
+import {ToastService} from "../../../services/toast.service";
+
 
 
 @Component({
@@ -22,15 +21,14 @@ export class FolderComponent {
   currentUser:User;
   rootFolderId:number = 0;
   access:boolean = true;
-  queryToSearch = new Subject<string>();
 
 
   constructor(private route:ActivatedRoute,
               private auth:AuthService,
-              private userService:UserService,
               private folderService:FolderService,
               private noteService:NoteService,
-              private router:Router) {
+              private router:Router,
+              private toastService: ToastService) {
   }
 
   ngOnInit() {
@@ -46,13 +44,13 @@ export class FolderComponent {
                 console.log('Creator.Id of loaded folder - ' + this.folder.creator.id);
                 if (this.currentUser.id == this.folder.creator.id) {
                   this.isCreator = true;
+                }
                   this.noteService.getFolderNotes(this.folder.id).subscribe(
                     (notes:any) => {
                       this.folder.notes = notes;
                       console.log('loaded notes: ' + this.folder.notes);
                     }
                   );
-                }
               } else {
                 console.log('The folder does not exist or the user does not have permission');
                 this.access = false;
@@ -83,5 +81,14 @@ export class FolderComponent {
         this.folder.members = members;
         console.log('Members: ' + this.folder.members);
       });
+  }
+
+  updateMembers() {
+    this.folderService.updateMembers(this.folder).subscribe((code: number) => {
+      console.log(code);
+      if(code == 0) {
+        this.toastService.success("Members list has been successfully updated");
+      }
+    });
   }
 }

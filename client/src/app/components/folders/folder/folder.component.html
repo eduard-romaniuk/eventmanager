@@ -39,19 +39,17 @@
             <div *ngFor="let member of folder.members">
 
               <label>
-                <input type="checkbox"
-                       [(checklist)]="folder.members"
-                       [checklistValue]="friend"/>
-                <span><strong>{{friend.name}} {{friend.surName}}</strong></span>
+                <input type="checkbox" [(ngModel)] = "member.isMember"/>
+                <span><strong>{{member.login}} {{member.isMember}}</strong></span>
               </label>
             </div>
           </div>
         </div>
-        <div *ngIf="userFriends?.length < 1">
+        <div *ngIf="folder.members?.length < 1">
           <p>No friends </p>
         </div>
         <div class="modal-footer ">
-          <button class="btn btn-default" type="submit" data-dismiss="modal">Submit
+          <button class="btn btn-default" type="submit" (click)="updateMembers()" data-dismiss="modal">Submit
           </button>
         </div>
       </div>
