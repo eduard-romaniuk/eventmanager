@@ -27,4 +27,8 @@ export class NoteService {
     return this.http.get(this.base_url + 'folder/' + folderId);
   }
 
+  public getNoteById(noteId: number) {
+    return this.http.get(this.base_url + noteId);
+  }
+
 }

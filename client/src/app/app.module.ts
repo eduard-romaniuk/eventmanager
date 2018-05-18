@@ -57,6 +57,7 @@ import { FolderService } from "./services/folder.service";
 import { RootFolderComponent } from './components/folders/rootFolder/rootFolder.component';
 import { FolderComponent } from './components/folders/folder/folder.component';
 import { CreateNoteComponent } from './components/note/createNote/createNote.component';
+import { ViewNoteComponent } from './components/note/viewNote/viewNote.component';
 import { NoteService } from "./services/note.service";
 import {ChecklistModule} from "angular-checklist";
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -127,6 +128,7 @@ export class AddressInterceptor implements HttpInterceptor {
     UserSettingsComponent,
     UserCalendarComponent,
     NoHtmlPipe,
+    ViewNoteComponent,
     UserEditEmailComponent
   ],
   imports: [

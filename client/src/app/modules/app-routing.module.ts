@@ -25,6 +25,7 @@ import { RecoverLoginComponent } from '../components/recover-login/recover-login
 import { ChangePasswordComponent } from '../components/change-password/change-password.component';
 import { RootFolderComponent } from "../components/folders/rootFolder/rootFolder.component"
 import { CreateNoteComponent } from "../components/note/createNote/createNote.component"
+import { ViewNoteComponent } from "../components/note/viewNote/viewNote.component"
 import { FolderComponent } from "../components/folders/folder/folder.component"
 import { UserSettingsComponent } from "../components/user/user-settings/user-settings.component";
 
@@ -118,6 +119,9 @@ const routes: Routes = [
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'note/create/:folderId',
     component: CreateNoteComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'note/:noteId',
+    component: ViewNoteComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: '**', redirectTo: '/hello', pathMatch: 'full'}
 ];
