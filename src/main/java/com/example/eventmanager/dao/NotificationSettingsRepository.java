@@ -110,6 +110,22 @@ public class NotificationSettingsRepository implements CrudRepository<Notificati
         logger.error("Delete does not supported");
     }
 
+    public NotificationSettings findOneByUserIdAndEventId(Long userId, Long eventId) {
+        try {
+            logger.info("Find one with user id {} and event id {}", userId, eventId);
+
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("user_id", userId);
+            namedParams.put("event_id", eventId);
+
+            return namedJdbcTemplate.queryForObject(env.getProperty("findOneNotificationByUserIdAndEventId"),
+                    namedParams, new NotificationSettingsMapper());
+        } catch (EmptyResultDataAccessException e) {
+            logger.error("NotificationSettings with user id {} and event id {} not found", userId, eventId);
+            return null;
+        }
+    }
+
     public List<NotificationSettings> findAllNotificationByUserId(Long userId) {
         try {
             logger.info("Find all notification by user with id {}", userId);

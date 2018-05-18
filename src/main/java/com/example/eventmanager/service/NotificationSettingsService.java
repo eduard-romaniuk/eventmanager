@@ -49,6 +49,11 @@ public class NotificationSettingsService {
         notificationSettingsRepository.update(notificationSettings);
     }
 
+    public NotificationSettings getByUserIdAndEventId(Long userId, Long eventId){
+        logger.info("Get with user id {} and event id {}", userId, eventId);
+        return notificationSettingsRepository.findOneByUserIdAndEventId(userId, eventId);
+    }
+
     public List<NotificationSettings> findAllByUserId(Long userId){
         logger.info("Find all notification by user with id {}", userId);
         return notificationSettingsRepository.findAllNotificationByUserId(userId);

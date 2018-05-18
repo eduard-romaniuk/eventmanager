@@ -63,5 +63,30 @@ public class NotificationSettingsController {
         return new ResponseEntity<>(newNotificationSettings, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "", params = {"userId", "eventId"}, method = RequestMethod.GET)
+    public ResponseEntity<NotificationSettings> getByUserIdAndEventId(@RequestParam Long userId, @RequestParam Long eventId) {
+        logger.info("GET /?userId={}&eventId={}", userId, eventId);
+
+        NotificationSettings notificationSettings = notificationSettingsService.getByUserIdAndEventId(userId, eventId);
+        if (notificationSettings == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(notificationSettings, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "", params = {"userId", "eventId"}, method = RequestMethod.POST)
+    public ResponseEntity<NotificationSettings> updateByUserIdAndEventId(@RequestParam Long userId,
+                                                                         @RequestParam Long eventId,
+                                                                         @RequestBody NotificationSettings newNotificationSettings) {
+        logger.info("POST /?userId={}&eventId={}", userId, eventId);
+
+        NotificationSettings oldNotificationSettings = notificationSettingsService.getByUserIdAndEventId(userId, eventId);
+        if (oldNotificationSettings == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        newNotificationSettings.setParticipantId(oldNotificationSettings.getParticipantId());
+        notificationSettingsService.update(newNotificationSettings);
+        return new ResponseEntity<>(newNotificationSettings, HttpStatus.OK);
+    }
 
 }
