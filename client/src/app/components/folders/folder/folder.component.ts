@@ -67,13 +67,9 @@ export class FolderComponent {
   delete() {
     this.folderService.delete(this.folder).subscribe(any => {
       this.router.navigate(['/folders/rootFolder']);
+      this.toastService.success("The folder was successfully deleted");
     });
   }
-
-  // addUsers(){
-  //   console.log(this.newParticipants);
-  //   this.eventService.addUsers(this.newParticipants,id).subscribe();
-  // }
 
   getAllMembers() {
     this.folderService.getAllMembers(this.folder.id)

@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS public.events (
   creator_id INT NOT NULL, 
   folder_id INT NULL,
   name VARCHAR(60) NOT NULL,
-  description VARCHAR(2083) NOT NULL, --contains link
+  description TEXT NOT NULL,
   place VARCHAR(60) NULL, -- type for coordrinates mb will change
   timeline_start TIMESTAMP NULL,
   timeline_finish TIMESTAMP NULL,

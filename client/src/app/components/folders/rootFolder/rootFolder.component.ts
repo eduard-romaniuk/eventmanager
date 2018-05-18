@@ -6,6 +6,7 @@ import {AuthService} from "../../../services/auth.service";
 import {User} from "../../../model/user";
 import { FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {Note} from "../../../model/note";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -25,6 +26,7 @@ export class RootFolderComponent {
   constructor(private auth : AuthService,
               private folderService: FolderService,
               private noteService: NoteService,
+              private router:Router,
               private formBuilder: FormBuilder) {
   }
 

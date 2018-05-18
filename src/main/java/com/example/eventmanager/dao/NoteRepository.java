@@ -62,11 +62,7 @@ public class NoteRepository implements CrudRepository<Note> {
         namedParams.addValue("creator_id", note.getCreator().getId());
         namedParams.addValue("name", note.getName());
         namedParams.addValue("description", note.getDescription());
-        namedParams.addValue("place", note.getPlace());
-        namedParams.addValue("period_in_days", note.getPeriod());
         namedParams.addValue("image", note.getImage());
-        namedParams.addValue("is_sent", note.isSent());
-        namedParams.addValue("is_private", note.isPrivate());
         namedParams.addValue("folder_id", note.getFolder() == null? null: note.getFolder().getId());
         KeyHolder keyHolder = new GeneratedKeyHolder();
         namedJdbcTemplate.update(env.getProperty("note.save"), namedParams, keyHolder);
@@ -106,11 +102,7 @@ public class NoteRepository implements CrudRepository<Note> {
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("name", note.getName());
         namedParams.put("description", note.getDescription());
-        namedParams.put("place", note.getPlace());
-        namedParams.put("period_in_days", note.getPeriod());
         namedParams.put("image", note.getImage());
-        namedParams.put("is_sent", note.isSent());
-        namedParams.put("is_private", note.isPrivate());
         namedParams.put("eventId", note.getId());
         namedJdbcTemplate.update(env.getProperty("note.updateNote"), namedParams);
     }
@@ -151,11 +143,7 @@ public class NoteRepository implements CrudRepository<Note> {
             note.setId(rs.getLong("id"));
             note.setName(rs.getString("name"));
             note.setDescription(rs.getString("description"));
-            note.setPlace(rs.getString("place"));
-            note.setPeriod(rs.getInt("period_in_days"));
             note.setImage(rs.getString("image"));
-            note.setSent(rs.getBoolean("is_sent"));
-            note.setPrivate(rs.getBoolean("is_private"));
             logger.info("Loaded Note: " + note);
             return note;
         }
