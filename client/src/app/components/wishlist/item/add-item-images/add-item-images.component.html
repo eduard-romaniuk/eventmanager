@@ -1,0 +1,59 @@
+
+<form class="md-form text-center" [formGroup]="formImg">
+  <p>Upload images:</p>
+
+  <div class="form-group">
+
+    <div class="d-inline"
+         *ngFor="let image of item.images; let i = index" >
+      <div class="col-lg-3 col-md-4 col-xs-6">
+        <a href="#" class="d-block mb-4 h-100">
+        <img [src]="image" id="image" name="image" width="40%"> <br/>
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="form-group">
+
+    <input
+      style="display: none"
+      type="file" accept=".jpg, .jpeg, .png, .gif" ng2FileSelect [uploader]="uploader" (change)="upload()"
+      #fileInput
+      formControlName="image"
+      [ngClass]="{
+                            'is-invalid': formImg.get('image').invalid && (formImg.get('image').dirty || formImg.get('image').touched)
+                        }">
+    <button class="btn btn-info button" (click)="fileInput.click()">Select new image</button>
+    <div *ngIf="formImg.get('image').invalid && (formImg.get('image').dirty || formImg.get('image').touched)"
+         class="text-danger">
+      <div *ngIf="formImg.get('image').errors.imageExtension">
+        You can upload files only with following extensions: .jpg, .jpeg, .png, .gif
+      </div>
+    </div>
+  </div>
+
+  <div class="alert mt-2" [hidden]="!imageUploading">
+    <div>
+      Uploading image...
+      <div class="progress" style="">
+        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-primary mt-2" [hidden]="!savingChanges">
+    Saving changes...
+  </div>
+
+  <div class="alert alert-danger mt-2" [hidden]="!error">
+    Some errors occurred, try again
+  </div>
+
+
+</form>
+

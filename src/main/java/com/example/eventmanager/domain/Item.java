@@ -43,7 +43,8 @@ public class Item {
     @JsonView({ItemView.FullView.class})
     private List<Tag> tags;
 
-//    private List<Image> images;
+    @JsonView({ItemView.FullView.class})
+    private List<String> images;
 //    private Booker booker;
 
     public Long getId() {
@@ -102,14 +103,14 @@ public class Item {
         this.likes = likes;
     }
 
-    //
-//    public List<Image> getImages() {
-//        return images;
-//    }
-//
-//    public void setImages(List<Image> images) {
-//        this.images = images;
-//    }
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
 //
 //    public Booker getBooker() {
 //        return booker;

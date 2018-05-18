@@ -1,5 +1,6 @@
 package com.example.eventmanager.service;
 
+import com.example.eventmanager.dao.ImageRepository;
 import com.example.eventmanager.dao.ItemRepository;
 import com.example.eventmanager.dao.LikeRepository;
 import com.example.eventmanager.dao.TagRepository;
@@ -19,10 +20,16 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final TagRepository tagRepository;
     private final LikeRepository likeRepository;
+
+
     private final Logger logger = LogManager.getLogger(ItemService.class);
 
     @Autowired
-    public ItemService(ItemRepository itemRepository, TagRepository tagRepository, LikeRepository likeRepository){
+    public ItemService(
+            ItemRepository itemRepository,
+            TagRepository tagRepository,
+            LikeRepository likeRepository
+            ){
         this.itemRepository = itemRepository;
         this.tagRepository = tagRepository;
         this.likeRepository = likeRepository;
@@ -57,7 +64,7 @@ public class ItemService {
 
     }
 
-    public Long copyItem ( Long toWishListId, Long itemId ) {
+    public Long copyItem ( Long toWishListId, Long itemId) {
         Long newItemId = itemRepository.copyItem (toWishListId, itemId);
         List<Tag> tags = tagRepository.getTagsForItem(itemId);
 

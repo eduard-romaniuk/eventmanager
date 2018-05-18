@@ -36,11 +36,16 @@
   </div>
 
   <!-- images -->
-  <!--TODO-->
+  <div class="form-group">
+    <div class="text-left"> Images: </div>
+    <app-add-item-images [item]="item"></app-add-item-images>
+  </div>
 
-  tags
+
+
   <div class="form-group">
 
+    <div class="text-left"> Tags: </div>
     <div class="d-inline" formArrayName="tags"
          *ngFor="let tag of formData.controls; let i = index; let last = last" >
 

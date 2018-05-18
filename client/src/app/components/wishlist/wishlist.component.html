@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">-->
 
 <div class="md-form text-center">
   <h1 [hidden]="!isOwnBoard()">{{title}}</h1>
@@ -9,39 +10,73 @@
   <div *ngFor="let item of items">
 
 
-    <div *ngIf="item.priority == 1">
-      <button type="button" class="button btn btn-success btn-lg"
-              data-toggle="modal" data-target="#viewItem"
-              (click)="sendViewingItem(item)">
-        {{item.name}}
+    <!--<div *ngIf="item.priority == 1">-->
+      <!--<button type="button" class="button btn btn-success btn-lg"-->
+              <!--data-toggle="modal" data-target="#viewItem"-->
+              <!--(click)="sendViewingItem(item)">-->
+        <!--{{item.name}}-->
 
-        <!-- Use an element to toggle between a like/dislike icon -->
+        <!--&lt;!&ndash; Use an element to toggle between a like/dislike icon &ndash;&gt;-->
 
-        <i class="likes fa fa-thumbs-up" >{{item.likes}}</i>
+        <!--<i class="likes fa fa-thumbs-up" >{{item.likes}}</i>-->
 
-      </button>
+      <!--</button>-->
 
-    </div>
-    <div *ngIf="item.priority == 2">
-      <button type="button" class="button btn btn-danger btn-lg"
-              data-toggle="modal" data-target="#viewItem"
-              (click)="sendViewingItem(item)">
-        {{item.name}}
-        <a class="fa fa-thumbs-up" (click)="clickOnLikeButt(item)">{{item.likes}}</a>
-      </button>
-    </div>
-    <div *ngIf="item.priority == 0">
-      <button type="button" class="button btn btn-secondary btn-lg"
-              data-toggle="modal" data-target="#viewItem"
-              (click)="sendViewingItem(item)">
-        {{item.name}}
-        <i class="fa fa-thumbs-up">{{item.likes}}</i>
-      </button>
+    <!--</div>-->
+    <!--<div *ngIf="item.priority == 2">-->
+      <!--<button type="button" class="button btn btn-danger btn-lg"-->
+              <!--data-toggle="modal" data-target="#viewItem"-->
+              <!--(click)="sendViewingItem(item)">-->
+        <!--{{item.name}}-->
+        <!--<a class="fa fa-thumbs-up" (click)="clickOnLikeButt(item)">{{item.likes}}</a>-->
+      <!--</button>-->
+    <!--</div>-->
+    <!--<div *ngIf="item.priority == 0">-->
+      <!--<button type="button" class="button btn btn-secondary btn-lg"-->
+              <!--data-toggle="modal" data-target="#viewItem"-->
+              <!--(click)="sendViewingItem(item)">-->
+        <!--{{item.name}}-->
+        <!--<i class="fa fa-thumbs-up">{{item.likes}}</i>-->
+      <!--</button>-->
 
+    <!--</div>-->
+    <div class="box-body">
+      <ul class="todo-list ui-sortable">
+        <li data-toggle="modal"
+            data-target="#viewItem"
+            data-dismiss="modal"
+            (click)="sendViewingItem(item)">
+
+          <span class="dot" [ngClass]="{'priority-green': item.priority == 1 , 'priority-red': item.priority == 2, 'priority-gray': item.priority == 0}"></span>
+          <span class="text">{{item.name}}</span>
+          <div class="tools" [hidden]="!isOwnBoard()">
+
+            <i class="fa fa-edit"
+               data-toggle="modal"
+               data-target="#editItem"
+               data-dismiss="modal"
+               (click)="sendViewingItem(item)"></i>
+
+            <i class="fa fa-trash-o"
+               (click)="removeItem(item)"
+            ></i>
+
+          </div>
+
+
+          <i class = "fa"
+            (click)="clickOnLikeButt(item)"
+             [ngClass]="{'fa-heart-o': !item.hasLiked, 'fa-heart': item.hasLiked }" >
+            {{item.likes}}
+          </i>
+        </li>
+
+
+      </ul>
     </div>
   </div>
 
-  <button class="btn btn-info btn-lg" type="button" data-toggle="modal" data-target="#addItem" [hidden]="!isOwnBoard()">Add new item...</button>
+  <button class="btn" type="button" data-toggle="modal" data-target="#addItem" [hidden]="!isOwnBoard()">Add item</button>
 
   <div id="addItem" class="modal fade" aria-hidden="true" aria-labelledby="exampleModalLabel" role="dialog" tabindex="-1">
     <div class="modal-dialog" role="dialog">

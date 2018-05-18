@@ -8,7 +8,7 @@ export class Item {
   description: String;
   priority: number;
   wishListId: number;
-  images: String[];
+  images: String[] = [];
   booker: User;
   likes: number;
   tags: Tag[];
