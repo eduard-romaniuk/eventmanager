@@ -3,7 +3,6 @@ export class User {
    id: number;
    login: String;
    password: String;
-   passwordConfirm: String;
    name: String;
    surName: String;
    email: String;
@@ -11,7 +10,7 @@ export class User {
    phone: String;
    sex: boolean;
    image: String;
-   regDate: Date; //TODO date
+   regDate: Date;
    friends: User[];
    wishList: any; //TODO wishList
    events: any[]; //TODO events

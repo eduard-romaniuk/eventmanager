@@ -65,6 +65,8 @@ import { UserCalendarComponent } from './components/user-calendar/user-calendar.
 import {NgxEditorModule} from "ngx-editor";
 import { NoHtmlPipe } from "./pipes/nohtml.pipe";
 import { UserEditEmailComponent } from './components/user/user-edit-email/user-edit-email.component';
+import { NotificationSettingsComponent } from './components/notification-settings/notification-settings.component';
+import {NotificationSettingsService} from "./services/notification-settings.service";
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -127,7 +129,8 @@ export class AddressInterceptor implements HttpInterceptor {
     UserSettingsComponent,
     UserCalendarComponent,
     NoHtmlPipe,
-    UserEditEmailComponent
+    UserEditEmailComponent,
+    NotificationSettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -165,7 +168,7 @@ export class AddressInterceptor implements HttpInterceptor {
     ItemService,
     PersonalPanSettingService,
     LikeService,
-
+    NotificationSettingsService,
     { provide: HTTP_INTERCEPTORS,
       useClass: AddressInterceptor,
       multi: true},
