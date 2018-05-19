@@ -22,7 +22,7 @@ export class WishListService {
   headers: HttpHeaders;
   private base_url = '/wishlist';
   private subject=new Subject<Item>();
-  private subItemArr = new BehaviorSubject<Item[]>([]);
+  private subItemArr = new Subject<Item[]>();
   private curentWishList: WishList = new WishList();
   private items: Item[] = [];
 
@@ -34,7 +34,8 @@ export class WishListService {
         (wishList: WishList) =>
         {
           this.curentWishList = wishList
-        }
+        
+		}
       );
     }
     );
@@ -53,13 +54,15 @@ export class WishListService {
   }
 
   getItemsFromWishList( wishListId: number ) : Observable<Item[]> {
-    console.log("im here " + wishListId)
-    this.http.get<Item[]>(this.base_url + "/" + wishListId).subscribe( (items : Item[]) => {
+  
+	
+     this.http.get<Item[]>(this.base_url + "/" + wishListId).subscribe( (items : Item[]) => {
       this.items = items;
       this.subItemArr.next(this.items);
     });
 
-    return this.subItemArr.asObservable();
+	return this.subItemArr.asObservable();
+    
 
   }
 

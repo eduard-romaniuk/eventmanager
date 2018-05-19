@@ -26,7 +26,9 @@ export class WishListComponent implements OnInit {
   items: Item[] = [];
   subscription: Subscription;
   isOwn: boolean = false;
+  isLoaded: boolean = false;
   user: User = new User();
+  
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -41,6 +43,8 @@ export class WishListComponent implements OnInit {
 
   ngOnInit() {
 
+	this.items = [];
+	
     if (this.router.url == '/wishlist') this.isOwn = true;
 
     if (this.isOwn) {
@@ -88,18 +92,16 @@ export class WishListComponent implements OnInit {
                   item.hasLiked = hasLike;
                 });
               }
+			  this.isLoaded = true;
             });
 
-          for (let item of this.items) {
-            this.likeService.wasLiked(item.id).subscribe((hasLike: boolean) => {
-              item.hasLiked = hasLike;
-            });
-
-          }
+          
           this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
           //TODO:END!!!
 
         }
+		
+	
       }
 
     )
