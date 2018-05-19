@@ -17,7 +17,7 @@ import * as $ from 'jquery';
 export class ChatComponent{
   currentUser: User = new User();
   messages: Message[];
-  private serverUrl = 'http://localhost:8080/socket'//https://web-event-manager.herokuapp.com/socket
+  private serverUrl = 'https://web-event-manager.herokuapp.com/socket'//https://web-event-manager.herokuapp.com/socket
   private title = 'Chat';
   private stompClient;
   private id;
@@ -62,10 +62,9 @@ export class ChatComponent{
   }
 
   sendMessage(message){
-    this.stompClient.send("/app/send"+this.router.url, {userId:this.id}, this.id+";"+message);
+    if(message.length>0){
+      this.stompClient.send("/app/send"+this.router.url, {userId:this.id}, this.id+";"+message);
+    }
     $('#input').val('');
   }
-//  private loadMessages(){
-//     this.stompClient.send("/app/send"+this.router.url+"/load");
-//  }
 }

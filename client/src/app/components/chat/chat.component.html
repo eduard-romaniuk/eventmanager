@@ -7,7 +7,7 @@
 
 <div class="container">
 	<div class="row">
-		<div class="col-md-12">
+		<div class="col-md-10">
 			<div class="panel panel-primary">
 				<div class="panel-heading" id="accordion">
 					<span class="glyphicon glyphicon-comment"></span> Chat
@@ -37,7 +37,8 @@
 				</div>
 				<div class="panel-footer">
 					<div class="input-group">
-						<textarea id="input" rows="4" name="text" #input></textarea>
+						<textarea id="input" rows="4" name="text" maxlength="200" #input></textarea>
+						<h5>Max length: 200 symbols</h5>
 						<span class="input-group-btn">
 							<button class="btn btn-warning btn-sm"
 								(click)="sendMessage(input.value)" id="btn-chat">Send</button>
