@@ -42,10 +42,19 @@ export class NotificationSettingsComponent implements OnInit {
     );
   }
 
+  fixDate(){
+    this.notificationSetting.startDate = new Date(this.notificationSetting.startDate.getTime()
+      + Math.abs(this.notificationSetting.startDate.getTimezoneOffset()*60000));
+  }
+
   save() {
     this.error = false;
     this.savingChanges = true;
     console.log("notificationSetting.emailNotificationOn - " + this.notificationSetting.emailNotificationOn);
+
+    if(this.form.get('startDate').value){
+      this.fixDate();
+    }
 
     this.notificationSettingsService.updateByUserIdAndEventId(this.userId, this.event.id, this.notificationSetting)
       .subscribe(response => {
