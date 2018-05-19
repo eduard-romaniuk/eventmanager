@@ -23,7 +23,6 @@ export class NotificationSettingsComponent implements OnInit {
 
   min = new Date();
   max = new Date();
-  //maxPeriod: number;
 
   constructor(private formBuilder: FormBuilder,
               private notificationSettingsService: NotificationSettingsService,
@@ -33,16 +32,6 @@ export class NotificationSettingsComponent implements OnInit {
     const eventStartDate = new Date(this.event.timeLineStart);
     const maxNotificationDate = eventStartDate.getDate() - 1;
     this.max.setDate(maxNotificationDate);
-
-    // if(this.notificationSetting.startDate){
-    //   const notificationStartDate = new Date(this.notificationSetting.startDate);
-    //   console.log("notificationStartDate - " + notificationStartDate);
-    //   this.maxPeriod = eventStartDate.valueOf() - notificationStartDate.valueOf();
-    // } else {
-    //   this.maxPeriod = 0;
-    // }
-    //
-    // console.log("this.maxPeriod - " + this.maxPeriod);
 
     this.form = this.formBuilder.group({
       emailNotif: [this.notificationSetting.emailNotificationOn, [Validators.required]],
