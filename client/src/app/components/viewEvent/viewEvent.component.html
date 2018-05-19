@@ -17,17 +17,28 @@
       </h3>
 
       <div *ngIf="this.isParticipant" class="container-fluid ">
-        <div *ngIf="low()">
-          <h4> Event priority: <strong class="text-success">Low </strong></h4>
+        <div>
+          <div *ngIf="low()" class="inlineDiv inlineDivRight">
+            <h4> Event priority: <strong class="text-success">Low </strong></h4>
+          </div>
+          <div *ngIf="normal()" class="inlineDiv inlineDivRight">
+            <h4>Event priority:<strong class="text-warning">Normal </strong></h4>
+          </div>
+          <div *ngIf="urgent()" class="inlineDiv inlineDivRight">
+            <h4>Event priority: <strong class="text-danger">Urgent </strong></h4>
+          </div>
+          <button class="btn btn-info btn-sm inlineDiv" data-toggle="modal" data-target="#priorityChange">Change</button>
         </div>
-        <div *ngIf="normal()">
-          <h4>Event priority:<strong class="text-warning">Normal </strong></h4>
+
+        <div>
+          <div *ngIf="notificationSetting.emailNotificationOn" class="inlineDiv inlineDivRight">
+            <h4> Notifications: <strong class="text-success">On</strong></h4>
+          </div>
+          <div *ngIf="!notificationSetting.emailNotificationOn" class="inlineDiv inlineDivRight">
+            <h4> Notifications: <strong class="text-danger">Off</strong></h4>
+          </div>
+          <button class="btn btn-info btn-sm inlineDiv" data-toggle="modal" data-target="#notificationSettings">Change</button>
         </div>
-        <div *ngIf="urgent()">
-          <h4>Event priority: <strong class="text-danger">Urgent </strong></h4>
-        </div>
-        <button class="btn btn-info" data-toggle="modal" data-target="#priorityChange">Change</button>
-        <button class="btn btn-info" data-toggle="modal" data-target="#notificationSettings">Notification settings</button>
       </div>
 
       <div class="my-2">

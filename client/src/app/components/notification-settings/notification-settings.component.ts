@@ -1,9 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Event} from "../../model/event";
-import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NotificationSettings} from "../../model/notificationSettings";
 import {NotificationSettingsService} from "../../services/notification-settings.service";
 import {ToastService} from "../../services/toast.service";
+import {maxPeriod} from "../../utils/validation-tools";
 
 @Component({
   selector: 'app-notification-settings',
@@ -21,21 +22,35 @@ export class NotificationSettingsComponent implements OnInit {
   error = false;
 
   min = new Date();
-  max: Date;
+  max = new Date();
+  //maxPeriod: number;
 
   constructor(private formBuilder: FormBuilder,
               private notificationSettingsService: NotificationSettingsService,
               private toast: ToastService) { }
 
   ngOnInit() {
+    const eventStartDate = new Date(this.event.timeLineStart);
+    const maxNotificationDate = eventStartDate.getDate() - 1;
+    this.max.setDate(maxNotificationDate);
+
+    // if(this.notificationSetting.startDate){
+    //   const notificationStartDate = new Date(this.notificationSetting.startDate);
+    //   console.log("notificationStartDate - " + notificationStartDate);
+    //   this.maxPeriod = eventStartDate.valueOf() - notificationStartDate.valueOf();
+    // } else {
+    //   this.maxPeriod = 0;
+    // }
+    //
+    // console.log("this.maxPeriod - " + this.maxPeriod);
+
     this.form = this.formBuilder.group({
       emailNotif: [this.notificationSetting.emailNotificationOn, [Validators.required]],
       startDate: [this.notificationSetting.startDate, []],
-      period: [this.notificationSetting.period, []],
+      period: [this.notificationSetting.period, [Validators.required, Validators.min(0)]],
       countDownOn: [this.notificationSetting.countDownOn, []]
-      }
+      }, {validator: maxPeriod(eventStartDate, 'startDate', 'period')}
     );
-    this.max = this.event.timeLineStart;
   }
 
   save() {

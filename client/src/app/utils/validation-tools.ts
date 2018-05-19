@@ -63,6 +63,30 @@ export function imageExtension(image: string) {
   }
 }
 
+export function maxPeriod(eventStartDate: Date, notificationStartDate: string, period: string) {
+  return (group: FormGroup): { [key: string]: any } => {
+    let notifStartDate = group.controls[notificationStartDate];
+    let per = group.controls[period];
+    let maxPeriod;
+
+    let maxNotificationDate = new Date();
+    maxNotificationDate.setDate(eventStartDate.getDate() - 1);
+
+    if (notifStartDate.value) {
+      let diff = maxNotificationDate.valueOf() - notifStartDate.value;
+      maxPeriod = Math.ceil(diff / (1000 * 3600 * 24));
+    } else {
+      maxPeriod = 0;
+    }
+
+    if (per.value > maxPeriod) {
+      group.get(period).setErrors({maxPeriod: true});
+    } else {
+      return null;
+    }
+  }
+}
+
 // TODO: check for boolean
 export function boolean(control: AbstractControl) {
   return control.value === '' ? { boolean: true } : null;

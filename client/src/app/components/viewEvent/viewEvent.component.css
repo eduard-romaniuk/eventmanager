@@ -2,6 +2,14 @@ agm-map {
   height: 400px;
 }
 
+.inlineDiv {
+  display: inline-block;
+}
+
+.inlineDivRight {
+  margin-right: 10px;
+}
+
 .radio {
   padding-left: 20px; }
 .radio label {
