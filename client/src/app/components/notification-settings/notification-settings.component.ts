@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Event} from "../../model/event";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {NotificationSettings} from "../../model/notificationSettings";
 import {NotificationSettingsService} from "../../services/notification-settings.service";
 import {ToastService} from "../../services/toast.service";
@@ -31,8 +31,6 @@ export class NotificationSettingsComponent implements OnInit {
     this.form = this.formBuilder.group({
       emailNotif: [this.notificationSetting.emailNotificationOn, [Validators.required]],
       startDate: [this.notificationSetting.startDate, []],
-      // startDate: new FormControl({value: this.notificationSetting.startDate,
-      //   disabled: this.isDisabled})
       period: [this.notificationSetting.period, []],
       countDownOn: [this.notificationSetting.countDownOn, []]
       }

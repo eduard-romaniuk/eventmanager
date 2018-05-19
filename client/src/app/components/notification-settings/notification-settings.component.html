@@ -16,7 +16,8 @@
       <input id="startDate"
              formControlName="startDate" [(ngModel)]="notificationSetting.startDate"
              [owlDateTimeTrigger]="dt" [owlDateTime]="dt"
-             [min]="min" [max]="max">
+             [min]="min" [max]="max"
+             [attr.disabled]="notificationSetting.emailNotificationOn ? null : ''">
       <owl-date-time [pickerType]="'calendar'" [pickerMode]="'dialog'" #dt></owl-date-time>
     </label>
   </div>
@@ -27,7 +28,8 @@
     </label>
     <div style="margin-left: 10px">
       <input type="checkbox" id="countDownOn" class="form-control mt-2"
-             formControlName="countDownOn" [(ngModel)]="notificationSetting.countDownOn">
+             formControlName="countDownOn" [(ngModel)]="notificationSetting.countDownOn"
+             [attr.disabled]="notificationSetting.emailNotificationOn ? null : ''">
     </div>
   </div>
 
@@ -38,7 +40,8 @@
     <div class="col-sm-12">
       <div class="input-group">
         <input class="form-control" id="period" name="period" type="number"
-               [(ngModel)]="notificationSetting.period" formControlName="period"/>
+               [(ngModel)]="notificationSetting.period" formControlName="period"
+               [attr.disabled]="notificationSetting.emailNotificationOn ? null : ''"/>
                <!--[ngClass]="{'is-invalid': form.get('periodControl').invalid &&-->
                        <!--(form.get('periodControl').dirty || form.get('periodControl').touched)}"-->
 
