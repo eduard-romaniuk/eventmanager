@@ -8,7 +8,7 @@ import lombok.Data;
 public class Message {
 	private long id;
 	private long chatId;
-	private Date date;
+	private String date;
 	private long participantId;
 	private String text;
 	
@@ -24,10 +24,10 @@ public class Message {
 	public void setChatId(long chatId) {
 		this.chatId = chatId;
 	}
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 	public long getParticipantId() {

@@ -66,6 +66,7 @@ import {NgxEditorModule} from "ngx-editor";
 import { NoHtmlPipe } from "./pipes/nohtml.pipe";
 import { UserEditEmailComponent } from './components/user/user-edit-email/user-edit-email.component';
 import { AddItemImagesComponent } from './components/wishlist/item/add-item-images/add-item-images.component';
+import { MessageService } from "./services/message.service";
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -166,6 +167,7 @@ export class AddressInterceptor implements HttpInterceptor {
     WishListService,
     ItemService,
     PersonalPanSettingService,
+    MessageService,
     LikeService,
 
     { provide: HTTP_INTERCEPTORS,

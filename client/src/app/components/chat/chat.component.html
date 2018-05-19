@@ -14,6 +14,25 @@
 				</div>
 				<div class="panel-body">
 					<ul class="chat">
+						<div *ngIf="messages">
+							<div *ngFor="let message of messages">
+								<li class='left clearfix'><span class='chat-img pull-left'>
+										<img src='{{message.image}}' width='50' height='50'
+										alt='User Avatar' class='img-circle' />
+								</span>
+									<div class='chat-body clearfix'>
+										<div class='header'>
+											<strong class='primary-font'>{{message.login}}</strong> <small
+												class='pull-right text-muted'> <span
+												class='glyphicon glyphicon-time'></span>{{message.date}}"
+											</small>
+										</div>
+										<p>{{message.text}}</p>
+									</div>
+								</li>
+								<hr width='90%' size='2' color='grey' />
+							</div>
+						</div>
 					</ul>
 				</div>
 				<div class="panel-footer">

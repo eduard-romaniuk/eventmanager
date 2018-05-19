@@ -158,11 +158,11 @@ export class ViewEventComponent {
   }
 
   goToChatWithCreator() {
-    this.router.navigate(['event', this.event.id, 'chats', 'withCreator']);
+    this.router.navigate(['chats', this.event.id, 'withCreator']);
   }
 
   goToChatWithoutCreator() {
-    this.router.navigate(['event', this.event.id, 'chats', 'withoutCreator']);
+    this.router.navigate(['chats', this.event.id, 'withoutCreator']);
   }
 
   low() {
