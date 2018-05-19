@@ -1,0 +1,83 @@
+<form class="md-form text-center" [formGroup]="form" (ngSubmit)="save()">
+
+  <div class="form-group form-inline">
+    <label for="emailNotif" style="margin-right: 10px">
+      Send email notification about this event
+    </label>
+    <div>
+      <input type="checkbox" id="emailNotif" class="form-control mt-2"
+             formControlName="emailNotif" [(ngModel)]="notificationSetting.emailNotificationOn"
+             style="margin-bottom: 5px">
+    </div>
+  </div>
+
+  <div class="form-group form-inline">
+    <label for="startDate" style="margin-right: 10px">
+      Start send notification from:
+    </label>
+      <input id="startDate"
+             formControlName="startDate" [(ngModel)]="notificationSetting.startDate"
+             [owlDateTimeTrigger]="dt" [owlDateTime]="dt"
+             [min]="min" [max]="max"
+             [attr.disabled]="notificationSetting.emailNotificationOn ? null : ''">
+      <owl-date-time [pickerType]="'calendar'" #dt></owl-date-time>
+  </div>
+
+  <div class="form-group form-inline">
+    <label for="countDownOn" style="margin-right: 10px">
+      Include countdown
+    </label>
+    <div>
+      <input type="checkbox" id="countDownOn" class="form-control mt-2"
+             formControlName="countDownOn" [(ngModel)]="notificationSetting.countDownOn"
+             [attr.disabled]="notificationSetting.emailNotificationOn ? null : ''"
+             style="margin-bottom: 5px">
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="period">
+      Period
+    </label>
+    <div class="col-sm-12">
+      <div class="input-group">
+        <input class="form-control" id="period" name="period" type="number"
+               [(ngModel)]="notificationSetting.period" formControlName="period"
+               [attr.disabled]="notificationSetting.emailNotificationOn && notificationSetting.startDate ? null : ''"
+               [ngClass]="{'is-invalid': form.get('period').invalid &&
+                       (form.get('period').dirty || form.get('period').touched)}"/>
+
+        <div class="input-group-append">
+                  <span class="input-group-text">
+                     <i class="fa fa-repeat"> </i> </span>
+        </div>
+      </div>
+      <span class="help-block" id="hint_period">
+        <small>Send notifications every n days from start date</small>
+       </span>
+      <div
+        *ngIf="form.get('period').invalid && (form.get('period').dirty || form.get('period').touched)"
+        class="text-danger">
+        <div *ngIf="form.get('period').errors.required">
+          Period can't be blank
+        </div>
+        <div *ngIf="form.get('period').errors.min">
+          Period can't be < 0
+        </div>
+        <div *ngIf="form.get('period').errors.maxPeriod">
+          Period should be less than number of days to the event
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-primary mt-2" [hidden]="!savingChanges">
+    Saving changes...
+  </div>
+
+  <div class="alert alert-danger mt-2" [hidden]="!error">
+    Some errors occurred, try again
+  </div>
+
+  <button class="btn btn-info button" type="submit" [disabled]="!form.valid">Save</button>
+</form>

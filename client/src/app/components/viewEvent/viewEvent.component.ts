@@ -10,6 +10,8 @@ import {Subscription} from "rxjs/Subscription";
 import {FormGroup} from "@angular/forms";
 import {ToastService} from "../../services/toast.service";
 import {UserService} from "../../services/user.service";
+import {NotificationSettings} from "../../model/notificationSettings";
+import {NotificationSettingsService} from "../../services/notification-settings.service";
 
 @Component({
   selector: 'app-createEvent',
@@ -21,6 +23,7 @@ export class ViewEventComponent {
   event: Event = new Event();
   userId: number;
   priority: String;
+  notificationSetting: NotificationSettings = new NotificationSettings();
   form: FormGroup;
   isParticipant: boolean;
   isCreator: boolean;
@@ -45,7 +48,8 @@ export class ViewEventComponent {
               private router: Router,
               private eventService: EventService,
               private toast: ToastService,
-              private userService: UserService) {
+              private userService: UserService,
+              private notificationSettingsService: NotificationSettingsService) {
   }
 
   ngOnInit() {
@@ -72,6 +76,16 @@ export class ViewEventComponent {
                 this.eventService.getPriority(id).subscribe((priority: String) => {
                   if (priority) {
                     this.priority = priority;
+
+                    this.notificationSettingsService.getByUserIdAndEventId(this.userId, this.event.id)
+                      .subscribe((notificationSetting: any) => {
+                        if (notificationSetting) {
+                          this.notificationSetting = notificationSetting;
+                        } else {
+                          console.log(`Notification Setting not found!`);
+                        }
+                      });
+
                   } else {
                     console.log(`Priority not found!`);
                   }
