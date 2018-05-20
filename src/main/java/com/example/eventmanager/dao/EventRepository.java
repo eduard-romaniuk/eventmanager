@@ -244,7 +244,7 @@ public class EventRepository implements CrudRepository<Event> {
             namedParams.put("event_id", id);
             return namedJdbcTemplate.query(env.getProperty("event.findParticipants"), namedParams, new UserMapper());
         } catch (EmptyResultDataAccessException e) {
-            logger.info("Participants not found");
+            logger.warn("Participants not found");
             return Collections.emptyList();
         }
     }
@@ -257,7 +257,7 @@ public class EventRepository implements CrudRepository<Event> {
             namedParams.put("toDate", toDate);
             return namedJdbcTemplate.query(env.getProperty("event.forPeriod"), namedParams, new EventExtractor());
         } catch (EmptyResultDataAccessException e) {
-            logger.info("Events not found");
+            logger.warn("Events not found");
             return Collections.emptyList();
         }
 
@@ -270,7 +270,7 @@ public class EventRepository implements CrudRepository<Event> {
             namedParams.put("event_id", event_id);
             return namedJdbcTemplate.queryForObject(env.getProperty("event.getEventPriority"), namedParams, String.class);
         } catch (EmptyResultDataAccessException e) {
-            logger.info("Priority not set for user" + user_id + "and event" + event_id);
+            logger.warn("Priority not set for user" + user_id + "and event" + event_id);
             return "";
         }
     }
@@ -294,7 +294,7 @@ public class EventRepository implements CrudRepository<Event> {
             namedJdbcTemplate.queryForObject(env.getProperty("event.userIsParticipant"), namedParams, Long.class);
             return true;
         } catch (EmptyResultDataAccessException e) {
-            logger.info("User is not a participant");
+            logger.warn("User is not a participant");
             return false;
         }
     }
@@ -396,6 +396,8 @@ public class EventRepository implements CrudRepository<Event> {
             User participant = new User();
             participant.setId(rs.getLong("id"));
             participant.setLogin(rs.getString("login"));
+            participant.setName(rs.getString("name"));
+            participant.setSurName(rs.getString("surname"));
             return participant;
         }
     }

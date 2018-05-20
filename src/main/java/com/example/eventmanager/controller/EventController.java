@@ -1,9 +1,6 @@
 package com.example.eventmanager.controller;
 
-import com.example.eventmanager.domain.Category;
-import com.example.eventmanager.domain.Event;
-import com.example.eventmanager.domain.EventView;
-import com.example.eventmanager.domain.User;
+import com.example.eventmanager.domain.*;
 import com.example.eventmanager.service.EmailService;
 import com.example.eventmanager.service.EventService;
 import com.example.eventmanager.service.ExportEventService;
