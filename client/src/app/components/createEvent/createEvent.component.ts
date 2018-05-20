@@ -5,7 +5,6 @@ import {JQueryStatic} from 'jquery'
 import {Event} from '../../model/event'
 import {AuthService} from "../../services/auth.service";
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {dateLessThan, dateValidator, imageExtension} from "../../utils/validation-tools";
 import {Router} from "@angular/router";
 import {CloudinaryUploader} from "ng2-cloudinary";
 import {ImageUploaderService} from "../../services/image-uploader.service";
@@ -51,6 +50,8 @@ export class CreateEventComponent implements OnInit {
     ]
   };
 
+  min = new Date();
+  max = new Date(2049,11,31);
 
   constructor(private auth: AuthService,
               private eventService: EventService,
@@ -74,10 +75,10 @@ export class CreateEventComponent implements OnInit {
     this.form = this.formBuilder.group({
       eventNameControl: ['', [Validators.required]],
       descriptionControl: ['', [Validators.required]],
-      timeLineStartControl: ['', [Validators.required, dateValidator()]],
+      timeLineStartControl: ['', [Validators.required]],
       timeLineFinishControl: ['', [Validators.required]],
       periodControl: ['', [Validators.required, Validators.min(0)]],
-    }, {validator: dateLessThan('timeLineStartControl', 'timeLineFinishControl'),});
+    });
     this.setCurrentPosition();
     this.getCategories();
   }

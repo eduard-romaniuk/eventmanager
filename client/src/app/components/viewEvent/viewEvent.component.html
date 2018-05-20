@@ -71,15 +71,9 @@
         Add Friends
       </button>
 
-      <button class="btn btn-info left-button" data-toggle="collapse" (click)="showParticipants()"
-              data-target="#hide-me">
+      <button class="btn btn-info left-button"  data-toggle="modal" data-target="#participants" (click)="showParticipants()">
         Participants
       </button>
-      <div id="hide-me" class="collapse in">
-        <div class="md-form text-center" *ngFor="let user of participants">
-          <a [routerLink]="['/users', user.id]"> {{ user.login }} </a>
-        </div>
-      </div>
 
     </div>
 
@@ -214,6 +208,21 @@
           <app-notification-settings *ngIf="userId && event && notificationSetting"
                                  [userId]="userId" [event]="event" [notificationSetting]="notificationSetting">
           </app-notification-settings>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="participants" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header text-center"><h3> Participants </h3>
+          <button class="close" type="button" data-dismiss="modal">×</button>
+        </div>
+        <div class="modal-body centerDiv">
+          <div class="md-form text-center" *ngFor="let user of participants">
+            <a [routerLink]="['/users', user.id]"> {{ user.name }} {{ user.surName }} </a>
+          </div>
         </div>
       </div>
     </div>

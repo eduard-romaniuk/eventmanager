@@ -120,14 +120,22 @@ export class ViewEventComponent {
 
   public join() {
     this.eventService.joinToEvent(this.event.id).subscribe(response => {
-      window.location.reload();
-      this.toast.success('You become a participant in this event');
+      this.eventService.getPriority(this.event.id).subscribe((priority: String) => {
+        this.priority = priority;
+        this.isParticipant=true;
+        this.router.navigate(['event/', this.event.id]);
+        this.toast.success('You become a participant in this event');
+      });
     });
   }
 
   public leave() {
-    this.eventService.leaveEvent(this.event.id).subscribe();
-    window.location.reload();
+    this.eventService.leaveEvent(this.event.id).subscribe(response => {
+      this.router.navigate(['event/', this.event.id]);
+      this.toast.warn('You leave this event');
+      this.isParticipant=false;
+    });
+
   }
 
   public delete() {
