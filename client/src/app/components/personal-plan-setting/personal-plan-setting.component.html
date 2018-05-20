@@ -36,7 +36,7 @@
             <div class="col-md-8">
               <div class="input-group">
                 <input class="form-control" id="planPeriod" name="planPeriod" type="number"
-                       [(ngModel)]="setting.notificationPeriod" formControlName="periodControl"
+                       [(ngModel)]="setting.planPeriod" formControlName="periodControl"
                        [ngClass]="{'is-invalid': form.get('periodControl').invalid &&
                        (form.get('periodControl').dirty || form.get('periodControl').touched)}"/>
                 <div class="input-group-append">
@@ -46,7 +46,7 @@
                 </div>
               </div>
               <span class="help-block" id="hpper">
-        Number of  days in the personal events plan
+        <small>Number of  days in the personal events plan</small>
        </span>
               <div
                 *ngIf="form.get('periodControl').invalid && (form.get('periodControl').dirty || form.get('periodControl').touched)"
@@ -95,14 +95,10 @@
           </div>
         </form>
 
-          <h4 class="my-4 text-center">
-           <strong>Send personal events plan via email ?</strong>
-            <span class="asteriskField">* </span>
-            <input id="sendPlan" type="checkbox" [(ngModel)]="setting.sendPlan">
-          </h4>
-
           <div class="col-md-8 centerDiv">
-            <button class="btn btn-primary" (click)="update()" [disabled]="!form.valid">Submit</button>
+            <button class="btn btn-primary" (click)="update()" [disabled]="!form.valid">Update</button>
+            <button *ngIf="!setting.sendPlan" class="btn btn-success" (click)="enable()" [disabled]="!form.valid">Enable</button>
+            <button *ngIf="setting.sendPlan" class="btn btn-danger" (click)="disable()" [disabled]="!form.valid">Disable</button>
           </div>
       </div>
     </div>

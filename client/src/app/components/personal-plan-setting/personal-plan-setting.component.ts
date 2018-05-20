@@ -4,6 +4,7 @@ import {PersonalPlanSetting} from '../../model/personalPlanSetting';
 import {PersonalPanSettingService} from '../../services/personal-pan-setting.service';
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {ToastService} from "../../services/toast.service";
 
 
 @Component({
@@ -21,7 +22,8 @@ export class PersonalPlanSettingComponent implements OnInit {
 
   constructor(private router: Router,
               private settingService: PersonalPanSettingService,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              private toast: ToastService) {
 
   }
 
@@ -47,7 +49,27 @@ export class PersonalPlanSettingComponent implements OnInit {
     console.log(this.setting.sendPlan);
     this.settingService.update(this.setting).subscribe(response => {
       this.router.navigate(['home']);
-    }, error => console.error(error));
+      this.toast.success('Personal Plan Setting was successfully updating');
+    }, error =>{
+      this.toast.warn('An error occurred while updating the data, please try again');
+      console.error(error)});
+
     console.log("Personal plan setting was update")
+  }
+
+  public enable(){
+
+    this.setting.sendPlan = true;
+    this.update();
+    this.toast.success('Sending Personal Plan was enable');
+
+  }
+
+  public disable(){
+
+    this.setting.sendPlan = false;
+    this.update();
+    this.toast.warn('Sending Personal Plan was disable');
+
   }
 }
