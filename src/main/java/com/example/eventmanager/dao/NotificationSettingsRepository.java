@@ -191,4 +191,13 @@ public class NotificationSettingsRepository implements CrudRepository<Notificati
         }
     }
 
+    public void shiftNotificationStartDateForAllNotifications(LocalDate date) {
+        logger.info("Shift notifications start date on {}", date);
+
+        Map<String, Object> namedParams = new HashMap<>();
+        namedParams.put("date", date);
+
+        namedJdbcTemplate.update(env.getProperty("shiftNotificationStartDateForAllNotifications"), namedParams);
+    }
+
 }

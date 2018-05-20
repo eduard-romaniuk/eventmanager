@@ -27,8 +27,10 @@ public class NotificationService {
 
     //TODO Move to external file
     //Pattern - second, minute, hour, day of month, month, day(s) of week
-    private final String TIME_TO_SEND_NOTIFICATIONS = "0 0 10 * * ?"; // every day at 10 a.m.
-    //private final String TIME_TO_SEND_NOTIFICATIONS = "0/30 * * * * *"; //every 30 seconds
+    private final String TIME_TO_SEND_NOTIFICATIONS = "0 0 8 * * ?";
+    //private final String TIME_TO_SEND_NOTIFICATIONS = "0/30 * * * * *";
+    private final String TIME_TO_UPDATE_DB = "0 0 20 * * ?";
+    //private final String TIME_TO_UPDATE_DB = "0/30 * * * * *";
 
     @Autowired
     public NotificationService(UserService userService,
@@ -51,6 +53,13 @@ public class NotificationService {
         }
 
         logger.info("End sending notifications");
+    }
+
+    @Scheduled(cron = TIME_TO_UPDATE_DB)
+    public void updateNotificationsInDB() {
+        logger.info("Start updating notifications in DB");
+        notificationSettingsService.shiftNotificationStartDateForAllNotifications(LocalDate.now());
+        logger.info("End updating notifications in DB");
     }
 
     private void sendNotificationToUser(User user){

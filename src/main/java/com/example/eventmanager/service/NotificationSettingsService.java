@@ -74,4 +74,9 @@ public class NotificationSettingsService {
         logger.info("findAllEventsToNotificateByUserId with user id {}", userId);
         return notificationSettingsRepository.findAllEventsToNotificateByUserId(userId, date);
     }
+
+    public void shiftNotificationStartDateForAllNotifications(LocalDate date){
+        logger.info("Shift notifications start date on {}", date);
+        notificationSettingsRepository.shiftNotificationStartDateForAllNotifications(date);
+    }
 }
