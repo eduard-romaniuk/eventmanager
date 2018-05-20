@@ -17,7 +17,8 @@ export class PersonalPlanSettingComponent implements OnInit {
   setting: PersonalPlanSetting;
   form: FormGroup;
 
-  min = new Date();
+  today: Date = new Date();
+  min = new Date(this.today.getFullYear(),this.today.getMonth(),this.today.getDate(),0,0);
   max = new Date(2049,11,31);
 
   constructor(private router: Router,
@@ -41,12 +42,15 @@ export class PersonalPlanSettingComponent implements OnInit {
 
     this.form = this.formBuilder.group({
       timeLineStartControl: ['', [Validators.required]],
-      periodControl: ['', [Validators.required, Validators.min(0)]],
+      planPerioddControl: ['', [Validators.required, Validators.min(0)]],
+      notificationPeriodControl: ['', [Validators.required, Validators.min(0)]]
     });
   }
 
   public update() {
-    console.log(this.setting.sendPlan);
+
+    this.setting.fromDate= new Date(this.setting.fromDate.getFullYear(),this.setting.fromDate.getMonth(),this.setting.fromDate.getDate()+1);
+    console.log(this.setting);
     this.settingService.update(this.setting).subscribe(response => {
       this.router.navigate(['home']);
       this.toast.success('Personal Plan Setting was successfully updating');
@@ -60,6 +64,7 @@ export class PersonalPlanSettingComponent implements OnInit {
   public enable(){
 
     this.setting.sendPlan = true;
+    this.setting.fromDate = new Date(this.setting.fromDate);
     this.update();
     this.toast.success('Sending Personal Plan was enable');
 
@@ -68,6 +73,7 @@ export class PersonalPlanSettingComponent implements OnInit {
   public disable(){
 
     this.setting.sendPlan = false;
+    this.setting.fromDate = new Date(this.setting.fromDate);
     this.update();
     this.toast.warn('Sending Personal Plan was disable');
 
