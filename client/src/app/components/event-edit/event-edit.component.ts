@@ -8,7 +8,6 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CloudinaryUploader} from "ng2-cloudinary";
 import {ImageUploaderService} from "../../services/image-uploader.service";
 import {AuthService} from "../../services/auth.service";
-import {dateLessThan, dateValidator} from "../../utils/validation-tools";
 import {Category} from "../../model/category";
 
 @Component({
@@ -30,6 +29,9 @@ export class EventEditComponent implements OnInit, OnDestroy {
   sub: Subscription;
 
   categories:Category[] =[];
+
+  min = new Date();
+  max = new Date(2049,11,31);
 
 
   editorConfig = {
@@ -79,10 +81,10 @@ export class EventEditComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       eventNameControl: ['', [Validators.required]],
       descriptionControl: ['', [Validators.required]],
-      timeLineStartControl: ['', [Validators.required, dateValidator()]],
+      timeLineStartControl: ['', [Validators.required]],
       timeLineFinishControl: ['', [Validators.required]],
-      periodControl: ['', [Validators.required, Validators.min(0)]],
-    }, {validator: dateLessThan('timeLineStartControl', 'timeLineFinishControl'),});
+      periodControl: ['', [Validators.required]],
+    });
     this.getCategories();
 
   }

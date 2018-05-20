@@ -4,7 +4,7 @@ import {PersonalPlanSetting} from '../../model/personalPlanSetting';
 import {PersonalPanSettingService} from '../../services/personal-pan-setting.service';
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {dateValidator} from "../../utils/validation-tools";
+
 
 @Component({
   selector: 'app-personal-plan-notification-setting',
@@ -15,6 +15,9 @@ export class PersonalPlanSettingComponent implements OnInit {
 
   setting: PersonalPlanSetting;
   form: FormGroup;
+
+  min = new Date();
+  max = new Date(2049,11,31);
 
   constructor(private router: Router,
               private settingService: PersonalPanSettingService,
@@ -35,7 +38,7 @@ export class PersonalPlanSettingComponent implements OnInit {
     });
 
     this.form = this.formBuilder.group({
-      timeLineStartControl: ['', [Validators.required, dateValidator()]],
+      timeLineStartControl: ['', [Validators.required]],
       periodControl: ['', [Validators.required, Validators.min(0)]],
     });
   }

@@ -5,49 +5,44 @@
       <div class="col-md-8 col-sm-6 col-xs-12 centerDiv">
         <h2 class="my-4 text-center">Setting the sending of a personal events plan</h2>
         <form class="form-horizontal" [formGroup]="form">
-          <div class="form-group ">
-            <label class="control-label col-sm-2 requiredField" for="timeLineStart">
-              Start date
-              <span class="asteriskField">*</span>
+
+
+          <div class="form-group">
+            <label class="control-label col-md-8 requiredField" for="timeLineStart">
+              Start date <span class="asteriskField">*</span>
             </label>
-            <div class="col-sm-10">
+            <div class="col-md-8">
               <div class="input-group">
-                <input class="form-control" id="timeLineStart" name="timeLineStart"  type="date"
-                       [(ngModel)]="setting.fromDate" formControlName="timeLineStartControl"
-                       [ngClass]="{'is-invalid': form.get('timeLineStartControl').invalid &&
-                       (form.get('timeLineStartControl').dirty || form.get('timeLineStartControl').touched)} "/>
-                <div class="input-group-addon">
-                  <i class="fa fa-calendar-check-o">
-                  </i>
+                <input id="timeLineStart"
+                       formControlName="timeLineStartControl" [(ngModel)]="setting.fromDate"
+                       [owlDateTimeTrigger]="dt" [owlDateTime]="dt"
+                       [min]="min" [max]="max">
+                <div class="input-group-append">
+                   <span class="input-group-text">
+                      <i class="fa fa-calendar-check-o"> </i>
+                   </span>
                 </div>
-              </div>
-              <span class="help-block" id="hstart">
-        Start date for sending a personal events plan
-       </span>
-              <div *ngIf="form.get('timeLineStartControl').invalid &&
-                (form.get('timeLineStartControl').dirty || form.get('timeLineStartControl').touched ||
-                      form.get('timeLineStartControl').touched)" class="text-danger">
-                <div *ngIf="form.get('timeLineStartControl')">
-                  Start date can't before current date
-                </div>
+                <owl-date-time [pickerType]="'calendar'" #dt></owl-date-time>
               </div>
             </div>
           </div>
 
+
           <div class="form-group ">
-            <label class="control-label col-sm-2 requiredField" for="planPeriod">
+            <label class="control-label col-md-8 requiredField" for="planPeriod">
               For days
               <span class="asteriskField">*</span>
             </label>
-            <div class="col-sm-10">
+            <div class="col-md-8">
               <div class="input-group">
                 <input class="form-control" id="planPeriod" name="planPeriod" type="number"
                        [(ngModel)]="setting.notificationPeriod" formControlName="periodControl"
                        [ngClass]="{'is-invalid': form.get('periodControl').invalid &&
                        (form.get('periodControl').dirty || form.get('periodControl').touched)}"/>
-                <div class="input-group-addon">
-                  <i class="fa fa-repeat">
-                  </i>
+                <div class="input-group-append">
+                   <span class="input-group-text">
+                      <i class="fa fa-repeat"> </i>
+                   </span>
                 </div>
               </div>
               <span class="help-block" id="hpper">
@@ -67,19 +62,20 @@
           </div>
 
           <div class="form-group ">
-            <label class="control-label col-sm-2 requiredField" for="notificationPeriod">
+            <label class="control-label col-md-8 requiredField" for="notificationPeriod">
               Send period
               <span class="asteriskField">*</span>
             </label>
-            <div class="col-sm-10">
+            <div class="col-md-8">
               <div class="input-group">
                 <input class="form-control" id="notificationPeriod" name="notificationPeriod" type="number"
                        [(ngModel)]="setting.notificationPeriod" formControlName="periodControl"
                        [ngClass]="{'is-invalid': form.get('periodControl').invalid &&
                        (form.get('periodControl').dirty || form.get('periodControl').touched)}"/>
-                <div class="input-group-addon">
-                  <i class="fa fa-repeat">
-                  </i>
+                <div class="input-group-append">
+                   <span class="input-group-text">
+                      <i class="fa fa-repeat"> </i>
+                   </span>
                 </div>
               </div>
               <span class="help-block" id="hnper">
@@ -105,7 +101,7 @@
             <input id="sendPlan" type="checkbox" [(ngModel)]="setting.sendPlan">
           </h4>
 
-          <div class="col-sm-8 col-sm-offset-6">
+          <div class="col-md-8 centerDiv">
             <button class="btn btn-primary" (click)="update()" [disabled]="!form.valid">Submit</button>
           </div>
       </div>

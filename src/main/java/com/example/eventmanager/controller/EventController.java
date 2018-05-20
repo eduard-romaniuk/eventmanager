@@ -129,24 +129,26 @@ public class EventController {
     }
 
     @RequestMapping(value = "/downloadPlan", method = RequestMethod.GET)
-    public void downloadEventsPlan(@RequestParam String from, @RequestParam String to, HttpServletResponse response) throws IOException, JRException {
+    public void downloadEventsPlan( @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
+                                    @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
+                                    HttpServletResponse response) throws IOException, JRException {
         logger.info("GET /downloadPlan");
 
-        LocalDate fromDate = LocalDate.parse(from);
-        LocalDate toDate = LocalDate.parse(to);
+        LocalDate fromDate = from.toLocalDate();
+        LocalDate toDate = to.toLocalDate();
 
         JasperPrint eventsPlan = exportService.eventsPlanForExport(fromDate, toDate);
         final OutputStream outputStream = response.getOutputStream();
         JasperExportManager.exportReportToPdfStream(eventsPlan, outputStream);
 
-
     }
 
     @RequestMapping(value = "/sendPlan", method = RequestMethod.GET)
-    public void sendEventsPlan(@RequestParam String from, @RequestParam String to) {
+    public void sendEventsPlan(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
+                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to) {
         logger.info("GET /sendPlan");
-        LocalDate fromDate = LocalDate.parse(from);
-        LocalDate toDate = LocalDate.parse(to);
+        LocalDate fromDate = from.toLocalDate();
+        LocalDate toDate = to.toLocalDate();
         JasperPrint eventsPlan = exportService.eventsPlanForExport(fromDate, toDate);
         String email =  userService.getCurrentUser().getEmail();
         exportService.sendEventsPlan(email,eventsPlan,fromDate,toDate);

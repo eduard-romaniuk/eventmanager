@@ -5,7 +5,6 @@ import {JQueryStatic} from 'jquery'
 import {Event} from '../../model/event'
 import {AuthService} from "../../services/auth.service";
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {dateLessThan, dateValidator, imageExtension} from "../../utils/validation-tools";
 import {Router} from "@angular/router";
 import {CloudinaryUploader} from "ng2-cloudinary";
 import {ImageUploaderService} from "../../services/image-uploader.service";

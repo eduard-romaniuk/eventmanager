@@ -44,11 +44,11 @@ public class ExportEventService {
 
 
                 JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(events);
-                logger.info("Events plan successfully crated");
+                logger.info("Events plan successfully created");
                 return JasperFillManager.fillReport(eventsPlan, params, dataSource);
 
             } catch (JRException ex) {
-                logger.info("Problem with create events plan", ex.getMessage());
+                logger.warn("Problem with create events plan", ex.getMessage());
                 ex.printStackTrace();
                 throw new IllegalArgumentException();
 
