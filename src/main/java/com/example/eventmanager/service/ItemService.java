@@ -1,12 +1,7 @@
 package com.example.eventmanager.service;
 
-import com.example.eventmanager.dao.ImageRepository;
-import com.example.eventmanager.dao.ItemRepository;
-import com.example.eventmanager.dao.LikeRepository;
-import com.example.eventmanager.dao.TagRepository;
-import com.example.eventmanager.domain.Item;
-import com.example.eventmanager.domain.Tag;
-import com.example.eventmanager.domain.WishList;
+import com.example.eventmanager.dao.*;
+import com.example.eventmanager.domain.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +15,8 @@ public class ItemService {
     private final ItemRepository itemRepository;
     private final TagRepository tagRepository;
     private final LikeRepository likeRepository;
+    private final BookerRepository bookerRepository;
+    private final EventRepository eventRepository;
 
 
     private final Logger logger = LogManager.getLogger(ItemService.class);
@@ -28,11 +25,15 @@ public class ItemService {
     public ItemService(
             ItemRepository itemRepository,
             TagRepository tagRepository,
-            LikeRepository likeRepository
+            LikeRepository likeRepository,
+            BookerRepository bookerRepository,
+            EventRepository eventRepository
             ){
         this.itemRepository = itemRepository;
         this.tagRepository = tagRepository;
         this.likeRepository = likeRepository;
+        this.bookerRepository = bookerRepository;
+        this.eventRepository = eventRepository;
     }
 
     public void saveItem(Item item){
@@ -59,6 +60,7 @@ public class ItemService {
     public void deleteItem (Item item) {
 
         likeRepository.deleteLikesForItem( item.getId() );
+        bookerRepository.deleteBookersForItem( item.getId() );
         tagRepository.deleteUnusedTags( new ArrayList<Tag>(), item.getId() );
         itemRepository.delete( item );
 
@@ -107,6 +109,24 @@ public class ItemService {
             }
         }
 
+    }
+
+    public void booking (Booker booker) {
+
+        if ( eventRepository.isParticipant(booker.getUserId(), booker.getEventId()) ) {
+            bookerRepository.save(booker);
+        } else {
+            logger.info("Cannot save booker, the booker doesnt exist!");
+        }
+
+    }
+
+    public void unbooking (Booker booker) {
+        if ( eventRepository.isParticipant(booker.getUserId(), booker.getEventId()) ) {
+            bookerRepository.delete(booker);
+        } else {
+            logger.info("Cannot save booker, the booker doesnt exist!");
+        }
     }
 
 

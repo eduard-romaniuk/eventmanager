@@ -1,5 +1,6 @@
 package com.example.eventmanager.controller;
 
+import com.example.eventmanager.domain.Booker;
 import com.example.eventmanager.domain.Item;
 import com.example.eventmanager.domain.Tag;
 import com.example.eventmanager.domain.WishList;
@@ -79,6 +80,28 @@ public class ItemController {
         Long newItemId = itemService.copyItem(wishListId, itemId);
 
         return new ResponseEntity<>(newItemId, HttpStatus.OK);
+    }
+
+    @JsonView(ItemView.ShortView.class)
+    @RequestMapping(value = "/booking", method = RequestMethod.POST)
+    public ResponseEntity<Booker> booking (@RequestBody Booker booker) {
+        logger.info("POST /booking");
+
+        itemService.booking(booker);
+
+        return new ResponseEntity<Booker>(booker, HttpStatus.OK);
+    }
+
+    @JsonView(ItemView.ShortView.class)
+    @RequestMapping(value = "/booking", method = RequestMethod.DELETE)
+    public ResponseEntity<String> unbooking (@RequestBody Booker booker) {
+        logger.info("DELETE /booking");
+
+        //TODO: if
+
+        itemService.unbooking(booker);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

@@ -34,6 +34,7 @@ public class ItemRepository implements CrudRepository<Item>{
     private final TagRepository tagRepository;
     private final LikeRepository likeRepository;
     private final ImageRepository imageRepository;
+    private final BookerRepository bookerRepository;
 
     @Autowired
     public ItemRepository(
@@ -41,7 +42,8 @@ public class ItemRepository implements CrudRepository<Item>{
             Environment env,
             TagRepository tagRepository,
             LikeRepository likeRepository,
-            ImageRepository imageRepository
+            ImageRepository imageRepository,
+            BookerRepository bookerRepository
     ) {
         logger.info("ItemRepository initialized");
 
@@ -50,6 +52,7 @@ public class ItemRepository implements CrudRepository<Item>{
         this.tagRepository = tagRepository;
         this.likeRepository = likeRepository;
         this.imageRepository = imageRepository;
+        this.bookerRepository = bookerRepository;
     }
 
     @Override
@@ -103,6 +106,7 @@ public class ItemRepository implements CrudRepository<Item>{
                         item.setLikes(likeRepository.getLikesCountForItem(item.getId()));
                         item.setTags(tagRepository.getTagsForItem(item.getId()));
                         item.setImages(imageRepository.getImagesForItem(item.getId()));
+                        item.setBookers(bookerRepository.getBookersForItem(itemId));
 
                         logger.info("Item got! " + item.toString());
                         return item;
@@ -166,6 +170,7 @@ public class ItemRepository implements CrudRepository<Item>{
                         item.setWishListId(wishListId);
                         item.setLikes(likeRepository.getLikesCountForItem(item.getId()));
 //                        item.setTags(tagRepository.getTagsForItem(item.getId()));
+                        item.setBookers(bookerRepository.getBookersForItem(item.getId()));
 
                         logger.info("Item got! " + item.toString());
                         return item;
