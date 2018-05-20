@@ -51,6 +51,8 @@ export class CreateEventComponent implements OnInit {
     ]
   };
 
+  min = new Date();
+  max = new Date(2049,11,31);
 
   constructor(private auth: AuthService,
               private eventService: EventService,
@@ -74,10 +76,10 @@ export class CreateEventComponent implements OnInit {
     this.form = this.formBuilder.group({
       eventNameControl: ['', [Validators.required]],
       descriptionControl: ['', [Validators.required]],
-      timeLineStartControl: ['', [Validators.required, dateValidator()]],
+      timeLineStartControl: ['', [Validators.required]],
       timeLineFinishControl: ['', [Validators.required]],
       periodControl: ['', [Validators.required, Validators.min(0)]],
-    }, {validator: dateLessThan('timeLineStartControl', 'timeLineFinishControl'),});
+    });
     this.setCurrentPosition();
     this.getCategories();
   }
