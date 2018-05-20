@@ -6,7 +6,7 @@ import com.example.eventmanager.query.term.Join;
 import java.util.ArrayList;
 import java.util.List;
 
-public class QueryBuilder {
+public class Query {
     private List<String> columns = new ArrayList<>();
     private List<String> tables = new ArrayList<>();
     private List<Join> joins = new ArrayList<>();
@@ -16,47 +16,98 @@ public class QueryBuilder {
     private int limit = -1;
     private int offset = -1;
 
-    public QueryBuilder() {
+    private Query() {}
+
+    public static final class Builder {
+
+        private Query query;
+
+        public Builder() {
+            query = new Query();
+        }
+
+        public Builder(String table) {
+            query = new Query();
+            this.query.tables.add(table);
+        }
+
+        public Builder column(String name) {
+            this.query.columns.add(name);
+            return this;
+        }
+
+        public Builder from(String table) {
+            this.query.tables.add(table);
+            return this;
+        }
+
+        public Builder join(Join join) {
+            this.query.joins.add(join);
+            return this;
+        }
+
+        public Builder where(Expression expr) {
+            this.query.wheres.add(expr);
+            return this;
+        }
+
+        public Builder groupBy(String expr) {
+            this.query.groupBys.add(expr);
+            return this;
+        }
+
+        public Builder orderBy(String name) {
+            this.query.orderBys.add(name);
+            return this;
+        }
+
+        public Builder limit(int limit) {
+            this.query.limit = limit;
+            return this;
+        }
+
+        public Builder offset(int offset) {
+            this.query.offset = offset;
+            return this;
+        }
+
+        public Query build() {
+            Query builtQuery = query;
+            query = new Query();
+            return builtQuery;
+        }
     }
 
-    public QueryBuilder column(String name) {
-        columns.add(name);
-        return this;
+    public List<String> getColumns() {
+        return columns;
     }
 
-    public QueryBuilder from(String table) {
-        tables.add(table);
-        return this;
+    public List<String> getTables() {
+        return tables;
     }
 
-    public QueryBuilder join(Join join) {
-        joins.add(join);
-        return this;
+    public List<Join> getJoins() {
+        return joins;
     }
 
-    public QueryBuilder where(Expression expr) {
-        wheres.add(expr);
-        return this;
+    public List<Expression> getWheres() {
+        return wheres;
     }
 
-    public QueryBuilder groupBy(String expr) {
-        groupBys.add(expr);
-        return this;
+    public List<String> getOrderBys() {
+        return orderBys;
     }
 
-    public QueryBuilder orderBy(String name) {
-        orderBys.add(name);
-        return this;
+    public List<String> getGroupBys() {
+        return groupBys;
     }
 
-    public QueryBuilder limit(int limit) {
-        this.limit = limit;
-        return this;
+    public int getLimit() {
+        return limit;
     }
 
-    public QueryBuilder offset(int offset) {
-        this.offset = offset;
-        return this;
+    public int getOffset() {
+        return offset;
     }
 
     private void appendList(StringBuilder sql, List<String> list, String init,
