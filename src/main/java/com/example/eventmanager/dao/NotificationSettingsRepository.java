@@ -175,4 +175,20 @@ public class NotificationSettingsRepository implements CrudRepository<Notificati
         }
     }
 
+    public List<Map<String,Object>> findAllEventsToNotificateByUserId(Long userId, LocalDate date) {
+        try {
+            logger.info("Find all events to notificate by user with id {}", userId);
+
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("user_id", userId);
+            namedParams.put("date", date);
+
+            return namedJdbcTemplate.queryForList(env.getProperty("findAllEventsToNotificateByUserId"),
+                    namedParams);
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("Find events to notificate for user with id {} not found", userId);
+            return Collections.emptyList();
+        }
+    }
+
 }

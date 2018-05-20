@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class NotificationSettingsService {
@@ -67,5 +68,10 @@ public class NotificationSettingsService {
     public List<Event> findEventsWithCountdownToNotificateByUserId(Long userId, LocalDate date){
         logger.info("Find all notification with countdown to notificate by user with id {}", userId);
         return notificationSettingsRepository.findEventsWithCountdownToNotificateByUserId(userId, date);
+    }
+
+    public List<Map<String,Object>> findAllEventsToNotificateByUserId(Long userId, LocalDate date){
+        logger.info("findAllEventsToNotificateByUserId with user id {}", userId);
+        return notificationSettingsRepository.findAllEventsToNotificateByUserId(userId, date);
     }
 }
