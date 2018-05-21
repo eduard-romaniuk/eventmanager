@@ -7,6 +7,8 @@ import {LikeService} from "../../../../services/like.service";
 import {ItemService} from "../../../../services/item.service";
 import { JQueryStatic } from 'jquery';
 import {Router} from "@angular/router";
+import {EventService} from "../../../../services/event.service";
+import {Booker} from "../../../../model/booker";
 declare var $:JQueryStatic;
 
 
@@ -20,13 +22,22 @@ export class ViewItemComponent implements OnInit {
   subscription: Subscription;
   userId: number;
   isOwn: boolean = false;
+  isParticipant: boolean = false;
+  isBooked: boolean = false;
+
+  currentBooker: Booker;
+
+  @Input()
+  eventId: number;
+
 
   constructor(
     private wishListService: WishListService,
     private auth : AuthService,
     private router: Router,
     private likeService : LikeService,
-    private itemService: ItemService
+    private itemService: ItemService,
+    private eventService: EventService
   ){
  }
 
@@ -43,8 +54,35 @@ export class ViewItemComponent implements OnInit {
 
     this.auth.getUser().subscribe((user: any) => {
       this.userId = user.id;
+      if (this.eventId) {
+        this.initParticipantViewWishList();
+      }
     });
 
+  }
+
+  initParticipantViewWishList() {
+
+      this.eventService.isParticipantRequest(this.eventId).subscribe((participation: String) => {
+        if (participation) {
+          this.isParticipant = (participation == "true");
+
+          if(this.isParticipant){
+            this.currentBooker = new Booker();
+            this.currentBooker.event_id = this.eventId;
+            this.currentBooker.item_id = this.item.id;
+            this.currentBooker.user_id = this.userId;
+            this.itemService.isBooked(this.currentBooker).subscribe(
+              (isBooked: boolean ) => {
+                this.isBooked = isBooked;
+              }
+            );
+          }
+
+        } else {
+          console.log(`Participation not found!`);
+        }
+      });
   }
 
   ngOnDestroy(): void {
@@ -72,6 +110,27 @@ export class ViewItemComponent implements OnInit {
 
   isOwnItem(): boolean {
     return this.isOwn;
+  }
+
+  booking() {
+
+    if ( !this.isBooked ) {
+
+      this.itemService.booking(this.currentBooker);
+
+      this.isBooked = true;
+    }
+  }
+  unbooking() {
+
+    if( this.isBooked ) {
+
+      this.itemService.unbooking(this.currentBooker);
+
+      this.isBooked = false;
+
+    }
+
   }
 
 

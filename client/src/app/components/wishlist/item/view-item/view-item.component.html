@@ -27,10 +27,16 @@
     <img src="../../../../../assets/images/mock/copy-icon.png" alt="Smiley face" height="20">
     Copy
   </button>
-  <button type="button" class=" btn" [hidden]="isOwnItem()">
+  <button type="button" class=" btn" [hidden]="isOwnItem() || isBooked">
     <img src="../../../../../assets/images/mock/Vote-512.png" alt="Smiley face" height="20">
     Booking
   </button>
+
+  <button type="button" class=" btn" [hidden]="isOwnItem() || !isBooked">
+    <img src="../../../../../assets/images/mock/Vote-512.png" alt="Smiley face" height="20">
+    Unbook
+  </button>
+
   <button type="button" class=" btn" (click)="deleteItem()" [hidden]="!isOwnItem()">
     <img src="../../../../../assets/images/mock/delete.png" alt="Smiley face" height="20">
     Delete

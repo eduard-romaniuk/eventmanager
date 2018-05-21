@@ -63,6 +63,12 @@
               data-target="#hide-me">
         Participants
       </button>
+
+      <button class="btn btn-info left-button" data-toggle="collapse"
+              data-target="#hide-me" [routerLink]="['/event', event.id, 'wishlist']">
+        WishList
+      </button>
+
       <div id="hide-me" class="collapse in">
         <div class="md-form text-center" *ngFor="let user of participants">
           <a [routerLink]="['/users', user.id]"> {{ user.login }} </a>

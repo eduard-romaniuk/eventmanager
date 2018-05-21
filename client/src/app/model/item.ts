@@ -1,6 +1,6 @@
-import {User} from './user';
+
 import {Tag} from "./tag";
-import {WishList} from "./wishlist";
+import {Booker} from "./booker";
 
 export class Item {
   id: number;
@@ -9,7 +9,7 @@ export class Item {
   priority: number;
   wishListId: number;
   images: String[] = [];
-  booker: User;
+  bookers: Booker[];
   likes: number;
   tags: Tag[];
   hasLiked: boolean;
