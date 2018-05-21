@@ -76,6 +76,9 @@ export class EventService {
   public addUsers(users:User[],id){
     return this.http.post(this.base_url+id+"/participants",users)
   }
+  public removeUsers(users:User[],id){
+    return this.http.post(this.base_url+id+"/participants/remove",users)
+  }
 
   public getCategories(): Observable<Category[]>{
     return this.http.get<Category[]>(this.base_url+"categories")

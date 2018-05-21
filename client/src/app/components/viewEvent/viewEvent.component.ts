@@ -12,7 +12,7 @@ import {ToastService} from "../../services/toast.service";
 import {UserService} from "../../services/user.service";
 import {NotificationSettings} from "../../model/notificationSettings";
 import {NotificationSettingsService} from "../../services/notification-settings.service";
-import {forEach} from "@angular/router/src/utils/collection";
+
 
 @Component({
   selector: 'app-createEvent',
@@ -35,6 +35,8 @@ export class ViewEventComponent {
 
 
   newParticipants: User[];
+
+  removeParticipants: User[];
 
   latitude: Number;
   longitude: Number;
@@ -90,6 +92,8 @@ export class ViewEventComponent {
                   } else {
                     console.log(`Priority not found!`);
                   }
+                  this.newParticipants = [];
+                  this.removeParticipants =[];
                   this.isLoading = false;
                 });
                 console.log(`Event with id '${id}' was loaded!`);
@@ -162,10 +166,10 @@ export class ViewEventComponent {
     });
 
     this.eventService.addUsers(this.newParticipants, this.event.id).subscribe((user: any) => {
+      this.getFriends();
       this.toast.success(participantsNames+" was added to this event");
 
     }, error => console.error(error));
-
 
     this.newParticipants = [];
   }
@@ -177,8 +181,23 @@ export class ViewEventComponent {
   }
 
   removeUsers() {
+    let participantsNames = "";
+    this.removeParticipants.forEach(function (value) {
+      participantsNames = participantsNames +  value.name+" "+value.surName + " ";
+    });
 
+    this.eventService.removeUsers(this.removeParticipants, this.event.id).subscribe((user: any) => {
+      this.showParticipants();
+      this.toast.warn(participantsNames+" was remove from this event");
 
+    }, error => console.error(error));
+
+    this.removeParticipants = [];
+  }
+
+  cancelRemoveUsers(){
+    this.removeParticipants = [];
+    this.router.navigate(['event/', this.event.id]);
   }
 
   getFriends() {

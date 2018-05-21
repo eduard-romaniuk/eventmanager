@@ -169,4 +169,11 @@ public class EventService {
         }
         return result;
     }
+
+    public void removeParticipants(List<User> users,Long id){
+
+        for (User user:users) {
+            eventRepository.deleteParticipant(user.getId(),id);
+        }
+    }
 }
