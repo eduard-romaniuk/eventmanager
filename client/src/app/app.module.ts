@@ -153,7 +153,8 @@ export class AddressInterceptor implements HttpInterceptor {
       timeOut: 2000
     }),
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyAM7RXrVYjGXrOIM1NrlifgXf8pdmzVZf0'
+      apiKey: 'AIzaSyAM7RXrVYjGXrOIM1NrlifgXf8pdmzVZf0',
+      libraries: ["places"]
     }),
     OwlDateTimeModule,
     OwlNativeDateTimeModule,

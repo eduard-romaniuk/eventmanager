@@ -1,15 +1,17 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnInit, OnDestroy, ViewChild, ElementRef, NgZone} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 import { Event } from '../../model/event';
 import { EventService } from '../../services/event.service';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {CloudinaryUploader} from "ng2-cloudinary";
 import {ImageUploaderService} from "../../services/image-uploader.service";
 import {AuthService} from "../../services/auth.service";
 import {Category} from "../../model/category";
 import {imageExtension} from "../../utils/validation-tools";
+import {MapsAPILoader} from "@agm/core";
+import {} from '@types/googlemaps'
 
 @Component({
   selector: 'app-event-edit',
@@ -22,8 +24,12 @@ export class EventEditComponent implements OnInit, OnDestroy {
 
   uploader: CloudinaryUploader = ImageUploaderService.getUploader();
 
-  latitude: Number;
-  longitude: Number;
+  public latitude: number;
+  public longitude: number;
+  public searchControl: FormControl;
+
+  @ViewChild("search")
+  public searchElementRef: ElementRef;
 
   form: FormGroup;
 
@@ -57,7 +63,9 @@ export class EventEditComponent implements OnInit, OnDestroy {
               private eventService: EventService,
               private formBuilder: FormBuilder,
               private route: ActivatedRoute,
-              private router: Router) {
+              private router: Router,
+              private mapsAPILoader: MapsAPILoader,
+              private ngZone: NgZone) {
 
     this.uploader.onSuccessItem = (item: any, response: string, status: number, headers: any): any => {
       this.imageUploading = false;
@@ -91,6 +99,27 @@ export class EventEditComponent implements OnInit, OnDestroy {
         image: ['', [Validators.required]]},
       {validator: imageExtension('image')});
     this.getCategories();
+
+    this.searchControl = new FormControl();
+
+    this.mapsAPILoader.load().then(() => {
+      const autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement, {
+        types: ["address"]
+      });
+      autocomplete.addListener("place_changed", () => {
+        this.ngZone.run(() => {
+
+          const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+
+          if (place.geometry === undefined || place.geometry === null) {
+            return;
+          }
+          this.latitude = place.geometry.location.lat();
+          this.longitude = place.geometry.location.lng();
+          this.event.place = this.latitude + "/" + this.longitude;
+        });
+      });
+    });
 
   }
 
