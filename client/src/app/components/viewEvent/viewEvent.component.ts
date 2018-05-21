@@ -92,6 +92,8 @@ export class ViewEventComponent {
                   } else {
                     console.log(`Priority not found!`);
                   }
+                  this.newParticipants = [];
+                  this.removeParticipants =[];
                   this.isLoading = false;
                 });
                 console.log(`Event with id '${id}' was loaded!`);
