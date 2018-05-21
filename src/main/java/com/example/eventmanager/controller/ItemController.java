@@ -74,7 +74,7 @@ public class ItemController {
 
     @JsonView(ItemView.ShortView.class)
     @RequestMapping(value = "/copy/{id}", method = RequestMethod.POST)
-    public ResponseEntity<Long> createItem (@PathVariable("id") Long itemId, @RequestBody Long wishListId) {
+    public ResponseEntity<Long> copyItem (@PathVariable("id") Long itemId, @RequestBody Long wishListId) {
         logger.info("POST /copy/" + itemId);
 
         Long newItemId = itemService.copyItem(wishListId, itemId);

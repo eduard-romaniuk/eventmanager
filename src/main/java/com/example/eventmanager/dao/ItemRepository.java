@@ -182,6 +182,39 @@ public class ItemRepository implements CrudRepository<Item>{
         }
     }
 
+    public List<Item> getPopularItems ( Long limit, Long offset ){
+        try {
+            Map<String, Object> namedParams = new HashMap<>();
+
+            String query = new StringBuilder()
+                    .append(env.getProperty("getPopularItems"))
+                    .append(" LIMIT ")
+                    .append(limit)
+                    .append(" OFFSET ")
+                    .append(offset)
+                    .toString();
+
+            return namedJdbcTemplate.query(query,
+                    (rs, rowNum) -> {
+                        Item item = new Item();
+
+                        item.setId(rs.getLong("id"));
+                        item.setName(rs.getString("name"));
+                        item.setPriority(rs.getInt("priority_id"));
+                        item.setWishListId(rs.getLong("wishlist_id"));
+                        item.setLikes(rs.getInt("likes_count"));
+
+                        logger.info("Item got! " + item.toString());
+                        return item;
+                    }
+            );
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("Not founded any items");
+            return Collections.emptyList();
+        }
+    }
+
+
     public Long copyItem ( Long toWishListId, Long itemId ) {
         logger.info("Copy item: " + itemId);
 

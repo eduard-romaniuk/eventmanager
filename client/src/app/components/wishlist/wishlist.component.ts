@@ -27,8 +27,9 @@ export class WishListComponent implements OnInit {
   subscription: Subscription;
   isOwn: boolean = false;
   isLoaded: boolean = false;
+  isPopular: boolean = false;
   user: User = new User();
-  
+
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -44,10 +45,15 @@ export class WishListComponent implements OnInit {
   ngOnInit() {
 
 	this.items = [];
-	
+
+	  if (this.router.url == "/items/popular"){
+	    this.isPopular = true;
+    }
     if (this.router.url == '/wishlist') this.isOwn = true;
 
-    if (this.isOwn) {
+	  if(this.isPopular) {
+	    this.initPopularItems()
+    } else if (this.isOwn) {
       this.auth.getUser().subscribe((user: User) => {
         this.initWishList(user.id);
       });
@@ -92,19 +98,35 @@ export class WishListComponent implements OnInit {
                   item.hasLiked = hasLike;
                 });
               }
-			  this.isLoaded = true;
+			        this.isLoaded = true;
             });
 
-          
+
           this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
           //TODO:END!!!
 
         }
-		
-	
+
+
       }
 
     )
+  }
+
+  initPopularItems() {
+    this.wishListService.getPopularItems(20, 0).subscribe(
+      (items: Item[]) => {
+        this.items = items;
+        for( let item of this.items) {
+          this.likeService.wasLiked(item.id).subscribe( (hasLike: boolean) => {
+            item.hasLiked = hasLike;
+          });
+        }
+        this.isLoaded = true;
+      }
+    );
+
+    this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
   }
 
   create() {
@@ -137,7 +159,9 @@ export class WishListComponent implements OnInit {
     return this.isOwn;
   }
 
-
+  isPopularBoard(): boolean {
+    return this.isPopular;
+  }
 
 
 }

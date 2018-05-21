@@ -129,6 +129,10 @@ public class ItemService {
         }
     }
 
+    public List<Item> getPopularItems ( Long limit, Long offset ) {
+        return itemRepository.getPopularItems(limit, offset);
+    }
+
 
 
 }

@@ -34,7 +34,7 @@ export class WishListService {
         (wishList: WishList) =>
         {
           this.curentWishList = wishList
-        
+
 		}
       );
     }
@@ -54,15 +54,15 @@ export class WishListService {
   }
 
   getItemsFromWishList( wishListId: number ) : Observable<Item[]> {
-  
-	
+
+
      this.http.get<Item[]>(this.base_url + "/" + wishListId).subscribe( (items : Item[]) => {
       this.items = items;
       this.subItemArr.next(this.items);
     });
 
 	return this.subItemArr.asObservable();
-    
+
 
   }
 
@@ -109,6 +109,20 @@ export class WishListService {
 
   getCurrentWishListId(): number{
     return this.curentWishList.id;
+  }
+
+  getPopularItems (limit: number, offset: number): Observable<Item[]> {
+
+
+    this.http.get<Item[]>(this.base_url + `/popular/items?limit=${limit}&offset=${offset}`).subscribe(
+      (items : Item[]) => {
+      this.items = items;
+      this.subItemArr.next(this.items);
+    });
+
+    return this.subItemArr.asObservable();
+
+
   }
 
 }
