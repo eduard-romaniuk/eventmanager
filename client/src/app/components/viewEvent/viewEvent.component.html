@@ -42,7 +42,7 @@
       </div>
 
       <div class="my-2">
-        <img class="img-fluid rounded" [src]="event.image" id="image" name="image">
+        <img *ngIf="event.image" class="img-fluid rounded" [src]="event.image" id="image" name="image">
       </div>
 
       <button *ngIf="!this.isCreator && this.isParticipant" class="btn btn-warning " (click)="leave()">
