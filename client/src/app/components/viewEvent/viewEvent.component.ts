@@ -12,6 +12,7 @@ import {ToastService} from "../../services/toast.service";
 import {UserService} from "../../services/user.service";
 import {NotificationSettings} from "../../model/notificationSettings";
 import {NotificationSettingsService} from "../../services/notification-settings.service";
+import {forEach} from "@angular/router/src/utils/collection";
 
 @Component({
   selector: 'app-createEvent',
@@ -122,7 +123,7 @@ export class ViewEventComponent {
     this.eventService.joinToEvent(this.event.id).subscribe(response => {
       this.eventService.getPriority(this.event.id).subscribe((priority: String) => {
         this.priority = priority;
-        this.isParticipant=true;
+        this.isParticipant = true;
         this.router.navigate(['event/', this.event.id]);
         this.toast.success('You become a participant in this event');
       });
@@ -133,7 +134,7 @@ export class ViewEventComponent {
     this.eventService.leaveEvent(this.event.id).subscribe(response => {
       this.router.navigate(['event/', this.event.id]);
       this.toast.warn('You leave this event');
-      this.isParticipant=false;
+      this.isParticipant = false;
     });
 
   }
@@ -144,16 +145,34 @@ export class ViewEventComponent {
     }, error => console.error(error));
   }
 
-  publish(){
-    this.event.isSent=true;
+  publish() {
+    this.event.isSent = true;
     this.eventService.updateEvent(this.event).subscribe((user: any) => {
       this.router.navigate(['event/', this.event.id]);
     }, error => console.error(error));
   }
-  addUsers(){
+
+  addUsers() {
 
     console.log(this.newParticipants);
-    this.eventService.addUsers(this.newParticipants,this.event.id).subscribe();
+
+    let participantsNames = "";
+    this.newParticipants.forEach(function (value) {
+      participantsNames = participantsNames + value.name+" "+value.surName+"\n";
+    });
+
+    this.eventService.addUsers(this.newParticipants, this.event.id).subscribe((user: any) => {
+      this.toast.success(participantsNames+" was added to this event");
+
+    }, error => console.error(error));
+
+
+    this.newParticipants = [];
+  }
+
+  removeUsers() {
+
+
   }
 
   getFriends() {
@@ -164,7 +183,6 @@ export class ViewEventComponent {
         console.log(this.candidates)
       });
   }
-
 
 
   public isCreatorTest(): boolean {

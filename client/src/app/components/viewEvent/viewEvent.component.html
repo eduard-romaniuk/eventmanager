@@ -172,6 +172,7 @@
         <button class="close" type="button" data-dismiss="modal">×</button>
       </div>
       <div class="modal-body">
+
         <div *ngIf="candidates">
           <div id="teamCheckboxList" class="checkboxList">
           <div *ngFor="let friend of candidates ">
@@ -181,6 +182,9 @@
                      [checklistValue]="friend" />
               <span><strong>{{friend.name}} {{friend.surName}}</strong></span>
             </label>
+            </div>
+            <div *ngFor="let friend of newParticipants ">
+              {{friend.name}} {{friend.surName}}
             </div>
         </div>
         </div>
