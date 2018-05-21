@@ -29,15 +29,12 @@ export class ViewEventComponent {
   isCreator: boolean;
   participationStr: String;
   participants: User[];
-
   candidates: User[];
-
-
   newParticipants: User[];
 
   latitude: Number;
   longitude: Number;
-
+  isStarted: boolean;
 
   sub: Subscription;
 
@@ -73,6 +70,8 @@ export class ViewEventComponent {
                 this.event = event;
                 this.isCreator = this.isCreatorTest();
                 this.Position();
+                this.isStarted = (new Date() >= new Date(this.event.timeLineStart));
+
                 this.eventService.getPriority(id).subscribe((priority: String) => {
                   if (priority) {
                     this.priority = priority;
