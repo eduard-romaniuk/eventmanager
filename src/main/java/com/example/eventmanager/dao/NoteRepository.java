@@ -74,7 +74,7 @@ public class NoteRepository implements CrudRepository<Note> {
         try {
             Map<String, Object> namedParams = new HashMap<>();
             namedParams.put("noteId", id);
-            return namedJdbcTemplate.query(env.getProperty("note.findById"), namedParams, new NoteMapper()).get(FIRST_ELEMENT);
+            return namedJdbcTemplate.query(env.getProperty("note.findById"), namedParams, new NoteWithCreatorMapper()).get(FIRST_ELEMENT);
         } catch (EmptyResultDataAccessException e) {
             logger.info("Note not found");
             return null;
@@ -144,6 +144,23 @@ public class NoteRepository implements CrudRepository<Note> {
             note.setName(rs.getString("name"));
             note.setDescription(rs.getString("description"));
             note.setImage(rs.getString("image"));
+            return note;
+        }
+    }
+
+    public static final class NoteWithCreatorMapper implements RowMapper<Note> {
+        private final Logger logger = LogManager.getLogger(NoteWithCreatorMapper.class);
+        @Override
+        public Note mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Note note = new Note();
+            note.setId(rs.getLong("id"));
+            note.setName(rs.getString("name"));
+            note.setDescription(rs.getString("description"));
+            note.setImage(rs.getString("image"));
+            User creator = new User();
+            creator.setId(rs.getLong("creator_id"));
+            creator.setName(rs.getString("creator_name"));
+            note.setCreator(creator);
             logger.info("Loaded Note: " + note);
             return note;
         }

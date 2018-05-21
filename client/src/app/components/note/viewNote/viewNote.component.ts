@@ -1,14 +1,11 @@
 import {Component} from '@angular/core';
 import {NoteService} from '../../../services/note.service';
-import {Router, ActivatedRoute} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {JQueryStatic} from 'jquery';
 
 import {Note} from '../../../model/note'
-import {User} from "../../../model/user";
 import {Subscription} from "rxjs/Subscription";
 import {FormGroup} from "@angular/forms";
-import {ToastService} from "../../../services/toast.service";
-import {UserService} from "../../../services/user.service";
 import {AuthService} from "../../../services/auth.service";
 
 @Component({
@@ -29,10 +26,7 @@ export class ViewNoteComponent {
 
   constructor(private auth: AuthService,
               private route: ActivatedRoute,
-              private router: Router,
-              private noteService: NoteService,
-              private toast: ToastService,
-              private userService: UserService) {
+              private noteService: NoteService) {
   }
 
   ngOnInit() {
@@ -42,15 +36,16 @@ export class ViewNoteComponent {
       console.log("currentUserId = " + user.id);
 
       this.sub = this.route.params.subscribe(params => {
-        const id = params['id'];
+        const id = params['noteId'];
+        console.log('Note id = ' + id);
         if (id) {
-
             this.noteService.getNoteById(id).subscribe((note: any) => {
               if (note) {
                 this.note = note;
-                this.isCreator = this.isCreatorTest();
                 console.log(`Note with id '${id}' was loaded!`);
                 console.log(note);
+                this.isCreator = this.isCreatorTest();
+                console.log('Creator id = ' + this.note.creator.id);
               } else {
                 console.log(`Note with id '${id}' not found!`);
               }
@@ -68,10 +63,7 @@ export class ViewNoteComponent {
   }
 
   convertToEvent(){
-    // this.event.isSent=true;
-    // this.eventService.updateEvent(this.event).subscribe((user: any) => {
-    //   this.router.navigate(['event/', this.event.id]);
-    // }, error => console.error(error));
+   
   }
 
   public isCreatorTest(): boolean {

@@ -34,7 +34,7 @@ export class CreateNoteComponent implements OnInit {
     spellcheck: false,
     height: '10rem',
     minHeight: '5rem',
-    placeholder: 'Event description...',
+    placeholder: 'Note description...',
     translate: 'no',
     "toolbar": [
       ["bold", "italic", "underline", "strikeThrough"],
