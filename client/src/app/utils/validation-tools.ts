@@ -70,14 +70,21 @@ export function maxPeriod(eventStartDate: Date, notificationStartDate: string, p
     let maxPeriod;
 
     let maxNotificationDate = new Date();
-    maxNotificationDate.setDate(eventStartDate.getDate() - 1);
+    maxNotificationDate.setDate(eventStartDate.getDate());
+
+    let notStartDate = new Date(notifStartDate.value);
+
+    console.log("maxNotificationDate - " + maxNotificationDate);
+    console.log("notStartDate - " + notStartDate);
 
     if (notifStartDate.value) {
-      let diff = maxNotificationDate.valueOf() - notifStartDate.value;
+      let diff = maxNotificationDate.getTime() - notStartDate.getTime();
       maxPeriod = Math.ceil(diff / (1000 * 3600 * 24));
     } else {
       maxPeriod = 0;
     }
+
+    console.log("maxPeriod - " + maxPeriod);
 
     if (per.value > maxPeriod) {
       group.get(period).setErrors({maxPeriod: true});

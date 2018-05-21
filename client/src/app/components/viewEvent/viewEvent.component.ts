@@ -35,6 +35,7 @@ export class ViewEventComponent {
   latitude: Number;
   longitude: Number;
   isStarted: boolean;
+  today: Date = new Date();
 
   sub: Subscription;
 
@@ -80,6 +81,15 @@ export class ViewEventComponent {
                       .subscribe((notificationSetting: any) => {
                         if (notificationSetting) {
                           this.notificationSetting = notificationSetting;
+
+                          if (this.notificationSetting.startDate == null) {
+                            const eventStartDate = new Date(this.event.timeLineStart);
+                            this.notificationSetting.startDate = new Date(eventStartDate.getTime());
+                            const maxNotificationDate = eventStartDate.getDate() - 1;
+                            this.notificationSetting.startDate.setDate(maxNotificationDate);
+                            //console.log("notificationSetting.startDate - " + this.notificationSetting.startDate);
+                          }
+
                         } else {
                           console.log(`Notification Setting not found!`);
                         }

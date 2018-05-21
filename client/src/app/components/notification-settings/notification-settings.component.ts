@@ -30,6 +30,7 @@ export class NotificationSettingsComponent implements OnInit {
 
   ngOnInit() {
     const eventStartDate = new Date(this.event.timeLineStart);
+    this.max = new Date(eventStartDate.getTime());
     const maxNotificationDate = eventStartDate.getDate() - 1;
     this.max.setDate(maxNotificationDate);
 
@@ -38,7 +39,7 @@ export class NotificationSettingsComponent implements OnInit {
       startDate: [this.notificationSetting.startDate, []],
       period: [this.notificationSetting.period, [Validators.required, Validators.min(0)]],
       countDownOn: [this.notificationSetting.countDownOn, []]
-      }, {validator: maxPeriod(eventStartDate, 'startDate', 'period')}
+      }, {validator: maxPeriod(this.max, 'startDate', 'period')}
     );
   }
 
