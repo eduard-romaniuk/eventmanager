@@ -19,6 +19,8 @@ public class Folder {
     private List<Note> notes;
     @JsonView(FolderView.FullView.class)
     private User creator;
+    @JsonView(FolderView.FullView.class)
+    private List<Member> members;
 
     public Long getId() {
         return id;
@@ -50,5 +52,13 @@ public class Folder {
 
     public void setNotes(List<Note> notes) {
         this.notes = notes;
+    }
+
+    public List<Member> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<Member> members) {
+        this.members = members;
     }
 }
