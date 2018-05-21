@@ -64,10 +64,11 @@
       </button>
 
       <button *ngIf="!this.isCreator && this.isParticipant && !this.event.isPrivate"
-              class="btn btn-primary" (click)="getFriends()" data-toggle="modal" data-target="#addFriend">
+              class="btn btn-primary" (click)="getFriends()" data-toggle="modal" data-target="#addFriend" data-backdrop="static">
         Add Friends
       </button>
-      <button *ngIf="this.isCreator" class="btn btn-primary" (click)="getFriends()" data-toggle="modal" data-target="#addFriend">
+      <button *ngIf="this.isCreator"
+              class="btn btn-primary" (click)="getFriends()" data-toggle="modal" data-target="#addFriend" data-backdrop="static">
         Add Friends
       </button>
 
@@ -169,7 +170,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header"><h3> Select friends</h3>
-        <button class="close" type="button" data-dismiss="modal">×</button>
+        <button class="close" type="button" (click)="cancelAddUsers()"  data-dismiss="modal">×</button>
       </div>
       <div class="modal-body">
 
@@ -183,16 +184,13 @@
               <span><strong>{{friend.name}} {{friend.surName}}</strong></span>
             </label>
             </div>
-            <div *ngFor="let friend of newParticipants ">
-              {{friend.name}} {{friend.surName}}
-            </div>
         </div>
         </div>
         <div *ngIf="candidates?.length < 1">
           <p>No candidates for add to event </p>
         </div>
         <div class="modal-footer ">
-          <button class="btn btn-warning centerDiv" [routerLink]="['/event', event.id]" data-dismiss="modal">Cancel
+          <button class="btn btn-warning centerDiv" (click)="cancelAddUsers()" data-dismiss="modal">Cancel
           </button>
           <button class="btn btn-success centerDiv" (click)="addUsers()" data-dismiss="modal">Submit
           </button>

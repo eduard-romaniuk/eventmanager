@@ -102,8 +102,27 @@
               <input
                 style="display: none"
                 type="file" accept=".jpg, .jpeg, .png, .gif" ng2FileSelect [uploader]="uploader" (change)="upload()"
-                #fileInput>
-              <button class="btn btn-info button my-4" (click)="fileInput.click()">Select File</button>
+                #fileInput
+                formControlName="image"
+                [ngClass]="{
+                            'is-invalid': form.get('image').invalid && (form.get('image').dirty || form.get('image').touched)
+                        }">
+              <button class="btn btn-info button" (click)="fileInput.click()">Select image</button>
+              <div *ngIf="form.get('image').invalid && (form.get('image').dirty || form.get('image').touched)"
+                   class="text-danger">
+                <div *ngIf="form.get('image').errors.imageExtension">
+                  You can upload files only with following extensions: .jpg, .jpeg, .png, .gif
+                </div>
+              </div>
+            </div>
+
+            <div class="alert mt-2" [hidden]="!imageUploading">
+              <div>
+                Uploading image...
+                <div class="progress" style="">
+                  <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+                </div>
+              </div>
             </div>
           </div>
 

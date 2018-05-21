@@ -11,6 +11,7 @@ import {ImageUploaderService} from "../../services/image-uploader.service";
 import {User} from "../../model/user";
 import {UserService} from "../../services/user.service";
 import {Category} from "../../model/category";
+import {imageExtension} from "../../utils/validation-tools";
 
 @Component({
   selector: 'app-createEvent',
@@ -53,6 +54,8 @@ export class CreateEventComponent implements OnInit {
   min = new Date();
   max = new Date(2049,11,31);
 
+  imageUploading = false;
+
   constructor(private auth: AuthService,
               private eventService: EventService,
               private formBuilder: FormBuilder,
@@ -60,6 +63,7 @@ export class CreateEventComponent implements OnInit {
               private userService:UserService) {
 
     this.uploader.onSuccessItem = (item: any, response: string, status: number, headers: any): any => {
+      this.imageUploading = false;
       let res: any = JSON.parse(response);
       this.event.image = res.url;
       console.log(`res - ` + JSON.stringify(res) );
@@ -78,7 +82,8 @@ export class CreateEventComponent implements OnInit {
       timeLineStartControl: ['', [Validators.required]],
       timeLineFinishControl: ['', [Validators.required]],
       periodControl: ['', [Validators.required, Validators.min(0)]],
-    });
+      image: ['', [Validators.required]]},
+      {validator: imageExtension('image')});
     this.setCurrentPosition();
     this.getCategories();
   }
@@ -123,7 +128,10 @@ export class CreateEventComponent implements OnInit {
   }
 
   upload() {
-    this.uploader.uploadAll();
+    if (this.form.get("image").valid) {
+      this.imageUploading = true;
+      this.uploader.uploadAll();
+    }
   }
 
   addUsers(id){

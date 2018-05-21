@@ -9,6 +9,7 @@ import {CloudinaryUploader} from "ng2-cloudinary";
 import {ImageUploaderService} from "../../services/image-uploader.service";
 import {AuthService} from "../../services/auth.service";
 import {Category} from "../../model/category";
+import {imageExtension} from "../../utils/validation-tools";
 
 @Component({
   selector: 'app-event-edit',
@@ -50,6 +51,8 @@ export class EventEditComponent implements OnInit, OnDestroy {
     ]
   };
 
+  imageUploading = false;
+
   constructor(private auth: AuthService,
               private eventService: EventService,
               private formBuilder: FormBuilder,
@@ -57,6 +60,7 @@ export class EventEditComponent implements OnInit, OnDestroy {
               private router: Router) {
 
     this.uploader.onSuccessItem = (item: any, response: string, status: number, headers: any): any => {
+      this.imageUploading = false;
       let res: any = JSON.parse(response);
       this.event.image = res.url;
       console.log(`res - ` + JSON.stringify(res) );
@@ -84,7 +88,8 @@ export class EventEditComponent implements OnInit, OnDestroy {
       timeLineStartControl: ['', [Validators.required]],
       timeLineFinishControl: ['', [Validators.required]],
       periodControl: ['', [Validators.required]],
-    });
+        image: ['', [Validators.required]]},
+      {validator: imageExtension('image')});
     this.getCategories();
 
   }
@@ -110,7 +115,10 @@ export class EventEditComponent implements OnInit, OnDestroy {
   }
 
   upload() {
-    this.uploader.uploadAll();
+    if (this.form.get("image").valid) {
+      this.imageUploading = true;
+      this.uploader.uploadAll();
+    }
   }
   publish() {
     this.event.isSent = true;

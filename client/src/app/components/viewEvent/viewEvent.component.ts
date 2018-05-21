@@ -158,7 +158,7 @@ export class ViewEventComponent {
 
     let participantsNames = "";
     this.newParticipants.forEach(function (value) {
-      participantsNames = participantsNames + value.name+" "+value.surName+"\n";
+      participantsNames = participantsNames +  value.name+" "+value.surName + " ";
     });
 
     this.eventService.addUsers(this.newParticipants, this.event.id).subscribe((user: any) => {
@@ -168,6 +168,12 @@ export class ViewEventComponent {
 
 
     this.newParticipants = [];
+  }
+
+  cancelAddUsers(){
+    this.newParticipants = [];
+    this.router.navigate(['event/', this.event.id]);
+
   }
 
   removeUsers() {
