@@ -70,6 +70,7 @@ import { AddItemImagesComponent } from './components/wishlist/item/add-item-imag
 import { MessageService } from "./services/message.service";
 import { NotificationSettingsComponent } from './components/notification-settings/notification-settings.component';
 import {NotificationSettingsService} from "./services/notification-settings.service";
+import { StatisticsService } from './services/statistics.service';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -135,7 +136,8 @@ export class AddressInterceptor implements HttpInterceptor {
     UserEditEmailComponent,
     AddItemImagesComponent,
     NotificationSettingsComponent,
-    ViewNoteComponent
+    ViewNoteComponent,
+    StatisticsComponent
   ],
   imports: [
     BrowserModule,
@@ -176,6 +178,7 @@ export class AddressInterceptor implements HttpInterceptor {
     MessageService,
     LikeService,
     NotificationSettingsService,
+    StatisticsService,
     { provide: HTTP_INTERCEPTORS,
       useClass: AddressInterceptor,
       multi: true},

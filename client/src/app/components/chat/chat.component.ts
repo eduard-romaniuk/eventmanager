@@ -21,8 +21,9 @@ export class ChatComponent{
   private title = 'Chat';
   private stompClient;
   private id;
+  private eventId;
       
-  constructor(private router: Router,private auth: AuthService, private msgService: MessageService){
+  constructor(private router: Router,private route: ActivatedRoute,private auth: AuthService, private msgService: MessageService){
     this.initializeWebSocketConnection();
   }
   
@@ -35,6 +36,9 @@ export class ChatComponent{
     this.msgService.loadMessages().subscribe((messages: any) => {
       this.messages = messages;
     });
+    this.route.params.subscribe(params => {
+        this.eventId = params['id'];
+      });
   }
   
   initializeWebSocketConnection(){
@@ -63,8 +67,12 @@ export class ChatComponent{
 
   sendMessage(message){
     if(message.length>0){
-      this.stompClient.send("/app/send"+this.router.url, {userId:this.id}, this.id+";"+message);
+      this.stompClient.send("/app/send"+this.router.url, {userId:this.id}, message);
     }
     $('#input').val('');
+  }
+  
+  goBack() {
+    this.router.navigate(['event', this.eventId]);
   }
 }

@@ -17,7 +17,7 @@ import java.util.Map;
 
 @PropertySource("classpath:queries/messages.properties")
 @Repository
-public class MessageRepository implements CrudRepository<Message> {
+public class MessageRepository {
 
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
     private final Environment env;
@@ -46,7 +46,6 @@ public class MessageRepository implements CrudRepository<Message> {
         }
     }
     
-    @Override
    	public int save(Message msg) {
    		Map<String, Object> namedParams = new HashMap<>();
    		namedParams.put("chat_id", msg.getChatId());
@@ -75,23 +74,4 @@ public class MessageRepository implements CrudRepository<Message> {
    		namedParams.put("id", participantId);
    		return namedJdbcTemplate.queryForObject(env.getProperty("findUserIdFromParticipant"), namedParams, Long.class);
    	}
-    @Override
-    public Iterable<Message> findAll() {
-       return null;
-    }
-
-    @Override
-    public Message findOne(Long id) {
-		return null;
-    }
-
-    @Override
-    public void update(Message msg) {
-        //
-    }
-
-    @Override
-    public void delete(Message msg) {
-        //
-    }
 }
