@@ -49,6 +49,7 @@ export class PersonalPlanSettingComponent implements OnInit {
 
   public update() {
 
+    this.setting.fromDate= new Date(this.setting.fromDate);
     this.setting.fromDate= new Date(this.setting.fromDate.getFullYear(),this.setting.fromDate.getMonth(),this.setting.fromDate.getDate()+1);
     console.log(this.setting);
     this.settingService.update(this.setting).subscribe(response => {
