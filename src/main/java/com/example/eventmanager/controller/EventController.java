@@ -125,6 +125,12 @@ public class EventController {
         eventService.AddUsersToEvent(users, id);
     }
 
+    @RequestMapping(value = "{id}/participants/remove", method = RequestMethod.POST)
+    public void removeParticipants(@RequestBody List<User> users, @PathVariable Long id) {
+        logger.info("DELETE /removeParticipants");
+        eventService.removeParticipants(users, id);
+    }
+
     @RequestMapping(value = "/downloadPlan", method = RequestMethod.GET)
     public void downloadEventsPlan( @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from,
                                     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
