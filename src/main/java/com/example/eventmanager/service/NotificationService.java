@@ -29,7 +29,7 @@ public class NotificationService {
     //Pattern - second, minute, hour, day of month, month, day(s) of week
     private final String TIME_TO_SEND_NOTIFICATIONS = "0 0 8 * * ?";
     //private final String TIME_TO_SEND_NOTIFICATIONS = "0/30 * * * * *";
-    private final String TIME_TO_UPDATE_DB = "0 0 20 * * ?";
+    private final String TIME_TO_UPDATE_DB = "0 59 20 * * ?";
     //private final String TIME_TO_UPDATE_DB = "0/30 * * * * *";
 
     @Autowired
