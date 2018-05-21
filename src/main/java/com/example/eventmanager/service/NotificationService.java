@@ -1,6 +1,5 @@
 package com.example.eventmanager.service;
 
-import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,8 +8,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
@@ -26,10 +27,10 @@ public class NotificationService {
 
     //TODO Move to external file
     //Pattern - second, minute, hour, day of month, month, day(s) of week
-    private final String TIME_TO_SEND_NOTIFICATIONS = "0 0 10 * * ?"; // every day at 10 a.m.
-//     private final String TIME_TO_SEND_NOTIFICATIONS = "0/30 * * * * *"; //every 30 seconds
-    //TODO Change
-    private final int LIMIT = 10;
+    private final String TIME_TO_SEND_NOTIFICATIONS = "0 0 8 * * ?";
+    //private final String TIME_TO_SEND_NOTIFICATIONS = "0/30 * * * * *";
+    private final String TIME_TO_UPDATE_DB = "0 59 20 * * ?";
+    //private final String TIME_TO_UPDATE_DB = "0/30 * * * * *";
 
     @Autowired
     public NotificationService(UserService userService,
@@ -44,72 +45,95 @@ public class NotificationService {
     public void sendNotifications() {
         logger.info("Start sending notifications");
 
-        int offset = 0;
-        boolean hasActiveUsers = true;
-        do{
-            logger.info("offset - " + offset);
+        List<User> activeUsers = userService.findAllActive();
+        logger.info("activeUsers - " + activeUsers.toString());
 
-            List<User> activeUsers = userService.findAllActivePagination(LIMIT, offset);
-            logger.info("activeUsers - " + activeUsers.toString());
-
-            for (User user : activeUsers) {
-                sendEventNotificationToUser(user);
-            }
-
-            offset += LIMIT;
-            if (activeUsers.size() < LIMIT)
-                hasActiveUsers = false;
-
-        } while (hasActiveUsers);
+        for (User user : activeUsers) {
+            sendNotificationToUser(user);
+        }
 
         logger.info("End sending notifications");
     }
 
-    private void sendEventNotificationToUser(User user){
-        logger.info("Start sending Event Notification to user with id {}", user.getId());
-
-        List<Event> eventsWithoutCountdown =
-                notificationSettingsService.findEventsToNotificateByUserId(user.getId(), LocalDate.now());
-        List<Event> eventsWithCountdown =
-                notificationSettingsService.findEventsWithCountdownToNotificateByUserId(user.getId(), LocalDate.now());
-
-        if(eventsWithoutCountdown.size() > 0 || eventsWithCountdown.size() > 0){
-            sendEventNotification(user, eventsWithoutCountdown, eventsWithCountdown);
-        }
-
-        logger.info("End sending Event Notification to user with id {}", user.getId());
+    @Scheduled(cron = TIME_TO_UPDATE_DB)
+    public void updateNotificationsInDB() {
+        logger.info("Start updating notifications in DB");
+        notificationSettingsService.shiftNotificationStartDateForAllNotifications(LocalDate.now());
+        logger.info("End updating notifications in DB");
     }
 
-    private void sendEventNotification(User user, List<Event> eventsWithoutCountdown, List<Event> eventsWithCountdown) {
+    private void sendNotificationToUser(User user){
+        logger.info("Start sending Notification to user with id {}", user.getId());
+
+        List<Map<String,Object>> notificationsToSend =
+                notificationSettingsService.findAllEventsToNotificateByUserId(user.getId(), LocalDate.now());
+
+        if(!notificationsToSend.isEmpty()){
+            sendEventNotification(user, notificationsToSend);
+        }
+
+        logger.info("End sending Notification to user with id {}", user.getId());
+    }
+
+    private void sendEventNotification(User user, List<Map<String,Object>> notifications) {
         String subject = "Notification about your events";
         String messageText = "Hello, " + user.getLogin() + "! \n\n";
 
-        if(eventsWithoutCountdown.size() > 0){
-            messageText += "Your upcoming events:\n";
-            for (Event event : eventsWithoutCountdown){
-                String eventInfo = "Event \'" + event.getName() + "\'\n" +
-                        "Start at " + event.getTimeLineStart().format(formatter) + "\n" +
-                        "End at " + event.getTimeLineFinish().format(formatter) + "\n\n";
-                messageText += eventInfo;
-            }
-        }
-
-        if(eventsWithCountdown.size() > 0){
-            messageText += "Countdown to your selected events:\n";
-            for (Event event : eventsWithCountdown){
-                long countDown = DAYS.between(LocalDate.now(), event.getTimeLineStart().toLocalDate());
-
-                String eventInfo = "Event \'" + event.getName() + "\'\n" +
-                        "Start at " + event.getTimeLineStart().format(formatter) + "\n" +
-                        "End at " + event.getTimeLineFinish().format(formatter) + "\n" +
-                        "Left " + countDown + " days\n\n";
-                messageText += eventInfo;
-            }
-        }
-
+        messageText += generateNotificationMessage(notifications);
         messageText += "Have fun! \nYour Event manager team";
 
         emailService.sendTextMail(user.getEmail(), subject, messageText);
     }
 
+    private String generateEventMessage(Map<String,Object> event) {
+        String eventName = event.get("name").toString();
+        LocalDateTime eventStartDate = LocalDateTime.parse(event.get("timeline_start").toString(),
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S"));
+        LocalDateTime eventEndDate = LocalDateTime.parse(event.get("timeline_finish").toString(),
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S"));
+
+        String eventInfo = "";
+
+        if(Boolean.TRUE.equals(event.get("count_down_on"))){
+            long countDown = DAYS.between(LocalDate.now(), eventStartDate);
+            eventInfo += "Left " + countDown + " days to ";
+        }
+
+        eventInfo += "\'" + eventName + "\'\n" +
+                "Start at " + eventStartDate.format(formatter) + "\n" +
+                "End at " + eventEndDate.format(formatter) + "\n\n";
+
+        return eventInfo;
+    }
+
+    private String generateNotificationMessage(List<Map<String,Object>> notifications){
+        String messageText = "";
+        String messageTextEventWithoutCountdown = "";
+        String messageTextEventWithCountdown = "";
+
+        Boolean hasEventWithoutCountdown = false;
+        Boolean hasEventWithCountdown = false;
+
+        for (Map<String,Object> notification : notifications) {
+            if (Boolean.TRUE.equals(notification.get("count_down_on"))) {
+                hasEventWithCountdown = true;
+                messageTextEventWithCountdown += generateEventMessage(notification);
+            } else {
+                hasEventWithoutCountdown = true;
+                messageTextEventWithoutCountdown += generateEventMessage(notification);
+            }
+        }
+
+        if(hasEventWithoutCountdown){
+            messageText += "Your upcoming events:\n";
+            messageText += messageTextEventWithoutCountdown;
+        }
+
+        if(hasEventWithCountdown){
+            messageText += "Countdown to your selected events:\n";
+            messageText += messageTextEventWithCountdown;
+        }
+
+        return messageText;
+    }
 }

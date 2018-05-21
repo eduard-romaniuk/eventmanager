@@ -17,20 +17,32 @@
       </h3>
 
       <div *ngIf="this.isParticipant" class="container-fluid ">
-        <div *ngIf="low()">
-          <h4> Event priority: <strong class="text-success">Low </strong></h4>
+        <div>
+          <div *ngIf="low()" class="inlineDiv inlineDivRight">
+            <h4> Event priority: <strong class="text-success">Low </strong></h4>
+          </div>
+          <div *ngIf="normal()" class="inlineDiv inlineDivRight">
+            <h4>Event priority:<strong class="text-warning">Normal </strong></h4>
+          </div>
+          <div *ngIf="urgent()" class="inlineDiv inlineDivRight">
+            <h4>Event priority: <strong class="text-danger">Urgent </strong></h4>
+          </div>
+          <button class="btn btn-info btn-sm inlineDiv" data-toggle="modal" data-target="#priorityChange">Change</button>
         </div>
-        <div *ngIf="normal()">
-          <h4>Event priority:<strong class="text-warning">Normal </strong></h4>
+
+        <div>
+          <div *ngIf="notificationSetting.emailNotificationOn" class="inlineDiv inlineDivRight">
+            <h4> Notifications: <strong class="text-success">On</strong></h4>
+          </div>
+          <div *ngIf="!notificationSetting.emailNotificationOn" class="inlineDiv inlineDivRight">
+            <h4> Notifications: <strong class="text-danger">Off</strong></h4>
+          </div>
+          <button class="btn btn-info btn-sm inlineDiv" data-toggle="modal" data-target="#notificationSettings">Change</button>
         </div>
-        <div *ngIf="urgent()">
-          <h4>Event priority: <strong class="text-danger">Urgent </strong></h4>
-        </div>
-        <button class="btn btn-info" data-toggle="modal" data-target="#priorityChange">Change</button>
       </div>
 
       <div class="my-2">
-        <img class="img-fluid rounded" [src]="event.image" id="image" name="image">
+        <img *ngIf="event.image" class="img-fluid rounded" [src]="event.image" id="image" name="image">
       </div>
 
       <button *ngIf="!this.isCreator && this.isParticipant" class="btn btn-warning " (click)="leave()">
@@ -52,22 +64,17 @@
       </button>
 
       <button *ngIf="!this.isCreator && this.isParticipant && !this.event.isPrivate"
-              class="btn btn-primary" (click)="getFriends()" data-toggle="modal" data-target="#addFriend">
+              class="btn btn-primary" (click)="getFriends()" data-toggle="modal" data-target="#addFriend" data-backdrop="static">
         Add Friends
       </button>
-      <button *ngIf="this.isCreator" class="btn btn-primary" (click)="getFriends()" data-toggle="modal" data-target="#addFriend">
+      <button *ngIf="this.isCreator"
+              class="btn btn-primary" (click)="getFriends()" data-toggle="modal" data-target="#addFriend" data-backdrop="static">
         Add Friends
       </button>
 
-      <button class="btn btn-info left-button" data-toggle="collapse" (click)="showParticipants()"
-              data-target="#hide-me">
+      <button class="btn btn-info left-button"  data-toggle="modal" data-target="#participants" (click)="showParticipants()">
         Participants
       </button>
-      <div id="hide-me" class="collapse in">
-        <div class="md-form text-center" *ngFor="let user of participants">
-          <a [routerLink]="['/users', user.id]"> {{ user.login }} </a>
-        </div>
-      </div>
 
     </div>
 
@@ -163,9 +170,10 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header"><h3> Select friends</h3>
-        <button class="close" type="button" data-dismiss="modal">×</button>
+        <button class="close" type="button" (click)="cancelAddUsers()"  data-dismiss="modal">×</button>
       </div>
       <div class="modal-body">
+
         <div *ngIf="candidates">
           <div id="teamCheckboxList" class="checkboxList">
           <div *ngFor="let friend of candidates ">
@@ -182,7 +190,7 @@
           <p>No candidates for add to event </p>
         </div>
         <div class="modal-footer ">
-          <button class="btn btn-warning centerDiv" [routerLink]="['/event', event.id]" data-dismiss="modal">Cancel
+          <button class="btn btn-warning centerDiv" (click)="cancelAddUsers()" data-dismiss="modal">Cancel
           </button>
           <button class="btn btn-success centerDiv" (click)="addUsers()" data-dismiss="modal">Submit
           </button>
@@ -191,6 +199,36 @@
     </div>
   </div>
 </div>
+
+  <div id="notificationSettings" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header"><h3> Notification settings </h3>
+          <button class="close" type="button" data-dismiss="modal">×</button>
+        </div>
+        <div class="modal-body centerDiv">
+          <app-notification-settings *ngIf="userId && event && notificationSetting"
+                                 [userId]="userId" [event]="event" [notificationSetting]="notificationSetting">
+          </app-notification-settings>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="participants" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header text-center"><h3> Participants </h3>
+          <button class="close" type="button" data-dismiss="modal">×</button>
+        </div>
+        <div class="modal-body centerDiv">
+          <div class="md-form text-center" *ngFor="let user of participants">
+            <a [routerLink]="['/users', user.id]"> {{ user.name }} {{ user.surName }} </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>
 

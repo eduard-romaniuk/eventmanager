@@ -66,6 +66,9 @@ import {NgxEditorModule} from "ngx-editor";
 import { NoHtmlPipe } from "./pipes/nohtml.pipe";
 import { UserEditEmailComponent } from './components/user/user-edit-email/user-edit-email.component';
 import { AddItemImagesComponent } from './components/wishlist/item/add-item-images/add-item-images.component';
+import { MessageService } from "./services/message.service";
+import { NotificationSettingsComponent } from './components/notification-settings/notification-settings.component';
+import {NotificationSettingsService} from "./services/notification-settings.service";
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -129,7 +132,9 @@ export class AddressInterceptor implements HttpInterceptor {
     UserCalendarComponent,
     NoHtmlPipe,
     UserEditEmailComponent,
-    AddItemImagesComponent
+    AddItemImagesComponent,
+    UserEditEmailComponent,
+    NotificationSettingsComponent
   ],
   imports: [
     BrowserModule,
@@ -148,7 +153,8 @@ export class AddressInterceptor implements HttpInterceptor {
       timeOut: 2000
     }),
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyAM7RXrVYjGXrOIM1NrlifgXf8pdmzVZf0'
+      apiKey: 'AIzaSyAM7RXrVYjGXrOIM1NrlifgXf8pdmzVZf0',
+      libraries: ["places"]
     }),
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
@@ -166,8 +172,9 @@ export class AddressInterceptor implements HttpInterceptor {
     WishListService,
     ItemService,
     PersonalPanSettingService,
+    MessageService,
     LikeService,
-
+    NotificationSettingsService,
     { provide: HTTP_INTERCEPTORS,
       useClass: AddressInterceptor,
       multi: true},

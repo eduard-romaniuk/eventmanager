@@ -38,7 +38,7 @@ public class MessageRepository implements CrudRepository<Message> {
             
             msg.setId(resultSet.getLong("id"));
             msg.setChatId(resultSet.getLong("chat_id"));
-            msg.setDate(resultSet.getDate("date"));
+            msg.setDate(resultSet.getString("date"));
             msg.setParticipantId(resultSet.getLong("participant_id"));
             msg.setText(resultSet.getString("text"));
             

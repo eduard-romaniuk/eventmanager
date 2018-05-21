@@ -10,6 +10,9 @@ import {Subscription} from "rxjs/Subscription";
 import {FormGroup} from "@angular/forms";
 import {ToastService} from "../../services/toast.service";
 import {UserService} from "../../services/user.service";
+import {NotificationSettings} from "../../model/notificationSettings";
+import {NotificationSettingsService} from "../../services/notification-settings.service";
+import {forEach} from "@angular/router/src/utils/collection";
 
 @Component({
   selector: 'app-createEvent',
@@ -21,6 +24,7 @@ export class ViewEventComponent {
   event: Event = new Event();
   userId: number;
   priority: String;
+  notificationSetting: NotificationSettings = new NotificationSettings();
   form: FormGroup;
   isParticipant: boolean;
   isCreator: boolean;
@@ -45,7 +49,8 @@ export class ViewEventComponent {
               private router: Router,
               private eventService: EventService,
               private toast: ToastService,
-              private userService: UserService) {
+              private userService: UserService,
+              private notificationSettingsService: NotificationSettingsService) {
   }
 
   ngOnInit() {
@@ -72,6 +77,16 @@ export class ViewEventComponent {
                 this.eventService.getPriority(id).subscribe((priority: String) => {
                   if (priority) {
                     this.priority = priority;
+
+                    this.notificationSettingsService.getByUserIdAndEventId(this.userId, this.event.id)
+                      .subscribe((notificationSetting: any) => {
+                        if (notificationSetting) {
+                          this.notificationSetting = notificationSetting;
+                        } else {
+                          console.log(`Notification Setting not found!`);
+                        }
+                      });
+
                   } else {
                     console.log(`Priority not found!`);
                   }
@@ -106,14 +121,22 @@ export class ViewEventComponent {
 
   public join() {
     this.eventService.joinToEvent(this.event.id).subscribe(response => {
-      window.location.reload();
-      this.toast.success('You become a participant in this event');
+      this.eventService.getPriority(this.event.id).subscribe((priority: String) => {
+        this.priority = priority;
+        this.isParticipant = true;
+        this.router.navigate(['event/', this.event.id]);
+        this.toast.success('You become a participant in this event');
+      });
     });
   }
 
   public leave() {
-    this.eventService.leaveEvent(this.event.id).subscribe();
-    window.location.reload();
+    this.eventService.leaveEvent(this.event.id).subscribe(response => {
+      this.router.navigate(['event/', this.event.id]);
+      this.toast.warn('You leave this event');
+      this.isParticipant = false;
+    });
+
   }
 
   public delete() {
@@ -122,16 +145,40 @@ export class ViewEventComponent {
     }, error => console.error(error));
   }
 
-  publish(){
-    this.event.isSent=true;
+  publish() {
+    this.event.isSent = true;
     this.eventService.updateEvent(this.event).subscribe((user: any) => {
       this.router.navigate(['event/', this.event.id]);
     }, error => console.error(error));
   }
-  addUsers(){
+
+  addUsers() {
 
     console.log(this.newParticipants);
-    this.eventService.addUsers(this.newParticipants,this.event.id).subscribe();
+
+    let participantsNames = "";
+    this.newParticipants.forEach(function (value) {
+      participantsNames = participantsNames +  value.name+" "+value.surName + " ";
+    });
+
+    this.eventService.addUsers(this.newParticipants, this.event.id).subscribe((user: any) => {
+      this.toast.success(participantsNames+" was added to this event");
+
+    }, error => console.error(error));
+
+
+    this.newParticipants = [];
+  }
+
+  cancelAddUsers(){
+    this.newParticipants = [];
+    this.router.navigate(['event/', this.event.id]);
+
+  }
+
+  removeUsers() {
+
+
   }
 
   getFriends() {
@@ -142,7 +189,6 @@ export class ViewEventComponent {
         console.log(this.candidates)
       });
   }
-
 
 
   public isCreatorTest(): boolean {
@@ -158,11 +204,11 @@ export class ViewEventComponent {
   }
 
   goToChatWithCreator() {
-    this.router.navigate(['event', this.event.id, 'chats', 'withCreator']);
+    this.router.navigate(['chats', this.event.id, 'withCreator']);
   }
 
   goToChatWithoutCreator() {
-    this.router.navigate(['event', this.event.id, 'chats', 'withoutCreator']);
+    this.router.navigate(['chats', this.event.id, 'withoutCreator']);
   }
 
   low() {

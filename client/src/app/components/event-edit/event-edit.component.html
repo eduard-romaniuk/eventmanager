@@ -72,26 +72,29 @@
             </div>
           </div>
 
-          <div class="form-group ">
+          <div class="form-group">
             <label class="control-label col-sm-2 requiredField">
               Place
               <span class="asteriskField">*</span>
             </label>
             <div class="col-sm-10">
-
-              <agm-map [mapTypeControl]="true" [fullscreenControl]="true"
-                       [latitude]="latitude" [longitude]="longitude"
-                       (mapClick)="onChoseLocation($event)">
-                <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
-              </agm-map>
-
+              <input placeholder="Enter location" autocorrect="no" autocapitalize="no"
+                     spellcheck="off" type="text" class="form-control" #search [formControl]="searchControl">
+              <div class="my-2">
+                <agm-map [mapTypeControl]="true" [fullscreenControl]="true"
+                         [latitude]="latitude" [longitude]="longitude"
+                         (mapClick)="onChoseLocation($event)">
+                  <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
+                </agm-map>
+              </div>
               <span class="help-block" id="hint_name1">
             <small>Mark the place of the event on the map</small>
        </span>
             </div>
           </div>
+        </form>
 
-
+        <form class="form-horizontal" [formGroup]="form">
           <div class="form-group">
             <label class="control-label col-sm-2 requiredField">
               Image </label>
@@ -102,60 +105,70 @@
               <input
                 style="display: none"
                 type="file" accept=".jpg, .jpeg, .png, .gif" ng2FileSelect [uploader]="uploader" (change)="upload()"
-                #fileInput>
-              <button class="btn btn-info button my-4" (click)="fileInput.click()">Select File</button>
+                #fileInput
+                formControlName="image"
+                [ngClass]="{
+                            'is-invalid': form.get('image').invalid && (form.get('image').dirty || form.get('image').touched)
+                        }">
+              <button class="btn btn-info button" (click)="fileInput.click()">Select image</button>
+              <div *ngIf="form.get('image').invalid && (form.get('image').dirty || form.get('image').touched)"
+                   class="text-danger">
+                <div *ngIf="form.get('image').errors.imageExtension">
+                  You can upload files only with following extensions: .jpg, .jpeg, .png, .gif
+                </div>
+              </div>
+            </div>
+
+            <div class="alert mt-2" [hidden]="!imageUploading">
+              <div>
+                Uploading image...
+                <div class="progress" style="">
+                  <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="form-group ">
+
+          <div class="form-group">
             <label class="control-label col-sm-2 requiredField" for="timeLineStart">
-              Start time
-              <span class="asteriskField">*</span>
+              Start time <span class="asteriskField">*</span>
             </label>
             <div class="col-sm-10">
               <div class="input-group">
-                <input class="form-control" id="timeLineStart" name="timeLineStart"  type="datetime-local"
-                       [(ngModel)]="event.timeLineStart" formControlName="timeLineStartControl"
-                       [ngClass]="{'is-invalid': form.get('timeLineStartControl').invalid &&
-                       (form.get('timeLineStartControl').dirty || form.get('timeLineStartControl').touched)} "/>
+                <input id="timeLineStart"
+                       formControlName="timeLineStartControl" [(ngModel)]="event.timeLineStart"
+                       [owlDateTimeTrigger]="dtS" [owlDateTime]="dtS"
+                       [min]="min" [max]="max">
                 <div class="input-group-append">
-                  <span class="input-group-text">
-                    <i class="fa fa-calendar-check-o"> </i> </span>
+                   <span class="input-group-text">
+                      <i class="fa fa-calendar-check-o"> </i>
+                   </span>
                 </div>
-              </div>
-              <div *ngIf="form.get('timeLineStartControl').invalid &&
-                (form.get('timeLineStartControl').dirty || form.get('timeLineStartControl').touched ||
-                      form.get('timeLineStartControl').touched)" class="text-danger">
-                <div *ngIf="form.get('timeLineStartControl')">
-                  Start time can't before current time
-                </div>
+                <owl-date-time [pickerType]="'both'" #dtS></owl-date-time>
               </div>
             </div>
           </div>
+
           <div class="form-group ">
             <label class="control-label col-sm-2 requiredField" for="timeLineFinish">
-              End time
-              <span class="asteriskField">*</span>
+              End time <span class="asteriskField">*</span>
             </label>
             <div class="col-sm-10">
               <div class="input-group">
-                <input class="form-control" id="timeLineFinish" name="timeLineFinish" type="datetime-local"
-                       [(ngModel)]="event.timeLineFinish" formControlName="timeLineFinishControl"
-                       [ngClass]="{'is-invalid': form.get('timeLineFinishControl').invalid &&
-                       (form.get('timeLineFinishControl').dirty || form.get('timeLineFinishControl').touched)}">
+                <input id="timeLineFinish"
+                       formControlName="timeLineFinishControl" [(ngModel)]="event.timeLineFinish"
+                       [owlDateTimeTrigger]="dtF" [owlDateTime]="dtF"
+                       [min]="this.event.timeLineStart" [max]="max">
                 <div class="input-group-append">
-                  <span class="input-group-text">
-                    <i class="fa fa-calendar-check-o"> </i> </span>
+                   <span class="input-group-text">
+                      <i class="fa fa-calendar-check-o"> </i>
+                   </span>
                 </div>
-              </div>
-              <div *ngIf="form.get('timeLineFinishControl').invalid &&
-                (form.get('timeLineFinishControl').dirty || form.get('timeLineFinishControl').touched ||
-                      form.get('timeLineFinishControl').touched)" class="text-danger">
-                <div *ngIf="form.get('timeLineFinishControl').errors.dateLessThan">
-                  End time can't before start time
-                </div>
+                <owl-date-time [pickerType]="'both'" #dtF></owl-date-time>
               </div>
             </div>
           </div>
+
           <div class="form-group ">
             <label class="control-label col-sm-2 requiredField" for="number">
               Period
@@ -187,6 +200,7 @@
               </div>
             </div>
           </div>
+        </form>
 
           <div class="col-sm-10">
             <h5>
@@ -196,11 +210,11 @@
           </div>
           <div class="form-group my-4">
             <div class="col-sm-8 col-sm-offset-4 centerDiv">
+              <button class="btn btn-danger" [routerLink]="['/event', event.id]">Cancel</button>
               <button class="btn btn-primary" (click)="save()" [disabled]="!form.valid">Update Draft</button>
               <button class="btn btn-primary " (click)="publish()" [disabled]="!form.valid" >Create Event</button>
             </div>
           </div>
-        </form>
       </div>
     </div>
   </div>

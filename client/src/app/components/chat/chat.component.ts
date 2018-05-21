@@ -1,5 +1,7 @@
 import { User } from '../../model/user';
+import { Message } from '../../model/message';
 import { AuthService } from '../../services/auth.service';
+import { MessageService } from '../../services/message.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as Stomp from 'stompjs';
@@ -12,18 +14,16 @@ import * as $ from 'jquery';
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css']
 })
-export class ChatComponent {
+export class ChatComponent{
   currentUser: User = new User();
+  messages: Message[];
   private serverUrl = 'https://web-event-manager.herokuapp.com/socket'//https://web-event-manager.herokuapp.com/socket
   private title = 'Chat';
   private stompClient;
   private id;
       
-  constructor(private router: Router,private auth: AuthService){
+  constructor(private router: Router,private auth: AuthService, private msgService: MessageService){
     this.initializeWebSocketConnection();
-    setTimeout(() => {
-      this.loadMessages();
-    }, 3000);
   }
   
   ngOnInit() {
@@ -32,7 +32,10 @@ export class ChatComponent {
         this.currentUser = current_user;
         this.id = this.currentUser.id;
       });
-    }
+    this.msgService.loadMessages().subscribe((messages: any) => {
+      this.messages = messages;
+    });
+  }
   
   initializeWebSocketConnection(){
     let ws = new SockJS(this.serverUrl);
@@ -59,10 +62,9 @@ export class ChatComponent {
   }
 
   sendMessage(message){
-    this.stompClient.send("/app/send"+this.router.url, {}, this.id+";"+message);
+    if(message.length>0){
+      this.stompClient.send("/app/send"+this.router.url, {userId:this.id}, this.id+";"+message);
+    }
     $('#input').val('');
-  }
-  private loadMessages(){
-     this.stompClient.send("/app/send"+this.router.url+"/load");
   }
 }

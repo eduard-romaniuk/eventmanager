@@ -1,6 +1,7 @@
 package com.example.eventmanager.service;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 import com.example.eventmanager.dao.PersonalPlanSettingRepository;
@@ -8,6 +9,7 @@ import com.example.eventmanager.domain.PersonalPlanJobDescriptor;
 
 import com.example.eventmanager.domain.PersonalPlanSetting;
 import com.example.eventmanager.domain.PersonalPlanTriggerDescriptor;
+import com.example.eventmanager.domain.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.quartz.*;
@@ -15,10 +17,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
+
 
 @Service
 @Transactional
 public class PersonalPlanService {
+
+    private final int LIMIT = 10;
 
     private final Scheduler scheduler;
     private final Logger logger = LogManager.getLogger(PersonalPlanService.class);
@@ -85,6 +91,49 @@ public class PersonalPlanService {
         } catch (SchedulerException e) {
             logger.error("Could not delete job with key - {} due to error - {}", name, e.getLocalizedMessage());
         }
+    }
+
+    @PostConstruct
+    public void restartJobs(){
+
+        logger.info("Starting jobs for users");
+
+        int offset = 0;
+        boolean hasActiveUsers = true;
+        do{
+            logger.info("offset - " + offset);
+
+            List<User> activeUsers = userService.findAllActivePagination(LIMIT, offset);
+            logger.info("activeUsers - " + activeUsers.toString());
+
+            for (User user : activeUsers) {
+                String name = "Job for user " + user.getId();
+                if (getPlanSetting(user.getId()).isSendPlan()){
+                    try {
+                        if (!scheduler.checkExists(JobKey.jobKey(name))){
+
+                            createJob(user.getId());
+
+                        } else {
+                            logger.info("Job with key - {} is already exist", name);
+                        }
+
+                    } catch (SchedulerException e) {
+                        logger.error("Job with key - {} is already exist - {}", name, e.getLocalizedMessage());
+                    }
+                } else {
+                    logger.info("Sending personal plan for user - {} disable",user.getId());
+                }
+            }
+
+            offset += LIMIT;
+            if (activeUsers.size() < LIMIT)
+                hasActiveUsers = false;
+
+        } while (hasActiveUsers);
+
+        logger.info("End starting jobs");
+
     }
 
 }

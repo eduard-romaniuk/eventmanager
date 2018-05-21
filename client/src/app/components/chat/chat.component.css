@@ -41,8 +41,8 @@
 .panel-body
 {
 	word-wrap: break-word;
-    overflow-y: auto;
-    height: 385px;
+    overflow-y: scroll;
+    height: 347px;
 }
 
 ::-webkit-scrollbar-track
