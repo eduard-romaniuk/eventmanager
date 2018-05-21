@@ -103,6 +103,7 @@
                 <img class="img-fluid" [src]="event.image" id="image" name="image"> <br/>
               </div>
               <input
+                [(ngModel)]="event.image"
                 style="display: none"
                 type="file" accept=".jpg, .jpeg, .png, .gif" ng2FileSelect [uploader]="uploader" (change)="upload()"
                 #fileInput
