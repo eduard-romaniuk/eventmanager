@@ -1,5 +1,6 @@
 package com.example.eventmanager.query;
 
+import com.example.eventmanager.query.term.Column;
 import com.example.eventmanager.query.term.Expression;
 import com.example.eventmanager.query.term.Join;
 
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Query {
-    private List<String> columns = new ArrayList<>();
+    private List<Column> columns = new ArrayList<>();
     private List<String> tables = new ArrayList<>();
     private List<Join> joins = new ArrayList<>();
     private List<Expression> wheres = new ArrayList<>();
@@ -31,7 +32,7 @@ public class Query {
             this.query.tables.add(table);
         }
 
-        public Builder column(String name) {
+        public Builder column(Column name) {
             this.query.columns.add(name);
             return this;
         }
@@ -79,7 +80,7 @@ public class Query {
         }
     }
 
-    public List<String> getColumns() {
+    public List<Column> getColumns() {
         return columns;
     }
 
@@ -125,6 +126,20 @@ public class Query {
         }
     }
 
+    private void appendCol(StringBuilder sql, List<Column> list, String init,
+                            String separator) {
+        boolean first = true;
+        for (Column s : list) {
+            if (first) {
+                sql.append(init);
+            } else {
+                sql.append(separator);
+            }
+            sql.append(s.toString());
+            first = false;
+        }
+    }
+
     private void appendWhere(StringBuilder sql, List<Expression> expressions) {
         List<String> expList = new ArrayList<>();
 
@@ -143,7 +158,7 @@ public class Query {
         if (columns.size() == 0) {
             sql.append("*");
         } else {
-            appendList(sql, columns, "", ", ");
+            appendCol(sql, columns, "", ", ");
         }
 
         appendList(sql, tables, " FROM ", ", ");
