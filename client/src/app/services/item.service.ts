@@ -89,12 +89,12 @@ export class ItemService {
   }
 
   public unbooking (booker: Booker) {
-    this.http.delete(this.base_url + "/booking/" + booker.item_id + "/" + booker.event_id + "/" + booker.user_id).subscribe(
+    this.http.delete(this.base_url + "/booking/" + booker.itemId + "/" + booker.eventId + "/" + booker.userId).subscribe(
     );
   }
 
   public isBooked (booker: Booker): Observable<Boolean> {
-    return this.http.get<boolean>(this.base_url + `/booking?user=${booker.user_id}&event=${booker.event_id}&item=${booker.item_id}`)
+    return this.http.get<boolean>(this.base_url + `/booking?user=${booker.userId}&event=${booker.eventId}&item=${booker.itemId}`)
   }
 
 

@@ -60,17 +60,25 @@ export class WishListComponent implements OnInit {
     } else if (this.router.url == '/wishlist') {
 
 	    this.isOwn = true;
+      this.auth.getUser().subscribe((user: User) => {
+        this.initWishList(user.id);
+      });
 
 	  } else {
 
       // this.route.params.subscribe(params => {
-      //   const eventId = params['eventId'];
-      //   this.eventId = eventId;
+      //
+      //
       // });
 
 
       this.route.params.subscribe(params => {
-        const id = params['id'];
+        const id = params['userId'];
+		    const eventId = params['eventId'];
+
+        if (eventId) {
+          this.eventId = eventId;
+        }
 
         if (id) {
           this.userService.getUserById(id).subscribe((user: User) => {

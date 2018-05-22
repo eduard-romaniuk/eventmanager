@@ -101,7 +101,8 @@
 
         <div class="modal-body">
 
-        <app-view-item [eventId]="getEventId()"></app-view-item>
+        <app-view-item *ngIf="getEventId()" [eventId]="getEventId()"></app-view-item>
+		<app-view-item *ngIf="!getEventId()"></app-view-item>
 
         </div>
       </div>

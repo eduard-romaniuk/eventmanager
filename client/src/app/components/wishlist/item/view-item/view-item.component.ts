@@ -50,14 +50,17 @@ export class ViewItemComponent implements OnInit {
       this.likeService.wasLiked(this.item.id).subscribe( (hasLike: boolean) => {
           this.item.hasLiked = hasLike;
         });
+
+      this.auth.getUser().subscribe((user: any) => {
+        this.userId = user.id;
+        if (this.eventId) {
+          this.initParticipantViewWishList();
+        }
+      });
+
     });
 
-    this.auth.getUser().subscribe((user: any) => {
-      this.userId = user.id;
-      if (this.eventId) {
-        this.initParticipantViewWishList();
-      }
-    });
+
 
   }
 
@@ -69,9 +72,9 @@ export class ViewItemComponent implements OnInit {
 
           if(this.isParticipant){
             this.currentBooker = new Booker();
-            this.currentBooker.event_id = this.eventId;
-            this.currentBooker.item_id = this.item.id;
-            this.currentBooker.user_id = this.userId;
+            this.currentBooker.eventId = this.eventId;
+            this.currentBooker.itemId = this.item.id;
+            this.currentBooker.userId = this.userId;
             this.itemService.isBooked(this.currentBooker).subscribe(
               (isBooked: boolean ) => {
                 this.isBooked = isBooked;
@@ -131,6 +134,10 @@ export class ViewItemComponent implements OnInit {
 
     }
 
+  }
+
+  getEventId() : number {
+    return this.eventId;
   }
 
 

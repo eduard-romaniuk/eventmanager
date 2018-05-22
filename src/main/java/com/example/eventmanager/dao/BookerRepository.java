@@ -129,4 +129,27 @@ public class BookerRepository {
             return Collections.emptyList();
         }
     }
+
+    public Boolean isBooked( Booker booker ) {
+
+        try {
+            Map<String, Object> namedParams = new HashMap<>();
+
+            namedParams.put("itemId", booker.getItemId());
+            namedParams.put("userId", booker.getUserId());
+            namedParams.put("eventId", booker.getEventId());
+
+            namedJdbcTemplate.queryForObject(
+                    env.getProperty("getBooker"),
+                    namedParams,
+                    Long.class
+            );
+
+            return true;
+
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("Booker " + booker.getUserId() + " not found for item " + booker.getItemId());
+            return false;
+        }
+    }
 }

@@ -27,12 +27,12 @@
     <img src="../../../../../assets/images/mock/copy-icon.png" alt="Smiley face" height="20">
     Copy
   </button>
-  <button type="button" class=" btn" [hidden]="isOwnItem() || isBooked">
+  <button type="button" class=" btn" [hidden]="isOwnItem() || isBooked || !getEventId()" (click)="booking()">
     <img src="../../../../../assets/images/mock/Vote-512.png" alt="Smiley face" height="20">
     Booking
   </button>
 
-  <button type="button" class=" btn" [hidden]="isOwnItem() || !isBooked">
+  <button type="button" class=" btn" [hidden]="isOwnItem() || !isBooked || !getEventId()" (click)="unbooking()">
     <img src="../../../../../assets/images/mock/Vote-512.png" alt="Smiley face" height="20">
     Unbook
   </button>
