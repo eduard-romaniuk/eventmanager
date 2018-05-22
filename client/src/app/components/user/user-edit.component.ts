@@ -23,9 +23,8 @@ export class UserEditComponent implements OnInit {
   savingChanges = false;
   error = false;
 
-  today: Date = new Date();
   min = new Date(1900, 0, 1, 0, 1);
-  max = new Date(this.today.getFullYear() - 10, this.today.getMonth() + 1, this.today.getDay(), 0, 1);
+  max = new Date();
 
   constructor(private auth: AuthService,
               private router: Router,
