@@ -71,6 +71,7 @@ import { MessageService } from "./services/message.service";
 import { NotificationSettingsComponent } from './components/notification-settings/notification-settings.component';
 import {NotificationSettingsService} from "./services/notification-settings.service";
 import { StatisticsService } from './services/statistics.service';
+import {StatisticsComponent} from "./components/statistics/statistics.component";
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
