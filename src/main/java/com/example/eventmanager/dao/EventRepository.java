@@ -125,16 +125,16 @@ public class EventRepository implements CrudRepository<Event> {
         namedJdbcTemplate.update(env.getProperty("event.delete.event"), namedParams);
     }
 
-    public Long countSearchResults(String pattern, LocalDateTime start, LocalDateTime finish, String category) {
+    public Long countPublic(String pattern, LocalDateTime start, LocalDateTime finish, String category) {
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("name", '%' + pattern.toLowerCase().trim().replace(' ', '%') + '%');
         namedParams.put("timeline_start", start);
         namedParams.put("timeline_finish", finish);
         namedParams.put("category", category.equals("") ? "%" : category);
-        return namedJdbcTemplate.queryForObject(env.getProperty("event.countSearchResults"), namedParams, Long.class);
+        return namedJdbcTemplate.queryForObject(env.getProperty("event.countPublic"), namedParams, Long.class);
     }
 
-    public List<Event> searchWithFiltersPagination(String pattern, LocalDateTime start, LocalDateTime finish,
+    public List<Event> searchPublic(String pattern, LocalDateTime start, LocalDateTime finish,
                                          String category, Long limit, Long offset) {
         try {
             Map<String, Object> namedParams = new HashMap<>();
@@ -143,7 +143,7 @@ public class EventRepository implements CrudRepository<Event> {
             namedParams.put("timeline_finish", finish);
             namedParams.put("category", category.equals("") ? "%" : category);
             String query = new StringBuilder()
-                    .append(env.getProperty("event.search"))
+                    .append(env.getProperty("event.public"))
                     .append(" LIMIT ")
                     .append(limit)
                     .append(" OFFSET ")
@@ -151,12 +151,12 @@ public class EventRepository implements CrudRepository<Event> {
                     .toString();
             return namedJdbcTemplate.query(query, namedParams, new EventExtractor());
         } catch (EmptyResultDataAccessException e) {
-            logger.info("searchWithFilters | Events not found");
+            logger.info("searchPublicWithFilters | Events not found");
             return Collections.emptyList();
         }
     }
 
-    public Long countSearchUserEventsResults(String pattern, LocalDateTime start, LocalDateTime finish, String category,
+    public Long countUserEvents(String pattern, LocalDateTime start, LocalDateTime finish, String category,
                                              Long userId, Long priority, Boolean byPriority, Boolean privat) {
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("name", '%' + pattern.toLowerCase().trim().replace(' ', '%') + '%');
@@ -167,10 +167,10 @@ public class EventRepository implements CrudRepository<Event> {
         namedParams.put("priority_id", priority);
         namedParams.put("by_priority", byPriority);
         namedParams.put("is_private", privat);
-        return namedJdbcTemplate.queryForObject(env.getProperty("event.countSearchUserEventsResults"), namedParams, Long.class);
+        return namedJdbcTemplate.queryForObject(env.getProperty("event.countUserEvents"), namedParams, Long.class);
     }
 
-    public List<Event> searchUserEventsWithFiltersPagination(String pattern, LocalDateTime start, LocalDateTime finish,
+    public List<Event> searchUserEvents(String pattern, LocalDateTime start, LocalDateTime finish,
                                                    String category, Long userId, Long priority, Boolean byPriority,
                                                    Boolean privat, Long limit, Long offset) {
         try {
@@ -184,7 +184,7 @@ public class EventRepository implements CrudRepository<Event> {
             namedParams.put("by_priority", byPriority);
             namedParams.put("is_private", privat);
             String query = new StringBuilder()
-                    .append(env.getProperty("event.searchUserEvents"))
+                    .append(env.getProperty("event.userEvents"))
                     .append(" LIMIT ")
                     .append(limit)
                     .append(" OFFSET ")
@@ -192,7 +192,85 @@ public class EventRepository implements CrudRepository<Event> {
                     .toString();
             return namedJdbcTemplate.query(query, namedParams, new EventExtractor());
         } catch (EmptyResultDataAccessException e) {
-            logger.info("searchUserEventsWithFilters | Events not found");
+            logger.info("userEvents | Events not found");
+            return Collections.emptyList();
+        }
+    }
+
+    public Long countCreated(String pattern, LocalDateTime start, LocalDateTime finish, String category,
+                                             Long userId, Long priority, Boolean byPriority) {
+        Map<String, Object> namedParams = new HashMap<>();
+        namedParams.put("name", '%' + pattern.toLowerCase().trim().replace(' ', '%') + '%');
+        namedParams.put("timeline_start", start);
+        namedParams.put("timeline_finish", finish);
+        namedParams.put("category", category.equals("") ? "%" : category);
+        namedParams.put("user_id", userId);
+        namedParams.put("priority_id", priority);
+        namedParams.put("by_priority", byPriority);
+        return namedJdbcTemplate.queryForObject(env.getProperty("event.countCreated"), namedParams, Long.class);
+    }
+
+    public List<Event> searchCreated(String pattern, LocalDateTime start, LocalDateTime finish,
+                                                             String category, Long userId, Long priority, Boolean byPriority,
+                                                             Long limit, Long offset) {
+        try {
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("name", '%' + pattern.toLowerCase().trim().replace(' ', '%') + '%');
+            namedParams.put("timeline_start", start);
+            namedParams.put("timeline_finish", finish);
+            namedParams.put("category", category.equals("") ? "%" : category);
+            namedParams.put("user_id", userId);
+            namedParams.put("priority_id", priority);
+            namedParams.put("by_priority", byPriority);
+            String query = new StringBuilder()
+                    .append(env.getProperty("event.created"))
+                    .append(" LIMIT ")
+                    .append(limit)
+                    .append(" OFFSET ")
+                    .append(offset)
+                    .toString();
+            return namedJdbcTemplate.query(query, namedParams, new EventExtractor());
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("created | Events not found");
+            return Collections.emptyList();
+        }
+    }
+
+    public Long countDrafts(String pattern, LocalDateTime start, LocalDateTime finish, String category,
+                                             Long userId, Long priority, Boolean byPriority) {
+        Map<String, Object> namedParams = new HashMap<>();
+        namedParams.put("name", '%' + pattern.toLowerCase().trim().replace(' ', '%') + '%');
+        namedParams.put("timeline_start", start);
+        namedParams.put("timeline_finish", finish);
+        namedParams.put("category", category.equals("") ? "%" : category);
+        namedParams.put("user_id", userId);
+        namedParams.put("priority_id", priority);
+        namedParams.put("by_priority", byPriority);
+        return namedJdbcTemplate.queryForObject(env.getProperty("event.countDrafts"), namedParams, Long.class);
+    }
+
+    public List<Event> searchDrafts(String pattern, LocalDateTime start, LocalDateTime finish,
+                                                             String category, Long userId, Long priority, Boolean byPriority,
+                                                             Long limit, Long offset) {
+        try {
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("name", '%' + pattern.toLowerCase().trim().replace(' ', '%') + '%');
+            namedParams.put("timeline_start", start);
+            namedParams.put("timeline_finish", finish);
+            namedParams.put("category", category.equals("") ? "%" : category);
+            namedParams.put("user_id", userId);
+            namedParams.put("priority_id", priority);
+            namedParams.put("by_priority", byPriority);
+            String query = new StringBuilder()
+                    .append(env.getProperty("event.drafts"))
+                    .append(" LIMIT ")
+                    .append(limit)
+                    .append(" OFFSET ")
+                    .append(offset)
+                    .toString();
+            return namedJdbcTemplate.query(query, namedParams, new EventExtractor());
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("drafts | Events not found");
             return Collections.emptyList();
         }
     }

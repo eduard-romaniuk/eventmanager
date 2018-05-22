@@ -84,23 +84,39 @@ export class EventService {
     return this.http.get<Category[]>(this.base_url+"categories")
   }
 
-  public getCalendarData(year: number, month: number, id: number, privat: boolean) {
-    console.log(privat);
-    return this.http.get(this.base_url + `${id}/calendar/${year}/${month+1}?privat=${privat}`);
+  public getCalendarData(year: number, month: number, id: number) {
+    return this.http.get(this.base_url + `${id}/calendar/${year}/${month+1}`);
   }
 
   public getFilteredEvents(pattern: string, category: string, start: Date, finish: Date, limit: number, offset: number):Observable<HttpResponse<Event[]>> {
-    return this.http.get<Event[]>(this.base_url + 'filter' +
+    return this.http.get<Event[]>(this.base_url + 'public/filter' +
       `?pattern=${pattern.toLowerCase()}&category=${category}&start=${start.toISOString()}&finish=${finish.toISOString()}&limit=${limit}&offset=${offset}`, {observe: 'response'});
   }
 
   public getFilteredUserEvents(pattern: string, category: string, start: Date, finish: Date,
-      user_id: number, priority: number, by_priority: boolean, privat: boolean,
+      user_id: number, priority: number, by_priority: boolean, 
       limit: number, offset: number):Observable<HttpResponse<Event[]>> {
-    console.log(privat);
-    return this.http.get<Event[]>(this.base_url + `user/${user_id}/filter` +
+    return this.http.get<Event[]>(this.base_url + `user/${user_id}/all/filter` +
       `?pattern=${pattern.toLowerCase()}&category=${category}&start=${start.toISOString()}&finish=${finish.toISOString()}` +
-      `&priority=${priority}&byPriority=${by_priority}&privat=${privat}` +
+      `&priority=${priority}&byPriority=${by_priority}` +
+      `&limit=${limit}&offset=${offset}`, {observe: 'response'});
+  }
+
+  public getFilteredUserCreatedEvents(pattern: string, category: string, start: Date, finish: Date,
+      user_id: number, priority: number, by_priority: boolean, 
+      limit: number, offset: number):Observable<HttpResponse<Event[]>> {
+    return this.http.get<Event[]>(this.base_url + `user/${user_id}/created/filter` +
+      `?pattern=${pattern.toLowerCase()}&category=${category}&start=${start.toISOString()}&finish=${finish.toISOString()}` +
+      `&priority=${priority}&byPriority=${by_priority}` +
+      `&limit=${limit}&offset=${offset}`, {observe: 'response'});
+  }
+
+  public getFilteredUserDraftsEvents(pattern: string, category: string, start: Date, finish: Date,
+      user_id: number, priority: number, by_priority: boolean,
+      limit: number, offset: number):Observable<HttpResponse<Event[]>> {
+    return this.http.get<Event[]>(this.base_url + `user/${user_id}/drafts/filter` +
+      `?pattern=${pattern.toLowerCase()}&category=${category}&start=${start.toISOString()}&finish=${finish.toISOString()}` +
+      `&priority=${priority}&byPriority=${by_priority}` +
       `&limit=${limit}&offset=${offset}`, {observe: 'response'});
   }
 

@@ -30,7 +30,10 @@ import { EventService } from "./services/event.service";
 import { UserComponent } from './components/user/user.component';
 import { UserListComponent } from './components/user/user-list.component';
 import { UserEditComponent } from './components/user/user-edit.component';
-import { EventListComponent } from './components/event-list/event-list.component';
+import { EventsListComponent } from './components/events-list/events-list.component';
+import { PublicEventListComponent } from './components/public-event-list/event-list.component';
+import { DraftsEventListComponent } from './components/drafts-event-list/drafts-event-list.component';
+import { CreatedEventListComponent } from './components/created-event-list/created-event-list.component';
 import { UserEventListComponent } from './components/user-event-list/user-event-list.component';
 import { UserEditImageComponent } from './components/user/user-edit-image.component';
 import { UserSearchComponent } from './components/user/user-search.component';
@@ -103,7 +106,10 @@ export class AddressInterceptor implements HttpInterceptor {
     CreateEventComponent,
     ViewEventComponent,
     EventEditComponent,
-    EventListComponent,
+    EventsListComponent,
+    PublicEventListComponent,
+    DraftsEventListComponent,
+    CreatedEventListComponent,
     UserEventListComponent,
     UserComponent,
     UserListComponent,
@@ -150,7 +156,7 @@ export class AddressInterceptor implements HttpInterceptor {
     NgSelectModule,
     CalendarModule.forRoot(),
     ToastrModule.forRoot({
-      timeOut: 2000
+      timeOut: 5000
     }),
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAM7RXrVYjGXrOIM1NrlifgXf8pdmzVZf0',

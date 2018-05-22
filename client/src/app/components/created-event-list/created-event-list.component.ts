@@ -9,19 +9,17 @@ import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
 
 @Component({
-  selector: 'app-user-event-list',
-  templateUrl: './user-event-list.component.html',
-  styleUrls: ['./user-event-list.component.css']
+  selector: 'app-created-event-list',
+  templateUrl: './created-event-list.component.html',
+  styleUrls: ['./created-event-list.component.css']
 })
-export class UserEventListComponent implements OnInit {
+export class CreatedEventListComponent implements OnInit {
 
   index = 10;
   count = 0;
   events: Event[] = [];
 
   user_id = 0;
-
-  isCurrent = false;
 
   pattern: string = '';
   last_pattern: string = this.pattern;
@@ -44,43 +42,21 @@ export class UserEventListComponent implements OnInit {
 
   constructor(private router: Router, private route: ActivatedRoute,
     private eventService: EventService, private toast: ToastService,
-    private auth: AuthService) {}
+    private auth: AuthService) { }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      if(params['id']) {
-        this.user_id = params['id'];
-
-        this.priority = this.priorities.filter(p => p.value === params['priority'])[0].id;
-        this.last_priority = this.priority;
-
-        this.date_range = params['date'] !== '-' ? [
-          new Date(params['date'].substr(0, params['date'].indexOf("|"))),
-          new Date(params['date'].substr(params['date'].indexOf("|") + 1))
-        ] : [
-        new Date(this.today.getFullYear(), this.today.getMonth(), 1, 0, 1),
-        new Date(this.today.getFullYear(), this.today.getMonth() + 1, 0, 23, 59)
-        ];
-        this.last_date_range = this.date_range;
-        this.eventService.getCategories().subscribe(response => {
+    this.auth.current_user.subscribe(response => {
+      this.user_id = response.id;
+      this.eventService.getCategories().subscribe(response => {
           this.categories = this.categories.concat(response);
-        });
-        this.reload();
-      } else {
-        this.auth.current_user.subscribe(response => {
-          this.user_id = response.id;
-          this.eventService.getCategories().subscribe(response => {
-            this.categories = this.categories.concat(response);
-          });
-          this.reload();
-        });
-      }
+      });
+      this.reload();
     });
   }
 
   reload() {
     this.eventService
-    .getFilteredUserEvents(this.last_pattern, this.last_category === 'All' ? '' : this.last_category,
+    .getFilteredUserCreatedEvents(this.last_pattern, this.last_category === 'All' ? '' : this.last_category,
       this.last_date_range[0], this.last_date_range[1],
       this.user_id, this.last_priority, Number(this.last_priority) !== -1,
       10, 0).subscribe(
@@ -95,7 +71,7 @@ export class UserEventListComponent implements OnInit {
 
   loadMore() {
     this.eventService
-    .getFilteredUserEvents(this.last_pattern, this.last_category === 'All' ? '' : this.last_category,
+    .getFilteredUserCreatedEvents(this.last_pattern, this.last_category === 'All' ? '' : this.last_category,
       this.last_date_range[0], this.last_date_range[1],
       this.user_id, this.last_priority, Number(this.last_priority) !== -1,
       10, 0).subscribe(

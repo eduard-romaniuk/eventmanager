@@ -11,7 +11,8 @@ import { UserComponent } from '../components/user/user.component';
 import { UserListComponent } from '../components/user/user-list.component';
 import { UserEditComponent } from '../components/user/user-edit.component';
 import { EventEditComponent } from '../components/event-edit/event-edit.component';
-import { EventListComponent } from '../components/event-list/event-list.component';
+import { PublicEventListComponent } from '../components/public-event-list/event-list.component';
+import { EventsListComponent } from '../components/events-list/events-list.component';
 import { UserEventListComponent } from '../components/user-event-list/user-event-list.component';
 import { UserEditImageComponent } from '../components/user/user-edit-image.component';
 import { UserSearchComponent } from "../components/user/user-search.component";
@@ -59,8 +60,11 @@ const routes: Routes = [
   { path: 'event/create',
     component: CreateEventComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'events/list',
+      component: EventsListComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'events/list/:date',
-      component: EventListComponent,
+      component: PublicEventListComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'users/:id/events/:priority/:date',
       component: UserEventListComponent,

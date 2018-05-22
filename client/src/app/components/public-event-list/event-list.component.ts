@@ -8,11 +8,11 @@ import { EventService } from '../../services/event.service';
 import { ToastService } from '../../services/toast.service';
 
 @Component({
-  selector: 'app-event-list',
+  selector: 'app-public-event-list',
   templateUrl: './event-list.component.html',
   styleUrls: ['./event-list.component.css']
 })
-export class EventListComponent implements OnInit {
+export class PublicEventListComponent implements OnInit {
 
   index = 10;
   count = 0;
@@ -38,14 +38,16 @@ export class EventListComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.date_range = params['date'] !== '-' ? [
-        new Date(params['date'].substr(0, params['date'].indexOf("|"))),
-        new Date(params['date'].substr(params['date'].indexOf("|") + 1))
-      ] : [
-      new Date(this.today.getFullYear(), this.today.getMonth(), 1, 0, 1),
-      new Date(this.today.getFullYear(), this.today.getMonth() + 1, 0, 23, 59)
-      ];
-      this.last_date_range = this.date_range;
+      if(params['date']) {
+        this.date_range = params['date'] !== '-' ? [
+          new Date(params['date'].substr(0, params['date'].indexOf("|"))),
+          new Date(params['date'].substr(params['date'].indexOf("|") + 1))
+        ] : [
+        new Date(this.today.getFullYear(), this.today.getMonth(), 1, 0, 1),
+        new Date(this.today.getFullYear(), this.today.getMonth() + 1, 0, 23, 59)
+        ];
+        this.last_date_range = this.date_range;
+      }
       this.eventService.getCategories().subscribe(response => {
           this.categories = this.categories.concat(response);
       });
