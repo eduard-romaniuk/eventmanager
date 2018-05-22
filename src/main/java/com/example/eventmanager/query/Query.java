@@ -72,9 +72,10 @@ public class Query {
         }
 
         public Query build() {
-            Query builtQuery = query;
-            query = new Query();
-            return builtQuery;
+//            Query builtQuery = query;
+//            query = new Query();
+//            return builtQuery;
+            return query;
         }
     }
 

@@ -1,5 +1,7 @@
 package com.example.eventmanager.query.term;
 
+import org.apache.commons.collections.CollectionUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,10 @@ public class OrExpression implements Expression {
 
     @Override
     public String generate() {
-        //TODO Error check
+        if (CollectionUtils.isEmpty(expressions)){
+            throw new NullPointerException("Expressions can`t be null or empty");
+        }
+
         StringBuilder orString = new StringBuilder("(");
 
         for (Expression expression : expressions){

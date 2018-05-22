@@ -1,29 +1,70 @@
 package com.example.eventmanager.query.term;
 
 public class Join {
-    public static final String INNER_JOIN = "INNER JOIN";
-    public static final String LEFT_JOIN = "LEFT JOIN";
-    public static final String RIGHT_JOIN = "RIGHT JOIN";
-    public static final String FULL_JOIN = "FULL JOIN";
+    public enum JoinType {
+        INNER_JOIN("INNER JOIN"),
+        LEFT_JOIN("LEFT JOIN"),
+        RIGHT_JOIN("RIGHT JOIN"),
+        FULL_JOIN("FULL JOIN");
+
+        private final String type;
+
+        JoinType(final String type) {
+            this.type = type;
+        }
+
+        @Override
+        public String toString() {
+            return type;
+        }
+    }
 
     private String table;
-    private String type;
+    private JoinType type;
     private String onOne;
     private Object onTwo;
 
-    public Join(String table, String type, String onOne, Object onTwo) {
+    public Join(String table, JoinType type, String onOne, Object onTwo) {
         this.table = table;
         this.type = type;
         this.onOne = onOne;
         this.onTwo = onTwo;
     }
 
+    private static boolean typeExist(String test) {
+        for (JoinType jt : JoinType.values()) {
+            if (jt.toString().equals(test)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public String generate(){
-        //TODO Error check
+        if (table == null || table.equals("")){
+            throw new NullPointerException("Table can't be null or empty");
+        }
+
+        if (type == null){
+            throw new NullPointerException("Type can't be null");
+        }
+
+        if(!typeExist(type.toString())){
+            throw new NullPointerException("Type doesn`t exist");
+        }
+
+        if (onOne == null || onOne.equals("")){
+            throw new NullPointerException("First argument in ON statement can't be null or empty");
+        }
+
+        if (onTwo == null || onTwo.equals("")){
+            throw new NullPointerException("Second argument in ON statement can't be null or empty");
+        }
+
         StringBuilder joinString = new StringBuilder();
 
         joinString.append(" ")
-                .append(type)
+                .append(type.toString())
                 .append(" ")
                 .append(table)
                 .append(" ON ")
@@ -42,11 +83,11 @@ public class Join {
         this.table = table;
     }
 
-    public String getType() {
+    public JoinType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(JoinType type) {
         this.type = type;
     }
 
