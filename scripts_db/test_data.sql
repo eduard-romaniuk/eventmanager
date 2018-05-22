@@ -65,6 +65,18 @@ INSERT INTO "public"."status" ("id","status_name") VALUES (1 ,'accepted');
 INSERT INTO "public"."status" ("id","status_name") VALUES (2 ,'declined');
 INSERT INTO "public"."status" ("id","status_name") VALUES (3 ,'blocked');
 -- ----------------------------------
+-- Categories  ----------------------
+-- ----------------------------------
+INSERT INTO "public"."categories" ("id","name") VALUES (1 ,'Education');
+INSERT INTO "public"."categories" ("id","name") VALUES (2 ,'Travel');
+INSERT INTO "public"."categories" ("id","name") VALUES (3 ,'Business');
+INSERT INTO "public"."categories" ("id","name") VALUES (4 ,'Entertainment');
+INSERT INTO "public"."categories" ("id","name") VALUES (5 ,'Culture');
+INSERT INTO "public"."categories" ("id","name") VALUES (6 ,'Sport');
+INSERT INTO "public"."categories" ("id","name") VALUES (7 ,'Family');
+INSERT INTO "public"."categories" ("id","name") VALUES (8 ,'Music');
+INSERT INTO "public"."categories" ("id","name") VALUES (9 ,'Other');
+-- ----------------------------------
 -- Tags --------------------------
 -- ----------------------------------
 INSERT INTO "public"."tags" ("tag_name") VALUES ('salt');
