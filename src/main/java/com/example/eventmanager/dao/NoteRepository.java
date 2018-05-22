@@ -1,6 +1,7 @@
 package com.example.eventmanager.dao;
 
 
+import com.example.eventmanager.domain.Folder;
 import com.example.eventmanager.domain.Note;
 import com.example.eventmanager.domain.User;
 import org.apache.logging.log4j.LogManager;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -25,6 +25,7 @@ import java.util.*;
 
 @PropertySource("classpath:queries/note.properties")
 @Repository
+@Transactional
 public class NoteRepository implements CrudRepository<Note> {
 
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
@@ -74,7 +75,22 @@ public class NoteRepository implements CrudRepository<Note> {
         try {
             Map<String, Object> namedParams = new HashMap<>();
             namedParams.put("noteId", id);
-            return namedJdbcTemplate.query(env.getProperty("note.findById"), namedParams, new NoteWithCreatorMapper()).get(FIRST_ELEMENT);
+            return namedJdbcTemplate.query(env.getProperty("note.findById"), namedParams, new NoteWithCreatorAndFolderMapper()).get(FIRST_ELEMENT);
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("Note not found");
+            return null;
+        } catch (IndexOutOfBoundsException e) {
+            logger.info("Note not found");
+            return null;
+        }
+    }
+
+    public Note findOneForUpdate(Long id) {
+        logger.info("find note for update");
+        try {
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("noteId", id);
+            return namedJdbcTemplate.query(env.getProperty("note.findByIdForUpdate"), namedParams, new NoteWithCreatorAndFolderMapper()).get(FIRST_ELEMENT);
         } catch (EmptyResultDataAccessException e) {
             logger.info("Note not found");
             return null;
@@ -103,8 +119,15 @@ public class NoteRepository implements CrudRepository<Note> {
         namedParams.put("name", note.getName());
         namedParams.put("description", note.getDescription());
         namedParams.put("image", note.getImage());
-        namedParams.put("eventId", note.getId());
+        namedParams.put("noteId", note.getId());
         namedJdbcTemplate.update(env.getProperty("note.updateNote"), namedParams);
+    }
+
+    public void moveNote(Note note) {
+        Map<String, Object> namedParams = new HashMap<>();
+        namedParams.put("noteId", note.getId());
+        namedParams.put("folderId", note.getFolder().getId());
+        namedJdbcTemplate.update(env.getProperty("note.moveNote"), namedParams);
     }
 
     @Override
@@ -112,7 +135,7 @@ public class NoteRepository implements CrudRepository<Note> {
     public void delete(Note entity) {
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("noteId", entity.getId());
-        namedJdbcTemplate.update(env.getProperty("note.delete.note"), namedParams);
+        namedJdbcTemplate.update(env.getProperty("note.delete"), namedParams);
     }
 
     public List<Note> findAllFolderNotes(Long folderId, Long currentUserId) {
@@ -136,7 +159,6 @@ public class NoteRepository implements CrudRepository<Note> {
     }
 
     public static final class NoteMapper implements RowMapper<Note> {
-        private final Logger logger = LogManager.getLogger(NoteMapper.class);
         @Override
         public Note mapRow(ResultSet rs, int rowNum) throws SQLException {
             Note note = new Note();
@@ -148,8 +170,8 @@ public class NoteRepository implements CrudRepository<Note> {
         }
     }
 
-    public static final class NoteWithCreatorMapper implements RowMapper<Note> {
-        private final Logger logger = LogManager.getLogger(NoteWithCreatorMapper.class);
+    public static final class NoteWithCreatorAndFolderMapper implements RowMapper<Note> {
+        private final Logger logger = LogManager.getLogger(NoteWithCreatorAndFolderMapper.class);
         @Override
         public Note mapRow(ResultSet rs, int rowNum) throws SQLException {
             Note note = new Note();
@@ -161,6 +183,9 @@ public class NoteRepository implements CrudRepository<Note> {
             creator.setId(rs.getLong("creator_id"));
             creator.setName(rs.getString("creator_name"));
             note.setCreator(creator);
+            Folder folder = new Folder();
+            folder.setId(rs.getLong("folder_id"));
+            note.setFolder(folder);
             logger.info("Loaded Note: " + note);
             return note;
         }

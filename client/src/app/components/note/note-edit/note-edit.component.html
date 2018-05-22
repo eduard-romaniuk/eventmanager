@@ -1,0 +1,110 @@
+<div class=" my-4">
+  <div class="container-fluid ">
+    <div class="row">
+
+    </div>
+    <div class="row">
+      <div class="col-md-10 centerDiv">
+        <h2 class="text-center">Enter information about note</h2>
+        <form class="form-horizontal" [formGroup]="form">
+          <div class="form-group ">
+            <label class="control-label col-sm-2 requiredField" for="name">
+              Name
+              <span class="asteriskField">*</span>
+            </label>
+            <div class="col-sm-10">
+              <div class="input-group">
+                <input class="form-control" id="name" placeholder="Note name" type="text"
+                       [(ngModel)]="note.name" formControlName="noteNameControl"
+                       [ngClass]="{'is-invalid': form.get('noteNameControl').invalid &&
+                       (form.get('noteNameControl').dirty || form.get('noteNameControl').touched)}"/>
+
+                <div class="input-group-append">
+                  <span class="input-group-text">
+                    <i class="fa fa-file-text-o"> </i> </span>
+                </div>
+              </div>
+              <div *ngIf="form.get('noteNameControl').invalid &&
+                (form.get('noteNameControl').dirty || form.get('noteNameControl').touched)" class="text-danger">
+                Name of note can't be blank
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <form class="form-horizontal" [formGroup]="form">
+          <div class="form-group ">
+            <label class="control-label col-sm-2 requiredField" for="description">
+              Description
+              <span class="asteriskField">*</span>
+            </label>
+            <div class="col-sm-10">
+
+              <app-ngx-editor id="description" [config]="editorConfig" [spellcheck]="true"
+                              [(ngModel)]="note.description"
+                              formControlName="descriptionControl"
+                              [ngClass]="{ 'is-invalid': form.get('descriptionControl').invalid &&
+                              (form.get('descriptionControl').dirty ||
+                               form.get('descriptionControl').touched)}"></app-ngx-editor>
+
+              <span class="help-block" id="hint_description">
+        <small> Enter additional information about the note </small>
+       </span>
+              <div
+                *ngIf="form.get('descriptionControl').invalid && (form.get('descriptionControl').dirty || form.get('descriptionControl').touched)"
+                class="text-danger"> Description can't be blank
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <form class="form-horizontal" [formGroup]="form">
+          <div class="form-group">
+            <label class="control-label col-sm-2 requiredField">
+              Image </label>
+            <div class="col-sm-10">
+              <div *ngIf="note.image">
+                <img class="img-fluid" [src]="note.image" id="image" name="image"> <br/>
+              </div>
+              <input
+                [(ngModel)]="note.image"
+                style="display: none"
+                type="file" accept=".jpg, .jpeg, .png, .gif" ng2FileSelect [uploader]="uploader" (change)="upload()"
+                #fileInput
+                formControlName="image"
+                [ngClass]="{
+                            'is-invalid': form.get('image').invalid && (form.get('image').dirty || form.get('image').touched)
+                        }">
+              <button class="btn btn-info button" (click)="fileInput.click()">Select image</button>
+              <div *ngIf="form.get('image').invalid && (form.get('image').dirty || form.get('image').touched)"
+                   class="text-danger">
+                <div *ngIf="form.get('image').errors.imageExtension">
+                  You can upload files only with following extensions: .jpg, .jpeg, .png, .gif
+                </div>
+              </div>
+            </div>
+
+            <div class="alert mt-2" [hidden]="!imageUploading">
+              <div>
+                Uploading image...
+                <div class="progress" style="">
+                  <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <div class="form-group my-4">
+          <div class="col-sm-8 col-sm-offset-4 centerDiv">
+            <button class="btn btn-danger" [routerLink]="['/note', note.id]">Cancel</button>
+            <button class="btn btn-primary" (click)="save()" [disabled]="!form.valid">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

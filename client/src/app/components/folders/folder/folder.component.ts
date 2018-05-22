@@ -6,6 +6,7 @@ import {AuthService} from "../../../services/auth.service";
 import {User} from "../../../model/user";
 import {Router, ActivatedRoute} from "@angular/router";
 import {ToastService} from "../../../services/toast.service";
+import {Note} from "../../../model/note";
 
 
 
@@ -21,6 +22,7 @@ export class FolderComponent {
   currentUser:User;
   rootFolderId:number = 0;
   access:boolean = true;
+  rootFolderNotes: Note[];
 
 
   constructor(private route:ActivatedRoute,
@@ -85,6 +87,30 @@ export class FolderComponent {
       if(code == 0) {
         this.toastService.success("Members list has been successfully updated");
       }
+    });
+  }
+
+  loadRootNotes() {
+    this.noteService.getFolderNotes(this.rootFolderId).subscribe(
+      (notes: any) => {
+        this.rootFolderNotes = notes;
+
+        console.log('loaded notes: ' + this.rootFolderNotes);
+      }
+    );
+  }
+
+  moveNotes() {
+    for(let note of this.rootFolderNotes) {
+      if(note.notFromRootFolder == true) {
+        note.folder = new Folder();
+        note.folder.id = this.folder.id;
+        console.log('new folder id of note: ' + note.folder.id);
+        this.folder.notes.push(note);
+      }
+    }
+    this.noteService.moveNotes(this.rootFolderNotes).subscribe((data: any) => {
+      this.toastService.success("Notes was successfully mowed");
     });
   }
 }

@@ -28,6 +28,7 @@ import { CreateNoteComponent } from "../components/note/createNote/createNote.co
 import { ViewNoteComponent } from "../components/note/viewNote/viewNote.component"
 import { FolderComponent } from "../components/folders/folder/folder.component"
 import { UserSettingsComponent } from "../components/user/user-settings/user-settings.component";
+import { NoteEditComponent } from '../components/note/note-edit/note-edit.component';
 
 @Injectable()
 export class OnlyLoggedInUsersGuard implements CanActivate {
@@ -122,6 +123,9 @@ const routes: Routes = [
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'note/:noteId',
     component: ViewNoteComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'note/:noteId/edit',
+    component: NoteEditComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: '**', redirectTo: '/hello', pathMatch: 'full'}
 ];

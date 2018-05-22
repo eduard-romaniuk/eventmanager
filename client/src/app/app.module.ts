@@ -70,6 +70,8 @@ import { AddItemImagesComponent } from './components/wishlist/item/add-item-imag
 import { MessageService } from "./services/message.service";
 import { NotificationSettingsComponent } from './components/notification-settings/notification-settings.component';
 import {NotificationSettingsService} from "./services/notification-settings.service";
+import {NoteEditComponent} from "./components/note/note-edit/note-edit.component";
+
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -135,7 +137,8 @@ export class AddressInterceptor implements HttpInterceptor {
     UserEditEmailComponent,
     AddItemImagesComponent,
     NotificationSettingsComponent,
-    ViewNoteComponent
+    ViewNoteComponent,
+    NoteEditComponent
   ],
   imports: [
     BrowserModule,

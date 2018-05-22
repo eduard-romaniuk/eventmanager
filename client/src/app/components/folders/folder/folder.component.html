@@ -3,7 +3,7 @@
     <h2> {{folder.name}} </h2>
     <div class="md-form text-left">
       <div *ngIf="isCreator">
-        <button type="button" class="btn btn-primary" data-toggle="modal">Add existing note</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#RootFolderNotes" (click)="loadRootNotes()">Add existing note</button>
         <button class="btn btn-primary" [routerLink]="['/note/create', folder.id]">Create note</button>
         <button type = "button" class="btn btn-primary" data-toggle="modal" data-target="#deleteFolder">Delete folder</button>
         <button type="button" class="btn btn-primary" (click)="getAllMembers()" data-toggle="modal" data-target="#Members">Members</button>
@@ -40,7 +40,7 @@
 
               <label>
                 <input type="checkbox" [(ngModel)] = "member.isMember"/>
-                <span><strong>{{member.login}} {{member.isMember}}</strong></span>
+                <span><strong>{{member.login}}</strong></span>
               </label>
             </div>
           </div>
@@ -66,9 +66,39 @@
       <div class="modal-body">
         <h4 class="text-center">Are you sure?</h4>
         <div class="modal-footer ">
-          <button class="btn btn-warning centerDiv" type="button" data-dismiss="modal">Cancel
+          <button class="btn btn-warning centerDiv" type="button" data-dismiss="modal">No
           </button>
-          <button class="btn btn-success centerDiv" (click)="delete()" data-dismiss="modal">Submit
+          <button class="btn btn-success centerDiv" (click)="delete()" data-dismiss="modal">Yes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="RootFolderNotes" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h3> Select notes</h3>
+        <button class="close" type="button" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="rootFolderNotes">
+          <div id="rootFolderNotesCheckboxList" class="checkboxList">
+            <div *ngFor="let note of rootFolderNotes">
+
+              <label>
+                <input type="checkbox" [(ngModel)] = "note.notFromRootFolder"/>
+                <span><strong>{{note.name}} {{note.notFromRootFolder}}</strong></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="rootFolderNotes?.length < 1">
+          <p>No notes </p>
+        </div>
+        <div class="modal-footer ">
+          <button class="btn btn-default" type="submit" (click)="moveNotes()" data-dismiss="modal">Submit
           </button>
         </div>
       </div>
