@@ -1,6 +1,7 @@
 package com.example.eventmanager.dao;
 
 import com.example.eventmanager.domain.User;
+import com.example.eventmanager.query.queries.SearchUser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -188,19 +189,8 @@ public class UserRepository implements CrudRepository<User> {
 
     public List<User> searchByLoginOrByNameAndSurnamePagination(String queryString, int limit, int offset) {
         try {
-            String fixedQueryString = ("%" + queryString.toLowerCase().trim() + "%").replace(" ", "%");
-
-            Map<String, Object> namedParams = new HashMap<>();
-            namedParams.put("queryString", fixedQueryString);
-
-            String query = new StringBuilder()
-                    .append(env.getProperty("searchUserByLoginOrByNameAndSurname"))
-                    .append(" LIMIT ")
-                    .append(limit)
-                    .append(" OFFSET ")
-                    .append(offset)
-                    .toString();
-            return namedJdbcTemplate.query(query, namedParams, new UserMapper());
+            String query = new SearchUser(queryString, limit, offset).construct().toString();
+            return namedJdbcTemplate.query(query, new UserMapper());
         } catch (EmptyResultDataAccessException e) {
             logger.info("Users not found");
             return Collections.emptyList();

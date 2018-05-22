@@ -10,7 +10,7 @@ public class SearchUser {
     private int offset;
 
     public SearchUser(String queryString, int limit, int offset){
-        this.queryString = queryString;
+        this.queryString = queryString.trim().replace(" ", "%");
         this.limit = limit;
         this.offset = offset;
     }
