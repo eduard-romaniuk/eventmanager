@@ -99,13 +99,9 @@ export class CreateEventComponent implements OnInit {
       image: ['', [Validators.required]]},
       {validator: imageExtension('image')});
 
-
-
-
-
-
     this.latitude =  50.450154;
     this.longitude = 30.524219;
+    this.event.place = this.latitude + "/" + this.longitude;
 
     this.searchControl = new FormControl();
 
@@ -160,6 +156,7 @@ export class CreateEventComponent implements OnInit {
       navigator.geolocation.getCurrentPosition((position) => {
         this.latitude = position.coords.latitude;
         this.longitude = position.coords.longitude;
+        this.event.place = this.latitude + "/" + this.longitude;
       });
     }
   }
