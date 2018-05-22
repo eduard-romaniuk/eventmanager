@@ -198,11 +198,8 @@ public class UserRepository implements CrudRepository<User> {
     }
 
     public Long countSearchByLoginOrByNameAndSurname(String queryString) {
-        String fixedQueryString = ("%" + queryString.toLowerCase().trim() + "%").replace(" ", "%");
-
-        Map<String, Object> namedParams = new HashMap<>();
-        namedParams.put("queryString", fixedQueryString);
-        return namedJdbcTemplate.queryForObject(env.getProperty("countSearchUserByLoginOrByNameAndSurname"), namedParams, Long.class);
+        String query = new SearchUser(queryString).constructCount().toString();
+        return namedJdbcTemplate.queryForObject(query, new HashMap<>(), Long.class);
     }
 
     public List<User> findAllActive() {
