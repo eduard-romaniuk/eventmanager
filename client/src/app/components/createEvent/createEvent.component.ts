@@ -80,8 +80,14 @@ export class CreateEventComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    this.newParticipants = [];
+    this.userFriends = [];
+
     this.auth.getUser().subscribe((data: any) => {
-      this.event.creator = data
+      this.event.creator = data;
+      this.getFriends();
+      this.getCategories();
     });
     console.log(this.event.creator);
     this.form = this.formBuilder.group({
@@ -93,7 +99,9 @@ export class CreateEventComponent implements OnInit {
       image: ['', [Validators.required]]},
       {validator: imageExtension('image')});
 
-    this.getCategories();
+
+
+
 
 
     this.latitude =  50.450154;
@@ -174,7 +182,6 @@ export class CreateEventComponent implements OnInit {
     console.log(this.newParticipants);
     this.eventService.addUsers(this.newParticipants,id).subscribe();
   }
-
   getFriends() {
     console.log(this.event.creator);
     this.userService.getFriends(this.event.creator.id)
@@ -188,6 +195,10 @@ export class CreateEventComponent implements OnInit {
       this.categories = categories;
     });
 
+  }
+
+  cancelAddUsers(){
+    this.newParticipants = [];
   }
 
 }

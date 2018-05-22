@@ -12,7 +12,7 @@ import {ToastService} from "../../services/toast.service";
 import {UserService} from "../../services/user.service";
 import {NotificationSettings} from "../../model/notificationSettings";
 import {NotificationSettingsService} from "../../services/notification-settings.service";
-import {forEach} from "@angular/router/src/utils/collection";
+
 
 @Component({
   selector: 'app-createEvent',
@@ -30,15 +30,15 @@ export class ViewEventComponent {
   isCreator: boolean;
   participationStr: String;
   participants: User[];
-
   candidates: User[];
-
-
   newParticipants: User[];
+
+  removeParticipants: User[];
 
   latitude: Number;
   longitude: Number;
-
+  isStarted: boolean;
+  today: Date = new Date();
 
   sub: Subscription;
 
@@ -74,6 +74,8 @@ export class ViewEventComponent {
                 this.event = event;
                 this.isCreator = this.isCreatorTest();
                 this.Position();
+                this.isStarted = (new Date() >= new Date(this.event.timeLineStart));
+
                 this.eventService.getPriority(id).subscribe((priority: String) => {
                   if (priority) {
                     this.priority = priority;
@@ -82,6 +84,15 @@ export class ViewEventComponent {
                       .subscribe((notificationSetting: any) => {
                         if (notificationSetting) {
                           this.notificationSetting = notificationSetting;
+
+                          if (this.notificationSetting.startDate == null) {
+                            const eventStartDate = new Date(this.event.timeLineStart);
+                            this.notificationSetting.startDate = new Date(eventStartDate.getTime());
+                            const maxNotificationDate = eventStartDate.getDate() - 1;
+                            this.notificationSetting.startDate.setDate(maxNotificationDate);
+                            //console.log("notificationSetting.startDate - " + this.notificationSetting.startDate);
+                          }
+
                         } else {
                           console.log(`Notification Setting not found!`);
                         }
@@ -90,6 +101,8 @@ export class ViewEventComponent {
                   } else {
                     console.log(`Priority not found!`);
                   }
+                  this.newParticipants = [];
+                  this.removeParticipants =[];
                   this.isLoading = false;
                 });
                 console.log(`Event with id '${id}' was loaded!`);
@@ -162,10 +175,10 @@ export class ViewEventComponent {
     });
 
     this.eventService.addUsers(this.newParticipants, this.event.id).subscribe((user: any) => {
+      this.getFriends();
       this.toast.success(participantsNames+" was added to this event");
 
     }, error => console.error(error));
-
 
     this.newParticipants = [];
   }
@@ -177,8 +190,23 @@ export class ViewEventComponent {
   }
 
   removeUsers() {
+    let participantsNames = "";
+    this.removeParticipants.forEach(function (value) {
+      participantsNames = participantsNames +  value.name+" "+value.surName + " ";
+    });
 
+    this.eventService.removeUsers(this.removeParticipants, this.event.id).subscribe((user: any) => {
+      this.showParticipants();
+      this.toast.warn(participantsNames+" was remove from this event");
 
+    }, error => console.error(error));
+
+    this.removeParticipants = [];
+  }
+
+  cancelRemoveUsers(){
+    this.removeParticipants = [];
+    this.router.navigate(['event/', this.event.id]);
   }
 
   getFriends() {

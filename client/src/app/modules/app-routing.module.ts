@@ -25,8 +25,11 @@ import { RecoverLoginComponent } from '../components/recover-login/recover-login
 import { ChangePasswordComponent } from '../components/change-password/change-password.component';
 import { RootFolderComponent } from "../components/folders/rootFolder/rootFolder.component"
 import { CreateNoteComponent } from "../components/note/createNote/createNote.component"
+import { ViewNoteComponent } from "../components/note/viewNote/viewNote.component"
 import { FolderComponent } from "../components/folders/folder/folder.component"
 import { UserSettingsComponent } from "../components/user/user-settings/user-settings.component";
+import {StatisticsComponent} from '../components/statistics/statistics.component';
+import { NoteEditComponent } from '../components/note/note-edit/note-edit.component';
 
 @Injectable()
 export class OnlyLoggedInUsersGuard implements CanActivate {
@@ -118,6 +121,15 @@ const routes: Routes = [
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'note/create/:folderId',
     component: CreateNoteComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'note/:noteId',
+    component: ViewNoteComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'statistics',
+    component: StatisticsComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'note/:noteId/edit',
+    component: NoteEditComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: '**', redirectTo: '/hello', pathMatch: 'full'}
 ];

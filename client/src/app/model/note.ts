@@ -5,10 +5,7 @@ export class Note {
   creator: User;
   name: string;
   description: string;
-  place: string;
-  period: number; //
   image: any;//TODO image
-  isSent: boolean;
-  isPrivate: boolean;
   folder: Folder;
+  notFromRootFolder: boolean;
 }

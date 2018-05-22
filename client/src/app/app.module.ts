@@ -57,6 +57,7 @@ import { FolderService } from "./services/folder.service";
 import { RootFolderComponent } from './components/folders/rootFolder/rootFolder.component';
 import { FolderComponent } from './components/folders/folder/folder.component';
 import { CreateNoteComponent } from './components/note/createNote/createNote.component';
+import { ViewNoteComponent } from './components/note/viewNote/viewNote.component';
 import { NoteService } from "./services/note.service";
 import {ChecklistModule} from "angular-checklist";
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -69,6 +70,9 @@ import { AddItemImagesComponent } from './components/wishlist/item/add-item-imag
 import { MessageService } from "./services/message.service";
 import { NotificationSettingsComponent } from './components/notification-settings/notification-settings.component';
 import {NotificationSettingsService} from "./services/notification-settings.service";
+import { StatisticsService } from './services/statistics.service';
+import {StatisticsComponent} from "./components/statistics/statistics.component";
+import {NoteEditComponent} from "./components/note/note-edit/note-edit.component";
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -133,8 +137,10 @@ export class AddressInterceptor implements HttpInterceptor {
     NoHtmlPipe,
     UserEditEmailComponent,
     AddItemImagesComponent,
-    UserEditEmailComponent,
-    NotificationSettingsComponent
+    NotificationSettingsComponent,
+    ViewNoteComponent,
+    StatisticsComponent,
+    NoteEditComponent
   ],
   imports: [
     BrowserModule,
@@ -175,6 +181,7 @@ export class AddressInterceptor implements HttpInterceptor {
     MessageService,
     LikeService,
     NotificationSettingsService,
+    StatisticsService,
     { provide: HTTP_INTERCEPTORS,
       useClass: AddressInterceptor,
       multi: true},

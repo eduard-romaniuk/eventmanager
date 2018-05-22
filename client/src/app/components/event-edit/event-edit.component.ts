@@ -96,7 +96,7 @@ export class EventEditComponent implements OnInit, OnDestroy {
       timeLineStartControl: ['', [Validators.required]],
       timeLineFinishControl: ['', [Validators.required]],
       periodControl: ['', [Validators.required]],
-        image: ['', [Validators.required]]},
+        image: ['', ]},
       {validator: imageExtension('image')});
     this.getCategories();
 

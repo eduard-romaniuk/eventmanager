@@ -4,7 +4,6 @@
 
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Router} from '@angular/router';
 import {Note} from "../model/note";
 
 @Injectable()
@@ -13,7 +12,7 @@ export class NoteService {
   private base_url = '/note/';
 
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient) {
 
   }
 
@@ -25,6 +24,26 @@ export class NoteService {
 
   public getFolderNotes(folderId: number) {
     return this.http.get(this.base_url + 'folder/' + folderId);
+  }
+
+  public getNoteById(noteId: number) {
+    return this.http.get(this.base_url + noteId);
+  }
+
+  public getNoteByIdForUpdate(noteId: number) {
+    return this.http.get(this.base_url + noteId + '/forUpdate');
+  }
+
+  public updateNote(note: Note) {
+    return this.http.post(this.base_url, note);
+  }
+
+  public deleteNote(noteId: number) {
+    return this.http.delete(this.base_url + noteId);
+  }
+
+  public moveNotes(notes: Note[]) {
+    return this.http.post(this.base_url + 'moveNotes', notes);
   }
 
 }

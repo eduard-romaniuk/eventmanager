@@ -1,10 +1,5 @@
 package com.example.eventmanager.domain;
 
-import java.util.Date;
-
-import lombok.Data;
-
-@Data
 public class Message {
 	private long id;
 	private long chatId;

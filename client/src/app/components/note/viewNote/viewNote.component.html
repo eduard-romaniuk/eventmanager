@@ -1,0 +1,67 @@
+<div *ngIf="isLoading">
+  loading ...
+</div>
+
+<div *ngIf="!isLoading">
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-6">
+        <h1>{{note.name}}</h1>
+        <h3>
+          <small> Creator: {{note.creator.name}} {{note.creator.surName}}</small>
+        </h3>
+
+        <div class="my-2">
+          <img class="img-fluid rounded" [src]="note.image" id="image" name="image">
+        </div>
+
+        <button *ngIf="this.isCreator" class="btn btn-danger" data-toggle="modal" data-target="#deleteNote">
+          Delete
+        </button>
+
+        <button class="btn btn-primary" [routerLink]="['/note', note.id, 'edit']">
+          Edit
+        </button>
+
+        <button *ngIf="this.isCreator" class="btn btn-success" (click)="convertToEvent()">
+          Convert to Event
+        </button>
+
+
+      </div>
+
+      <div class="col-md-6">
+        <h3 class="my-2">
+          Description
+        </h3>
+
+        <div [innerHTML]="this.note.description"></div>
+
+
+      </div>
+    </div>
+  </div>
+
+  <div id="deleteNote" class="modal fade">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header"><h3> Delete Note</h3>
+          <button class="close" type="button" data-dismiss="modal">×</button>
+        </div>
+        <div class="modal-body">
+          <h4 class="text-center">Are you sure?</h4>
+          <div class="modal-footer ">
+            <button class="btn btn-warning centerDiv" type="button" data-dismiss="modal">No
+            </button>
+            <button class="btn btn-success centerDiv" (click)="delete()" data-dismiss="modal">Yes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+

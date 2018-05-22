@@ -24,13 +24,26 @@ export class CreateNoteComponent implements OnInit {
 
   uploader:CloudinaryUploader = ImageUploaderService.getUploader();
 
-  latitude:number;
-  longitude:number;
-
   form:FormGroup;
 
   folderId:number = 0;
   rootFolderId:number = 0;
+
+  editorConfig = {
+    editable: true,
+    spellcheck: false,
+    height: '10rem',
+    minHeight: '5rem',
+    placeholder: 'Note description...',
+    translate: 'no',
+    "toolbar": [
+      ["bold", "italic", "underline", "strikeThrough"],
+      ["fontSize", "color"],
+      ["justifyLeft", "justifyCenter", "justifyRight", "justifyFull"],
+      ["undo", "redo"],
+      ["horizontalLine", "orderedList", "unorderedList"],
+    ]
+  };
 
   constructor(private route:ActivatedRoute,
               private auth:AuthService,
@@ -72,16 +85,13 @@ export class CreateNoteComponent implements OnInit {
       }
     );
     this.form = this.formBuilder.group({
-      eventNameControl: ['', [Validators.required]],
-      descriptionControl: ['', [Validators.required]],
-      periodControl: ['', [Validators.required, Validators.min(0)]],
+      noteNameControl: ['', [Validators.required]],
+      descriptionControl: ['', [Validators.required]]
     });
-    this.setCurrentPosition();
   }
 
 
   create() {
-    this.note.isSent = false;
     console.log('Creating note: ' + this.note);
     this.noteService.createNote(this.note).subscribe(
       (note:Note) => {
@@ -94,22 +104,6 @@ export class CreateNoteComponent implements OnInit {
         }
       }
     );
-  }
-
-  private setCurrentPosition() {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.latitude = position.coords.latitude;
-        this.longitude = position.coords.longitude;
-      });
-    }
-  }
-
-  onChoseLocation(note) {
-    this.latitude = note.coords.lat;
-    this.longitude = note.coords.lng;
-    this.note.place = this.latitude + "/" + this.longitude;
-    console.log(this.note.place)
   }
 
   upload() {

@@ -3,14 +3,19 @@
     <h2> {{folder.name}} </h2>
     <div class="md-form text-left">
       <div *ngIf="isCreator">
-        <button type="button" class="btn btn-primary" data-toggle="modal">Add existing note</button>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#RootFolderNotes" (click)="loadRootNotes()">Add existing note</button>
         <button class="btn btn-primary" [routerLink]="['/note/create', folder.id]">Create note</button>
-        <button class="btn btn-primary" (click)="delete()">Delete folder</button>
+        <button type = "button" class="btn btn-primary" data-toggle="modal" data-target="#deleteFolder">Delete folder</button>
+        <button type="button" class="btn btn-primary" (click)="getAllMembers()" data-toggle="modal" data-target="#Members">Members</button>
         <br>
       </div>
-      <a [routerLink]="['../../']"> ../ </a>
+      <div [routerLink]="['../../']">
+        <img src="../../../../../assets/images/undo-right-arrow.png" alt="Smiley face" height="20">
+        <a [routerLink]="['../../']"> ../ </a>
+      </div>
       <tr *ngFor="let note of folder.notes">
-        <td>
+        <td [routerLink]="['/note', note.id]">
+          <img src="../../../../../assets/images/note.png" alt="Smiley face" height="20">
           <a [routerLink]="['/note', note.id]"> {{ note.name}} </a>
         </td>
       </tr>
@@ -19,5 +24,84 @@
 
   <div class="alert alert-danger" *ngIf="!access">
     <strong>Error!</strong> The folder does not exist or the user does not have permission
+  </div>
+</div>
+
+<div id="Members" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h3> Select members</h3>
+        <button class="close" type="button" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="folder.members">
+          <div id="teamCheckboxList" class="checkboxList">
+            <div *ngFor="let member of folder.members">
+
+              <label>
+                <input type="checkbox" [(ngModel)] = "member.isMember"/>
+                <span><strong>{{member.login}}</strong></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="folder.members?.length < 1">
+          <p>No friends </p>
+        </div>
+        <div class="modal-footer ">
+          <button class="btn btn-default" type="submit" (click)="updateMembers()" data-dismiss="modal">Submit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="deleteFolder" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h3> Delete Folder</h3>
+        <button class="close" type="button" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body">
+        <h4 class="text-center">Are you sure?</h4>
+        <div class="modal-footer ">
+          <button class="btn btn-warning centerDiv" type="button" data-dismiss="modal">No
+          </button>
+          <button class="btn btn-success centerDiv" (click)="delete()" data-dismiss="modal">Yes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="RootFolderNotes" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header"><h3> Select notes</h3>
+        <button class="close" type="button" data-dismiss="modal">×</button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="rootFolderNotes">
+          <div id="rootFolderNotesCheckboxList" class="checkboxList">
+            <div *ngFor="let note of rootFolderNotes">
+
+              <label>
+                <input type="checkbox" [(ngModel)] = "note.notFromRootFolder"/>
+                <span><strong>{{note.name}}</strong></span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="rootFolderNotes?.length < 1">
+          <p>No notes </p>
+        </div>
+        <div class="modal-footer ">
+          <button class="btn btn-default" type="submit" (click)="moveNotes()" data-dismiss="modal">Submit
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

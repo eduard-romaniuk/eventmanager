@@ -11,11 +11,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.example.eventmanager.domain.Message;
 
 @PropertySource("classpath:queries/messages.properties")
 @Repository
-public class ChatRepository implements CrudRepository<Message> {
+public class ChatRepository {
 
 	 private final NamedParameterJdbcTemplate namedJdbcTemplate;
 	    private final Environment env;
@@ -36,27 +35,5 @@ public class ChatRepository implements CrudRepository<Message> {
 	    	return namedJdbcTemplate.queryForObject(env.getProperty("findChatId"), namedParams, Long.class);
 	    }
 	    
-		@Override
-		public int save(Message entity) {
-			return 0;
-		}
-	
-		@Override
-		public Message findOne(Long id) {
-			return null;
-		}
-	
-		@Override
-		public Iterable<Message> findAll() {
-			return null;
-		}
-	
-		@Override
-		public void update(Message entity) {
-		}
-	
-		@Override
-		public void delete(Message entity) {
-		}
 		
 }

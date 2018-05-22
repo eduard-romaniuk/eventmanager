@@ -6,6 +6,7 @@ import com.example.eventmanager.domain.Note;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import java.util.List;
 
 @Service
@@ -14,6 +15,7 @@ public class NoteService {
     private final NoteRepository noteRepository;
     private final UserService userService;
 
+
     @Autowired
     public NoteService(NoteRepository noteRepository, UserService userService) {
         this.noteRepository = noteRepository;
@@ -21,10 +23,13 @@ public class NoteService {
     }
 
 
-    public void createNote(Note note){
-        note.setId((long) noteRepository.save(note));
+    public void saveNote(Note note){
+        if(getNote(note.getId()) == null) {
+            note.setId((long) noteRepository.save(note));
+        } else {
+            noteRepository.update(note);
+        }
     }
-
 
     public void updateNote(Note note){
         noteRepository.update(note);
@@ -34,9 +39,21 @@ public class NoteService {
         return noteRepository.findOne(id);
     }
 
+    public Note getNoteForUpdate (Long id){
+        return noteRepository.findOneForUpdate(id);
+    }
+
     public List<Note> getAllFolderNotes(Long folderId, Long currentUserId){
 
        return noteRepository.findAllFolderNotes(folderId, currentUserId);
+    }
+
+    public void moveNotes(Note[] notes) {
+        for(Note note: notes) {
+            if(note.getFolder()!=null) {
+                noteRepository.moveNote(note);
+            }
+        }
     }
 
     public void deleteNote(Note note){

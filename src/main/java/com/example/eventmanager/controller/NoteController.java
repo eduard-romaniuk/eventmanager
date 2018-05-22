@@ -36,8 +36,15 @@ public class NoteController {
     @RequestMapping(value = "/", method = RequestMethod.POST)
     public ResponseEntity<Note> createNote(@RequestBody Note note, UriComponentsBuilder ucBuilder) {
         logger.info("POST /");
-        noteService.createNote(note);
+        noteService.saveNote(note);
         return new ResponseEntity<>(note, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/moveNotes", method = RequestMethod.POST)
+    public ResponseEntity<String> updateNotes(@RequestBody Note[] notes, UriComponentsBuilder ucBuilder) {
+        logger.info("POST /moveNotes");
+        noteService.moveNotes(notes);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @JsonView(NoteView.FullView.class)
@@ -46,6 +53,18 @@ public class NoteController {
         logger.info("GET /" + id);
 
         Note note = noteService.getNote(id);
+        if (note == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(note, HttpStatus.OK);
+    }
+
+    @JsonView(NoteView.FullView.class)
+    @RequestMapping(value = "/{id}/forUpdate", method = RequestMethod.GET)
+    public ResponseEntity<Note> getNoteForUpdate(@PathVariable("id") Long id) {
+        logger.info("GET /" + id + "/forUpdate");
+
+        Note note = noteService.getNoteForUpdate(id);
         if (note == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -67,6 +86,7 @@ public class NoteController {
         return new ResponseEntity<>(newNote, HttpStatus.OK);
     }
 
+
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<String> deleteNote(@PathVariable("id") Long id) {
         logger.info("DELETE /" + id);
@@ -83,7 +103,7 @@ public class NoteController {
     @RequestMapping(value = "/folder/{folderId}", method = RequestMethod.GET)
     public ResponseEntity<List<Note>> getAllFolderNotes(@PathVariable Long folderId) {
         logger.info("GET /folder/{folderId}");
-
+        logger.info("Current user id = " + userService.getCurrentUser().getId());
         List<Note> noteList = noteService.getAllFolderNotes(folderId, userService.getCurrentUser().getId());
         return new ResponseEntity<>(noteList, HttpStatus.OK);
     }
