@@ -75,6 +75,7 @@ export class ViewNoteComponent {
 
   convertToEvent(){
 
+    this.router.navigate(['/note', this.note.id, 'convert']);
   }
 
   public isCreatorTest(): boolean {

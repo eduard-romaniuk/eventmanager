@@ -1,26 +1,30 @@
 import {Component, ElementRef, NgZone, OnInit, ViewChild} from '@angular/core';
-import {EventService} from '../../services/event.service';
+
 import {JQueryStatic} from 'jquery'
 
-import {Event} from '../../model/event'
-import {AuthService} from "../../services/auth.service";
+import {Event} from "../../../model/event"
+import {EventService} from "../../../services/event.service";
+import {AuthService} from "../../../services/auth.service";
 import {FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {CloudinaryUploader} from "ng2-cloudinary";
-import {ImageUploaderService} from "../../services/image-uploader.service";
-import {User} from "../../model/user";
-import {UserService} from "../../services/user.service";
-import {Category} from "../../model/category";
-import {imageExtension} from "../../utils/validation-tools";
+import {ImageUploaderService} from "../../../services/image-uploader.service";
+import {User} from "../../../model/user";
+import {UserService} from "../../../services/user.service";
+import {Category} from "../../../model/category";
+import {imageExtension} from "../../../utils/validation-tools";
 import {MapsAPILoader} from "@agm/core";
 import {} from '@types/googlemaps'
+import {NoteService} from "../../../services/note.service";
+import {Subscription} from "rxjs/Subscription";
+
 
 @Component({
-  selector: 'app-createEvent',
-  templateUrl: './createEvent.component.html',
-  styleUrls: ['./createEvent.component.css']
+  selector: 'app-convert',
+  templateUrl: './convert.component.html',
+  styleUrls: ['./convert.component.css']
 })
-export class CreateEventComponent implements OnInit {
+export class ConvertComponent implements OnInit {
 
   event: Event = new Event();
 
@@ -38,6 +42,8 @@ export class CreateEventComponent implements OnInit {
   public searchElementRef: ElementRef;
 
   form: FormGroup;
+
+  sub: Subscription;
 
   categories:Category[] =[];
 
@@ -65,8 +71,10 @@ export class CreateEventComponent implements OnInit {
   constructor(private auth: AuthService,
               private eventService: EventService,
               private formBuilder: FormBuilder,
+              private route: ActivatedRoute,
               private router: Router,
               private userService:UserService,
+              private noteService: NoteService,
               private mapsAPILoader: MapsAPILoader,
               private ngZone: NgZone) {
 
@@ -89,14 +97,30 @@ export class CreateEventComponent implements OnInit {
       this.getFriends();
       this.getCategories();
     });
-    console.log(this.event.creator);
+
+    this.sub = this.route.params.subscribe(params => {
+      const id = params['noteId'];
+      console.log('Note id = ' + id);
+      if (id) {
+        this.noteService.getNoteById(id).subscribe((note: any) => {
+          if (note) {
+            this.event = note;
+            console.log(`Note with id '${id}' was loaded!`);
+            console.log(note);
+          } else {
+            console.log(`Note with id '${id}' not found!`);
+          }
+        });
+      }
+    });
+
     this.form = this.formBuilder.group({
-      eventNameControl: ['', [Validators.required]],
-      descriptionControl: ['', [Validators.required]],
-      timeLineStartControl: ['', [Validators.required]],
-      timeLineFinishControl: ['', [Validators.required]],
-      periodControl: ['', [Validators.required, Validators.min(0)]],
-      image: ['', [Validators.required]]},
+        eventNameControl: ['', [Validators.required]],
+        descriptionControl: ['', [Validators.required]],
+        timeLineStartControl: ['', [Validators.required]],
+        timeLineFinishControl: ['', [Validators.required]],
+        periodControl: ['', [Validators.required, Validators.min(0)]],
+        image: ['', ]},
       {validator: imageExtension('image')});
 
     this.latitude =  50.450154;
