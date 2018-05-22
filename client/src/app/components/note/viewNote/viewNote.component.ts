@@ -1,12 +1,13 @@
 import {Component} from '@angular/core';
 import {NoteService} from '../../../services/note.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {JQueryStatic} from 'jquery';
 
 import {Note} from '../../../model/note'
 import {Subscription} from "rxjs/Subscription";
 import {FormGroup} from "@angular/forms";
 import {AuthService} from "../../../services/auth.service";
+import {ToastService} from "../../../services/toast.service";
 
 @Component({
   selector: 'app-createEvent',
@@ -24,9 +25,13 @@ export class ViewNoteComponent {
 
   public isLoading = true;
 
+  rootFolderId: number = 0;
+
   constructor(private auth: AuthService,
               private route: ActivatedRoute,
-              private noteService: NoteService) {
+              private noteService: NoteService,
+              private router: Router,
+              private toastService: ToastService) {
   }
 
   ngOnInit() {
@@ -57,13 +62,19 @@ export class ViewNoteComponent {
   }
 
   public delete() {
-    // this.noteService.deleteNote(this.note.id).subscribe(any => {
-    //   this.router.navigate(['home']);
-    // }, error => console.error(error));
+    this.noteService.deleteNote(this.note.id).subscribe(any => {
+      console.log('Folder id = ' + this.note.folder.id);
+      this.toastService.success("The note was successfully deleted");
+      if(this.note.folder.id == this.rootFolderId) {
+        this.router.navigate(['folders/rootFolder']);
+      } else {
+        this.router.navigate(['folders/rootFolder/folder/' + this.note.folder.id]);
+      }
+    }, error => console.error(error));
   }
 
   convertToEvent(){
-   
+
   }
 
   public isCreatorTest(): boolean {

@@ -30,4 +30,20 @@ export class NoteService {
     return this.http.get(this.base_url + noteId);
   }
 
+  public getNoteByIdForUpdate(noteId: number) {
+    return this.http.get(this.base_url + noteId + '/forUpdate');
+  }
+
+  public updateNote(note: Note) {
+    return this.http.post(this.base_url, note);
+  }
+
+  public deleteNote(noteId: number) {
+    return this.http.delete(this.base_url + noteId);
+  }
+
+  public moveNotes(notes: Note[]) {
+    return this.http.post(this.base_url + 'moveNotes', notes);
+  }
+
 }

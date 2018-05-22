@@ -7,4 +7,5 @@ export class Note {
   description: string;
   image: any;//TODO image
   folder: Folder;
+  notFromRootFolder: boolean;
 }
