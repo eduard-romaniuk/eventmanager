@@ -154,6 +154,7 @@ export class ViewEventComponent {
 
   public delete() {
     this.eventService.deleteEvent(this.event.id).subscribe((user: any) => {
+      this.toast.success("Event '"+ this.event.name + "' was deleted");
       this.router.navigate(['home']);
     }, error => console.error(error));
   }
