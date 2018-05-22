@@ -30,6 +30,7 @@ import { FolderComponent } from "../components/folders/folder/folder.component"
 import { UserSettingsComponent } from "../components/user/user-settings/user-settings.component";
 import {StatisticsComponent} from '../components/statistics/statistics.component';
 import { NoteEditComponent } from '../components/note/note-edit/note-edit.component';
+import {ConvertComponent} from "../components/note/convert/convert.component";
 
 @Injectable()
 export class OnlyLoggedInUsersGuard implements CanActivate {
@@ -130,6 +131,9 @@ const routes: Routes = [
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: 'note/:noteId/edit',
     component: NoteEditComponent,
+    canActivate: [ OnlyLoggedInUsersGuard ] },
+  { path: 'note/:noteId/convert',
+    component: ConvertComponent,
     canActivate: [ OnlyLoggedInUsersGuard ] },
   { path: '**', redirectTo: '/hello', pathMatch: 'full'}
 ];

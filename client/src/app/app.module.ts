@@ -73,6 +73,7 @@ import {NotificationSettingsService} from "./services/notification-settings.serv
 import { StatisticsService } from './services/statistics.service';
 import {StatisticsComponent} from "./components/statistics/statistics.component";
 import {NoteEditComponent} from "./components/note/note-edit/note-edit.component";
+import { ConvertComponent } from './components/note/convert/convert.component';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -140,7 +141,8 @@ export class AddressInterceptor implements HttpInterceptor {
     NotificationSettingsComponent,
     ViewNoteComponent,
     StatisticsComponent,
-    NoteEditComponent
+    NoteEditComponent,
+    ConvertComponent
   ],
   imports: [
     BrowserModule,
