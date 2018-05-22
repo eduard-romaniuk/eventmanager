@@ -126,18 +126,14 @@ public class Query {
         }
     }
 
-    private void appendCol(StringBuilder sql, List<Column> list, String init,
-                            String separator) {
-        boolean first = true;
-        for (Column s : list) {
-            if (first) {
-                sql.append(init);
-            } else {
-                sql.append(separator);
-            }
-            sql.append(s.toString());
-            first = false;
+    private void appendColumn(StringBuilder sql, List<Column> columns) {
+        List<String> colList = new ArrayList<>();
+
+        for(Column column : columns){
+            colList.add(column.toString());
         }
+
+        appendList(sql, colList, "", ", ");
     }
 
     private void appendWhere(StringBuilder sql, List<Expression> expressions) {
@@ -158,7 +154,7 @@ public class Query {
         if (columns.size() == 0) {
             sql.append("*");
         } else {
-            appendCol(sql, columns, "", ", ");
+            appendColumn(sql, columns);
         }
 
         appendList(sql, tables, " FROM ", ", ");
