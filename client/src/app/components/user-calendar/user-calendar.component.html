@@ -12,7 +12,6 @@
       </div>
       <div class="col-md-4">
         <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):locale }}</h3>
-        <h3 *ngIf="isCurrUser()">My calendar</h3>
       </div>
       <div class="col-md-4">
           <div class="btn btn-primary"
@@ -25,14 +24,25 @@
       </div>
     </div>
     <br>
+    <div class="row text-center">
+      <div class="col-md-4">
+        <span class="badge badge-pill badge-success">x</span><p>low</p>
+      </div>
+      <div class="col-md-4">
+        <span class="badge badge-pill badge-warning">x</span><p>normal</p>
+      </div>
+      <div class="col-md-4">
+        <span class="badge badge-pill badge-danger">x</span><p>urgent</p>
+      </div>
+    </div>
 
     <!-- OTHER -->
 <ng-template #customCellTemplate let-day="day" let-locale="locale">
   <div class="cal-cell-top">
-    <a class="cal-day-badge badge badge-pill badge-danger" *ngIf="day.public > 0 && isCurrUser()"
+    <!--<a class="cal-day-badge badge badge-pill badge-danger" *ngIf="day.public > 0"
       [routerLink]="day.public_link">
       {{day.public}}
-    </a>
+    </a>-->
     <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span>
   </div>
   <div class="cell-totals text-center">

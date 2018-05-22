@@ -108,27 +108,53 @@ public class EventService {
         eventRepository.deleteParticipant(userService.getCurrentUser().getId(),event_id);
     }
 
-    public Long countSearchResults(String pattern, String category, LocalDateTime start, LocalDateTime finish) {
-        return eventRepository.countSearchResults(pattern, start, finish, category);
+    public Long countPublic(String pattern, String category, LocalDateTime start, LocalDateTime finish) {
+        return eventRepository.countPublic(pattern, start, finish, category);
     }
 
-    public List<Event> searchWithFiltersPagination(String pattern, String category, LocalDateTime start, LocalDateTime finish,
+    public List<Event> searchPublic(String pattern, String category, LocalDateTime start, LocalDateTime finish,
                                                    Long limit, Long offset) {
-        return eventRepository.searchWithFiltersPagination(pattern, start, finish, category, limit, offset);
+        return eventRepository.searchPublic(pattern, start, finish, category, limit, offset);
     }
 
-    public List<Event> searchUserEventsWithFiltersPagination(String pattern, LocalDateTime start, LocalDateTime finish,
+    public Long countUserEvents(String pattern, LocalDateTime start, LocalDateTime finish,
+                                String category, Long userId, Long priority, Boolean byPriority,
+                                Boolean privat) {
+        return eventRepository.countUserEvents(pattern, start, finish, category,
+                userId, priority, byPriority, privat);
+    }
+
+    public List<Event> searchUserEvents(String pattern, LocalDateTime start, LocalDateTime finish,
                                                              String category, Long userId, Long priority, Boolean byPriority,
                                                              Boolean privat, Long limit, Long offset) {
-        return eventRepository.searchUserEventsWithFiltersPagination(pattern, start, finish, category,
+        return eventRepository.searchUserEvents(pattern, start, finish, category,
                 userId, priority, byPriority, privat, limit, offset);
     }
 
-    public Long countSearchUserEventsResults(String pattern, LocalDateTime start, LocalDateTime finish,
-                                                             String category, Long userId, Long priority, Boolean byPriority,
-                                                             Boolean privat) {
-        return eventRepository.countSearchUserEventsResults(pattern, start, finish, category,
-                userId, priority, byPriority, privat);
+    public Long countCreated(String pattern, LocalDateTime start, LocalDateTime finish,
+                                String category, Long userId, Long priority, Boolean byPriority) {
+        return eventRepository.countCreated(pattern, start, finish, category,
+                userId, priority, byPriority);
+    }
+
+    public List<Event> searchCreated(String pattern, LocalDateTime start, LocalDateTime finish,
+                                        String category, Long userId, Long priority, Boolean byPriority,
+                                        Long limit, Long offset) {
+        return eventRepository.searchCreated(pattern, start, finish, category,
+                userId, priority, byPriority, limit, offset);
+    }
+
+    public Long countDrafts(String pattern, LocalDateTime start, LocalDateTime finish,
+                             String category, Long userId, Long priority, Boolean byPriority) {
+        return eventRepository.countDrafts(pattern, start, finish, category,
+                userId, priority, byPriority);
+    }
+
+    public List<Event> searchDrafts(String pattern, LocalDateTime start, LocalDateTime finish,
+                                     String category, Long userId, Long priority, Boolean byPriority,
+                                     Long limit, Long offset) {
+        return eventRepository.searchDrafts(pattern, start, finish, category,
+                userId, priority, byPriority, limit, offset);
     }
 
     public List<Category> getCategories(){
@@ -164,7 +190,7 @@ public class EventService {
                     (int) dataByDay.stream().filter(event -> event.getPriority() == 0L).count(),
                     (int) dataByDay.stream().filter(event -> event.getPriority() == 1L).count(),
                     (int) dataByDay.stream().filter(event -> event.getPriority() == 2L).count(),
-                    (int) dataByDay.stream().filter(event -> event.getPriority() == 3L).count()
+                    privat ? (int) dataByDay.stream().filter(event -> event.getPriority() == 3L).count() : 0
             ));
         }
         return result;

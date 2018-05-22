@@ -1,0 +1,38 @@
+<div role="tabpanel">
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a id="publicH" aria-controls="publicTab" class="nav-link active" data-toggle="tab" href="#publicTab" role="tab">
+                All public events
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a id="userH" aria-controls="userTab" class="nav-link" data-toggle="tab" href="#userTab" role="tab">
+                My events
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a id="createdH" aria-controls="createdTab" class="nav-link" data-toggle="tab" href="#createdTab" role="tab">
+                Created events
+            </a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a id="draftsH" aria-controls="draftsTab" class="nav-link" data-toggle="tab" href="#draftsTab" role="tab">
+                Drafts
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane active" id="publicTab" role="tabpanel">
+            <app-public-event-list></app-public-event-list>
+        </div>
+        <div class="tab-pane" id="userTab" role="tabpanel">
+            <app-user-event-list></app-user-event-list>
+        </div>
+        <div class="tab-pane" id="createdTab" role="tabpanel">
+            <app-created-event-list></app-created-event-list>
+        </div>
+        <div class="tab-pane" id="draftsTab" role="tabpanel">
+            <app-drafts-event-list></app-drafts-event-list>
+        </div>
+    </div>
+</div>

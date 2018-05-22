@@ -20,7 +20,6 @@ const colors: any = {
 export class UserCalendarComponent implements OnInit {
 
   @Input() user_id: number;
-  @Input() auth_user_id: number;
 
   view: string = 'month';
   viewDate: Date = new Date();
@@ -32,10 +31,6 @@ export class UserCalendarComponent implements OnInit {
   events$: Observable<Array<CalendarEvent<{ public: number, low: number, normal: number, urgent: number }>>>
 
   constructor(private eventService: EventService) {}
-
-  isCurrUser() {
-  	return this.user_id === this.auth_user_id;
-  }
 
   ngOnInit() {
   	this.fetchEvents();
@@ -57,7 +52,7 @@ export class UserCalendarComponent implements OnInit {
 
   fetchEvents() {
   	this.events$ = this.eventService
-  		.getCalendarData(this.month[0].getFullYear(), this.month[0].getMonth(), this.user_id, this.isCurrUser())
+  		.getCalendarData(this.month[0].getFullYear(), this.month[0].getMonth(), this.user_id)
   		.pipe(
   			map(results => {
   				const object = Object.entries(results);
@@ -101,14 +96,14 @@ export class UserCalendarComponent implements OnInit {
 
   getMonthRange(d: Date) {
 	  return [
-	      new Date(d.getFullYear(), d.getMonth(), 1, 3, 1),
-	      new Date(d.getFullYear(), d.getMonth() + 1, 0, 26, 59)
+	      new Date(d.getFullYear(), d.getMonth(), 1, 0, 1),
+	      new Date(d.getFullYear(), d.getMonth() + 1, 0, 23, 59)
 	  ];
   }
 
   getDayRange(d: Date) {
-	return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 3, 1).toISOString().substr(0, 22) + "|" +
-	       new Date(d.getFullYear(), d.getMonth(), d.getDate(), 26, 59).toISOString().substr(0, 22)
+	return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 1).toISOString().substr(0, 22) + "|" +
+	       new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59).toISOString().substr(0, 22)
   }
 
 }

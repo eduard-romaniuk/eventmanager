@@ -1,10 +1,7 @@
 package com.example.eventmanager.controller;
 
 import com.example.eventmanager.domain.*;
-import com.example.eventmanager.service.EmailService;
-import com.example.eventmanager.service.EventService;
-import com.example.eventmanager.service.ExportEventService;
-import com.example.eventmanager.service.UserService;
+import com.example.eventmanager.service.*;
 import com.fasterxml.jackson.annotation.JsonView;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperExportManager;
@@ -36,13 +33,16 @@ public class EventController {
     private final EventService eventService;
     private final ExportEventService exportService;
     private final UserService userService;
+    private final SecurityService securityService;
     private final Logger logger = LogManager.getLogger(EventController.class);
 
     @Autowired
-    public EventController(EventService eventService, ExportEventService exportService, UserService userService) {
+    public EventController(EventService eventService, ExportEventService exportService,
+                           UserService userService, SecurityService securityService) {
         logger.info("Class initialized");
 
         this.userService = userService;
+        this.securityService = securityService;
 
         this.exportService = exportService;
         this.eventService = eventService;
@@ -191,41 +191,85 @@ public class EventController {
 
     @RequestMapping(value = "{id}/calendar/{year}/{month}", method = RequestMethod.GET)
     public Map<Integer, List<Integer>> getCalendar(@PathVariable Long id, @PathVariable Integer year,
-                                                   @PathVariable Integer month,
-                                                   @RequestParam(required = false, defaultValue = "false") Boolean privat) {
+                                                   @PathVariable Integer month) {
         logger.info("GET getCalendar");
         LocalDateTime initial = LocalDateTime.parse(year+"-"+month+"-3 00:00", DateTimeFormatter.ofPattern("yyyy-M-d HH:mm"));
         LocalDateTime start = initial.with(firstDayOfMonth());
         LocalDateTime finish = initial.with(lastDayOfMonth()).plusHours(23).plusMinutes(59);
-        return eventService.getCalendarCounts(start, finish, id, privat);
+        return eventService.getCalendarCounts(start, finish, id, securityService.getCurrentUser().getId().equals(id));
     }
 
     @JsonView(EventView.FullView.class)
-    @RequestMapping(value = "/filter", method = RequestMethod.GET)
+    @RequestMapping(value = "public/filter", method = RequestMethod.GET)
     public List<Event> filter(@RequestParam String pattern, @RequestParam String category,
                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime finish,
                               @RequestParam Long limit, @RequestParam Long offset,
                               HttpServletResponse response){
         logger.info("GET filter");
-        response.addHeader("count", eventService.countSearchResults(pattern, category, start, finish).toString());
-        return eventService.searchWithFiltersPagination(pattern, category, start, finish, limit, offset);
+        response.addHeader("count", eventService.countPublic(pattern, category, start, finish).toString());
+        return eventService.searchPublic(pattern, category, start, finish, limit, offset);
     }
 
     @JsonView(EventView.FullView.class)
-    @RequestMapping(value = "/user/{id}/filter", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/{id}/all/filter", method = RequestMethod.GET)
     public List<Event> filterUserEvents(@RequestParam String pattern, @RequestParam String category,
                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
                               @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime finish,
                               @PathVariable Long id, @RequestParam Long priority,
-                              @RequestParam Boolean byPriority, @RequestParam Boolean privat,
+                              @RequestParam Boolean byPriority,
                               @RequestParam Long limit, @RequestParam Long offset,
                               HttpServletResponse response){
         logger.info("GET filterUserEvents");
-        response.addHeader("count", eventService.countSearchUserEventsResults(pattern, start.plusHours(3), finish.plusHours(3), category,
-                id, priority, byPriority, privat).toString());
-        return eventService.searchUserEventsWithFiltersPagination(pattern, start.plusHours(3), finish.plusHours(3), category, id,
-                priority, byPriority, privat, limit, offset);
+        boolean isCurrentUser = securityService.getCurrentUser().getId().equals(id);
+        response.addHeader("count", eventService.countUserEvents(pattern, start, finish, category,
+                id, priority, byPriority, isCurrentUser).toString());
+        return eventService.searchUserEvents(pattern, start, finish, category, id,
+                priority, byPriority, isCurrentUser, limit, offset);
+    }
+
+    @JsonView(EventView.FullView.class)
+    @RequestMapping(value = "/user/{id}/created/filter", method = RequestMethod.GET)
+    public ResponseEntity<List<Event>> filterCreated(@RequestParam String pattern, @RequestParam String category,
+                                        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+                                        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime finish,
+                                        @PathVariable Long id, @RequestParam Long priority,
+                                        @RequestParam Boolean byPriority,
+                                        @RequestParam Long limit, @RequestParam Long offset,
+                                        HttpServletResponse response){
+        logger.info("GET filterUserEvents");
+        if (securityService.getCurrentUser().getId().equals(id)) {
+            response.addHeader("count", eventService.countCreated(pattern, start, finish, category,
+                    id, priority, byPriority).toString());
+            return new ResponseEntity<>(
+                    eventService.searchCreated(pattern, start, finish, category, id,
+                            priority, byPriority, limit, offset),
+                    HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @JsonView(EventView.FullView.class)
+    @RequestMapping(value = "/user/{id}/drafts/filter", method = RequestMethod.GET)
+    public ResponseEntity<List<Event>> filterDrafts(@RequestParam String pattern, @RequestParam String category,
+                                                     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+                                                     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime finish,
+                                                     @PathVariable Long id, @RequestParam Long priority,
+                                                     @RequestParam Boolean byPriority,
+                                                     @RequestParam Long limit, @RequestParam Long offset,
+                                                     HttpServletResponse response){
+        logger.info("GET filterUserEvents");
+        if (securityService.getCurrentUser().getId().equals(id)) {
+            response.addHeader("count", eventService.countDrafts(pattern, start, finish, category,
+                    id, priority, byPriority).toString());
+            return new ResponseEntity<>(
+                    eventService.searchDrafts(pattern, start, finish, category, id,
+                            priority, byPriority, limit, offset),
+                    HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @RequestMapping(value = "{id}/friendsNotParticipants", method = RequestMethod.GET)
