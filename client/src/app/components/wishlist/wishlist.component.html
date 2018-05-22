@@ -2,64 +2,52 @@
 <!--<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">-->
 
 <div class="md-form text-center">
-  <h1 [hidden]="!isOwnBoard()">{{title}}</h1>
-  <h1 [hidden]="isOwnBoard()">{{user.name}} Wish Board</h1>
+  <h1 *ngIf="isPopularBoard()">Popular items</h1>
+  <h1 *ngIf="isOwnBoard()">{{title}}</h1>
+  <h1 *ngIf="!isOwnBoard()  && !isPopularBoard()">{{user.name}} Wish Board</h1>
+
   <!-- Add icon library -->
+<ng-template #loading>
+  <div class="text-center">
+    <i class="fa fa-spin fa-spinner fa-5x"></i>
+    <br>
+    Loading items...
+  </div>
+</ng-template>
 
-
+<div class="box-body__wrap" *ngIf="isLoaded;else loading">
   <div *ngFor="let item of items">
 
 
-    <!--<div *ngIf="item.priority == 1">-->
-      <!--<button type="button" class="button btn btn-success btn-lg"-->
-              <!--data-toggle="modal" data-target="#viewItem"-->
-              <!--(click)="sendViewingItem(item)">-->
-        <!--{{item.name}}-->
-
-        <!--&lt;!&ndash; Use an element to toggle between a like/dislike icon &ndash;&gt;-->
-
-        <!--<i class="likes fa fa-thumbs-up" >{{item.likes}}</i>-->
-
-      <!--</button>-->
-
-    <!--</div>-->
-    <!--<div *ngIf="item.priority == 2">-->
-      <!--<button type="button" class="button btn btn-danger btn-lg"-->
-              <!--data-toggle="modal" data-target="#viewItem"-->
-              <!--(click)="sendViewingItem(item)">-->
-        <!--{{item.name}}-->
-        <!--<a class="fa fa-thumbs-up" (click)="clickOnLikeButt(item)">{{item.likes}}</a>-->
-      <!--</button>-->
-    <!--</div>-->
-    <!--<div *ngIf="item.priority == 0">-->
-      <!--<button type="button" class="button btn btn-secondary btn-lg"-->
-              <!--data-toggle="modal" data-target="#viewItem"-->
-              <!--(click)="sendViewingItem(item)">-->
-        <!--{{item.name}}-->
-        <!--<i class="fa fa-thumbs-up">{{item.likes}}</i>-->
-      <!--</button>-->
-
-    <!--</div>-->
     <div class="box-body">
-      <ul class="todo-list ui-sortable">
-        <li data-toggle="modal"
-            data-target="#viewItem"
-            data-dismiss="modal"
-            (click)="sendViewingItem(item)">
 
-          <span class="dot" [ngClass]="{'priority-green': item.priority == 1 , 'priority-red': item.priority == 2, 'priority-gray': item.priority == 0}"></span>
+      <ul class="todo-list ui-sortable">
+        <li
+			[ngClass]="{'item-border-red': item.priority == 1 , 'item-border-green': item.priority == 2, 'item-border-grey': item.priority == 0}"
+			>
+
           <span class="text">{{item.name}}</span>
-          <div class="tools" [hidden]="!isOwnBoard()">
+          <div class="tools">
+
+			<i class="fa fa-eye"
+                data-toggle="modal"
+				data-target="#viewItem"
+				data-dismiss="modal"
+				(click)="sendViewingItem(item)"
+            ></i>
 
             <i class="fa fa-edit"
                data-toggle="modal"
                data-target="#editItem"
                data-dismiss="modal"
-               (click)="sendViewingItem(item)"></i>
+               (click)="sendViewingItem(item)"
+			   [hidden]="!isOwnBoard()"></i>
 
             <i class="fa fa-trash-o"
                (click)="removeItem(item)"
+			   [hidden]="!isOwnBoard()"
             ></i>
+
 
           </div>
 
@@ -71,12 +59,15 @@
           </i>
         </li>
 
-
       </ul>
     </div>
   </div>
 
-  <button class="btn" type="button" data-toggle="modal" data-target="#addItem" [hidden]="!isOwnBoard()">Add item</button>
+  <button class="btn" type="button" data-toggle="modal" data-target="#addItem" [hidden]="!isOwnBoard() ">Add item</button>
+
+</div>
+
+
 
   <div id="addItem" class="modal fade" aria-hidden="true" aria-labelledby="exampleModalLabel" role="dialog" tabindex="-1">
     <div class="modal-dialog" role="dialog">
@@ -110,7 +101,8 @@
 
         <div class="modal-body">
 
-        <app-view-item></app-view-item>
+        <app-view-item *ngIf="getEventId()" [eventId]="getEventId()"></app-view-item>
+		<app-view-item *ngIf="!getEventId()"></app-view-item>
 
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { WishListService } from '../../services/wishlist.service';
 import { HttpClient } from '@angular/common/http';
 import {Router, ActivatedRoute} from '@angular/router';
@@ -13,6 +13,7 @@ import {WishList} from "../../model/wishlist";
 import {AuthService} from "../../services/auth.service";
 import {User} from "../../model/user";
 import {UserService} from "../../services/user.service";
+import {EventService} from "../../services/event.service";
 
 @Component({
   selector: 'app-wish-list',
@@ -26,7 +27,13 @@ export class WishListComponent implements OnInit {
   items: Item[] = [];
   subscription: Subscription;
   isOwn: boolean = false;
+  isLoaded: boolean = false;
+  isPopular: boolean = false;
   user: User = new User();
+
+  @Input()
+  private eventId: number;
+
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -34,23 +41,44 @@ export class WishListComponent implements OnInit {
               private likeService: LikeService,
               private itemService: ItemService,
               private auth: AuthService,
-              private userService: UserService
+              private userService: UserService,
               ) {
 
   }
 
   ngOnInit() {
 
-    if (this.router.url == '/wishlist') this.isOwn = true;
+	this.items = [];
 
-    if (this.isOwn) {
+
+
+	  if (this.router.url == "/items/popular"){
+
+	    this.isPopular = true;
+      this.initPopularItems()
+
+    } else if (this.router.url == '/wishlist') {
+
+	    this.isOwn = true;
       this.auth.getUser().subscribe((user: User) => {
         this.initWishList(user.id);
       });
-    } else {
+
+	  } else {
+
+      // this.route.params.subscribe(params => {
+      //
+      //
+      // });
+
 
       this.route.params.subscribe(params => {
-        const id = params['id'];
+        const id = params['userId'];
+		    const eventId = params['eventId'];
+
+        if (eventId) {
+          this.eventId = eventId;
+        }
 
         if (id) {
           this.userService.getUserById(id).subscribe((user: User) => {
@@ -88,22 +116,38 @@ export class WishListComponent implements OnInit {
                   item.hasLiked = hasLike;
                 });
               }
+			        this.isLoaded = true;
             });
 
-          for (let item of this.items) {
-            this.likeService.wasLiked(item.id).subscribe((hasLike: boolean) => {
-              item.hasLiked = hasLike;
-            });
 
-          }
           this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
           //TODO:END!!!
 
         }
+
+
       }
 
     )
   }
+
+  initPopularItems() {
+    this.wishListService.getPopularItems(20, 0).subscribe(
+      (items: Item[]) => {
+        this.items = items;
+        for( let item of this.items) {
+          this.likeService.wasLiked(item.id).subscribe( (hasLike: boolean) => {
+            item.hasLiked = hasLike;
+          });
+        }
+        this.isLoaded = true;
+      }
+    );
+
+    this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
+  }
+
+
 
   create() {
   }
@@ -135,7 +179,13 @@ export class WishListComponent implements OnInit {
     return this.isOwn;
   }
 
+  isPopularBoard(): boolean {
+    return this.isPopular;
+  }
 
+  getEventId() : number {
+    return this.eventId;
+  }
 
 
 }

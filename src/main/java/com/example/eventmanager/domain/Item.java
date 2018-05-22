@@ -45,7 +45,9 @@ public class Item {
 
     @JsonView({ItemView.FullView.class})
     private List<String> images;
-//    private Booker booker;
+
+    @JsonView({ItemView.FullView.class})
+    private List<Booker> bookers;
 
     public Long getId() {
         return id;
@@ -111,15 +113,14 @@ public class Item {
     public void setImages(List<String> images) {
         this.images = images;
     }
-//
-//    public Booker getBooker() {
-//        return booker;
-//    }
-//
-//    public void setBooker(Booker booker) {
-//        this.booker = booker;
-//    }
 
+    public List<Booker> getBookers() {
+        return bookers;
+    }
+
+    public void setBookers(List<Booker> bookers) {
+        this.bookers = bookers;
+    }
 
     @Override
     public String toString() {

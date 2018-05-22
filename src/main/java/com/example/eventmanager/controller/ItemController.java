@@ -1,5 +1,6 @@
 package com.example.eventmanager.controller;
 
+import com.example.eventmanager.domain.Booker;
 import com.example.eventmanager.domain.Item;
 import com.example.eventmanager.domain.Tag;
 import com.example.eventmanager.domain.WishList;
@@ -73,12 +74,51 @@ public class ItemController {
 
     @JsonView(ItemView.ShortView.class)
     @RequestMapping(value = "/copy/{id}", method = RequestMethod.POST)
-    public ResponseEntity<Long> createItem (@PathVariable("id") Long itemId, @RequestBody Long wishListId) {
+    public ResponseEntity<Long> copyItem (@PathVariable("id") Long itemId, @RequestBody Long wishListId) {
         logger.info("POST /copy/" + itemId);
 
         Long newItemId = itemService.copyItem(wishListId, itemId);
 
         return new ResponseEntity<>(newItemId, HttpStatus.OK);
+    }
+
+    @JsonView(ItemView.ShortView.class)
+    @RequestMapping(value = "/booking/{itemId}/{eventId}/{userId}", method = RequestMethod.POST)
+    public ResponseEntity<Booker> booking (@PathVariable("itemId") Long itemId, @PathVariable("eventId") Long eventId, @PathVariable("userId") Long userId) {
+        logger.info("POST /booking/" + itemId + "/" + eventId + "/" + userId);
+
+        Booker booker = new Booker();
+        booker.setItemId(itemId);
+        booker.setEventId(eventId);
+        booker.setUserId(userId);
+
+        itemService.booking(booker);
+
+        return new ResponseEntity<>(booker, HttpStatus.OK);
+    }
+
+    @JsonView(ItemView.ShortView.class)
+    @RequestMapping(value = "/booking", method = RequestMethod.DELETE)
+    public ResponseEntity<String> unbooking (@RequestBody Booker booker) {
+        logger.info("DELETE /booking");
+
+        //TODO: if
+
+        itemService.unbooking(booker);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(value = "/booking", method = RequestMethod.GET)
+    public ResponseEntity<Boolean> isBooked(@RequestParam Long user, @RequestParam Long event, @RequestParam Long item) {
+        logger.info("GET /booking");
+
+        Booker booker = new Booker();
+        booker.setUserId(user);
+        booker.setEventId(event);
+        booker.setItemId(item);
+
+        return new ResponseEntity<>(itemService.isBooked(booker), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
@@ -114,6 +154,7 @@ public class ItemController {
 
         return new ResponseEntity<Boolean>(itemService.isUserLikesItem(userId, itemId), HttpStatus.OK);
     }
+
 
 
 }

@@ -34,6 +34,7 @@ public class ItemRepository implements CrudRepository<Item>{
     private final TagRepository tagRepository;
     private final LikeRepository likeRepository;
     private final ImageRepository imageRepository;
+    private final BookerRepository bookerRepository;
 
     @Autowired
     public ItemRepository(
@@ -41,7 +42,8 @@ public class ItemRepository implements CrudRepository<Item>{
             Environment env,
             TagRepository tagRepository,
             LikeRepository likeRepository,
-            ImageRepository imageRepository
+            ImageRepository imageRepository,
+            BookerRepository bookerRepository
     ) {
         logger.info("ItemRepository initialized");
 
@@ -50,6 +52,7 @@ public class ItemRepository implements CrudRepository<Item>{
         this.tagRepository = tagRepository;
         this.likeRepository = likeRepository;
         this.imageRepository = imageRepository;
+        this.bookerRepository = bookerRepository;
     }
 
     @Override
@@ -103,6 +106,7 @@ public class ItemRepository implements CrudRepository<Item>{
                         item.setLikes(likeRepository.getLikesCountForItem(item.getId()));
                         item.setTags(tagRepository.getTagsForItem(item.getId()));
                         item.setImages(imageRepository.getImagesForItem(item.getId()));
+                        item.setBookers(bookerRepository.getBookersForItem(itemId));
 
                         logger.info("Item got! " + item.toString());
                         return item;
@@ -166,6 +170,7 @@ public class ItemRepository implements CrudRepository<Item>{
                         item.setWishListId(wishListId);
                         item.setLikes(likeRepository.getLikesCountForItem(item.getId()));
 //                        item.setTags(tagRepository.getTagsForItem(item.getId()));
+                        item.setBookers(bookerRepository.getBookersForItem(item.getId()));
 
                         logger.info("Item got! " + item.toString());
                         return item;
@@ -176,6 +181,39 @@ public class ItemRepository implements CrudRepository<Item>{
             return Collections.emptyList();
         }
     }
+
+    public List<Item> getPopularItems ( Long limit, Long offset ){
+        try {
+            Map<String, Object> namedParams = new HashMap<>();
+
+            String query = new StringBuilder()
+                    .append(env.getProperty("getPopularItems"))
+                    .append(" LIMIT ")
+                    .append(limit)
+                    .append(" OFFSET ")
+                    .append(offset)
+                    .toString();
+
+            return namedJdbcTemplate.query(query,
+                    (rs, rowNum) -> {
+                        Item item = new Item();
+
+                        item.setId(rs.getLong("id"));
+                        item.setName(rs.getString("name"));
+                        item.setPriority(rs.getInt("priority_id"));
+                        item.setWishListId(rs.getLong("wishlist_id"));
+                        item.setLikes(rs.getInt("likes_count"));
+
+                        logger.info("Item got! " + item.toString());
+                        return item;
+                    }
+            );
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("Not founded any items");
+            return Collections.emptyList();
+        }
+    }
+
 
     public Long copyItem ( Long toWishListId, Long itemId ) {
         logger.info("Copy item: " + itemId);

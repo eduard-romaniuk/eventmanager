@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable, Input} from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import {Item} from '../model/item';
 import {Observable} from 'rxjs/Observable';
@@ -10,6 +10,7 @@ import {AuthService} from "./auth.service";
 import {User} from "../model/user";
 import { JQueryStatic } from 'jquery';
 import {ItemService} from "./item.service";
+import {EventService} from "./event.service";
 declare var $:JQueryStatic;
 
 const httpOptions = {
@@ -22,11 +23,13 @@ export class WishListService {
   headers: HttpHeaders;
   private base_url = '/wishlist';
   private subject=new Subject<Item>();
-  private subItemArr = new BehaviorSubject<Item[]>([]);
+  private subItemArr = new Subject<Item[]>();
   private curentWishList: WishList = new WishList();
   private items: Item[] = [];
 
-  constructor(private http: HttpClient, private auth: AuthService) {
+
+
+  constructor(private http: HttpClient, private auth: AuthService, private eventService: EventService) {
     this.auth.getUser().subscribe(
       (user: User) =>
     {
@@ -34,10 +37,15 @@ export class WishListService {
         (wishList: WishList) =>
         {
           this.curentWishList = wishList
-        }
+
+		    }
       );
-    }
-    );
+
+
+
+
+
+    });
   }
 
   sendViewingItem(viewingItem: Item):void{
@@ -53,13 +61,15 @@ export class WishListService {
   }
 
   getItemsFromWishList( wishListId: number ) : Observable<Item[]> {
-    console.log("im here " + wishListId)
-    this.http.get<Item[]>(this.base_url + "/" + wishListId).subscribe( (items : Item[]) => {
+
+
+     this.http.get<Item[]>(this.base_url + "/" + wishListId).subscribe( (items : Item[]) => {
       this.items = items;
       this.subItemArr.next(this.items);
     });
 
-    return this.subItemArr.asObservable();
+	return this.subItemArr.asObservable();
+
 
   }
 
@@ -107,5 +117,19 @@ export class WishListService {
   getCurrentWishListId(): number{
     return this.curentWishList.id;
   }
+
+  getPopularItems (limit: number, offset: number): Observable<Item[]> {
+
+    this.http.get<Item[]>(this.base_url + `/popular/items?limit=${limit}&offset=${offset}`).subscribe(
+      (items : Item[]) => {
+      this.items = items;
+      this.subItemArr.next(this.items);
+    });
+
+    return this.subItemArr.asObservable();
+
+  }
+
+
 
 }

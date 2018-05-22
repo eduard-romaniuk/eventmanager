@@ -6,6 +6,7 @@ import {WishListService} from "./wishlist.service";
 import {Observable} from "rxjs/Observable";
 import {Event} from "../model/event";
 import {ToastService} from "./toast.service";
+import {Booker} from "../model/booker";
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' })
@@ -74,6 +75,26 @@ export class ItemService {
     this.toastService.info("Item removed");
     return callback && callback();
 
+  }
+
+  public booking (booker: Booker,  callback?, errorCallback?) {
+    this.http.post(this.base_url + '/booking', booker).subscribe(
+      (booker: Booker) => {
+        return callback && callback();
+      },
+      error => {
+        return errorCallback && errorCallback();
+      }
+    );
+  }
+
+  public unbooking (booker: Booker) {
+    this.http.delete(this.base_url + "/booking/" + booker.itemId + "/" + booker.eventId + "/" + booker.userId).subscribe(
+    );
+  }
+
+  public isBooked (booker: Booker): Observable<Boolean> {
+    return this.http.get<boolean>(this.base_url + `/booking?user=${booker.userId}&event=${booker.eventId}&item=${booker.itemId}`)
   }
 
 
