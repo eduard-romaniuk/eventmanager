@@ -16,8 +16,8 @@ import {Item} from "../../../../model/item";
 })
 export class AddItemImagesComponent implements OnInit {
 
-  @Input() item: Item = new Item();
-  newImages: String[] = []
+  @Input() item: Item;
+  newImages: String[] = [];
 
   formImg: FormGroup;
   imageUploading = false;
@@ -30,9 +30,14 @@ export class AddItemImagesComponent implements OnInit {
               private userService: UserService,
               private formBuilder: FormBuilder,
               private toast: ToastService) {
+    if(!this.item) {
+      this.item = new Item();
+      this.item.images = [];
+    }
     this.uploader.onSuccessItem = (item: any, response: string, status: number, headers: any): any => {
       this.imageUploading = false;
       let res: any = JSON.parse(response);
+      console.log(this.item);
       this.item.images.push(res.url);
       this.newImages.push(res.url);
       console.log(`res - ` + JSON.stringify(res));

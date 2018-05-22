@@ -86,8 +86,7 @@
           Participants
         </button>
 
-        <button *ngIf="!this.isCreator && this.isParticipant" class="btn btn-info left-button" data-toggle="collapse"
-                data-target="#hide-me" [routerLink]="['/event', event.id, event.creator.id, 'wishlist']">
+        <button *ngIf="!this.isCreator && this.isParticipant" class="btn btn-info left-button" [routerLink]="['/event', event.id, event.creator.id, 'wishlist']">
           WishList
         </button>
 
