@@ -80,16 +80,26 @@ export class ItemService {
   public booking (booker: Booker,  callback?, errorCallback?) {
     this.http.post(this.base_url + '/booking', booker).subscribe(
       (booker: Booker) => {
+        this.toastService.success("Item booked");
         return callback && callback();
       },
       error => {
+        this.toastService.error("Cannot booked the item");
         return errorCallback && errorCallback();
       }
     );
   }
 
-  public unbooking (booker: Booker) {
+  public unbooking (booker: Booker, callback?, errorCallback?) {
     this.http.delete(this.base_url + "/booking/" + booker.itemId + "/" + booker.eventId + "/" + booker.userId).subscribe(
+      (resp: any) => {
+        this.toastService.success("Item unbooked");
+        return callback && callback();
+      },
+      error => {
+        this.toastService.error("Cannot unbooked the item");
+        return errorCallback && errorCallback();
+      }
     );
   }
 

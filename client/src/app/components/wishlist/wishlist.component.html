@@ -3,8 +3,9 @@
 
 <div class="md-form text-center">
   <h1 *ngIf="isPopularBoard()">Popular items</h1>
+  <h1 *ngIf="isBooking">Your booking items</h1>
   <h1 *ngIf="isOwnBoard()">{{title}}</h1>
-  <h1 *ngIf="!isOwnBoard()  && !isPopularBoard()">{{user.name}} Wish Board</h1>
+  <h1 *ngIf="!isOwnBoard()  && !isPopularBoard() && !isBooking">{{user.name}} Wish Board</h1>
 
   <!-- Add icon library -->
 <ng-template #loading>

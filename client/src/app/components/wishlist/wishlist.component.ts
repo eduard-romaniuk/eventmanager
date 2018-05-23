@@ -29,6 +29,7 @@ export class WishListComponent implements OnInit {
   isOwn: boolean = false;
   isLoaded: boolean = false;
   isPopular: boolean = false;
+  isBooking: boolean = false;
   user: User = new User();
 
   @Input()
@@ -52,11 +53,16 @@ export class WishListComponent implements OnInit {
 
 
 
-	  if (this.router.url == "/items/popular"){
+	if (this.router.url == "/items/popular"){
 
 	    this.isPopular = true;
       this.initPopularItems()
 
+	} else if (this.router.url == '/items/booking') {
+		
+		this.isBooking = true;
+		this.initBookedItems();
+		
     } else if (this.router.url == '/wishlist') {
 
 	    this.isOwn = true;
@@ -73,8 +79,8 @@ export class WishListComponent implements OnInit {
 
 
       this.route.params.subscribe(params => {
-        const id = params['userId'];
-		    const eventId = params['eventId'];
+        const id: number = params['userId'];
+		const eventId: number = params['eventId'];
 
         if (eventId) {
           this.eventId = eventId;
@@ -143,6 +149,25 @@ export class WishListComponent implements OnInit {
         this.isLoaded = true;
       }
     );
+
+    this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
+  }
+  
+   initBookedItems() {
+	this.auth.getUser().subscribe((user: User) => {
+
+		this.wishListService.getBookedItems(user.id).subscribe(
+		  (items: Item[]) => {
+			this.items = items;
+			for( let item of this.items) {
+			  this.likeService.wasLiked(item.id).subscribe( (hasLike: boolean) => {
+				item.hasLiked = hasLike;
+			  });
+			}
+			this.isLoaded = true;
+		  }
+		);
+	};
 
     this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
   }

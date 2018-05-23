@@ -137,6 +137,10 @@ public class ItemService {
         return itemRepository.getPopularItems(limit, offset);
     }
 
+    public List<Item> getBookedItems ( Long userId ) {
+        return itemRepository.getBookedItems( userId );
+    }
+
 
 
 }

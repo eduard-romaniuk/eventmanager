@@ -9,6 +9,7 @@ import { JQueryStatic } from 'jquery';
 import {Router} from "@angular/router";
 import {EventService} from "../../../../services/event.service";
 import {Booker} from "../../../../model/booker";
+import {FormArray} from "@angular/forms";
 declare var $:JQueryStatic;
 
 
@@ -90,6 +91,7 @@ export class ViewItemComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+    this.item = new Item();
   }
 
   clickOnLikeButt(): void {
@@ -119,18 +121,24 @@ export class ViewItemComponent implements OnInit {
 
     if ( !this.isBooked ) {
 
-      this.itemService.booking(this.currentBooker);
-
-      this.isBooked = true;
+      this.itemService.booking(
+        this.currentBooker,
+        () => {
+          this.isBooked = true;
+        }
+        );
     }
   }
   unbooking() {
 
     if( this.isBooked ) {
 
-      this.itemService.unbooking(this.currentBooker);
-
-      this.isBooked = false;
+      this.itemService.unbooking(
+        this.currentBooker,
+        () => {
+          this.isBooked = false;
+        }
+      );
 
     }
 

@@ -53,4 +53,12 @@ public class WishListController {
 
         return new ResponseEntity<>(itemService.getPopularItems(limit, offset), HttpStatus.OK);
     }
+
+    @JsonView(ItemView.ShortView.class)
+    @RequestMapping(value = "/booking/{userId}", method = RequestMethod.GET)
+    public ResponseEntity<List<Item>> getPopularItems(@PathVariable("userId") Long userId) {
+        logger.info("GET /booking/" + userId);
+
+        return new ResponseEntity<>(itemService.getBookedItems(userId), HttpStatus.OK);
+    }
 }
