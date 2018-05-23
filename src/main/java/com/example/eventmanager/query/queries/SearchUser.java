@@ -22,7 +22,7 @@ public class SearchUser {
 
     private WhereExpression searchUserByColumn(String column){
         return new WhereExpression(column, WhereExpression.Operation.LIKE, queryString);
-    }
+}
 
     private OrExpression searchBody(){
         return new OrExpression()
