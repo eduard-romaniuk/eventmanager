@@ -34,6 +34,8 @@ export class WishListComponent implements OnInit {
 
   @Input()
   private eventId: number;
+  @Input()
+  private userId: number;
 
 
   constructor(private route: ActivatedRoute,
@@ -79,12 +81,12 @@ export class WishListComponent implements OnInit {
 
 
       this.route.params.subscribe(params => {
-        const id: number = params['userId'];
-		const eventId: number = params['eventId'];
-
-        if (eventId) {
-          this.eventId = eventId;
-        }
+		
+        let id: number = params['userId'];
+		
+		if(!id) {
+			id = this.userId;
+		}
 
         if (id) {
           this.userService.getUserById(id).subscribe((user: User) => {
@@ -167,7 +169,7 @@ export class WishListComponent implements OnInit {
 			this.isLoaded = true;
 		  }
 		);
-	};
+	});
 
     this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
   }
