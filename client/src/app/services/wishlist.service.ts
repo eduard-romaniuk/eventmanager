@@ -141,7 +141,16 @@ export class WishListService {
     return this.subItemArr.asObservable();
   
   }
+  
+  getEventsBookedItems (eventId: number, userId number): Observable<Item[]> {
+	this.http.get<Item[]>(this.base_url + "/booking/event/" + eventId + "/" + userId).subscribe(
+      (items : Item[]) => {
+      this.items = items;
+      this.subItemArr.next(this.items);
+    });
 
+    return this.subItemArr.asObservable();
+  }
 
 
 }

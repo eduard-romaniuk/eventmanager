@@ -39,6 +39,8 @@ export class WishListComponent implements OnInit {
   private eventId: number;
   @Input()
   private userId: number;
+  @Input()
+  private isEventPanel: boolean;
 
 
   constructor(private route: ActivatedRoute,
@@ -75,15 +77,12 @@ export class WishListComponent implements OnInit {
         this.initWishList(user.id);
       });
 
-	  } else {
-
-      // this.route.params.subscribe(params => {
-      //
-      //
-      // });
-
-
-      this.route.params.subscribe(params => {
+	} else if (this.userId && this.eventId && this.isEventPanel){
+		this.initEventsBookedItems();
+	
+	} else {
+		  
+		this.route.params.subscribe(params => {
 		
         let id: number = params['userId'];
 		
@@ -176,6 +175,24 @@ export class WishListComponent implements OnInit {
 
     this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
   }
+  
+  initEventsBookedItems() {
+	  
+	this.wishListService.getEventsBookedItems(this.eventId, this.userId).subscribe(
+		(items: Item[]) => {
+			this.items = items;
+			for( let item of this.items) {
+			  this.likeService.wasLiked(item.id).subscribe( (hasLike: boolean) => {
+				item.hasLiked = hasLike;
+			  });
+			}
+			this.isLoaded = true;
+		}	
+	);
+	
+	this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
+		
+  }
 
 
 
@@ -207,7 +224,9 @@ export class WishListComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+	if(this.subscription) {
+		this.subscription.unsubscribe();
+	}
   }
 
   isOwnBoard(): boolean {

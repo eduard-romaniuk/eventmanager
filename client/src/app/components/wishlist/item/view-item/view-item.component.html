@@ -1,6 +1,13 @@
 <div *ngIf="item">
 
-  <span class="badge-danger" *ngIf="isBooked && !isOwn">Item booked</span>
+  <span class="badge-danger" *ngIf="isBooked">You are already booking the item</span>
+  <div class="badge-danger" *ngIf="isBookersExist() && !isOwn">Item booked by:
+
+	<div class="d-inline"
+	*ngFor="let user of bookersAsUsers">
+		<a [routerLink]="['/users', user.id]" > {{user.login}} </a>
+	</div>
+  </div>
   <h4 class="text-uppercase">{{item.name}}</h4>
   <i class="fa fa-heart-o" *ngIf="!item.hasLiked" (click)="clickOnLikeButt(item)">{{item.likes}}</i>
   <i class="fa fa-heart" *ngIf="item.hasLiked" (click)="clickOnLikeButt(item)">{{item.likes}}</i>
