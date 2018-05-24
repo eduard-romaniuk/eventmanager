@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import {Router, ActivatedRoute} from '@angular/router';
 import { JQueryStatic } from 'jquery';
 
+
 import { Event } from '../../model/event'
 import {Item} from '../../model/item';
 import {Subscription} from 'rxjs/Subscription';
@@ -14,6 +15,8 @@ import {AuthService} from "../../services/auth.service";
 import {User} from "../../model/user";
 import {UserService} from "../../services/user.service";
 import {EventService} from "../../services/event.service";
+
+declare var $:JQueryStatic;
 
 @Component({
   selector: 'app-wish-list',
@@ -180,6 +183,7 @@ export class WishListComponent implements OnInit {
   }
 
   sendViewingItem(item: Item){
+	  
     this.itemService.getItem(item.id).subscribe( (fullItem: Item) => {
       console.log(fullItem);
       this.wishListService.sendViewingItem(fullItem)
@@ -188,6 +192,10 @@ export class WishListComponent implements OnInit {
 
   hideViewingItem(){
     this.wishListService.hideViewingItem()
+  }
+  
+  hideViewAndShowList(){
+	$('#viewItem').modal('toggle');
   }
 
   clickOnLikeButt(item: Item){
