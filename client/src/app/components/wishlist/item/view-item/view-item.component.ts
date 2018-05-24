@@ -64,6 +64,14 @@ export class ViewItemComponent implements OnInit {
 
 
   }
+  
+  hideAndShow() {
+	  
+	$('#viewItem').modal('hide');
+	$('#editItem').modal('show');
+	
+  }
+  
 
   initParticipantViewWishList() {
 

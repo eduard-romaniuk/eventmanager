@@ -33,6 +33,9 @@ declare var $:JQueryStatic;
   ) { }
 
   ngOnInit(){
+	  
+	this.item = new Item();
+	this.item.images = [];
     this.auth.getUser().subscribe((user: any) => {
       this.userId = user.id;
     });
@@ -40,6 +43,7 @@ declare var $:JQueryStatic;
   }
 
   initForm(){
+	
     this.form = this.formBuilder.group({
       name: ['',
         [Validators.required,
