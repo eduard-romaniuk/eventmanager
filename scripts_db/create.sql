@@ -13,6 +13,7 @@ DROP TABLE IF EXISTS priorities;
 DROP TABLE IF EXISTS chats;
 DROP TABLE IF EXISTS events;
 DROP TABLE IF EXISTS folders;
+DROP TABLE IF EXISTS categories;
 DROP TABLE IF EXISTS relationships;
 DROP TABLE IF EXISTS settings;
 DROP TABLE IF EXISTS users;
@@ -95,13 +96,26 @@ CREATE TABLE IF NOT EXISTS public.relationships (
 
 
 -- -----------------------------------------------------
+-- Table public.categories
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS public.categories (
+    id SERIAL NOT NULL ,
+    name VARCHAR(45) NOT NULL,
+    
+    CONSTRAINT pk_categories_id PRIMARY KEY (id),
+    CONSTRAINT uk_categories_name UNIQUE(name)
+    
+);
+
+-- -----------------------------------------------------
 -- Table public.folders
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.folders (
   id SERIAL NOT NULL,
   folder_name VARCHAR(45) NOT NULL,
 
-  CONSTRAINT pk_folders_id PRIMARY KEY (id));
+  CONSTRAINT pk_folders_id PRIMARY KEY (id)
+);
 
 -- -----------------------------------------------------
 -- Table public.events
@@ -109,6 +123,7 @@ CREATE TABLE IF NOT EXISTS public.folders (
 CREATE TABLE IF NOT EXISTS public.events (
   id SERIAL NOT NULL,
   creator_id INT NOT NULL, 
+  category_id INT NULL,
   folder_id INT NULL,
   name VARCHAR(60) NOT NULL,
   description TEXT NOT NULL,
@@ -126,7 +141,10 @@ CREATE TABLE IF NOT EXISTS public.events (
     REFERENCES public.folders (id),
     
   CONSTRAINT fk_events_creator FOREIGN KEY (creator_id)
-    REFERENCES public.users (id)
+    REFERENCES public.users (id),
+
+  CONSTRAINT fk_events_category FOREIGN KEY (category_id)
+    REFERENCES public.categories (id)
 );
 -- -----------------------------------------------------
 -- Table public.chats
@@ -207,7 +225,7 @@ CREATE TABLE IF NOT EXISTS public.messages (
   chat_id INT NOT NULL,
   date TIMESTAMP NOT NULL DEFAULT current_timestamp,
   participant_id INT NOT NULL,
-  text VARCHAR(2083) NOT NULL, --link on file with formated text
+  text TEXT NOT NULL,
   
   CONSTRAINT pk_messages_id PRIMARY KEY (id),
 
@@ -243,7 +261,7 @@ CREATE TABLE IF NOT EXISTS public.items (
   id SERIAL NOT NULL,
   name VARCHAR(45) NOT NULL,
   priority_id INT NOT NULL,
-  description VARCHAR(2083) NULL, --link
+  description TEXT NULL,
   wishlist_id INT NOT NULL,
   
   CONSTRAINT pk_items_id PRIMARY KEY (id),
