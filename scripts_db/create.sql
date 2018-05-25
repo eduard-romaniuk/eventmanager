@@ -27,6 +27,11 @@ CREATE TABLE IF NOT EXISTS public.status (
   
   CONSTRAINT pk_status_id PRIMARY KEY (id),
   CONSTRAINT uk_status_statusName UNIQUE(status_name));
+  
+INSERT INTO "public"."status" ("id","status_name") VALUES (0 ,'pending');
+INSERT INTO "public"."status" ("id","status_name") VALUES (1 ,'accepted');
+INSERT INTO "public"."status" ("id","status_name") VALUES (2 ,'declined');
+INSERT INTO "public"."status" ("id","status_name") VALUES (3 ,'blocked');
 
 
 -- -----------------------------------------------------

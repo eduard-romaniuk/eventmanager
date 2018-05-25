@@ -94,7 +94,7 @@ BEGIN
 
     ELSIF TG_OP = 'DELETE' THEN
 	DELETE FROM public.chats WHERE event_id = OLD.id;
-	RETURN NEW;
+	RETURN OLD;
     END IF;
 END;
 $$ LANGUAGE plpgsql;
