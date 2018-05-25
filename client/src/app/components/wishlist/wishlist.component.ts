@@ -66,11 +66,11 @@ export class WishListComponent implements OnInit {
       this.initPopularItems()
 
 	} else if (this.router.url == '/items/booking') {
-		
+
 		this.isBooking = true;
 		this.initBookedItems();
-		
-    } else if (this.router.url == '/wishlist') {
+
+	} else if (this.router.url == '/wishlist') {
 
 	    this.isOwn = true;
       this.auth.getUser().subscribe((user: User) => {
@@ -79,13 +79,13 @@ export class WishListComponent implements OnInit {
 
 	} else if (this.userId && this.eventId && this.isEventPanel){
 		this.initEventsBookedItems();
-	
+
 	} else {
-		  
+
 		this.route.params.subscribe(params => {
-		
+
         let id: number = params['userId'];
-		
+
 		if(!id) {
 			id = this.userId;
 		}
@@ -108,7 +108,7 @@ export class WishListComponent implements OnInit {
 
   }
 
-  initWishList(userId: number): void{
+  public initWishList(userId: number): void{
     this.wishListService.getWishListByUser(userId).subscribe(
 
 
@@ -156,7 +156,7 @@ export class WishListComponent implements OnInit {
 
     this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
   }
-  
+
    initBookedItems() {
 	this.auth.getUser().subscribe((user: User) => {
 
@@ -175,23 +175,23 @@ export class WishListComponent implements OnInit {
 
     this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
   }
-  
-  initEventsBookedItems() {
-	  
-	this.wishListService.getEventsBookedItems(this.eventId, this.userId).subscribe(
+
+  public initEventsBookedItems() {
+
+	this.wishListService.getEventsBookedItems(this.eventId).subscribe(
 		(items: Item[]) => {
-			this.items = items;
-			for( let item of this.items) {
-			  this.likeService.wasLiked(item.id).subscribe( (hasLike: boolean) => {
-				item.hasLiked = hasLike;
-			  });
-			}
+      this.items = items;
+      for( let item of this.items) {
+        this.likeService.wasLiked(item.id).subscribe( (hasLike: boolean) => {
+          item.hasLiked = hasLike;
+        });
+      }
 			this.isLoaded = true;
-		}	
+		}
 	);
-	
+
 	this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
-		
+
   }
 
 
@@ -200,7 +200,7 @@ export class WishListComponent implements OnInit {
   }
 
   sendViewingItem(item: Item){
-	  
+
     this.itemService.getItem(item.id).subscribe( (fullItem: Item) => {
       console.log(fullItem);
       this.wishListService.sendViewingItem(fullItem)
@@ -210,7 +210,7 @@ export class WishListComponent implements OnInit {
   hideViewingItem(){
     this.wishListService.hideViewingItem()
   }
-  
+
   hideViewAndShowList(){
 	$('#viewItem').modal('toggle');
   }

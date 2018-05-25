@@ -24,7 +24,7 @@ export class AddItemImagesComponent implements OnInit {
   savingChanges = false;
   error = false;
 
-  private uploader: CloudinaryUploader
+  uploader: CloudinaryUploader
 
   constructor(private router: Router,
               private userService: UserService,

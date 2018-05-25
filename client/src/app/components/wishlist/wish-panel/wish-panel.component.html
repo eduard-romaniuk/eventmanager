@@ -1,12 +1,12 @@
 <div role="tabpanel">
   <ul class="nav nav-tabs" role="tablist">
     <li class="nav-item" role="presentation">
-      <a id="publicH" aria-controls="publicTab" class="nav-link active" data-toggle="tab" href="#wishlistTab" role="tab">
+      <a id="publicH" aria-controls="publicTab" class="nav-link active" data-toggle="tab" href="#wishlistTab" role="tab" (click)="toUserBooking()">
         Creator Wish Board
       </a>
     </li>
     <li class="nav-item" role="presentation">
-      <a id="userH" aria-controls="userTab" class="nav-link" data-toggle="tab" href="#bookTab" role="tab">
+      <a id="userH" aria-controls="userTab" class="nav-link" data-toggle="tab" href="#bookTab" role="tab" (click)="toEventBooking()">
         All booking items for event
       </a>
     </li>
@@ -14,10 +14,10 @@
   </ul>
   <div class="tab-content">
     <div class="tab-pane active" id="wishlistTab" role="tabpanel">
-      <app-wish-list [eventId]="eventId" [userId]="userId" ></app-wish-list>
+      <app-wish-list [eventId]="eventId" [userId]="userId" #wish1 ></app-wish-list>
     </div>
-    <div class="tab-pane" id="bookTab" role="tabpanel">
-     <app-wish-list [eventId]="eventId" [userId]="userId" isEventPanel="true"></app-wish-list>
+    <div class="tab-pane" id="bookTab" role="tabpanel" >
+     <app-wish-list [eventId]="eventId" [userId]="userId" isEventPanel="true" #wish2></app-wish-list>
     </div>
   </div>
 </div>

@@ -141,6 +141,12 @@ public class ItemService {
         return itemRepository.getBookedItems( userId );
     }
 
+    public List<Item> getEventBookingItems ( Long eventId ) {
+        return itemRepository.getEventBookingItems( eventId );
+    }
+
+
+
 
 
 }
