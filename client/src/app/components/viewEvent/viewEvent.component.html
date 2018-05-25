@@ -86,8 +86,10 @@
           Participants
         </button>
 
-        <button *ngIf="!this.isCreator && this.isParticipant" class="btn btn-info left-button" [routerLink]="['/event', event.id, event.creator.id, 'wishlist']">
-          WishList
+        <button *ngIf="!this.isCreator && this.isParticipant"
+		class="btn btn-info left-button"
+		data-toggle="modal" data-target="#wishlist" data-backdrop="static">
+          Creators Wish Board
         </button>
 
       </div>
@@ -261,6 +263,25 @@
               </button>
           </div>
       </div>
+    </div>
+  </div>
+
+   <div id="wishlist" class="modal fade" aria-hidden="false" aria-labelledby="exampleModalLabel" role="dialog" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+
+        <div class="modal-header">
+		  <h5 class="modal-title">Wish Board</h5>
+          <button class="close" type="button" data-dismiss="modal">×</button>
+
+        </div>
+        <div class="modal-body">
+          <app-wish-panel [eventId]="event.id" [userId]="event.creator.id" ></app-wish-panel>
+
+        </div>
+
+      </div>
+
     </div>
   </div>
 

@@ -77,6 +77,7 @@ import { StatisticsService } from './services/statistics.service';
 import {StatisticsComponent} from "./components/statistics/statistics.component";
 import {NoteEditComponent} from "./components/note/note-edit/note-edit.component";
 import { ConvertComponent } from './components/note/convert/convert.component';
+import { WishPanelComponent } from './components/wishlist/wish-panel/wish-panel.component';
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -148,7 +149,8 @@ export class AddressInterceptor implements HttpInterceptor {
     ViewNoteComponent,
     StatisticsComponent,
     NoteEditComponent,
-    ConvertComponent
+    ConvertComponent,
+    WishPanelComponent
   ],
   imports: [
     BrowserModule,

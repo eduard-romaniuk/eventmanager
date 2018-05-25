@@ -3,8 +3,9 @@
 
 <div class="md-form text-center">
   <h1 *ngIf="isPopularBoard()">Popular items</h1>
+  <h1 *ngIf="isBooking">Your booking items</h1>
   <h1 *ngIf="isOwnBoard()">{{title}}</h1>
-  <h1 *ngIf="!isOwnBoard()  && !isPopularBoard()">{{user.name}} Wish Board</h1>
+  <h1 *ngIf="!isOwnBoard()  && !isPopularBoard() && !isBooking ">{{user.name}} Wish Board</h1>
 
   <!-- Add icon library -->
 <ng-template #loading>
@@ -32,7 +33,6 @@
 			<i class="fa fa-eye"
                 data-toggle="modal"
 				data-target="#viewItem"
-				data-dismiss="modal"
 				(click)="sendViewingItem(item)"
             ></i>
 
@@ -89,14 +89,14 @@
     </div>
   </div>
 
-  <div id="viewItem" class="modal fade" aria-hidden="true" aria-labelledby="exampleModalLabel" role="dialog" tabindex="-1">
+  <div id="viewItem" class="modal fade" aria-hidden="true" aria-labelledby="exampleModalLabel" role="dialog" tabindex="-1" aria-modal="true">
     <div class="modal-dialog" role="dialog">
       <div class="modal-content">
 
-        <div class="modal-header">
+        <div class="modal-header" >
           <h5 class="modal-title">Item info</h5>
-          <button class="close" type="button" data-dismiss="modal">×</button>
-
+          <button class="close" type="button" (click)="hideViewAndShowList()">×</button>
+		
         </div>
 
         <div class="modal-body">
