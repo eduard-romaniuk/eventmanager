@@ -4,6 +4,7 @@ import com.example.eventmanager.domain.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.Map;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
+@PropertySource("classpath:schedule.properties")
 @Service
 public class NotificationService {
 
@@ -23,14 +25,8 @@ public class NotificationService {
     private final EmailService emailService;
     private final Logger logger = LogManager.getLogger(NotificationService.class);
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
-
-    //TODO Move to external file
-    //Pattern - second, minute, hour, day of month, month, day(s) of week
-    private final String TIME_TO_SEND_NOTIFICATIONS = "0 0 8 * * ?";
-    //private final String TIME_TO_SEND_NOTIFICATIONS = "0/30 * * * * *";
-    private final String TIME_TO_UPDATE_DB = "0 59 20 * * ?";
-    //private final String TIME_TO_UPDATE_DB = "0/30 * * * * *";
+    private final DateTimeFormatter formatterForDB = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+    private final DateTimeFormatter formatterForUsers = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
 
     @Autowired
     public NotificationService(UserService userService,
@@ -41,7 +37,7 @@ public class NotificationService {
         this.emailService = emailService;
     }
 
-    @Scheduled(cron = TIME_TO_SEND_NOTIFICATIONS)
+    @Scheduled(cron = "${schedule.cron.sendNotifications}")
     public void sendNotifications() {
         logger.info("Start sending notifications");
 
@@ -55,7 +51,7 @@ public class NotificationService {
         logger.info("End sending notifications");
     }
 
-    @Scheduled(cron = TIME_TO_UPDATE_DB)
+    @Scheduled(cron = "${schedule.cron.updateDb}")
     public void updateNotificationsInDB() {
         logger.info("Start updating notifications in DB");
         notificationSettingsService.shiftNotificationStartDateForAllNotifications(LocalDate.now());
@@ -87,10 +83,8 @@ public class NotificationService {
 
     private String generateEventMessage(Map<String,Object> event) {
         String eventName = event.get("name").toString();
-        LocalDateTime eventStartDate = LocalDateTime.parse(event.get("timeline_start").toString(),
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S"));
-        LocalDateTime eventEndDate = LocalDateTime.parse(event.get("timeline_finish").toString(),
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S"));
+        LocalDateTime eventStartDate = LocalDateTime.parse(event.get("timeline_start").toString(), formatterForDB);
+        LocalDateTime eventEndDate = LocalDateTime.parse(event.get("timeline_finish").toString(), formatterForDB);
 
         String eventInfo = "";
 
@@ -100,8 +94,8 @@ public class NotificationService {
         }
 
         eventInfo += "\'" + eventName + "\'\n" +
-                "Start at " + eventStartDate.format(formatter) + "\n" +
-                "End at " + eventEndDate.format(formatter) + "\n\n";
+                "Start at " + eventStartDate.format(formatterForUsers) + "\n" +
+                "End at " + eventEndDate.format(formatterForUsers) + "\n\n";
 
         return eventInfo;
     }
