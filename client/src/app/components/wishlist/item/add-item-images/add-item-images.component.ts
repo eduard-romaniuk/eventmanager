@@ -1,5 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {CloudinaryUploader} from "ng2-cloudinary";
 import {Router} from "@angular/router";
 import {ToastService} from "../../../../services/toast.service";
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
@@ -8,6 +7,7 @@ import {UserService} from "../../../../services/user.service";
 import {ImageUploaderService} from "../../../../services/image-uploader.service";
 import {imageExtension} from "../../../../utils/validation-tools";
 import {Item} from "../../../../model/item";
+import {CloudinaryOptions, CloudinaryUploader} from "ng2-cloudinary";
 
 @Component({
   selector: 'app-add-item-images',
@@ -24,28 +24,39 @@ export class AddItemImagesComponent implements OnInit {
   savingChanges = false;
   error = false;
 
-  uploader: CloudinaryUploader = ImageUploaderService.getUploader();
+  uploader: CloudinaryUploader
 
   constructor(private router: Router,
               private userService: UserService,
               private formBuilder: FormBuilder,
               private toast: ToastService) {
-    if(!this.item) {
-      this.item = new Item();
-      this.item.images = [];
-    }
+
+	this.uploader = new CloudinaryUploader(
+    new CloudinaryOptions({
+      cloudName: 'eventnetcracker',
+      uploadPreset: 'tawlrxdf' })
+	);
+    
     this.uploader.onSuccessItem = (item: any, response: string, status: number, headers: any): any => {
-      this.imageUploading = false;
+      console.log("onSuccess: " + this.imageUploading);
+	  
+	  this.imageUploading = false;
+	  console.log(this.imageUploading);
       let res: any = JSON.parse(response);
-      console.log(this.item);
+      
+	  
       this.item.images.push(res.url);
       this.newImages.push(res.url);
+	  
+	  console.log(this.item);
       console.log(`res - ` + JSON.stringify(res));
       return {item, response, status, headers};
     };
   }
 
   ngOnInit() {
+	  console.log(this.item);
+	
     this.formImg = this.formBuilder.group({
         image: ['', [Validators.required]]
       },
@@ -56,6 +67,7 @@ export class AddItemImagesComponent implements OnInit {
   upload() {
     if (this.formImg.get("image").valid) {
       this.imageUploading = true;
+	  console.log("upload:" + this.imageUploading);
       this.uploader.uploadAll();
     }
   }
@@ -75,6 +87,16 @@ export class AddItemImagesComponent implements OnInit {
     if ( i > -1 ) {
       this.item.images.splice (i, 1);
     }
+  }
+  
+  ngOnDestroy() {
+	
+	  this.newImages = [];
+	  this.imageUploading = false;
+	  this.savingChanges = false;
+	  this.error = false;
+	  this.item = null;
+	  
   }
 
 

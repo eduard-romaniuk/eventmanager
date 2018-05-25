@@ -1,10 +1,18 @@
 <div *ngIf="item">
 
-  <h4 class="text-uppercase">{{item.name}}
+  <span class="badge-danger" *ngIf="isBooked">You are already booking the item</span>
+  <div class="badge-danger" *ngIf="isBookersExist() && !isOwn">Item booked by:
 
-</h4>
+	<div class="d-inline"
+	*ngFor="let user of bookersAsUsers">
+		<a [routerLink]="['/users', user.id]" > {{user.login}} </a>
+	</div>
+  </div>
+  <h4 class="text-uppercase">{{item.name}}</h4>
   <i class="fa fa-heart-o" *ngIf="!item.hasLiked" (click)="clickOnLikeButt(item)">{{item.likes}}</i>
   <i class="fa fa-heart" *ngIf="item.hasLiked" (click)="clickOnLikeButt(item)">{{item.likes}}</i>
+
+
 
   <button type="button" class="exbutt btn" *ngFor="let tag of item.tags">
       #{{tag.name}}
@@ -12,12 +20,9 @@
 
   <div class="d-inline"
        *ngFor="let image of item.images; let i = index" >
-    <div class="col-lg-3 col-md-4 col-xs-6">
-      <a href="#" class="d-block mb-4 h-100">
-        <img [src]="image" id="image" name="image" width="40%"> <br/>
-      </a>
 
-    </div>
+        <img [src]="image" id="image" name="image" width=400> <br/>
+
 
   </div>
   <p>
@@ -42,7 +47,7 @@
     Delete
   </button>
   <button type="button" class=" btn"
-          data-toggle="modal" data-target="#editItem" data-dismiss="modal" [hidden]="!isOwnItem()">
+          [hidden]="!isOwnItem()" (click)="hideAndShow()">
     Edit
   </button>
 

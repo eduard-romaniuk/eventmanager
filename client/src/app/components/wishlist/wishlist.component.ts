@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import {Router, ActivatedRoute} from '@angular/router';
 import { JQueryStatic } from 'jquery';
 
+
 import { Event } from '../../model/event'
 import {Item} from '../../model/item';
 import {Subscription} from 'rxjs/Subscription';
@@ -14,6 +15,8 @@ import {AuthService} from "../../services/auth.service";
 import {User} from "../../model/user";
 import {UserService} from "../../services/user.service";
 import {EventService} from "../../services/event.service";
+
+declare var $:JQueryStatic;
 
 @Component({
   selector: 'app-wish-list',
@@ -29,10 +32,15 @@ export class WishListComponent implements OnInit {
   isOwn: boolean = false;
   isLoaded: boolean = false;
   isPopular: boolean = false;
+  isBooking: boolean = false;
   user: User = new User();
 
   @Input()
   private eventId: number;
+  @Input()
+  private userId: number;
+  @Input()
+  private isEventPanel: boolean;
 
 
   constructor(private route: ActivatedRoute,
@@ -52,33 +60,35 @@ export class WishListComponent implements OnInit {
 
 
 
-	  if (this.router.url == "/items/popular"){
+	if (this.router.url == "/items/popular"){
 
 	    this.isPopular = true;
       this.initPopularItems()
 
-    } else if (this.router.url == '/wishlist') {
+	} else if (this.router.url == '/items/booking') {
+
+		this.isBooking = true;
+		this.initBookedItems();
+
+	} else if (this.router.url == '/wishlist') {
 
 	    this.isOwn = true;
       this.auth.getUser().subscribe((user: User) => {
         this.initWishList(user.id);
       });
 
-	  } else {
+	} else if (this.userId && this.eventId && this.isEventPanel){
+		this.initEventsBookedItems();
 
-      // this.route.params.subscribe(params => {
-      //
-      //
-      // });
+	} else {
 
+		this.route.params.subscribe(params => {
 
-      this.route.params.subscribe(params => {
-        const id = params['userId'];
-		    const eventId = params['eventId'];
+        let id: number = params['userId'];
 
-        if (eventId) {
-          this.eventId = eventId;
-        }
+		if(!id) {
+			id = this.userId;
+		}
 
         if (id) {
           this.userService.getUserById(id).subscribe((user: User) => {
@@ -98,7 +108,7 @@ export class WishListComponent implements OnInit {
 
   }
 
-  initWishList(userId: number): void{
+  public initWishList(userId: number): void{
     this.wishListService.getWishListByUser(userId).subscribe(
 
 
@@ -147,12 +157,50 @@ export class WishListComponent implements OnInit {
     this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
   }
 
+   initBookedItems() {
+	this.auth.getUser().subscribe((user: User) => {
+
+		this.wishListService.getBookedItems(user.id).subscribe(
+		  (items: Item[]) => {
+			this.items = items;
+			for( let item of this.items) {
+			  this.likeService.wasLiked(item.id).subscribe( (hasLike: boolean) => {
+				item.hasLiked = hasLike;
+			  });
+			}
+			this.isLoaded = true;
+		  }
+		);
+	});
+
+    this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
+  }
+
+  public initEventsBookedItems() {
+
+	this.wishListService.getEventsBookedItems(this.eventId).subscribe(
+		(items: Item[]) => {
+      this.items = items;
+      for( let item of this.items) {
+        this.likeService.wasLiked(item.id).subscribe( (hasLike: boolean) => {
+          item.hasLiked = hasLike;
+        });
+      }
+			this.isLoaded = true;
+		}
+	);
+
+	this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
+
+  }
+
 
 
   create() {
   }
 
   sendViewingItem(item: Item){
+
     this.itemService.getItem(item.id).subscribe( (fullItem: Item) => {
       console.log(fullItem);
       this.wishListService.sendViewingItem(fullItem)
@@ -161,6 +209,10 @@ export class WishListComponent implements OnInit {
 
   hideViewingItem(){
     this.wishListService.hideViewingItem()
+  }
+
+  hideViewAndShowList(){
+	$('#viewItem').modal('toggle');
   }
 
   clickOnLikeButt(item: Item){
@@ -172,7 +224,9 @@ export class WishListComponent implements OnInit {
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+	if(this.subscription) {
+		this.subscription.unsubscribe();
+	}
   }
 
   isOwnBoard(): boolean {
