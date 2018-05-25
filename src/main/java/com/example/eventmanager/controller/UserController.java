@@ -150,6 +150,17 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    @JsonView(UserView.ShortView.class)
+    @RequestMapping(value = "/all", params = {"limit", "offset"}, method = RequestMethod.GET)
+    public ResponseEntity<List<User>> getAllUsersPagination(
+            @RequestParam int limit, @RequestParam int offset, HttpServletResponse response) {
+        logger.info("GET /users/all?limit={}&offset={}", limit, offset);
+
+        response.addHeader("count", userService.countAllUsers().toString());
+        List<User> users = userService.getAllUsersPagination(limit, offset);
+        return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
     @JsonView(UserView.FullView.class)
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<User> getUser(@PathVariable("id") Long id) {
@@ -193,9 +204,16 @@ public class UserController {
     public ResponseEntity<List<User>> searchByLoginOrByNameAndSurnamePagination(
             @RequestParam String query, @RequestParam int limit, @RequestParam int offset, HttpServletResponse response) {
         logger.info("GET /users/search?query={}&limit={}&offset={}", query, limit, offset);
+        List<User> users;
 
-        response.addHeader("count", userService.countSearchByLoginOrByNameAndSurname(query).toString());
-        List<User> users = userService.searchByLoginOrByNameAndSurnamePagination(query, limit, offset);
+        if(query.equals("")){
+            response.addHeader("count", userService.countAllUsers().toString());
+            users = userService.getAllUsersPagination(limit, offset);
+        } else {
+            response.addHeader("count", userService.countSearchByLoginOrByNameAndSurname(query).toString());
+            users = userService.searchByLoginOrByNameAndSurnamePagination(query, limit, offset);
+        }
+
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 

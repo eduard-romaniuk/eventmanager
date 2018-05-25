@@ -28,10 +28,23 @@ export class UserSearchComponent implements OnInit {
     this.auth.current_user.subscribe(
       current_user => {
         this.currentUser = current_user;
+        this.getAll();
       });
   }
 
   ngOnInit() {}
+
+  getAll(){
+    this.index = 10;
+    this.userService.getUsersPagination(10, 0).subscribe(
+      response => {
+        this.count = +response.headers.get('count');
+        this.users = response.body;
+      }, error => {
+        console.log(error);
+        this.toast.error('Some errors occurred while trying to load data');
+      })
+  }
 
   search() {
     this.index = 10;
@@ -48,7 +61,7 @@ export class UserSearchComponent implements OnInit {
 
   loadMore() {
     this.userService.searchByLoginOrByNameAndSurnamePagination(this.queryString,
-        10, this.index).subscribe(
+      10, this.index).subscribe(
       response => {
         this.index += 10;
         this.users = this.users.concat(response.body);

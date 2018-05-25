@@ -17,6 +17,14 @@ export class UserService {
     return this.http.get(this.base_url + "/all");
   }
 
+  getUsersPagination(limit: number, offset: number)
+  :Observable<HttpResponse<User[]>> {
+    const params = new HttpParams()
+      .set('limit', limit.toString())
+      .set('offset', offset.toString());
+    return this.http.get<User[]>(this.base_url + "/all",{params: params, observe: 'response'});
+  }
+
   public getUserById(id) {
     return this.http.get(this.base_url + "/" + id);
   }

@@ -29,6 +29,11 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public Long countAllUsers(){
+        logger.info("Count all users");
+        return userRepository.countAllUsers();
+    }
+
     public List<User> getAllUsers(){
         //TODO Return list, not iterator
         Iterator<User> iter = userRepository.findAll().iterator();
@@ -37,7 +42,11 @@ public class UserService {
             copy.add(iter.next());
         System.out.println(copy);
         return copy;
+    }
 
+    public List<User> getAllUsersPagination(int limit, int offset){
+        logger.info("Get all users");
+        return userRepository.findAllPagination(limit, offset);
     }
 
     public User getUser(Long id){
