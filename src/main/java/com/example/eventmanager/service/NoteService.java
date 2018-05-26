@@ -4,7 +4,15 @@ package com.example.eventmanager.service;
 import com.example.eventmanager.dao.NoteRepository;
 import com.example.eventmanager.domain.Note;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.transaction.support.TransactionTemplate;
 
 
 import java.util.List;
@@ -14,7 +22,6 @@ public class NoteService {
 
     private final NoteRepository noteRepository;
     private final UserService userService;
-
 
     @Autowired
     public NoteService(NoteRepository noteRepository, UserService userService) {

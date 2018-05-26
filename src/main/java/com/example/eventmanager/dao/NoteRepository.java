@@ -10,22 +10,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-
 @PropertySource("classpath:queries/note.properties")
 @Repository
-@Transactional
 public class NoteRepository implements CrudRepository<Note> {
 
     private final NamedParameterJdbcTemplate namedJdbcTemplate;
@@ -33,12 +35,24 @@ public class NoteRepository implements CrudRepository<Note> {
     private final Logger logger = LogManager.getLogger(NoteRepository.class);
     private static final int FIRST_ELEMENT = 0;
 
+    private final DefaultTransactionDefinition def;
+    private DataSourceTransactionManager txManager;
+
+    private TransactionStatus updateStatus;
+
     @Autowired
-    public NoteRepository(NamedParameterJdbcTemplate namedJdbcTemplate, Environment env) {
+    public NoteRepository(NamedParameterJdbcTemplate namedJdbcTemplate, Environment env, JdbcTemplate jdbcTemplate) {
         logger.info("Class initialized");
 
         this.namedJdbcTemplate = namedJdbcTemplate;
         this.env = env;
+
+        this.txManager = new DataSourceTransactionManager(jdbcTemplate.getDataSource());
+
+        this.def = new DefaultTransactionDefinition();
+        def.setName("UpdateNote");
+        def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
+        def.setTimeout(60);
     }
 
 
@@ -86,6 +100,7 @@ public class NoteRepository implements CrudRepository<Note> {
     }
 
     public Note findOneForUpdate(Long id) {
+        //updateStatus = txManager.getTransaction(def);
         logger.info("find note for update");
         try {
             Map<String, Object> namedParams = new HashMap<>();
@@ -115,12 +130,16 @@ public class NoteRepository implements CrudRepository<Note> {
 
     @Override
     public void update(Note note) {
+        logger.info("Update note");
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("name", note.getName());
         namedParams.put("description", note.getDescription());
         namedParams.put("image", note.getImage());
         namedParams.put("noteId", note.getId());
+
         namedJdbcTemplate.update(env.getProperty("note.updateNote"), namedParams);
+        txManager.commit(updateStatus);
+        //logger.info("END OF Update note");
     }
 
     public void moveNote(Note note) {
@@ -131,7 +150,6 @@ public class NoteRepository implements CrudRepository<Note> {
     }
 
     @Override
-    @Transactional
     public void delete(Note entity) {
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("noteId", entity.getId());
