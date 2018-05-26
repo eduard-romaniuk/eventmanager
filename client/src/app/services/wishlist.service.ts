@@ -11,6 +11,7 @@ import {User} from "../model/user";
 import { JQueryStatic } from 'jquery';
 import {ItemService} from "./item.service";
 import {EventService} from "./event.service";
+import {LikeService} from "./like.service";
 declare var $:JQueryStatic;
 
 const httpOptions = {
@@ -29,7 +30,9 @@ export class WishListService {
 
 
 
-  constructor(private http: HttpClient, private auth: AuthService, private eventService: EventService) {
+  constructor(private http: HttpClient, private auth: AuthService,
+              private likeService: LikeService,
+              private eventService: EventService) {
     this.auth.getUser().subscribe(
       (user: User) =>
     {
@@ -130,6 +133,29 @@ export class WishListService {
 
   }
 
+  getBookedItems ( userId: number): Observable<Item[]> {
+
+	this.http.get<Item[]>(this.base_url + "/booking/" + userId).subscribe(
+      (items : Item[]) => {
+      this.items = items;
+      this.subItemArr.next(this.items);
+    });
+
+    return this.subItemArr.asObservable();
+
+  }
+
+  getEventsBookedItems (eventId: number): Observable<Item[]> {
+	this.http.get<Item[]>(this.base_url + "/booking/event/" + eventId).subscribe(
+    (items: Item[]) => {
+      this.items = items;
+
+
+      this.subItemArr.next(this.items);
+    });
+
+    return this.subItemArr.asObservable();
+  }
 
 
 }

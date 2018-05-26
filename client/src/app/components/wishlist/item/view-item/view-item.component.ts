@@ -8,7 +8,10 @@ import {ItemService} from "../../../../services/item.service";
 import { JQueryStatic } from 'jquery';
 import {Router} from "@angular/router";
 import {EventService} from "../../../../services/event.service";
+import {UserService} from "../../../../services/user.service";
 import {Booker} from "../../../../model/booker";
+import {FormArray} from "@angular/forms";
+import {User} from "../../../../model/user";
 declare var $:JQueryStatic;
 
 
@@ -25,6 +28,8 @@ export class ViewItemComponent implements OnInit {
   isParticipant: boolean = false;
   isBooked: boolean = false;
 
+  bookersAsUsers: User[];
+
   currentBooker: Booker;
 
   @Input()
@@ -37,7 +42,8 @@ export class ViewItemComponent implements OnInit {
     private router: Router,
     private likeService : LikeService,
     private itemService: ItemService,
-    private eventService: EventService
+    private eventService: EventService,
+	private userService: UserService
   ){
  }
 
@@ -47,6 +53,7 @@ export class ViewItemComponent implements OnInit {
 
     this.subscription = this.wishListService.getViewingItem().subscribe(item => {
       this.item = item;
+      this.updateBookersName();
       this.likeService.wasLiked(this.item.id).subscribe( (hasLike: boolean) => {
           this.item.hasLiked = hasLike;
         });
@@ -63,6 +70,15 @@ export class ViewItemComponent implements OnInit {
 
 
   }
+  
+
+  hideAndShow() {
+
+	$('#viewItem').modal('hide');
+	$('#editItem').modal('show');
+
+  }
+
 
   initParticipantViewWishList() {
 
@@ -88,8 +104,23 @@ export class ViewItemComponent implements OnInit {
       });
   }
 
+  updateBookersName(): void {
+	this.bookersAsUsers = [];
+	for (let booker of this.item.bookers) {
+		this.userService.getUserById(booker.userId).subscribe(
+				(user: User) => {
+					this.bookersAsUsers.push(user);
+				}
+			);
+	}
+
+  }
+
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+	$('#viewItem').modal('hide');
+	$('#wishlist').modal('hide');
+	if(this.subscription)this.subscription.unsubscribe();
+    this.item = new Item();
   }
 
   clickOnLikeButt(): void {
@@ -119,18 +150,35 @@ export class ViewItemComponent implements OnInit {
 
     if ( !this.isBooked ) {
 
-      this.itemService.booking(this.currentBooker);
-
-      this.isBooked = true;
+      this.itemService.booking(
+        this.currentBooker,
+        () => {
+			this.isBooked = true;
+			this.item.bookers.push(this.currentBooker);
+        });
     }
   }
   unbooking() {
 
     if( this.isBooked ) {
 
-      this.itemService.unbooking(this.currentBooker);
+      this.itemService.unbooking(
+        this.currentBooker,
+        () => {
+			this.isBooked = false;
 
-      this.isBooked = false;
+			for (let booker of this.item.bookers){
+
+				if (booker.eventId == this.currentBooker.eventId && booker.userId == this.currentBooker.userId) {
+					const index: number = this.item.bookers.indexOf(booker);
+					if (index !== -1) {
+						this.item.bookers.splice(index, 1);
+					}
+				}
+			}
+
+        }
+      );
 
     }
 
@@ -139,6 +187,15 @@ export class ViewItemComponent implements OnInit {
   getEventId() : number {
     return this.eventId;
   }
+
+  isBookersExist(): boolean {
+	if(!this.item) return false;
+	if(!this.item.bookers) return false;
+	return  this.item.bookers.length > 0;
+  }
+
+
+
 
 
 }

@@ -30,9 +30,7 @@ export class NotificationSettingsComponent implements OnInit {
 
   ngOnInit() {
     const eventStartDate = new Date(this.event.timeLineStart);
-    this.max = new Date(eventStartDate.getTime());
-    const maxNotificationDate = eventStartDate.getDate() - 1;
-    this.max.setDate(maxNotificationDate);
+    this.max = new Date(eventStartDate.getFullYear(), eventStartDate.getMonth(), eventStartDate.getDate());
 
     this.form = this.formBuilder.group({
       emailNotif: [this.notificationSetting.emailNotificationOn, [Validators.required]],
@@ -51,9 +49,8 @@ export class NotificationSettingsComponent implements OnInit {
   save() {
     this.error = false;
     this.savingChanges = true;
-    console.log("notificationSetting.emailNotificationOn - " + this.notificationSetting.emailNotificationOn);
 
-    if(this.form.get('startDate').value){
+    if(this.notificationSetting.emailNotificationOn){
       this.fixDate();
     }
 

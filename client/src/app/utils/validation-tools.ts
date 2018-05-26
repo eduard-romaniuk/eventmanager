@@ -69,22 +69,17 @@ export function maxPeriod(eventStartDate: Date, notificationStartDate: string, p
     let per = group.controls[period];
     let maxPeriod;
 
-    let maxNotificationDate = new Date();
-    maxNotificationDate.setDate(eventStartDate.getDate());
-
+    let maxNotificationDate = new Date(eventStartDate.getFullYear(), eventStartDate.getMonth(), eventStartDate.getDate());
     let notStartDate = new Date(notifStartDate.value);
 
-    console.log("maxNotificationDate - " + maxNotificationDate);
-    console.log("notStartDate - " + notStartDate);
-
     if (notifStartDate.value) {
-      let diff = maxNotificationDate.getTime() - notStartDate.getTime();
-      maxPeriod = Math.ceil(diff / (1000 * 3600 * 24));
+      let diff =
+        Date.UTC(maxNotificationDate.getFullYear(), maxNotificationDate.getMonth(), maxNotificationDate.getDate())
+        - Date.UTC(notStartDate.getFullYear(), notStartDate.getMonth(), notStartDate.getDate());
+      maxPeriod = Math.floor(diff / (1000 * 3600 * 24));
     } else {
       maxPeriod = 0;
     }
-
-    console.log("maxPeriod - " + maxPeriod);
 
     if (per.value > maxPeriod) {
       group.get(period).setErrors({maxPeriod: true});

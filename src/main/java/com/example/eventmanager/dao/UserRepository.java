@@ -82,9 +82,29 @@ public class UserRepository implements CrudRepository<User> {
         }
     }
 
+    public Long countAllUsers() {
+        return namedJdbcTemplate.queryForObject(env.getProperty("countAllUsers"), new HashMap<>(), Long.class);
+    }
+
     @Override
     public Iterable<User> findAll() {
-        return namedJdbcTemplate.query(env.getProperty("findAllUser"), new UserMapper());
+        return namedJdbcTemplate.query(env.getProperty("findAllUsers"), new UserMapper());
+    }
+
+    public List<User> findAllPagination(int limit, int offset) {
+        try {
+            String query = new StringBuilder()
+                    .append(env.getProperty("findAllUsers"))
+                    .append(" LIMIT ")
+                    .append(limit)
+                    .append(" OFFSET ")
+                    .append(offset)
+                    .toString();
+            return namedJdbcTemplate.query(query, new UserMapper());
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("Users not found");
+            return Collections.emptyList();
+        }
     }
 
     @Override
