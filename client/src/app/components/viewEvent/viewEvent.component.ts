@@ -9,7 +9,6 @@ import {AuthService} from "../../services/auth.service";
 import {Subscription} from "rxjs/Subscription";
 import {FormGroup} from "@angular/forms";
 import {ToastService} from "../../services/toast.service";
-import {UserService} from "../../services/user.service";
 import {NotificationSettings} from "../../model/notificationSettings";
 import {NotificationSettingsService} from "../../services/notification-settings.service";
 
@@ -32,13 +31,11 @@ export class ViewEventComponent {
   participants: User[];
   candidates: User[];
   newParticipants: User[];
-
   removeParticipants: User[];
 
   latitude: Number;
   longitude: Number;
   isStarted: boolean;
-  today: Date = new Date();
 
   sub: Subscription;
 
@@ -49,7 +46,6 @@ export class ViewEventComponent {
               private router: Router,
               private eventService: EventService,
               private toast: ToastService,
-              private userService: UserService,
               private notificationSettingsService: NotificationSettingsService) {
   }
 
@@ -90,7 +86,6 @@ export class ViewEventComponent {
                             this.notificationSetting.startDate = new Date(eventStartDate.getTime());
                             const maxNotificationDate = eventStartDate.getDate() - 1;
                             this.notificationSetting.startDate.setDate(maxNotificationDate);
-                            //console.log("notificationSetting.startDate - " + this.notificationSetting.startDate);
                           }
 
                         } else {
