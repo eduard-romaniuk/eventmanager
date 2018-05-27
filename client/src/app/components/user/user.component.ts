@@ -40,23 +40,17 @@ export class UserComponent implements OnInit, OnDestroy {
             this.userService.getUserById(id).subscribe((user: any) => {
               if (user) {
                 this.user = user;
-
-                console.log("this.currentUser.id - " + this.currentUser.id);
-                console.log("this.user.id - " + this.user.id);
                 this.currentUserPage = (this.currentUser.id == this.user.id);
-                console.log("this.currentUserPage - " + this.currentUserPage);
 
                 if(this.currentUserPage) {
                   this.userService.getCurrentUserEvents(this.user.id)
                     .subscribe((events: any) => {
-                      console.log("events - " + events);
                       this.userEvents = events;
                     });
                     this.getIncomingRequests();
                 } else {
                   this.userService.getEventsByUserId(this.user.id, false, true)
                     .subscribe((events: any) => {
-                      console.log("events - " + events);
                       this.userEvents = events;
                     });
                 }
@@ -77,7 +71,7 @@ export class UserComponent implements OnInit, OnDestroy {
   goToSettingsPage(): void {
     this.router.navigate(['settings']);
   }
-  
+
   goToStatisticsPage():void {
      this.router.navigate(['statistics']);
   }
