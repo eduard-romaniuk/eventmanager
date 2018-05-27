@@ -46,6 +46,9 @@
             <div *ngIf="form.get('newEmail').errors.email">
               Enter valid email
             </div>
+            <div *ngIf="form.get('newEmail').errors.emailExists">
+              Email already used
+            </div>
           </div>
         </div>
 

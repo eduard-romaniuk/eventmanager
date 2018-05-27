@@ -2,9 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {User} from "../../../model/user";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ToastService} from "../../../services/toast.service";
-import {AuthService} from "../../../services/auth.service";
 import {UserService} from "../../../services/user.service";
-import {Router} from "@angular/router";
 import {emailExists} from "../../../utils/validation-tools";
 
 @Component({
@@ -23,9 +21,7 @@ export class UserEditEmailComponent implements OnInit {
   wrongEmailError = false;
   error = false;
 
-  constructor(private auth: AuthService,
-              private userService: UserService,
-              private router: Router,
+  constructor(private userService: UserService,
               private formBuilder: FormBuilder,
               private toast: ToastService) { }
 
@@ -44,8 +40,8 @@ export class UserEditEmailComponent implements OnInit {
     this.userService.updateUserEmail(this.user.id, this.formContent.currentEmail, this.formContent.newEmail)
       .subscribe(response => {
         this.savingChanges = false;
-        this.auth.logout(() => this.router.navigateByUrl('/hello'));
-        this.toast.info('Check your email');
+        this.form.reset();
+        this.toast.info('We send a confirmation letter to your new email address');
         }, error => {
           if (error.status === 409) {
             this.savingChanges = false;

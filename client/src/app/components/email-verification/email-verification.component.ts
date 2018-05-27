@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { ToastService } from '../../services/toast.service';
 import { UserService } from '../../services/user.service';
@@ -14,6 +14,7 @@ import { User } from '../../model/user';
 export class EmailVerificationComponent implements OnInit {
 
   public token: string;
+  public email: string;
   public form: FormGroup;
   public credentials = {login: '', password: ''};
   public loading = false;
@@ -29,6 +30,9 @@ export class EmailVerificationComponent implements OnInit {
   ngOnInit() {
   	this.route.params.subscribe(params => {
   		this.token = params['token'];
+  		if(this.route.snapshot.queryParams["email"]){
+        this.email = this.route.snapshot.queryParams["email"];
+      }
   		if(this.token) {
 			  this.form = this.formBuilder.group({
 			    login: ['', [ Validators.required, Validators.pattern('^[a-zA-Z0-9_]*$') ]],
@@ -59,8 +63,16 @@ export class EmailVerificationComponent implements OnInit {
 
   public verify(user: User, token: string) {
   	if(user.verified) {
-		  this.router.navigate(['home']);
-  		this.toast.info('Your new email verified');
+      if(this.email){
+        if(this.token === user.token){
+          this.changeEmail(user);
+        } else {
+          this.router.navigate(['home']);
+          this.toast.error('Invalid link');
+        }
+      } else {
+        this.toast.info('Already verified');
+      }
 	  } else {
   		const isVerified = this.token === user.token;
       const isActive = this.diffDays(new Date(), new Date(user.regDate.toString())) < 1;
@@ -70,7 +82,7 @@ export class EmailVerificationComponent implements OnInit {
 		  		this.router.navigate(['home']);
 		  		this.toast.success('Your account verified');
 	  		}, error => {
-	  			this.toast.error('Put error');
+	  			this.toast.error('Some error occured');
 	  		});
 	  	} else {
         if (!isActive) {
@@ -80,6 +92,16 @@ export class EmailVerificationComponent implements OnInit {
 	  		this.toast.error('Invalid verification link');
 	  	}
 	  }
+  }
+
+  private changeEmail(user: User){
+    user.email = this.email;
+    this.userService.updateUser(user).subscribe(response =>{
+      this.router.navigate(['home']);
+      this.toast.success('Your email successfully changed');
+    }, error => {
+      this.toast.error('Some error occured');
+    });
   }
 
   private diffDays(date1: Date, date2: Date) {

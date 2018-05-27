@@ -141,13 +141,12 @@ public class UserRepository implements CrudRepository<User> {
         namedJdbcTemplate.update(env.getProperty("changePassword"), namedParams);
     }
 
-    public void changeEmail(User user) {
+    public void changeToken(User user) {
         Map<String, Object> namedParams = new HashMap<>();
-        namedParams.put("email", user.getEmail());
         namedParams.put("conf_link", user.getToken());
         namedParams.put("id", user.getId());
 
-        namedJdbcTemplate.update(env.getProperty("changeEmail"), namedParams);
+        namedJdbcTemplate.update(env.getProperty("changeConfLink"), namedParams);
     }
 
     @Override

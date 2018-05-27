@@ -17,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
 
@@ -106,14 +108,21 @@ public class UserController {
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else if(oldEmail.equals(user.getEmail())){
-            user.setEmail(newEmail);
-            userService.changeEmail(securityService.verificationToken(user));
-            emailService.sendTextMail(
-                    user.getEmail(),
-                    "Change email verification",
-                    "Please verify your new email:\n" +
-                            "https://web-event-manager.firebaseapp.com/email-verification/" +
-                            user.getToken());
+            securityService.verificationToken(user);
+            userService.changeToken(user);
+
+            String verificationLink;
+            try {
+                verificationLink = "https://web-event-manager.firebaseapp.com/email-verification/" +
+                        user.getToken() + "?email=" + URLEncoder.encode(newEmail, "UTF-8");
+                emailService.sendTextMail(
+                        newEmail,
+                        "Confirm email changing",
+                        "Please verify your new email:\n" +
+                                verificationLink);
+            } catch (UnsupportedEncodingException e) {
+                throw new AssertionError("UTF-8 is unknown");
+            }
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.CONFLICT);

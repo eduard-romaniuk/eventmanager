@@ -1,9 +1,16 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 col-sm-6 col-xs-12 centerDiv">
       <form (submit)="login()" [formGroup]="form" class="md-form text-center">
+        <header>
+          <h2 class="text-center">Log In</h2>
+        </header>
         <div class="form-group">
           <input formControlName="login" [(ngModel)]="credentials.login" [ngClass]="{
                             'is-invalid': form.get('login').invalid && (form.get('login').dirty || form.get('login').touched)
                         }" class="form-control mt-2" id="login" placeholder="login" type="text">
-          <div *ngIf="form.get('login').invalid && (form.get('login').dirty || form.get('login').touched)" class="text-danger">
+          <div *ngIf="form.get('login').invalid && (form.get('login').dirty || form.get('login').touched)"
+               class="text-danger">
             <div *ngIf="form.get('login').errors.required">
               Username field can't be blank
             </div>
@@ -16,7 +23,8 @@
           <input formControlName="password" [(ngModel)]="credentials.password" [ngClass]="{
                             'is-invalid': form.get('password').invalid && (form.get('password').dirty || form.get('password').touched)
                         }" class="form-control mt-2" id="password" placeholder="Password" type="password">
-          <div *ngIf="form.get('password').invalid && (form.get('password').dirty || form.get('password').touched)" class="text-danger">
+          <div *ngIf="form.get('password').invalid && (form.get('password').dirty || form.get('password').touched)"
+               class="text-danger">
             <div *ngIf="form.get('password').errors.required">
               Password field can't be blank
             </div>
@@ -35,3 +43,6 @@
           Log in
         </button>
       </form>
+    </div>
+  </div>
+</div>

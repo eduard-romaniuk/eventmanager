@@ -29,7 +29,6 @@ public class SecurityService {
     }
 
     public boolean comparePass(User user, String password) {
-        System.out.println("compare pass");
         return bCryptPasswordEncoder.matches(password, user.getPassword());
     }
 
