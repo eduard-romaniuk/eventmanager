@@ -2,43 +2,36 @@
   <div class="row">
 
     <div class="col-sm-3 border userProfileBlock" align="center">
-      <h2> {{ user.login }} </h2>
-
       <div class="bigImage">
         <app-partial-user-image [user]="user"></app-partial-user-image>
       </div>
 
+      <h3> {{ user.login }} </h3>
       <p>{{ user.name }} {{ user.surName }}</p>
-
-      <div *ngIf="currentUserPage">
-        <p>
-          <button class="btn btn-info" data-toggle="modal" data-target="#requests" (click)="getIncomingRequests()">
-            Requests <span class="badge badge-light" *ngIf="incomeRequests.length > 0"> {{ incomeRequests.length }} </span>
-          </button>
-        </p>
-
-        <p>
-          <button class="btn btn-info" (click)="goToSettingsPage()"> Settings </button>
-        </p>
-        
-        <p>
-          <button class="btn btn-info" (click)="goToStatisticsPage()"> Statistics </button>
-        </p>
-      </div>
 
       <div *ngIf="!currentUserPage" class="mb-2">
         <app-partial-user-friendship-button *ngIf="currentUser.id && user.id"
                                             [currentUser]="currentUser" [user]="user">
         </app-partial-user-friendship-button>
       </div>
-      
-      <button type="button" class="btn btn-info mb-2" data-toggle="modal"
-              data-target="#friendsList" (click)="getFriends()">Friends</button>
 
-      <button type="button" class="btn btn-info mb-2" data-toggle="modal"
-              data-target="#friendsList" (click)="goToUserWishList(user)" *ngIf="!currentUserPage">
-            View user Wish Board
-      </button>
+      <div class="btn-group-vertical" style="width: 100%">
+        <button class="btn btn-default" data-toggle="modal"
+                data-target="#friendsList" (click)="getFriends()"> Friends
+        </button>
+        <button *ngIf="!currentUserPage" class="btn btn-default" data-toggle="modal"
+                data-target="#friendsList" (click)="goToUserWishList(user)">
+          View user Wish Board
+        </button>
+        <button *ngIf="currentUserPage" class="btn btn-default" data-toggle="modal" data-target="#requests"
+                (click)="getIncomingRequests()">
+          Requests <span class="badge badge-light"
+                         *ngIf="incomeRequests.length > 0"> {{ incomeRequests.length }} </span>
+        </button>
+        <button *ngIf="currentUserPage" class="btn btn-default" (click)="goToSettingsPage()"> Settings </button>
+        <button *ngIf="currentUserPage" class="btn btn-default" (click)="goToStatisticsPage()"> Statistics </button>
+      </div>
+
     </div>
 
     <div class="col-sm-9">
