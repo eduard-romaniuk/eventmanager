@@ -93,9 +93,10 @@ public class TagRepository implements CrudRepository<Tag>{
 
         int update = 0;
 
-        List<String> existsTags = getTagsForItem(itemId).stream().map(
-                Tag::getName
-        ).collect(Collectors.toList());
+        List<String> existsTags = getTagsForItem(itemId)
+                .stream()
+                .map(Tag::getName)
+                .collect(Collectors.toList());
 
         for ( Tag tag : tags) {
             if (!existsTags.contains(tag.getName())) {
@@ -197,6 +198,27 @@ public class TagRepository implements CrudRepository<Tag>{
         return deleted;
     }
 
+    public List<Tag> getTagsFromTheList (List<Long> tagIds) {
+        try {
+            Map<String, Object> namedParams = new HashMap<>();
 
+            namedParams.put("tagIds", tagIds);
+
+            return namedJdbcTemplate.query(env.getProperty("getItemsWithTags"), namedParams,
+                    (rs, rowNum) -> {
+                        Tag tag = new Tag();
+
+                        tag.setId(rs.getLong("tag_id"));
+                        //////////////TODO: повернути повністю готові айтеми. Порахувати для них вагу в сервісі. І підтягнути того, чого не вистачає
+
+                        logger.info("Item got!  " + item.toString());
+                        return item;
+                    }
+            );
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("Not found any items");
+            return Collections.emptyList();
+        }
+    }
 
 }

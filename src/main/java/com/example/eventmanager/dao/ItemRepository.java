@@ -1,7 +1,9 @@
 package com.example.eventmanager.dao;
 
+import com.example.eventmanager.dao.utils.ResultSetHandler;
 import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.Item;
+import com.example.eventmanager.domain.Tag;
 import com.example.eventmanager.domain.WishList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -154,6 +156,32 @@ public class ItemRepository implements CrudRepository<Item>{
         logger.info(deleted + " items was deleted from items");
     }
 
+
+    public Long copyItem ( Long toWishListId, Long itemId ) {
+        logger.info("Copy item: " + itemId);
+
+        MapSqlParameterSource namedParams = new MapSqlParameterSource();
+
+        namedParams.addValue("toWishListId", toWishListId);
+        namedParams.addValue("itemId", itemId);
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        int update = namedJdbcTemplate.update(env.getProperty("copyItem"), namedParams, keyHolder);
+
+        logger.info(update + " row was updated from table items...");
+        logger.info("Item was copy = " + keyHolder.getKeys());
+
+        Long newItemId = ((Integer)keyHolder
+                .getKeys()
+                .get("id"))
+                .longValue();
+
+        imageRepository.saveImagesForItem(imageRepository.getImagesForItem(itemId), newItemId);
+
+        return newItemId;
+    }
+
+
     public List<Item> getItemsForWishList ( Long wishListId ){
         try {
             Map<String, Object> namedParams = new HashMap<>();
@@ -166,10 +194,8 @@ public class ItemRepository implements CrudRepository<Item>{
                         item.setId(rs.getLong("id"));
                         item.setName(rs.getString("name"));
                         item.setPriority(rs.getInt("priority_id"));
-//                        item.setDescription(rs.getString("description"));
                         item.setWishListId(wishListId);
                         item.setLikes(likeRepository.getLikesCountForItem(item.getId()));
-//                        item.setTags(tagRepository.getTagsForItem(item.getId()));
                         item.setBookers(bookerRepository.getBookersForItem(item.getId()));
 
                         logger.info("Item got! " + item.toString());
@@ -209,7 +235,7 @@ public class ItemRepository implements CrudRepository<Item>{
                     }
             );
         } catch (EmptyResultDataAccessException e) {
-            logger.info("Not founded any items");
+            logger.info("Not found any items");
             return Collections.emptyList();
         }
     }
@@ -230,12 +256,12 @@ public class ItemRepository implements CrudRepository<Item>{
                         item.setWishListId(rs.getLong("wishlist_id"));
                         item.setLikes(likeRepository.getLikesCountForItem(item.getId()));
 
-                        logger.info("Item got! " + item.toString());
+                        logger.info("Item got ! " + item.toString());
                         return item;
                     }
             );
         } catch (EmptyResultDataAccessException e) {
-            logger.info("Not founded any items");
+            logger.info("Not found any items");
             return Collections.emptyList();
         }
     }
@@ -256,56 +282,70 @@ public class ItemRepository implements CrudRepository<Item>{
                         item.setWishListId(rs.getLong("wishlist_id"));
                         item.setLikes(likeRepository.getLikesCountForItem(item.getId()));
 
-                        logger.info("Item got! " + item.toString());
+                        logger.info("Item got!  " + item.toString());
                         return item;
                     }
             );
         } catch (EmptyResultDataAccessException e) {
-            logger.info("Not founded any items");
+            logger.info("Not found any items");
             return Collections.emptyList();
         }
     }
 
 
-    public Long copyItem ( Long toWishListId, Long itemId ) {
-        logger.info("Copy item: " + itemId);
+    public Map<Long, Integer> getWeightOfSystemTags ( Long limit, Long offset ){
+        try {
 
-        MapSqlParameterSource namedParams = new MapSqlParameterSource();
+            String query = new StringBuilder()
+                    .append(env.getProperty("getWeightOfSystemTags"))
+                    .append(" LIMIT ")
+                    .append(limit)
+                    .append(" OFFSET ")
+                    .append(offset)
+                    .toString();
 
-        namedParams.addValue("toWishListId", toWishListId);
-        namedParams.addValue("itemId", itemId);
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-        int update = namedJdbcTemplate.update(env.getProperty("copyItem"), namedParams, keyHolder);
-
-        logger.info(update + " row was updated from table items...");
-        logger.info("Item was copy = " + keyHolder.getKeys());
-
-        Long newItemId = ((Integer)keyHolder
-                .getKeys()
-                .get("id"))
-                .longValue();
-
-        imageRepository.saveImagesForItem(imageRepository.getImagesForItem(itemId), newItemId);
-
-        return newItemId;
+            return namedJdbcTemplate.query(query, ResultSetHandler::getWeightOfTags);
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("Not found any tags");
+            return Collections.emptyMap();
+        }
     }
 
-//    private static final class ItemMapper implements RowMapper<Item> {
-//        @Override
-//        public Item mapRow(ResultSet rs, int rowNum) throws SQLException {
-//            Item item = new Item();
-//
-//            item.setId(rs.getLong("id"));
-//            item.setName(rs.getString("name"));
-//            item.setPriority(rs.getInt("priority_id"));
-//            item.setDescription(rs.getString("description"));
-//            item.setWishListId(rs.getLong("wishListId"));
-//            item.setLikes(likeRepository.getLikesCountForItem(item.getId()));
-//            item.setTags(tagRepository.getTagsForItem(item.getId()));
-//
-//            logger.info("Item got! " + item.toString());
-//            return item;
-//        }
-//    }
+    public Map<Long, Integer> getWeightOfMyTags ( Long userId ){
+
+        try {
+
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("userId", userId);
+
+            return namedJdbcTemplate.query(env.getProperty("getWeightOfMyTags"), namedParams,ResultSetHandler::getWeightOfTags);
+
+        } catch (EmptyResultDataAccessException e) {
+
+            logger.info("Not found any tags");
+            return Collections.emptyMap();
+
+        }
+    }
+
+    public Map<Long, Integer> getWeightOfFriendsTags ( Long userId ){
+
+        try {
+
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("userId", userId);
+
+            return namedJdbcTemplate.query(env.getProperty("getWeightOfFriendsTags"), namedParams, ResultSetHandler::getWeightOfTags);
+
+        } catch (EmptyResultDataAccessException e) {
+
+            logger.info("Not found  any tags");
+            return Collections.emptyMap();
+
+        }
+    }
+
+
+
+
 }
