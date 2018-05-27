@@ -4,27 +4,21 @@
     <div class="col-sm-3 border userProfileBlock" align="center">
       <h2> Settings </h2>
 
-      <p>
-        <button class="btn btn-info" (click)="showEditInfo()"> Edit info </button>
-      </p>
-      <p>
-        <button class="btn btn-info" (click)="showEditImage()"> Edit image </button>
-      </p>
-      <p>
-        <button class="btn btn-info" (click)="showEditEmail()"> Edit email </button>
-      </p>
-      <p>
-        <button class="btn btn-info" (click)="showEditPassword()"> Edit password </button>
-      </p>
-      <p>
-        <button class="btn btn-info" (click)="showExportEventPlan()"> My event plan  </button>
-      </p>
-      <p>
-        <button class="btn btn-info" (click)="showPersonalPlanSettings()"> Personal plan settings </button>
-      </p>
-      <p>
-        <button class="btn btn-info" (click)="goBack()"> Back </button>
-      </p>
+      <div class="btn-group-vertical">
+        <button class="btn btn-default" (click)="showEditInfo()"
+                [ngClass]="{'active': selectedEditInfo}"> Edit info </button>
+        <button class="btn btn-default" (click)="showEditImage()"
+                [ngClass]="{'active': selectedEditImage}"> Edit image </button>
+        <button class="btn btn-default" (click)="showEditEmail()"
+                [ngClass]="{'active': selectedEditEmail}"> Edit email </button>
+        <button class="btn btn-default" (click)="showEditPassword()"
+                [ngClass]="{'active': selectedEditPassword}"> Edit password </button>
+        <button class="btn btn-default" (click)="showExportEventPlan()"
+                [ngClass]="{'active': selectedEventPlan}"> My event plan  </button>
+        <button class="btn btn-default" (click)="showPersonalPlanSettings()"
+                [ngClass]="{'active': selectedPersonalPlanSettings}"> Personal plan settings </button>
+        <button class="btn btn-default" (click)="goBack()"> Back </button>
+      </div>
 
     </div>
 

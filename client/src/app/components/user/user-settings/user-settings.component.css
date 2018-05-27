@@ -1,0 +1,12 @@
+.btn {
+  background: none;
+  padding: 12px 22px;
+}
+
+.btn-default {
+  border-top: 1px solid #E0DBE1;
+}
+
+.btn-default.active, .btn-default:active {
+  border-left: 4px solid #4867E1;
+}
