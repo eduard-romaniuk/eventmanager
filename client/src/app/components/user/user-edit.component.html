@@ -1,10 +1,9 @@
 <div class="container">
   <div class="row">
-
     <div class="col-md-8 col-sm-6 col-xs-12 centerDiv">
       <form class="md-form text-center" [formGroup]="form" (ngSubmit)="save()">
         <header>
-          <h2 class="text-center">Edit User</h2>
+          <h2 class="text-center">Edit user info</h2>
         </header>
 
         <div class="form-group">
@@ -17,12 +16,13 @@
                  [ngClass]="{
                 'is-invalid': form.get('editUserLogin').invalid && (form.get('editUserLogin').dirty || form.get('editUserLogin').touched)
             }">
-          <div *ngIf="form.get('editUserLogin').invalid && (form.get('editUserLogin').dirty || form.get('editUserLogin').touched)"
-               class="text-danger">
-            <div *ngIf = "form.get('editUserLogin').errors.required">
+          <div
+            *ngIf="form.get('editUserLogin').invalid && (form.get('editUserLogin').dirty || form.get('editUserLogin').touched)"
+            class="text-danger">
+            <div *ngIf="form.get('editUserLogin').errors.required">
               Username field can't be blank
             </div>
-            <div *ngIf = "form.get('editUserLogin').errors.pattern">
+            <div *ngIf="form.get('editUserLogin').errors.pattern">
               You can use only letters(a-z), digits(0-9) and underscore(_)
             </div>
             <div *ngIf="form.get('editUserLogin').errors.minlength || form.get('editUserLogin').errors.maxlength">
@@ -44,9 +44,10 @@
                  [ngClass]="{
                 'is-invalid': form.get('editUserName').invalid && (form.get('editUserName').dirty || form.get('editUserName').touched)
             }">
-          <div *ngIf="form.get('editUserName').invalid && (form.get('editUserName').dirty || form.get('editUserName').touched)"
-               class="text-danger">
-            <div *ngIf = "form.get('editUserName').errors.required">
+          <div
+            *ngIf="form.get('editUserName').invalid && (form.get('editUserName').dirty || form.get('editUserName').touched)"
+            class="text-danger">
+            <div *ngIf="form.get('editUserName').errors.required">
               Name field can't be blank
             </div>
           </div>
@@ -62,26 +63,27 @@
                  [ngClass]="{
                 'is-invalid': form.get('editUserSurName').invalid && (form.get('editUserSurName').dirty || form.get('editUserSurName').touched)
             }">
-          <div *ngIf="form.get('editUserSurName').invalid && (form.get('editUserSurName').dirty || form.get('editUserSurName').touched)"
-               class="text-danger">
-            <div *ngIf = "form.get('editUserSurName').errors.required">
+          <div
+            *ngIf="form.get('editUserSurName').invalid && (form.get('editUserSurName').dirty || form.get('editUserSurName').touched)"
+            class="text-danger">
+            <div *ngIf="form.get('editUserSurName').errors.required">
               Surname field can't be blank
             </div>
           </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group form-inline">
           <label>
-            Birth day:<br>
-            <input id="editUserBirthDay"
-                   formControlName="editUserBirthDay" [(ngModel)]="user.birth"
-                   [owlDateTimeTrigger]="dt" [owlDateTime]="dt"
-                   [min]="min" [max]="max">
-            <owl-date-time [pickerType]="'calendar'" #dt></owl-date-time>
+            Birth day
           </label>
+          <input id="editUserBirthDay"
+                 formControlName="editUserBirthDay" [(ngModel)]="user.birth"
+                 [owlDateTimeTrigger]="dt" [owlDateTime]="dt"
+                 [min]="min" [max]="max">
+          <owl-date-time [pickerType]="'calendar'" #dt></owl-date-time>
         </div>
 
-        <div class="form-group">
+        <div class="form-group form-inline">
           <label for="editUserSex">
             Gender
             <span class="asteriskField">*</span>
@@ -90,7 +92,7 @@
                   formControlName="editUserSex" [(ngModel)]="user.sex"
                   [ngClass]="{
                             'is-invalid': form.get('editUserSex').invalid && (form.get('editUserSex').dirty || form.get('editUserSex').touched)
-                        }" >
+                        }">
             <option value="true">
               Male
             </option>
@@ -98,7 +100,9 @@
               Female
             </option>
           </select>
-          <div *ngIf="form.get('editUserSex').invalid && (form.get('editUserSex').dirty || form.get('editUserSex').touched)" class="text-danger">
+          <div
+            *ngIf="form.get('editUserSex').invalid && (form.get('editUserSex').dirty || form.get('editUserSex').touched)"
+            class="text-danger">
             <div *ngIf="form.get('editUserSex').errors.required">
               Choose your gender
             </div>
@@ -109,16 +113,14 @@
           <label for="editUserPhone">Phone</label>
           <input type="text" id="editUserPhone" class="form-control mt-2"
                  formControlName="editUserPhone" [(ngModel)]="user.phone"
+                 [textMask]="{mask: mobileNumberMask, guide: true}"
                  [ngClass]="{
                 'is-invalid': form.get('editUserPhone').invalid
             }">
           <div *ngIf="form.get('editUserPhone').invalid"
                class="text-danger">
-            <div *ngIf = "form.get('editUserPhone').errors.pattern">
-              You can use only digits(0-9), +, -, (, ) and spaces
-            </div>
-            <div *ngIf="form.get('editUserPhone').errors.phoneLength">
-              Phone must be between 10 and 18 symbols
+            <div *ngIf="form.get('editUserPhone').errors.pattern">
+              You can use only digits(0-9)
             </div>
           </div>
         </div>

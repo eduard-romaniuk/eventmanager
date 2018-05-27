@@ -6,7 +6,7 @@ import {UserService} from '../../services/user.service';
 import {ToastService} from "../../services/toast.service";
 import {AuthService} from "../../services/auth.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {phoneLength, usernameExists} from "../../utils/validation-tools";
+import {usernameExists} from "../../utils/validation-tools";
 
 @Component({
   selector: 'app-user-edit',
@@ -25,6 +25,8 @@ export class UserEditComponent implements OnInit {
 
   min = new Date(1900, 0, 1, 0, 1);
   max = new Date();
+
+  mobileNumberMask = ['(', /[0-9]/, /\d/, /\d/, ')', /\d/, /\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/];
 
   constructor(private auth: AuthService,
               private router: Router,
@@ -49,8 +51,8 @@ export class UserEditComponent implements OnInit {
         editUserBirthDay: [this.user.birth, []],
         editUserSex: [this.user.sex, [Validators.required]],
         editUserPhone: [this.user.phone, [
-          Validators.pattern('^[0-9-+ ()]*$')]]
-      }, {validator: phoneLength('editUserPhone')}
+          Validators.pattern('^[0-9- ()]*$')]]
+      }
     );
   }
 

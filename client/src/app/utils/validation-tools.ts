@@ -20,22 +20,6 @@ export function emailExists(userService: UserService) {
   };
 }
 
-export function phoneLength(phone: string) {
-  return (group: FormGroup): { [key: string]: any } => {
-    let phoneNumber = group.controls[phone];
-    console.log("phoneNumber - " + phoneNumber.value);
-    if(phoneNumber.value){
-      if (phoneNumber.value.length < 10 || phoneNumber.value.length > 18) {
-        group.get(phone).setErrors({phoneLength: true});
-      } else {
-        return null;
-      }
-    } else {
-      return null;
-    }
-  }
-}
-
 export function passConfirm(password: string, passwordConfirmation: string) {
   return (group: FormGroup): { [key: string]: any } => {
     let pass = group.controls[password];

@@ -78,6 +78,7 @@ import {StatisticsComponent} from "./components/statistics/statistics.component"
 import {NoteEditComponent} from "./components/note/note-edit/note-edit.component";
 import { ConvertComponent } from './components/note/convert/convert.component';
 import { WishPanelComponent } from './components/wishlist/wish-panel/wish-panel.component';
+import {TextMaskModule} from "angular2-text-mask";
 
 @Injectable()
 export class AuthenticationInterceptor implements HttpInterceptor {
@@ -174,7 +175,8 @@ export class AddressInterceptor implements HttpInterceptor {
     }),
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    NgxEditorModule
+    NgxEditorModule,
+    TextMaskModule
   ],
   providers: [
     AuthService,
