@@ -53,17 +53,26 @@ export class UserEditImageComponent implements OnInit {
     }
   }
 
-  uploadImage() {
+  updateUser(toastMessage){
     this.savingChanges = true;
     this.userService.updateUser(this.user).subscribe((user: any) => {
       this.savingChanges = false;
       this.goHome();
-      this.toast.success('Profile image successfully updated');
+      this.toast.success(toastMessage);
     }, error => {
       console.error(error);
       this.error = true;
       this.savingChanges = false;
     });
+  }
+
+  deleteImage() {
+    this.user.image = null;
+    this.updateUser('Profile image successfully deleted');
+  }
+
+  uploadImage() {
+    this.updateUser('Profile image successfully updated');
   }
 
   goHome(): void {
