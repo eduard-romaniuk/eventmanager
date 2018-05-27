@@ -22,16 +22,13 @@
             <a class="dropdown-item" routerLink="/event/create">Create</a>
           </div>
         </li>
-        <a class="nav-link" routerLink="/folders/rootFolder">Notes</a>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="" id="searchDropdown" role="button"
-             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Search
-          </a>
-          <div class="dropdown-menu" aria-labelledby="searchDropdown">
-            <a class="dropdown-item" routerLink="/searchUsers">Users</a>
-          </div>
+        <li>
+          <a class="nav-link" routerLink="/folders/rootFolder">Notes</a>
+        </li>
+
+        <li>
+          <a class="nav-link" routerLink="/searchUsers">Users</a>
         </li>
 
         <li class="nav-item dropdown">
@@ -42,11 +39,9 @@
           <div class="dropdown-menu" aria-labelledby="searchDropdown">
             <a class="dropdown-item" routerLink="/wishlist">Your Wish Board</a>
             <a class="dropdown-item" routerLink="/items/popular">Popular items</a>
-			<a class="dropdown-item" routerLink="/items/booking">Booking items</a>
+            <a class="dropdown-item" routerLink="/items/booking">Booking items</a>
           </div>
-
         </li>
-
 
       </ul>
       <button (click)="logout()" class="btn btn-primary" type="button">
