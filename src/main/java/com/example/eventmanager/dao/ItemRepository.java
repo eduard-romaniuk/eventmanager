@@ -1,10 +1,7 @@
 package com.example.eventmanager.dao;
 
 import com.example.eventmanager.dao.utils.ResultSetHandler;
-import com.example.eventmanager.domain.Event;
-import com.example.eventmanager.domain.Item;
-import com.example.eventmanager.domain.Tag;
-import com.example.eventmanager.domain.WishList;
+import com.example.eventmanager.domain.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +17,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @PropertySource("classpath:queries/item.properties")
 @Repository
@@ -293,15 +287,13 @@ public class ItemRepository implements CrudRepository<Item>{
     }
 
 
-    public Map<Long, Integer> getWeightOfSystemTags ( Long limit, Long offset ){
+    public Map<Long, Integer> getWeightOfSystemTags ( int limit ){
         try {
 
             String query = new StringBuilder()
                     .append(env.getProperty("getWeightOfSystemTags"))
                     .append(" LIMIT ")
                     .append(limit)
-                    .append(" OFFSET ")
-                    .append(offset)
                     .toString();
 
             return namedJdbcTemplate.query(query, ResultSetHandler::getWeightOfTags);
@@ -342,6 +334,38 @@ public class ItemRepository implements CrudRepository<Item>{
             logger.info("Not found  any tags");
             return Collections.emptyMap();
 
+        }
+    }
+
+
+    public List<ItemsTag> getItemsWithTags (Set<Long> tagIds) {
+        try {
+            Map<String, Object> namedParams = new HashMap<>();
+
+            namedParams.put("tagIds", tagIds);
+
+            return namedJdbcTemplate.query(env.getProperty("getTagWithItem"), namedParams,
+                    (rs, rowNum) -> {
+                        ItemsTag tag = new ItemsTag();
+
+                        tag.setTagId(rs.getLong("tag_id"));
+
+                        //TODO: ONE REFERENCE
+                        Item item = new Item();
+
+                        item.setId(rs.getLong("item_id"));
+                        item.setWishListId(rs.getLong("wishlist_id"));
+                        item.setName(rs.getString("name"));
+
+                        tag.setItem(item);
+
+                        logger.info("Tag: " + tag.getTagId() + " with item: " + tag.getItem().getId() + " got!");
+                        return tag;
+                    }
+            );
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("Not found any items");
+            return Collections.emptyList();
         }
     }
 

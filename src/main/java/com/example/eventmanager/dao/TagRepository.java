@@ -1,6 +1,7 @@
 package com.example.eventmanager.dao;
 
 import com.example.eventmanager.domain.Item;
+import com.example.eventmanager.domain.ItemsTag;
 import com.example.eventmanager.domain.Tag;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -198,27 +199,5 @@ public class TagRepository implements CrudRepository<Tag>{
         return deleted;
     }
 
-    public List<Tag> getTagsFromTheList (List<Long> tagIds) {
-        try {
-            Map<String, Object> namedParams = new HashMap<>();
-
-            namedParams.put("tagIds", tagIds);
-
-            return namedJdbcTemplate.query(env.getProperty("getItemsWithTags"), namedParams,
-                    (rs, rowNum) -> {
-                        Tag tag = new Tag();
-
-                        tag.setId(rs.getLong("tag_id"));
-                        //////////////TODO: повернути повністю готові айтеми. Порахувати для них вагу в сервісі. І підтягнути того, чого не вистачає
-
-                        logger.info("Item got!  " + item.toString());
-                        return item;
-                    }
-            );
-        } catch (EmptyResultDataAccessException e) {
-            logger.info("Not found any items");
-            return Collections.emptyList();
-        }
-    }
 
 }

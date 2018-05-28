@@ -1,5 +1,7 @@
 package com.example.eventmanager.dao.utils;
 
+import com.example.eventmanager.domain.Item;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -16,4 +18,5 @@ public class ResultSetHandler {
 
         return weight;
     }
+
 }
