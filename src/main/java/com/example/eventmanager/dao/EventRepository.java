@@ -142,14 +142,9 @@ public class EventRepository implements CrudRepository<Event> {
             namedParams.put("timeline_start", start);
             namedParams.put("timeline_finish", finish);
             namedParams.put("category", category.equals("") ? "%" : category);
-            String query = new StringBuilder()
-                    .append(env.getProperty("event.public"))
-                    .append(" LIMIT ")
-                    .append(limit)
-                    .append(" OFFSET ")
-                    .append(offset)
-                    .toString();
-            return namedJdbcTemplate.query(query, namedParams, new EventExtractor());
+            namedParams.put("limit", limit);
+            namedParams.put("offset", offset);
+            return namedJdbcTemplate.query(env.getProperty("event.public"), namedParams, new EventExtractor());
         } catch (EmptyResultDataAccessException e) {
             logger.info("searchPublicWithFilters | Events not found");
             return Collections.emptyList();
@@ -183,14 +178,9 @@ public class EventRepository implements CrudRepository<Event> {
             namedParams.put("priority_id", priority);
             namedParams.put("by_priority", byPriority);
             namedParams.put("is_private", privat);
-            String query = new StringBuilder()
-                    .append(env.getProperty("event.userEvents"))
-                    .append(" LIMIT ")
-                    .append(limit)
-                    .append(" OFFSET ")
-                    .append(offset)
-                    .toString();
-            return namedJdbcTemplate.query(query, namedParams, new EventExtractor());
+            namedParams.put("limit", limit);
+            namedParams.put("offset", offset);
+            return namedJdbcTemplate.query(env.getProperty("event.userEvents"), namedParams, new EventExtractor());
         } catch (EmptyResultDataAccessException e) {
             logger.info("userEvents | Events not found");
             return Collections.emptyList();
@@ -222,14 +212,9 @@ public class EventRepository implements CrudRepository<Event> {
             namedParams.put("user_id", userId);
             namedParams.put("priority_id", priority);
             namedParams.put("by_priority", byPriority);
-            String query = new StringBuilder()
-                    .append(env.getProperty("event.created"))
-                    .append(" LIMIT ")
-                    .append(limit)
-                    .append(" OFFSET ")
-                    .append(offset)
-                    .toString();
-            return namedJdbcTemplate.query(query, namedParams, new EventExtractor());
+            namedParams.put("limit", limit);
+            namedParams.put("offset", offset);
+            return namedJdbcTemplate.query(env.getProperty("event.created"), namedParams, new EventExtractor());
         } catch (EmptyResultDataAccessException e) {
             logger.info("created | Events not found");
             return Collections.emptyList();
@@ -261,14 +246,9 @@ public class EventRepository implements CrudRepository<Event> {
             namedParams.put("user_id", userId);
             namedParams.put("priority_id", priority);
             namedParams.put("by_priority", byPriority);
-            String query = new StringBuilder()
-                    .append(env.getProperty("event.drafts"))
-                    .append(" LIMIT ")
-                    .append(limit)
-                    .append(" OFFSET ")
-                    .append(offset)
-                    .toString();
-            return namedJdbcTemplate.query(query, namedParams, new EventExtractor());
+            namedParams.put("limit", limit);
+            namedParams.put("offset", offset);
+            return namedJdbcTemplate.query(env.getProperty("event.drafts"), namedParams, new EventExtractor());
         } catch (EmptyResultDataAccessException e) {
             logger.info("drafts | Events not found");
             return Collections.emptyList();
