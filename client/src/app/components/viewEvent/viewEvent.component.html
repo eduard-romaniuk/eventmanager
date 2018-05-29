@@ -252,7 +252,7 @@
             </div>
             <div *ngIf="!this.isCreator">
               <div *ngFor="let user of participants ">
-                <a [routerLink]="['/users', user.id]"> {{ user.name }} {{ user.surName }} </a>
+                <a [routerLink]="['/users', user.id]" data-dismiss="modal"> {{ user.name }} {{ user.surName }} </a>
               </div>
             </div>
           </div>
