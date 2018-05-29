@@ -7,6 +7,10 @@
   border-top: 1px solid #E0DBE1;
 }
 
+.btn-default:hover {
+  background: rgba(223, 232, 225, .3);
+}
+
 .btn-default.active, .btn-default:active {
   border-left: 5px solid #4867E1;
 }
