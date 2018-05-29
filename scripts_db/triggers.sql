@@ -69,7 +69,7 @@ CREATE OR REPLACE FUNCTION create_chats() RETURNS TRIGGER AS $$
 BEGIN
     IF    TG_OP = 'INSERT' THEN
     
-	IF (NEW.is_sent = TRUE) /*AND (NEW.is_private = FALSE)*/ AND (NEW.timeline_start IS NOT NULL) THEN
+	IF (NEW.is_sent = TRUE) AND (NEW.timeline_start IS NOT NULL) THEN
 		INSERT INTO public.chats (event_id, with_creator) VALUES (NEW.id, TRUE);
 		INSERT INTO public.chats (event_id, with_creator) VALUES (NEW.id, FALSE);
 	END IF;
@@ -78,14 +78,14 @@ BEGIN
 
     ELSIF TG_OP = 'UPDATE' THEN
 	--WHEN event is public, create two chats
-	IF (NEW.is_sent = TRUE) AND /*(NEW.is_private = FALSE) AND*/ (NEW.timeline_start IS NOT NULL) THEN
-		IF (OLD.is_sent = FALSE)/* OR (OLD.is_private = TRUE)*/ OR (OLD.timeline_start IS NULL) THEN
+	IF (NEW.is_sent = TRUE) AND (NEW.timeline_start IS NOT NULL) THEN
+		IF (OLD.is_sent = FALSE) OR (OLD.timeline_start IS NULL) THEN
 			INSERT INTO public.chats (event_id, with_creator) VALUES (NEW.id, TRUE);
 			INSERT INTO public.chats (event_id, with_creator) VALUES (NEW.id, FALSE);
 		END IF;
 	--WHEN event was public, but now it isnt, delete two chats
-	ELSIF (OLD.is_sent = TRUE) /*AND (OLD.is_private = FALSE)*/ AND (OLD.timeline_start IS NOT NULL) THEN
-		IF (NEW.is_sent = FALSE) /*OR (NEW.is_private = TRUE)*/ OR (NEW.timeline_start IS NULL) THEN
+	ELSIF (OLD.is_sent = TRUE) AND (OLD.timeline_start IS NOT NULL) THEN
+		IF (NEW.is_sent = FALSE) OR (NEW.timeline_start IS NULL) THEN
 			DELETE FROM public.chats WHERE event_id = NEW.id;
 		END IF;
 	END IF;
@@ -190,3 +190,36 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER t_create_default_wish_list
 	AFTER INSERT ON users FOR EACH ROW EXECUTE PROCEDURE create_default_wish_list();
 
+-- --- -------------------------------
+-- Function for difine a friend
+-- --- -------------------------------
+CREATE OR REPLACE FUNCTION filter_friend(user_one_id BIGINT, user_two_id BIGINT, main_user_id BIGINT) RETURNS INT AS $$
+BEGIN
+  IF (user_one_id = main_user_id) THEN
+    RETURN user_two_id;
+  ELSIF (user_two_id = main_user_id) THEN
+    RETURN user_one_id;
+  ELSE
+    RAISE EXCEPTION 'ILLEGAL PARAMS!';
+  END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+-- --- -------------------------------
+-- Triggers for autoremoving participant messages
+-- --- -------------------------------
+CREATE OR REPLACE FUNCTION delete_messages_with_participant() RETURNS TRIGGER AS $$
+
+BEGIN
+  
+    IF TG_OP = 'DELETE' THEN
+        DELETE FROM public.messages
+		WHERE participant_id = OLD.id;
+        RETURN OLD;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+
+CREATE TRIGGER t_del_messages
+	BEFORE DELETE ON participants FOR EACH ROW EXECUTE PROCEDURE delete_messages_with_participant();
