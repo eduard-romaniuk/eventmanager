@@ -34,7 +34,7 @@ public class ItemsSuggestionService {
 
         Map<Long, Integer> weight = getTotalTagsWeight( userId );
 
-        List<ItemsTag> items = itemRepository.getItemsWithTags( weight.keySet() );
+        List<ItemsTag> items = itemRepository.getItemsWithTags( weight.keySet(), userId );
 
         return getSortedItemsByWeight(weight, items, limit);
     }

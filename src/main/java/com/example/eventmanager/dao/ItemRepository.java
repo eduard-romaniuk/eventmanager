@@ -338,11 +338,13 @@ public class ItemRepository implements CrudRepository<Item>{
     }
 
 
-    public List<ItemsTag> getItemsWithTags (Set<Long> tagIds) {
+    public List<ItemsTag> getItemsWithTags (Set<Long> tagIds, Long userId) {
         try {
             Map<String, Object> namedParams = new HashMap<>();
+            ResultSetHandler resultSetHandler = new ResultSetHandler(likeRepository);
 
-            namedParams.put("tagIds", tagIds);
+            namedParams.put("userId", userId);
+            namedParams.put("tagsIds", tagIds);
 
             return namedJdbcTemplate.query(env.getProperty("getTagWithItem"), namedParams,
                     (rs, rowNum) -> {
@@ -350,14 +352,7 @@ public class ItemRepository implements CrudRepository<Item>{
 
                         tag.setTagId(rs.getLong("tag_id"));
 
-                        //TODO: ONE REFERENCE
-                        Item item = new Item();
-
-                        item.setId(rs.getLong("item_id"));
-                        item.setWishListId(rs.getLong("wishlist_id"));
-                        item.setName(rs.getString("name"));
-
-                        tag.setItem(item);
+                        tag.setItem(resultSetHandler.getItem(rs));
 
                         logger.info("Tag: " + tag.getTagId() + " with item: " + tag.getItem().getId() + " got!");
                         return tag;
