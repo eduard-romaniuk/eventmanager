@@ -75,7 +75,7 @@ public class UserRepository implements CrudRepository<User> {
         try {
             Map<String, Object> namedParams = new HashMap<>();
             namedParams.put("id", id);
-            return namedJdbcTemplate.queryForObject(env.getProperty("findOne"), namedParams, new UserMapper());
+            return namedJdbcTemplate.queryForObject(env.getProperty("findOneUser"), namedParams, new UserMapper());
         } catch (EmptyResultDataAccessException e) {
             logger.info("User not found");
             return null;
@@ -93,14 +93,10 @@ public class UserRepository implements CrudRepository<User> {
 
     public List<User> findAllPagination(int limit, int offset) {
         try {
-            String query = new StringBuilder()
-                    .append(env.getProperty("findAllUsers"))
-                    .append(" LIMIT ")
-                    .append(limit)
-                    .append(" OFFSET ")
-                    .append(offset)
-                    .toString();
-            return namedJdbcTemplate.query(query, new UserMapper());
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("limit", limit);
+            namedParams.put("offset", offset);
+            return namedJdbcTemplate.query(env.getProperty("findAllUsersPagination"), namedParams, new UserMapper());
         } catch (EmptyResultDataAccessException e) {
             logger.info("Users not found");
             return Collections.emptyList();
@@ -109,7 +105,6 @@ public class UserRepository implements CrudRepository<User> {
 
     @Override
     public void update(User user) {
-        System.out.println("UserRepository.update");
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("login", user.getLogin());
         namedParams.put("name", user.getName());
@@ -123,14 +118,14 @@ public class UserRepository implements CrudRepository<User> {
         namedParams.put("is_active", user.getVerified());
         namedParams.put("id", user.getId());
 
-        namedJdbcTemplate.update(env.getProperty("update"), namedParams);
+        namedJdbcTemplate.update(env.getProperty("updateUser"), namedParams);
     }
 
     @Override
     public void delete(User user) {
         Map<String, Object> namedParams = new HashMap<>();
         namedParams.put("id", user.getId());
-        namedJdbcTemplate.update(env.getProperty("event.delete"), namedParams);
+        namedJdbcTemplate.update(env.getProperty("deleteUser"), namedParams);
     }
 
     public void changePass(User user) {
@@ -165,7 +160,7 @@ public class UserRepository implements CrudRepository<User> {
         namedParams.put("reg_date", LocalDate.now());
         namedParams.put("conf_link", user.getToken());
 
-        return namedJdbcTemplate.update(env.getProperty("save"), namedParams);
+        return namedJdbcTemplate.update(env.getProperty("saveUser"), namedParams);
     }
 
     public boolean isUsernameExists(String login) {
@@ -226,14 +221,10 @@ public class UserRepository implements CrudRepository<User> {
     }
 
     public List<User> findAllActivePagination(int limit, int offset) {
-        String query = new StringBuilder()
-                .append(env.getProperty("findAllActiveUsers"))
-                .append(" LIMIT ")
-                .append(limit)
-                .append(" OFFSET ")
-                .append(offset)
-                .toString();
-        return namedJdbcTemplate.query(query, new UserMapper());
+        Map<String, Object> namedParams = new HashMap<>();
+        namedParams.put("limit", limit);
+        namedParams.put("offset", offset);
+        return namedJdbcTemplate.query(env.getProperty("findAllActiveUsersPagination"), namedParams, new UserMapper());
     }
 
     public User findByEmail(String email) {
