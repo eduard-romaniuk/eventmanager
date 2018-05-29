@@ -156,6 +156,19 @@ export class WishListService {
 
     return this.subItemArr.asObservable();
   }
+  
+  
+   getSuggestionItems (limit: number): Observable<Item[]> {
+
+    this.http.get<Item[]>(this.base_url + `/items/suggestion?limit=${limit}`).subscribe(
+      (items : Item[]) => {
+      this.items = items;
+      this.subItemArr.next(this.items);
+    });
+
+    return this.subItemArr.asObservable();
+
+  }
 
 
 }

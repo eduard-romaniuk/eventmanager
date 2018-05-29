@@ -4,6 +4,8 @@ import com.example.eventmanager.domain.Item;
 import com.example.eventmanager.domain.WishList;
 import com.example.eventmanager.domain.transfer.view.ItemView;
 import com.example.eventmanager.service.ItemService;
+import com.example.eventmanager.service.ItemsSuggestionService;
+import com.example.eventmanager.service.SecurityService;
 import com.example.eventmanager.service.WishListService;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.apache.logging.log4j.LogManager;
@@ -21,12 +23,19 @@ import java.util.logging.Logger;
 public class WishListController {
     private final ItemService itemService;
     private final WishListService wishListService;
+    private final ItemsSuggestionService itemsSuggestionService;
+    private final SecurityService securityService;
+
     private final org.apache.logging.log4j.Logger logger = LogManager.getLogger(ItemController.class);
 
     @Autowired
-    public WishListController(ItemService itemService, WishListService wishListService) {
+    public WishListController(ItemService itemService, WishListService wishListService,
+                              ItemsSuggestionService itemsSuggestionService, SecurityService securityService) {
         this.itemService = itemService;
         this.wishListService = wishListService;
+        this.itemsSuggestionService = itemsSuggestionService;
+        this.securityService = securityService;
+
         logger.info("Class initialized");
     }
 
@@ -68,5 +77,13 @@ public class WishListController {
         logger.info("GET /booking/event/" + eventId);
 
         return new ResponseEntity<>(itemService.getEventBookingItems(eventId), HttpStatus.OK);
+    }
+
+    @JsonView(ItemView.ShortView.class)
+    @RequestMapping(value = "/items/suggestion", method = RequestMethod.GET)
+    public ResponseEntity<List<Item>> getSuggestingItems(@RequestParam Long limit) {
+        logger.info("GET /items/suggestion");
+
+        return new ResponseEntity<>(itemsSuggestionService.getSuggestingItems(securityService.getCurrentUser().getId(), limit), HttpStatus.OK);
     }
 }

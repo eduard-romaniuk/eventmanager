@@ -1,6 +1,7 @@
 package com.example.eventmanager.dao;
 
 import com.example.eventmanager.domain.Item;
+import com.example.eventmanager.domain.ItemsTag;
 import com.example.eventmanager.domain.Tag;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -93,9 +94,10 @@ public class TagRepository implements CrudRepository<Tag>{
 
         int update = 0;
 
-        List<String> existsTags = getTagsForItem(itemId).stream().map(
-                Tag::getName
-        ).collect(Collectors.toList());
+        List<String> existsTags = getTagsForItem(itemId)
+                .stream()
+                .map(Tag::getName)
+                .collect(Collectors.toList());
 
         for ( Tag tag : tags) {
             if (!existsTags.contains(tag.getName())) {
@@ -196,7 +198,6 @@ public class TagRepository implements CrudRepository<Tag>{
 
         return deleted;
     }
-
 
 
 }

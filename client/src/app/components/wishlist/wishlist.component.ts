@@ -33,6 +33,7 @@ export class WishListComponent implements OnInit {
   isLoaded: boolean = false;
   isPopular: boolean = false;
   isBooking: boolean = false;
+  isSuggested: boolean = false;
   user: User = new User();
 
   @Input()
@@ -62,9 +63,14 @@ export class WishListComponent implements OnInit {
 
 	if (this.router.url == "/items/popular"){
 
-	    this.isPopular = true;
+	  this.isPopular = true;
       this.initPopularItems()
 
+	} else if (this.router.url == "/items/suggestions") {
+		
+		this.isSuggested = true;
+		this.initSuggestionItems();
+		
 	} else if (this.router.url == '/items/booking') {
 
 		this.isBooking = true;
@@ -143,6 +149,22 @@ export class WishListComponent implements OnInit {
 
   initPopularItems() {
     this.wishListService.getPopularItems(20, 0).subscribe(
+      (items: Item[]) => {
+        this.items = items;
+        for( let item of this.items) {
+          this.likeService.wasLiked(item.id).subscribe( (hasLike: boolean) => {
+            item.hasLiked = hasLike;
+          });
+        }
+        this.isLoaded = true;
+      }
+    );
+
+    this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
+  }
+  
+  initSuggestionItems() {
+    this.wishListService.getSuggestionItems(20).subscribe(
       (items: Item[]) => {
         this.items = items;
         for( let item of this.items) {
