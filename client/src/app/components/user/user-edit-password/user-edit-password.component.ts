@@ -47,7 +47,7 @@ export class UserEditPasswordComponent implements OnInit {
           this.auth.authenticate({
             login: this.user.login,
             password: this.formContent.newPassword
-          }, () => {
+          }, false, () => {
             this.savingChanges = false;
             this.auth.current_user.subscribe(
               current_user => {

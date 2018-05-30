@@ -49,7 +49,7 @@ export class ChangePasswordComponent implements OnInit {
     this.error = false;
     this.auth.updateUserPassword(this.credentials.login, this.token, this.credentials.password)
     .subscribe(response => {
-      this.auth.authenticate(this.credentials, () => {
+      this.auth.authenticate(this.credentials, false, () => {
         this.form.reset();
         this.credentials.password = '';
         this.credentials.login = '';

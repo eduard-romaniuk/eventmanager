@@ -84,7 +84,7 @@ export class UserEditComponent implements OnInit {
             this.auth.authenticate({
               login: this.user.login,
               password: this.password
-            }, () => {
+            }, false, () => {
               this.goHome();
             });
           } else {
