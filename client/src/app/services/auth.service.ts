@@ -30,22 +30,17 @@ export class AuthService {
 
     this.http.get(this.base_url + '/').subscribe(response => {
         if (response['name']) {
-          this.authenticated = true;
-          this.setSessionLogin(credentials.login);
-          this.current_user = this.users.getUser(credentials.login);
-
-          // const user = this.users.getUser(credentials.login);
-          // user.subscribe(response => {
-          //   if(!response.verified) {
-          //     this.logout();
-          //     this.toast.error('Your account not verified!');
-          //   } else {
-          //     this.authenticated = true;
-          //     this.setSessionLogin(credentials.login);
-          //     this.current_user = user;
-          //   }
-          // })
-
+          const user = this.users.getUser(credentials.login);
+          user.subscribe(response => {
+            if(!response.verified) {
+              this.logout();
+              this.toast.error('Your account not verified!');
+            } else {
+              this.authenticated = true;
+              this.setSessionLogin(credentials.login);
+              this.current_user = user;
+            }
+          })
         } else {
           this.logout();
         }
