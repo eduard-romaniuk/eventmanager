@@ -6,10 +6,15 @@ import com.example.eventmanager.domain.CalendarData;
 import com.example.eventmanager.domain.Category;
 import com.example.eventmanager.domain.Event;
 import com.example.eventmanager.domain.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,11 +24,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@PropertySource("classpath:schedule.properties")
 @Service
 public class EventService {
 
     private final EventRepository eventRepository;
     private final UserService userService;
+    private final Logger logger = LogManager.getLogger(NotificationService.class);
 
     @Autowired
     public EventService(EventRepository eventRepository, UserService userService) {
@@ -202,4 +209,20 @@ public class EventService {
             eventRepository.deleteParticipant(user.getId(),id);
         }
     }
+
+    @Scheduled(cron = "${schedule.cron.everyDay}")
+    public void eventsShift() {
+        logger.info("Events shift");
+        List<Event> eventsForShift = eventRepository.eventsForShift(LocalDateTime.now());
+        logger.info(eventsForShift.size() + " events found for the shift");
+        eventsForShift.forEach(event -> {
+            Long length = Duration.between(event.getTimeLineStart(), event.getTimeLineFinish()).getSeconds();
+            // Repetition in days to seconds
+            Long RID = event.getPeriod() * 86400L;
+            event.setTimeLineStart(event.getTimeLineStart().plusSeconds(length + RID));
+            event.setTimeLineFinish(event.getTimeLineFinish().plusSeconds(length + RID));
+        });
+        eventRepository.saveAll(eventsForShift);
+    }
+
 }

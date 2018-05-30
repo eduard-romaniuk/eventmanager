@@ -321,6 +321,18 @@ public class EventRepository implements CrudRepository<Event> {
 
     }
 
+    public List<Event> eventsForShift(LocalDateTime date) {
+        try {
+            Map<String, Object> namedParams = new HashMap<>();
+            namedParams.put("date", date);
+            return namedJdbcTemplate.query(env.getProperty("event.forShift"), namedParams, new EventExtractor());
+        } catch (EmptyResultDataAccessException e) {
+            logger.warn("Events not found");
+            return Collections.emptyList();
+        }
+
+    }
+
     public String getPriority(Long user_id, Long event_id) {
         try {
             Map<String, Object> namedParams = new HashMap<>();
