@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
     this.loading = true;
     this.error = false;
 
-    this.auth.authenticate(this.credentials, () => {
+    this.auth.authenticate(this.credentials, false, () => {
         this.form.reset();
         this.credentials.password = '';
         this.credentials.login = '';

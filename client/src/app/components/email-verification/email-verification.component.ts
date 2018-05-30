@@ -49,7 +49,7 @@ export class EmailVerificationComponent implements OnInit {
     this.loading = true;
     this.error = false;
 
-    this.auth.authenticate(this.credentials, () => {
+    this.auth.authenticate(this.credentials, true, () => {
         this.auth.current_user.subscribe(
           user => {
             this.verify(user, this.token);
@@ -64,9 +64,10 @@ export class EmailVerificationComponent implements OnInit {
   public verify(user: User, token: string) {
   	if(user.verified) {
       if(this.email){
-        if(this.token === user.token){
+        if(token === user.token){
           this.changeEmail(user);
         } else {
+          this.auth.logout();
           this.router.navigate(['home']);
           this.toast.error('Invalid link');
         }
@@ -74,7 +75,7 @@ export class EmailVerificationComponent implements OnInit {
         this.toast.info('Already verified');
       }
 	  } else {
-  		const isVerified = this.token === user.token;
+  		const isVerified = token === user.token;
       const isActive = this.diffDays(new Date(), new Date(user.regDate.toString())) < 1;
 	  	if(isVerified && isActive) {
 	  		user.verified = isVerified;
@@ -88,7 +89,8 @@ export class EmailVerificationComponent implements OnInit {
         if (!isActive) {
           this.userService.deleteUser(user.id);
         }
-	  		this.router.navigate(['home']);
+        this.auth.logout();
+	  		this.router.navigate(['hello']);
 	  		this.toast.error('Invalid verification link');
 	  	}
 	  }

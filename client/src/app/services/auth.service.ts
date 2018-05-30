@@ -25,22 +25,28 @@ export class AuthService {
     }
   }
 
-  authenticate(credentials, callback?, errorCallback?) {
+  authenticate(credentials, ignoreVerification: boolean, callback?, errorCallback?) {
     this.setSessionAuthToken(credentials.login, credentials.password);
 
     this.http.get(this.base_url + '/').subscribe(response => {
         if (response['name']) {
-          const user = this.users.getUser(credentials.login);
-          user.subscribe(response => {
-            if(!response.verified) {
-              this.logout();
-              this.toast.error('Your account not verified!');
-            } else {
-              this.authenticated = true;
-              this.setSessionLogin(credentials.login);
-              this.current_user = user;
-            }
-          })
+          if(ignoreVerification){
+            this.authenticated = true;
+            this.setSessionLogin(credentials.login);
+            this.current_user = this.users.getUser(credentials.login);
+          } else {
+            const user = this.users.getUser(credentials.login);
+            user.subscribe(response => {
+              if(!response.verified) {
+                this.logout();
+                this.toast.error('Your account not verified!');
+              } else {
+                this.authenticated = true;
+                this.setSessionLogin(credentials.login);
+                this.current_user = user;
+              }
+            })
+          }
         } else {
           this.logout();
         }
