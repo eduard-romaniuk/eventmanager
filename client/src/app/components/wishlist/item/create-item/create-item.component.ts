@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Router, ActivatedRoute} from '@angular/router';
 import { JQueryStatic } from 'jquery';
@@ -22,6 +22,7 @@ declare var $:JQueryStatic;
   form: FormGroup;
   item: Item = new Item();
   userId: number;
+  @ViewChild('add_images') imagesComponent;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -33,7 +34,7 @@ declare var $:JQueryStatic;
   ) { }
 
   ngOnInit(){
-	  
+
 	this.item = new Item();
 	this.item.images = [];
     this.auth.getUser().subscribe((user: any) => {
@@ -43,7 +44,7 @@ declare var $:JQueryStatic;
   }
 
   initForm(){
-	
+
     this.form = this.formBuilder.group({
       name: ['',
         [Validators.required,
@@ -81,6 +82,7 @@ declare var $:JQueryStatic;
 
       () => {
         $('#addItem').modal('hide');
+        this.imagesComponent.reset();
         this.form.reset();
         this.form.setControl('tags', new FormArray([this.createTag()]));
       }

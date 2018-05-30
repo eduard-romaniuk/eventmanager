@@ -10,6 +10,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,6 +37,7 @@ public class BookerRepository {
         this.env = env;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public int save(Booker booker) {
         logger.info("Saving booker. Booker looks like: " + booker);
 
@@ -77,6 +80,7 @@ public class BookerRepository {
     }
 
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public int delete (Booker booker){
         logger.info("Deleting booker: userId " + booker.getUserId() + " itemId " + booker.getItemId() + " eventId " + booker.getEventId());
 
@@ -93,6 +97,7 @@ public class BookerRepository {
         return deleted;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public int deleteBookersForItem (Long itemId) {
         logger.info("Deleting bookers for item: " + itemId );
 

@@ -14,6 +14,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -88,6 +90,7 @@ public class TagRepository implements CrudRepository<Tag>{
         }
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public int saveItemTags(List<Tag> tags, Long itemId) {
         logger.info("Saving tags for item with id : " + itemId);
 
@@ -110,6 +113,7 @@ public class TagRepository implements CrudRepository<Tag>{
         return update;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public int addItemTag (Long itemId, Long tagId){
         MapSqlParameterSource namedParams = new MapSqlParameterSource();
 
@@ -144,6 +148,7 @@ public class TagRepository implements CrudRepository<Tag>{
         }
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public int deleteUnusedTags ( List<Tag> usedTags, Long itemId) {
 
         if (usedTags.isEmpty()) {
@@ -171,6 +176,7 @@ public class TagRepository implements CrudRepository<Tag>{
         return deleted;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public int deleteAllTagsForItem( Long itemId) {
         logger.info("Deleting tags for item: " + itemId );
 
@@ -187,6 +193,7 @@ public class TagRepository implements CrudRepository<Tag>{
         return deleted;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public int cleanTags () {
         logger.info( "Cleaning tags...");
 

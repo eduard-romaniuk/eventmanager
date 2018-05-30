@@ -97,8 +97,6 @@ public class ItemController {
     public ResponseEntity<String> unbooking (@PathVariable("itemId") Long itemId, @PathVariable("eventId") Long eventId, @PathVariable("userId") Long userId) {
         logger.info("DELETE /booking");
 
-        //TODO: if
-
         Booker booker = new Booker();
         booker.setItemId(itemId);
         booker.setEventId(eventId);

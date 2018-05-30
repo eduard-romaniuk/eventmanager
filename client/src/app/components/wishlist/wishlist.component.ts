@@ -67,10 +67,10 @@ export class WishListComponent implements OnInit {
       this.initPopularItems()
 
 	} else if (this.router.url == "/items/suggestions") {
-		
+
 		this.isSuggested = true;
 		this.initSuggestionItems();
-		
+
 	} else if (this.router.url == '/items/booking') {
 
 		this.isBooking = true;
@@ -123,7 +123,7 @@ export class WishListComponent implements OnInit {
           this.wishList = wishList;
           console.log(this.wishList);
 
-          //TODO: CHANGE!!!
+
           this.wishListService.getItemsFromWishList(this.wishList.id)
             .subscribe((items: any) => {
               this.items = items;
@@ -137,7 +137,6 @@ export class WishListComponent implements OnInit {
 
 
           this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
-          //TODO:END!!!
 
         }
 
@@ -162,7 +161,7 @@ export class WishListComponent implements OnInit {
 
     this.subscription = this.wishListService.getViewingItem().subscribe(item => {});
   }
-  
+
   initSuggestionItems() {
     this.wishListService.getSuggestionItems(20).subscribe(
       (items: Item[]) => {

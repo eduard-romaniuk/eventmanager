@@ -175,7 +175,8 @@ public class NotificationSettingsRepository implements CrudRepository<Notificati
         }
     }
 
-    public List<Map<String,Object>> findAllEventsToNotificateByUserId(Long userId, LocalDate date) {
+    public List<Map<String,Object>>
+    findAllEventsToNotificateByUserId(Long userId, LocalDate date) {
         try {
             logger.info("Find all events to notificate by user with id {}", userId);
 
