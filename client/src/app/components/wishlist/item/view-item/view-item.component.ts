@@ -14,7 +14,6 @@ import {FormArray} from "@angular/forms";
 import {User} from "../../../../model/user";
 declare var $:JQueryStatic;
 
-
 @Component({
   selector: 'app-view-item',
   templateUrl: './view-item.component.html',
@@ -70,7 +69,7 @@ export class ViewItemComponent implements OnInit {
 
 
   }
-  
+
 
   hideAndShow() {
 

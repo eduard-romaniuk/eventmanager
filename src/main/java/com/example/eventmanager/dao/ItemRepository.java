@@ -14,6 +14,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -52,6 +54,7 @@ public class ItemRepository implements CrudRepository<Item>{
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public int save(Item item) {
         logger.info("Saving item: " + item);
 
@@ -75,6 +78,7 @@ public class ItemRepository implements CrudRepository<Item>{
                         .longValue()
         );
 
+        tagRepository.saveItemTags(item.getTags(), item.getId());
         imageRepository.saveImagesForItem(item.getImages(), item.getId());
 
         return  update;
@@ -121,6 +125,7 @@ public class ItemRepository implements CrudRepository<Item>{
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void update(Item item) {
 
         Map<String, Object> namedParams = new HashMap<>();
@@ -133,12 +138,18 @@ public class ItemRepository implements CrudRepository<Item>{
         namedJdbcTemplate.update(env.getProperty("updateItem"), namedParams);
 
         imageRepository.updateImagesForItem(item.getImages(), item.getId());
+        tagRepository.saveItemTags( item.getTags(), item.getId() );
+        tagRepository.deleteUnusedTags( item.getTags(), item.getId() );
 
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void delete(Item item) {
 
+        likeRepository.deleteLikesForItem( item.getId() );
+        bookerRepository.deleteBookersForItem( item.getId() );
+        tagRepository.deleteUnusedTags( new ArrayList<>(), item.getId() );
         imageRepository.deleteAllImagesForItem(item.getId());
 
         Map<String, Object> namedParams = new HashMap<>();
@@ -150,7 +161,7 @@ public class ItemRepository implements CrudRepository<Item>{
         logger.info(deleted + " items was deleted from items");
     }
 
-
+    @Transactional(propagation = Propagation.REQUIRED)
     public Long copyItem ( Long toWishListId, Long itemId ) {
         logger.info("Copy item: " + itemId);
 

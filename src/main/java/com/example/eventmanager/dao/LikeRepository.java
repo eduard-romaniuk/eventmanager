@@ -9,6 +9,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -74,6 +76,7 @@ public class LikeRepository {
         }
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public int save (Long userId, Long itemId){
         logger.info("Saving like: userId " + userId + " itemId " + itemId );
 
@@ -90,6 +93,7 @@ public class LikeRepository {
         return  update;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public int delete (Long userId, Long itemId){
         logger.info("Deleting like: userId " + userId + " itemId " + itemId );
 
@@ -105,6 +109,7 @@ public class LikeRepository {
         return deleted;
     }
 
+    @Transactional(propagation = Propagation.MANDATORY)
     public int deleteLikesForItem (Long itemId) {
         logger.info("Deleting likes for item: " + itemId );
 

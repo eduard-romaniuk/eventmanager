@@ -41,7 +41,7 @@ public class ItemService {
         setNewTags(item.getTags());
 
         itemRepository.save(item);
-        tagRepository.saveItemTags(item.getTags(), item.getId());
+
     }
 
     public Item getItem (Long itemId) {
@@ -53,15 +53,11 @@ public class ItemService {
         setNewTags( item.getTags() );
 
         itemRepository.update( item );
-        tagRepository.saveItemTags( item.getTags(), item.getId() );
-        tagRepository.deleteUnusedTags( item.getTags(), item.getId() );
+
     }
 
     public void deleteItem (Item item) {
 
-        likeRepository.deleteLikesForItem( item.getId() );
-        bookerRepository.deleteBookersForItem( item.getId() );
-        tagRepository.deleteUnusedTags( new ArrayList<Tag>(), item.getId() );
         itemRepository.delete( item );
 
     }

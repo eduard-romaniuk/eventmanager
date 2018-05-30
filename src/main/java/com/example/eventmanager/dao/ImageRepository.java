@@ -12,6 +12,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,9 +32,7 @@ public class ImageRepository{
     @Autowired
     public ImageRepository(
             NamedParameterJdbcTemplate namedJdbcTemplate,
-            Environment env,
-            TagRepository tagRepository,
-            LikeRepository likeRepository
+            Environment env
     ) {
         logger.info("ImageRepository initialized");
 
@@ -40,7 +40,7 @@ public class ImageRepository{
         this.env = env;
     }
 
-
+    @Transactional(propagation = Propagation.REQUIRED)
     public int save(String image, Long itemId) {
         logger.info("Saving image: " + image);
 
@@ -57,6 +57,7 @@ public class ImageRepository{
     }
 
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public int saveImagesForItem (List<String> images, Long itemId) {
         logger.info("Saving images for item " + itemId);
 
@@ -91,11 +92,13 @@ public class ImageRepository{
         }
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public void updateImagesForItem(List<String> images, Long itemId){
         deleteAllImagesForItem(itemId);
         saveImagesForItem(images, itemId);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public int deleteAllImagesForItem(Long itemId) {
         logger.info("Deleting images for item: " + itemId );
 
@@ -111,6 +114,7 @@ public class ImageRepository{
         return deleted;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public int delete (String image, Long itemId) {
         logger.info("Deleting image : "  + image );
 

@@ -36,18 +36,18 @@ export class AddItemImagesComponent implements OnInit {
       cloudName: 'eventnetcracker',
       uploadPreset: 'tawlrxdf' })
 	);
-    
+
     this.uploader.onSuccessItem = (item: any, response: string, status: number, headers: any): any => {
       console.log("onSuccess: " + this.imageUploading);
-	  
+
 	  this.imageUploading = false;
 	  console.log(this.imageUploading);
       let res: any = JSON.parse(response);
-      
-	  
+
+
       this.item.images.push(res.url);
       this.newImages.push(res.url);
-	  
+
 	  console.log(this.item);
       console.log(`res - ` + JSON.stringify(res));
       return {item, response, status, headers};
@@ -56,7 +56,7 @@ export class AddItemImagesComponent implements OnInit {
 
   ngOnInit() {
 	  console.log(this.item);
-	
+
     this.formImg = this.formBuilder.group({
         image: ['', [Validators.required]]
       },
@@ -88,15 +88,15 @@ export class AddItemImagesComponent implements OnInit {
       this.item.images.splice (i, 1);
     }
   }
-  
-  ngOnDestroy() {
-	
+
+  reset() {
+
 	  this.newImages = [];
+	  this.item.images = [];
 	  this.imageUploading = false;
 	  this.savingChanges = false;
 	  this.error = false;
-	  this.item = null;
-	  
+
   }
 
 
