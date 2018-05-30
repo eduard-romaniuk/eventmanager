@@ -5,6 +5,8 @@ import com.example.eventmanager.domain.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+@PropertySource("classpath:schedule.properties")
 @Service
 public class UserService {
 
@@ -166,5 +169,13 @@ public class UserService {
     public List<User> getFriendsByUserId(Long userId){
         logger.info("Get friends for user with id {}", userId);
         return userRepository.getFriendsByUserId(userId);
+    }
+
+    @Scheduled(cron = "${schedule.cron.everyDay}")
+    public void deleteDisabledUsers() {
+        logger.info("delete disabled users");
+        List<User> usersForDelete = userRepository.findDisabledUsersForDelete();
+        logger.info(usersForDelete.size() + " users found for the delete");
+        userRepository.deleteAll(usersForDelete);
     }
 }

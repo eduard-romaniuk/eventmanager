@@ -372,6 +372,15 @@ public class UserRepository implements CrudRepository<User> {
 
         return namedJdbcTemplate.query(env.getProperty("getFriendsByUserId"), namedParams, new UserMapper());
     }
+
+    public List<User> findDisabledUsersForDelete() {
+        try {
+            return namedJdbcTemplate.query(env.getProperty("user.findDisabledUsersForDelete"), new UserMapper());
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("User not found");
+            return null;
+        }
+    }
 }
 
 
