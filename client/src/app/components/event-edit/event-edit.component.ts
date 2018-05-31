@@ -151,7 +151,7 @@ export class EventEditComponent implements OnInit, OnDestroy {
   }
   publish() {
     this.event.isSent = true;
-    console.log(this.event);
+    this.fixDate();
     this.eventService.updateEvent(this.event).subscribe((user: any) => {
       this.router.navigate(['event/', this.event.id]);
     }, error => console.error(error));
@@ -159,7 +159,7 @@ export class EventEditComponent implements OnInit, OnDestroy {
 
   save() {
     this.event.isSent = false;
-    console.log(this.event);
+    this.fixDate();
     this.eventService.updateEvent(this.event).subscribe((user: any) => {
       this.router.navigate(['event', this.event.id]);
     }, error => console.error(error));
@@ -170,6 +170,13 @@ export class EventEditComponent implements OnInit, OnDestroy {
       this.categories = categories;
     });
 
+  }
+
+  fixDate(){
+    this.event.timeLineStart = new Date(new Date(this.event.timeLineStart).getTime()
+      + Math.abs(new Date(this.event.timeLineStart).getTimezoneOffset()*60000));
+    this.event.timeLineFinish = new Date(new Date(this.event.timeLineFinish).getTime()
+      + Math.abs(new Date(this.event.timeLineFinish).getTimezoneOffset()*60000));
   }
 
 }

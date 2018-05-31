@@ -131,6 +131,7 @@ export class CreateEventComponent implements OnInit {
 
   draft() {
     this.event.isSent = false;
+    this.fixDate();
     this.eventService.createEvent(this.event).subscribe (
       (id: number) => {
         this.router.navigate(['event/', id]);
@@ -140,8 +141,7 @@ export class CreateEventComponent implements OnInit {
 
   create() {
     this.event.isSent = true;
-    console.log(this.event.category.id);
-    console.log(this.event);
+    this.fixDate();
     this.eventService.createEvent(this.event).subscribe (
       (id: number) => {
         this.addUsers(id);
@@ -198,4 +198,10 @@ export class CreateEventComponent implements OnInit {
     this.newParticipants = [];
   }
 
+  fixDate(){
+    this.event.timeLineStart = new Date(new Date(this.event.timeLineStart).getTime()
+      + Math.abs(new Date(this.event.timeLineStart).getTimezoneOffset()*60000));
+    this.event.timeLineFinish = new Date(new Date(this.event.timeLineFinish).getTime()
+      + Math.abs(new Date(this.event.timeLineFinish).getTimezoneOffset()*60000));
+  }
 }

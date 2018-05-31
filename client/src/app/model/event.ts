@@ -6,12 +6,12 @@ export class Event {
   name: string;
   description: string;
   place: string;
-  timeLineStart: any;//TODO date & time
-  timeLineFinish: any;//TODO date & time
-  period: number; //
-  image: any;//TODO image
+  timeLineStart: any;
+  timeLineFinish: any;
+  period: number;
+  image: any;
   isSent: boolean;
   isPrivate: boolean;
-  participants: any[]; //TODO User[]
+  participants: any[];
   category: Category;
 }

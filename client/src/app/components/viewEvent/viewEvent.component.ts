@@ -246,4 +246,11 @@ export class ViewEventComponent {
   urgent() {
     if (this.priority == "2") return true
   }
+
+  isBegun(){
+    if(new Date() > new Date(this.event.timeLineStart)) return true
+  }
+  isEnded(){
+    if(new Date() > new Date(this.event.timeLineFinish)) return true
+  }
 }
