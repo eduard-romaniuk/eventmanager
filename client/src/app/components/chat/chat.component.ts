@@ -17,7 +17,7 @@ import * as $ from 'jquery';
 export class ChatComponent{
   currentUser: User = new User();
   messages: Message[];
-  private serverUrl = 'https://web-event-manager.herokuapp.com/socket'//https://web-event-manager.herokuapp.com/socket
+  private serverUrl = 'https://web-event-manager.herokuapp.com/socket'
   private title = 'Chat';
   private stompClient;
   private id;

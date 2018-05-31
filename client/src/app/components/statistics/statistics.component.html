@@ -1,14 +1,62 @@
-<button class="btn btn-secondary" type="button" (click)="goHome()">
-	&larr; Back</button>
-<h1>My Statistics</h1>
-<div *ngIf="statistics">
-	<p>Created events: {{statistics.asCreator}}</p>
-	<p>Participated events: {{statistics.asParticipant}}</p>
-	<p>Messages sent: {{statistics.messagesSent}}</p>
-	<p>Registered in system: {{statistics.withUs}}</p>
-	<p>Set likes: {{statistics.likes}}</p>
-<h1>General Statistics</h1>
-	<p>Male users: {{statistics.males}}%</p>
-	<p>Female users: {{statistics.females}}%</p>
-	<p>Average age: {{statistics.avgAge}}</p>
-</div>
+<head>
+<style>
+table {
+	font-family: arial, sans-serif;
+	border-collapse: collapse;
+	width: 50%;
+	align: center;
+}
+
+td, th {
+	border: 3px solid #dddddd;
+	text-align: left;
+	padding: 8px;
+}
+</style>
+</head>
+<body>
+	<center>
+		<h1>My Statistics</h1>
+		<div *ngIf="statistics">
+			<table>
+				<tr>
+					<td>Created events:</td>
+					<td>{{statistics.asCreator}}</td>
+				</tr>
+				<tr>
+					<td>Participated events:</td>
+					<td>{{statistics.asParticipant}}</td>
+				</tr>
+				<tr>
+					<td>Messages sent:</td>
+					<td>{{statistics.messagesSent}}</td>
+				</tr>
+				<tr>
+					<td>Registered in system:</td>
+					<td>{{statistics.withUs}}</td>
+				</tr>
+				<tr>
+					<td>Set likes:</td>
+					<td>{{statistics.likes}}</td>
+				</tr>
+			</table>
+			<h1>General Statistics</h1>
+			<table>
+				<tr>
+					<td>Male users:</td>
+					<td>{{statistics.males}}%</td>
+				</tr>
+				<tr>
+					<td>Female users:</td>
+					<td>{{statistics.females}}%</td>
+				</tr>
+				<tr>
+					<td>Average age:</td>
+					<td>{{statistics.avgAge}}</td>
+				</tr>
+			</table>
+		</div>
+		<button class="btn btn-secondary" type="button" (click)="goHome()">&larr; Back</button>
+</body>
+
+
