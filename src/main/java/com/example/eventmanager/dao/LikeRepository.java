@@ -49,7 +49,7 @@ public class LikeRepository {
             );
 
         } catch (EmptyResultDataAccessException e) {
-            logger.info("Likes for the item not found. Returned 0...");
+            logger.error("Likes for the item not found. Returned 0...");
             return 0;
         }
     }
@@ -71,7 +71,7 @@ public class LikeRepository {
             return true;
 
         } catch (EmptyResultDataAccessException e) {
-            logger.info("User " + userId + " dont liked item " + itemId);
+            logger.error("User " + userId + " dont liked item " + itemId);
             return false;
         }
     }
