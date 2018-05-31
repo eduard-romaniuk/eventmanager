@@ -87,7 +87,7 @@ public class ImageRepository{
                     }
             );
         } catch (EmptyResultDataAccessException e) {
-            logger.info("Images for item with id: " + itemId + " not found");
+            logger.error("Images for item with id: " + itemId + " not found");
             return Collections.emptyList();
         }
     }
