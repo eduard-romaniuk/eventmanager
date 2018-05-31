@@ -4,7 +4,8 @@ table {
 	font-family: arial, sans-serif;
 	border-collapse: collapse;
 	width: 50%;
-	align: center;
+	margin-left: auto;
+    margin-right: auto
 }
 
 td, th {
@@ -12,15 +13,17 @@ td, th {
 	text-align: left;
 	padding: 8px;
 }
+h1{
+text-align: center;
+}
 </style>
 </head>
-<body>
-	<center>
+<button class="btn btn-secondary" type="button" (click)="goHome()">&larr; Back</button>
 		<h1>My Statistics</h1>
 		<div *ngIf="statistics">
 			<table>
 				<tr>
-					<td>Created events:</td>
+					<td width="50%">Created events:</td>
 					<td>{{statistics.asCreator}}</td>
 				</tr>
 				<tr>
@@ -39,7 +42,7 @@ td, th {
 			<h1>General Statistics</h1>
 			<table>
 				<tr>
-					<td>Male users:</td>
+					<td width="50%">Male users:</td>
 					<td>{{statistics.males}}%</td>
 				</tr>
 				<tr>
@@ -52,7 +55,6 @@ td, th {
 				</tr>
 			</table>
 		</div>
-		<button class="btn btn-secondary" type="button" (click)="goHome()">&larr; Back</button>
-</body>
+
 
 
