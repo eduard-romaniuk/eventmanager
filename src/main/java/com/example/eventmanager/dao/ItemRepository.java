@@ -113,7 +113,7 @@ public class ItemRepository implements CrudRepository<Item>{
                     }
             );
         } catch (EmptyResultDataAccessException e) {
-            logger.info("Items with id: " + itemId + " not found");
+            logger.error("Items with id: " + itemId + " not found");
             return null;
         }
 
@@ -208,7 +208,7 @@ public class ItemRepository implements CrudRepository<Item>{
                     }
                     );
         } catch (EmptyResultDataAccessException e) {
-            logger.info("Items for wish list with id: " + wishListId + " not found");
+            logger.error("Items for wish list with id: " + wishListId + " not found");
             return Collections.emptyList();
         }
     }
@@ -240,7 +240,7 @@ public class ItemRepository implements CrudRepository<Item>{
                     }
             );
         } catch (EmptyResultDataAccessException e) {
-            logger.info("Not found any items");
+            logger.error("Not found any items");
             return Collections.emptyList();
         }
     }
@@ -266,7 +266,7 @@ public class ItemRepository implements CrudRepository<Item>{
                     }
             );
         } catch (EmptyResultDataAccessException e) {
-            logger.info("Not found any items");
+            logger.error("Not found any items");
             return Collections.emptyList();
         }
     }
@@ -292,7 +292,7 @@ public class ItemRepository implements CrudRepository<Item>{
                     }
             );
         } catch (EmptyResultDataAccessException e) {
-            logger.info("Not found any items");
+            logger.error("Not found any items");
             return Collections.emptyList();
         }
     }
@@ -309,7 +309,7 @@ public class ItemRepository implements CrudRepository<Item>{
 
             return namedJdbcTemplate.query(query, ResultSetHandler::getWeightOfTags);
         } catch (EmptyResultDataAccessException e) {
-            logger.info("Not found any tags");
+            logger.error("Not found any tags");
             return Collections.emptyMap();
         }
     }
@@ -325,7 +325,7 @@ public class ItemRepository implements CrudRepository<Item>{
 
         } catch (EmptyResultDataAccessException e) {
 
-            logger.info("Not found any tags");
+            logger.error("Not found any tags");
             return Collections.emptyMap();
 
         }
@@ -342,7 +342,7 @@ public class ItemRepository implements CrudRepository<Item>{
 
         } catch (EmptyResultDataAccessException e) {
 
-            logger.info("Not found  any tags");
+            logger.error("Not found  any tags");
             return Collections.emptyMap();
 
         }
@@ -370,7 +370,7 @@ public class ItemRepository implements CrudRepository<Item>{
                     }
             );
         } catch (EmptyResultDataAccessException e) {
-            logger.info("Not found any items");
+            logger.error("Not found any items");
             return Collections.emptyList();
         }
     }

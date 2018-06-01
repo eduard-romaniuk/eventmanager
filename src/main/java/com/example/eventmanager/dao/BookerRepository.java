@@ -130,7 +130,7 @@ public class BookerRepository {
                     }
             );
         } catch (EmptyResultDataAccessException e) {
-            logger.info("Booking items for user : " + userId + " not found");
+            logger.error("Booking items for user : " + userId + " not found");
             return Collections.emptyList();
         }
     }
@@ -153,7 +153,7 @@ public class BookerRepository {
             return true;
 
         } catch (EmptyResultDataAccessException e) {
-            logger.info("Booker " + booker.getUserId() + " not found for item " + booker.getItemId());
+            logger.error("Booker " + booker.getUserId() + " not found for item " + booker.getItemId());
             return false;
         }
     }

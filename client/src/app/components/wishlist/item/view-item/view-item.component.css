@@ -11,3 +11,31 @@
   padding-right: 5px;
   padding-left: 5px;
 }
+.view-img{
+	margin-bottom:20px;
+}
+.item-heart{
+	float: right;
+	font-size: 20px;
+	position: relative;
+	top: 4px;
+}
+
+.booking-label {
+	display: inline-block;
+	color: red;
+	font-size: 12px;
+}
+
+ .booking-label-left{
+	float: right;
+ }
+ 
+ .booking-label-right {
+	float: left;
+  }
+.label-wrap:after{
+	content: "";
+    clear: both;
+    display: table;
+}

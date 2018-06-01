@@ -109,6 +109,7 @@ export class WishListService {
     for (let item of this.items){
       if (item.id == chanItem.id) {
         item.likes = chanItem.likes;
+		item.hasLiked = chanItem.hasLiked
       }
     }
   }

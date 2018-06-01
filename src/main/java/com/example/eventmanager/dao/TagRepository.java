@@ -85,7 +85,7 @@ public class TagRepository implements CrudRepository<Tag>{
 
             return namedJdbcTemplate.queryForObject(env.getProperty("findIdByTagName"), namedParams,Long.class);
         } catch (EmptyResultDataAccessException e) {
-            logger.info("There is not tag with name = " + tagName);
+            logger.error("There is not tag with name = " + tagName);
             return null; //TODO: Optional
         }
     }
@@ -143,7 +143,7 @@ public class TagRepository implements CrudRepository<Tag>{
                     }
             );
         } catch (EmptyResultDataAccessException e) {
-            logger.info("Tags for items with id: " + itemId + " not found");
+            logger.error("Tags for items with id: " + itemId + " not found");
             return Collections.emptyList();
         }
     }

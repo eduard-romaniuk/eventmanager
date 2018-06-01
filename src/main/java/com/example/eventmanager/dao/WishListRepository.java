@@ -85,7 +85,7 @@ public class WishListRepository implements CrudRepository<WishList>{
                     }
             );
         } catch (EmptyResultDataAccessException e) {
-            logger.info("WishList for user with id: " + userId + " not found");
+            logger.error("WishList for user with id: " + userId + " not found");
             return null;
         }
     }
