@@ -1,5 +1,8 @@
 ### Event Manager [![Build Status](https://travis-ci.org/eduard-romanyuk/eventmanager.png?branch=dev)](https://travis-ci.org/eduard-romanyuk/eventmanager)
 
+#### Description:
+Event manager it's a social network based on users events. Main opportunities of user it's creating events (public/private), invite friends to events, add items to his wish list and create notes.
+
 #### Used technologies:
 * Java 8
 * Spring
