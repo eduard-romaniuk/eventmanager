@@ -3,8 +3,6 @@
 #### Description:
 Event manager it's a social network based on users events. Main opportunities of user it's creating events (public/private), invite friends to events, add items to his wish list and create notes.
 
-[You can test this service here](https://web-event-manager.firebaseapp.com/)
-
 #### Used technologies:
 * Java 8
 * Spring
